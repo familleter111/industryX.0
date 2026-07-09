@@ -34,6 +34,7 @@ import {
 } from 'lucide-react'
 
 import Image from 'next/image'
+import ChatWidget from './ChatWidget'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -272,6 +273,7 @@ export default function Navbar() {
   const [language, setLanguage] = useState('FR')
   const [languageOpen, setLanguageOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [isChatOpen, setIsChatOpen] = useState(false)
 
   const activeGroup = navGroups.find((group) => group.label === activeMenu)
 
@@ -738,13 +740,16 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* CHAT BUTTON */}
-      <a
-        href="#chat"
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#111827] text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition-all duration-300 hover:scale-105"
+      {/* CHAT BUTTON & WIDGET */}
+      <button
+        onClick={() => setIsChatOpen(!isChatOpen)}
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#0C0D12] border border-[#DAA250]/20 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition-all duration-300 hover:scale-105 hover:border-[#DAA250]/50"
+        aria-label="Ouvrir le chat"
       >
-        <MessageCircle size={20} />
-      </a>
+        {isChatOpen ? <X size={20} className="text-[#DAA250]" /> : <MessageCircle size={20} />}
+      </button>
+
+      <ChatWidget isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} language={language} />
     </div>
   )
 }

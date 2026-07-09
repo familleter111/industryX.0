@@ -9,32 +9,32 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 
-const ctaLogos = [
-  '/Microsoft.png',
-  '/DOT.tn.png',
-  '/AWS.png',
-  '/Deloitte.png',
-  '/Ey.png',
-  '/GIZ.png',
+interface CtaLogo {
+  src: string
+  alt: string
+  hClass: string
+}
+
+const ctaLogos: CtaLogo[] = [
+  { src: '/Microsoft.png', alt: 'Microsoft', hClass: 'h-[78px] sm:h-[96px] md:h-[114px]' },
+  { src: '/DOT.tn.png', alt: 'DOT.tn', hClass: 'h-[90px] sm:h-[114px] md:h-[132px]' },
+  { src: '/AWS.png', alt: 'AWS', hClass: 'h-[72px] sm:h-[90px] md:h-[108px]' },
+  { src: '/Deloitte.png', alt: 'Deloitte', hClass: 'h-[48px] sm:h-[60px] md:h-[72px]' },
+  { src: '/Ey.png', alt: 'EY', hClass: 'h-[96px] sm:h-[120px] md:h-[144px]' },
+  { src: '/GIZ.png', alt: 'GIZ', hClass: 'h-[72px] sm:h-[90px] md:h-[108px]' },
 ]
 
-function LogoCard({ src }: { src: string }) {
+function LogoCard({ logo }: { logo: CtaLogo }) {
   return (
-    <div className="group/logo flex items-center justify-center mx-5">
-      <div className="relative w-40 h-24 sm:w-44 sm:h-26 md:w-48 md:h-28
-                      bg-white border border-black/[0.06] rounded-2xl
-                      shadow-sm flex items-center justify-center
-                      transition-all duration-300
-                      hover:shadow-lg hover:border-gold/30
-                      hover:scale-[1.06]">
-        <Image
-          src={src}
-          alt="partner logo"
-          fill
-          className="object-contain p-6 transition duration-300
-                     group-hover/marquee:grayscale group-hover/logo:!grayscale-0"
-        />
-      </div>
+    <div className="group/logo mx-8 sm:mx-12 md:mx-16 flex items-center justify-center shrink-0">
+      <img
+        src={logo.src}
+        alt={logo.alt}
+        className={`${logo.hClass} w-auto object-contain opacity-80 grayscale contrast-125 transition-all duration-300
+                   group-hover/marquee:opacity-40 group-hover/marquee:grayscale
+                   group-hover/logo:!opacity-100 group-hover/logo:!grayscale-0 group-hover/logo:!contrast-100
+                   group-hover/logo:scale-108`}
+      />
     </div>
   )
 }
@@ -252,19 +252,19 @@ export default function CTASection() {
 
         </motion.div>
 
-        {/* ================= PARTNERS MARQUEE ================= */}
-        <div className="group/marquee relative overflow-hidden py-8 mt-16">
-          {/* fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F9F8F6] to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F9F8F6] to-transparent z-10" />
+      </div>
 
-          <div className="flex animate-marquee w-max items-center py-4 group-hover/marquee:[animation-play-state:paused]">
-            {[...ctaLogos, ...ctaLogos].map((logo, i) => (
-              <LogoCard key={i} src={logo} />
-            ))}
-          </div>
+      {/* ================= PARTNERS MARQUEE ================= */}
+      <div className="group/marquee relative overflow-hidden py-8 mt-16 w-full z-10">
+        {/* fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F9F8F6] to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F9F8F6] to-transparent z-10" />
+
+        <div className="flex animate-marquee w-max items-center py-8 sm:py-12 group-hover/marquee:[animation-play-state:paused]">
+          {[...ctaLogos, ...ctaLogos, ...ctaLogos, ...ctaLogos].map((logo, i) => (
+            <LogoCard key={i} logo={logo} />
+          ))}
         </div>
-
       </div>
     </section>
   )
