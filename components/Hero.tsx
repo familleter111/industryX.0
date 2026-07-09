@@ -113,7 +113,7 @@ export default function Hero() {
 
       </div>
 
-      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:gap-16 lg:grid-cols-[1fr_1.05fr] px-4 sm:px-6 lg:px-10">
+      <div className="mx-auto grid max-w-7xl items-center gap-8 lg:gap-6 lg:grid-cols-[0.9fr_1.7fr] px-4 sm:px-6 lg:px-10">
         {/* LEFT */}
 
         <motion.div
@@ -152,36 +152,35 @@ export default function Hero() {
 
           {/* TITLE */}
 
-          <h1 className="font-black leading-[0.97] tracking-[-0.06em] text-[#0F172A]">
+          <h1 className="font-black leading-[1.04] tracking-[-0.06em] text-[#0F172A]">
             {/* LIGNE 1 */}
-
             <span
-              className="block"
-              style={{
-                fontSize: 'clamp(2.1rem,3.6vw,4.1rem)',
-              }}
+              className="block whitespace-nowrap"
+              style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
-              Vos opérations sont complexes.
+              Vos opérations
             </span>
 
             {/* LIGNE 2 */}
-
             <span
-              className="mt-2 block"
-              style={{
-                fontSize: 'clamp(1.9rem,3.2vw,3.7rem)',
-              }}
+              className="block whitespace-nowrap"
+              style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
+            >
+              sont complexes.
+            </span>
+
+            {/* LIGNE 3 */}
+            <span
+              className="mt-3 block whitespace-nowrap"
+              style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               Nous les transformons
             </span>
 
-            {/* LIGNE 3 */}
-
+            {/* LIGNE 4 */}
             <span
-              className="mt-2 block font-black"
-              style={{
-                fontSize: 'clamp(1.8rem,3vw,3.7rem)',
-              }}
+              className="block whitespace-nowrap font-black"
+              style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               en{' '}
               <span
@@ -349,7 +348,7 @@ export default function Hero() {
               l'image se fond dans la section via mix-blend-multiply.
               Agrandi et décalé un peu vers la droite sur grand écran. */}
           <div
-            className="overflow-hidden lg:origin-center lg:translate-x-6 lg:scale-110"
+            className="overflow-hidden lg:origin-center lg:translate-x-10 lg:scale-110"
             style={{ background: '#F7F7F6', isolation: 'isolate' }}
           >
             <Image

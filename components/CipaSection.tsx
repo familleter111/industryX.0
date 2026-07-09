@@ -14,7 +14,7 @@ import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 
 const colors = {
-  gold: '#D4AF37',
+  gold: '#DAA250',
   goldLight: '#F2D94E',
 
   lime: '#C7FF3A',
@@ -149,7 +149,7 @@ export default function CipaSection() {
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(circle at top left, rgba(212,175,55,.08), transparent 26%),
+              radial-gradient(circle at top left, rgba(218,162,80,.08), transparent 26%),
               radial-gradient(circle at bottom right, rgba(199,255,58,.06), transparent 26%),
               linear-gradient(180deg, #FFFFFF 0%, #F6F7F4 100%)
             `,
@@ -159,7 +159,7 @@ export default function CipaSection() {
         <div
           className="absolute left-0 top-0 h-[700px] w-[700px] rounded-full"
           style={{
-            background: 'rgba(212,175,55,.09)',
+            background: 'rgba(218,162,80,.09)',
             filter: 'blur(150px)',
           }}
         />
@@ -238,8 +238,8 @@ export default function CipaSection() {
             <div
               className="inline-flex items-center gap-2.5 rounded-full border bg-white px-5 py-2.5"
               style={{
-                borderColor: 'rgba(212,175,55,.3)',
-                boxShadow: '0 12px 34px rgba(212,175,55,.14)',
+                borderColor: 'rgba(218,162,80,.3)',
+                boxShadow: '0 12px 34px rgba(218,162,80,.14)',
               }}
             >
               <span className="relative flex h-2 w-2">
@@ -260,7 +260,7 @@ export default function CipaSection() {
           <div className="flex flex-col items-center">
             <div
               className="mt-3 h-6 w-[2px] rounded-full"
-              style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0), #D4AF37)' }}
+              style={{ background: 'linear-gradient(to bottom, rgba(218,162,80,0), #DAA250)' }}
             />
             <ChevronDown size={20} className="-mt-1" style={{ color: colors.gold }} />
             <p
@@ -278,13 +278,13 @@ export default function CipaSection() {
           <div className="relative mx-auto mt-3 hidden h-8 max-w-5xl lg:block">
             <div
               className="absolute left-1/2 top-0 h-4 w-[2px] -translate-x-1/2"
-              style={{ background: 'rgba(212,175,55,.7)' }}
+              style={{ background: 'rgba(218,162,80,.7)' }}
             />
             <div
               className="absolute left-[16.66%] right-[16.66%] top-4 h-[2px]"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(212,175,55,.25), #D4AF37, rgba(212,175,55,.25))',
+                  'linear-gradient(to right, rgba(218,162,80,.25), #DAA250, rgba(218,162,80,.25))',
               }}
             />
             {[16.66, 50, 83.34].map((left, i) => (
@@ -293,10 +293,10 @@ export default function CipaSection() {
                 className="absolute top-4 flex flex-col items-center"
                 style={{ left: `${left}%`, transform: 'translateX(-50%)' }}
               >
-                <div className="h-4 w-[2px]" style={{ background: 'rgba(212,175,55,.7)' }} />
+                <div className="h-4 w-[2px]" style={{ background: 'rgba(218,162,80,.7)' }} />
                 <div
                   className="-mt-[3px] h-2 w-2 rotate-45 border-b-2 border-r-2"
-                  style={{ borderColor: '#D4AF37' }}
+                  style={{ borderColor: '#DAA250' }}
                 />
               </div>
             ))}
@@ -323,7 +323,7 @@ export default function CipaSection() {
                 className="absolute inset-x-0 top-0 h-[3px]"
                 style={{
                   background:
-                    'linear-gradient(to right, transparent, rgba(212,175,55,.7), transparent)',
+                    'linear-gradient(to right, transparent, rgba(218,162,80,.7), transparent)',
                 }}
               />
 
@@ -391,12 +391,12 @@ export default function CipaSection() {
               className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-3.5 font-bold transition-all duration-500 hover:-translate-y-0.5"
               style={{
                 background: '#0A0A0A',
-                color: '#D4AF37',
-                border: '1px solid rgba(212,175,55,.5)',
+                color: '#DAA250',
+                border: '1px solid rgba(218,162,80,.5)',
                 boxShadow: '0 20px 60px rgba(0,0,0,.18)',
               }}
             >
-              <div className="absolute inset-0 bg-[#D4AF37] opacity-0 transition duration-500 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-[#DAA250] opacity-0 transition duration-500 group-hover:opacity-100" />
 
               <span className="relative z-10 group-hover:text-black">
                 Planifier une démo

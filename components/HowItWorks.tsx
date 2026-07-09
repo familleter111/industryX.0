@@ -9,10 +9,6 @@ import {
   Shield,
   Crosshair,
   TrendingUp,
-  GitFork,
-  Workflow,
-  Brain,
-  CheckCircle2,
 } from 'lucide-react'
 
 // Data for middle stat cards
@@ -193,112 +189,6 @@ export default function ProblemsSection() {
             </motion.div>
           ))}
         </div>
-
-        {/* ================= BLOC INFÉRIEUR : SOLUTION & TIMELINE CIPA ================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mt-16 bg-white border border-slate-200/60 rounded-[2.2rem] p-6 sm:p-8 lg:p-10 shadow-[0_15px_45px_rgba(15,23,42,0.015)]"
-        >
-          {/* Haut : Phrase de Présentation Solution (au-dessus de la flèche) */}
-          <div className="flex flex-col sm:flex-row items-center gap-5 mb-10 pb-8 border-b border-slate-100/80">
-            <div className="h-14 w-14 rounded-2xl bg-[#0F172A] flex items-center justify-center flex-shrink-0 shadow-[0_6px_20px_rgba(15,23,42,0.12)] relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 to-slate-800" />
-              <TrendingUp size={22} className="text-[#DAA250] z-10 animate-pulse" />
-            </div>
-            <p className="text-[14px] sm:text-[15px] leading-relaxed text-[#475569] text-center sm:text-left">
-              <span className="font-extrabold text-[#0F172A] tracking-tight text-[16px]">CIPA</span>{' '}
-              reconnecte vos opérations, vos équipes et vos données pour transformer les
-              signaux faibles en{' '}
-              <span className="font-extrabold text-[#DAA250]">décisions maîtrisées</span> et en{' '}
-              <span className="font-extrabold text-[#16A34A]">amélioration continue</span>.
-            </p>
-          </div>
-
-          {/* Bas : Chronologie de Processus (Pleine Largeur) */}
-          <div className="relative pb-10 pt-2">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 text-center">
-              {[
-                {
-                  title: 'UNIFIER',
-                  desc: 'Toutes vos données, terrain et systèmes.',
-                  icon: GitFork,
-                  color: '#2563EB',
-                },
-                {
-                  title: 'STRUCTURER',
-                  desc: 'Des processus standardisés et pilotés.',
-                  icon: Workflow,
-                  color: '#4F46E5',
-                },
-                {
-                  title: 'ANALYSER',
-                  desc: 'IA intégrée pour comprendre et agir.',
-                  icon: Brain,
-                  color: '#7C3AED',
-                },
-                {
-                  title: 'AGIR',
-                  desc: 'Décisions plus rapides, risques maîtrisés.',
-                  icon: CheckCircle2,
-                  color: '#10B981',
-                },
-              ].map((step, index) => (
-                <div key={index} className="flex flex-col items-center relative z-10">
-                  {/* Icône d'étape */}
-                  <div className="h-12 w-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-sm text-slate-600 mb-3.5 transition-transform duration-300 hover:scale-110">
-                    <step.icon size={20} style={{ color: step.color }} />
-                  </div>
-
-                  {/* Textes d'étape */}
-                  <h4 className="text-[12px] font-extrabold tracking-wider text-slate-800 mb-1">{step.title}</h4>
-                  <p className="text-[10.5px] leading-relaxed text-slate-500 max-w-[155px] mx-auto">{step.desc}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Ligne chronologique horizontale (Desktop seulement) */}
-            <div className="hidden sm:block absolute bottom-2 left-[12.5%] right-[12.5%] h-[3px] bg-slate-100 rounded-full pointer-events-none">
-              <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 via-indigo-500 via-purple-500 to-emerald-500 w-full h-full rounded-full opacity-75" />
-              <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 via-indigo-500 via-purple-500 to-emerald-500 w-full h-full rounded-full blur-[2px] opacity-45" />
-
-              {/* Jalons de points */}
-              {[
-                { color: '#2563EB' },
-                { color: '#4F46E5' },
-                { color: '#7C3AED' },
-              ].map((dot, stepIdx) => (
-                <div
-                  key={stepIdx}
-                  className="absolute top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-white shadow-md border-2 flex items-center justify-center z-10"
-                  style={{
-                    left: `${(stepIdx / 3) * 100}%`,
-                    transform: 'translate(-50%, -50%)',
-                    borderColor: dot.color,
-                  }}
-                >
-                  <div
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: dot.color }}
-                  />
-                </div>
-              ))}
-
-              {/* Flèche créative à l'extrémité droite (Jalon final + flèche) */}
-              <div
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-6 w-6 rounded-full bg-[#10B981] flex items-center justify-center border-2 border-white shadow-md z-20"
-                style={{
-                  transform: 'translate(50%, -50%)',
-                }}
-              >
-                <svg className="w-3.5 h-3.5 text-white animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </motion.div>
 
       </div>
     </section>

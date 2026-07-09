@@ -17,58 +17,107 @@ interface ChatWidgetProps {
   language: string
 }
 
+// Messages de bienvenue joués séquentiellement (effet de frappe)
+const WELCOME: Record<string, string[]> = {
+  FR: [
+    "Bonjour 👋 Je suis l'assistant virtuel d'Industry X.0.",
+    'Prêt à découvrir comment digitaliser et piloter vos opérations industrielles avec CIPA ?',
+    'Avez-vous des questions sur notre plateforme, ou souhaitez-vous planifier une démonstration ?',
+  ],
+  EN: [
+    "Hi 👋 I'm the Industry X.0 virtual assistant.",
+    'Ready to see how CIPA can digitize and streamline your industrial operations?',
+    'Any questions about our platform, or would you like to schedule a live demo?',
+  ],
+}
+
+const rid = () => Math.random().toString(36).slice(2, 11)
+
+// Réponse contextuelle simple selon le message de l'utilisateur
+function getBotResponse(userText: string, language: string): string {
+  const t = userText.toLowerCase()
+  if (language === 'FR') {
+    if (/(demo|démo|rdv|rendez|contact|tester)/.test(t))
+      return "C'est une excellente idée ! Pour réserver une démonstration personnalisée de CIPA, cliquez sur « Planifier une démo » dans le menu, ou laissez-moi votre email et notre équipe vous recontacte."
+    if (/(prix|tarif|coût|cout|abonnement)/.test(t))
+      return "Nos tarifs s'adaptent à la taille de votre usine et aux modules choisis (Qualité, Production, Maintenance). Nous serions ravis de vous préparer une estimation rapide lors d'un court échange !"
+    if (/(cipa|produit|logiciel|app|solution|fonctionne)/.test(t))
+      return "CIPA est notre suite modulaire conçue pour collecter les données terrain, digitaliser les formulaires et exploiter l'IA afin d'optimiser vos performances. Elle fonctionne sur mobile, tablette et PC."
+    if (/(merci|super|ok|parfait)/.test(t))
+      return "Je vous en prie ! C'est un plaisir de vous aider. N'hésitez pas si vous avez besoin d'autre chose."
+    return "Merci pour votre message ! Un membre de l'équipe Industry X.0 va vous répondre sous peu. Comment puis-je vous aider concernant la digitalisation de vos usines ?"
+  }
+  if (/(demo|book|schedule|meeting|contact|test)/.test(t))
+    return "Excellent choice! To book a personalized CIPA demo, click « Schedule a demo » in the menu, or drop your email here and our team will reach out."
+  if (/(price|pricing|cost|license|subscription)/.test(t))
+    return "Our pricing adapts to your factory scale and the modules you activate (Quality, Production, Maintenance). Let's set up a short call to estimate your needs!"
+  if (/(cipa|product|software|app|solution|works|platform)/.test(t))
+    return 'CIPA is our modular industrial platform built to capture shop-floor data, digitize checklists and leverage AI insights. It runs on mobile, tablet and desktop.'
+  if (/(thanks|thank you|awesome|ok|perfect)/.test(t))
+    return "You're very welcome! It's my pleasure to help. Let me know if you have other questions."
+  return 'Thank you for your message! A member of the Industry X.0 team will get back to you shortly. Is there anything else I can help you with?'
+}
+
 export default function ChatWidget({ isOpen, onClose, language = 'FR' }: ChatWidgetProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [streamingId, setStreamingId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
-  // Initialize welcome messages
+  // Joue les messages de bienvenue un par un, avec effet de frappe
   useEffect(() => {
-    if (language === 'FR') {
-      setMessages([
-        {
-          id: 'welcome-1',
-          sender: 'bot',
-          text: 'Bonjour ! Je suis Mehdi, votre conseiller digital chez Industry X.0.',
-          timestamp: new Date(),
-        },
-        {
-          id: 'welcome-2',
-          sender: 'bot',
-          text: 'Prêt à découvrir comment digitaliser et piloter vos opérations industrielles avec CIPA ?',
-          timestamp: new Date(),
-        },
-        {
-          id: 'welcome-3',
-          sender: 'bot',
-          text: 'Avez-vous des questions sur notre plateforme ou souhaitez-vous planifier une démonstration ?',
-          timestamp: new Date(),
-        },
-      ])
-    } else {
-      setMessages([
-        {
-          id: 'welcome-1',
-          sender: 'bot',
-          text: "Welcome back! I'm Mehdi, your digital advisor here at Industry X.0.",
-          timestamp: new Date(),
-        },
-        {
-          id: 'welcome-2',
-          sender: 'bot',
-          text: 'Are you ready to see what you can build with CIPA?',
-          timestamp: new Date(),
-        },
-        {
-          id: 'welcome-3',
-          sender: 'bot',
-          text: 'Do you have any questions about our platform or would you like to schedule a live demo?',
-          timestamp: new Date(),
-        },
-      ])
+    const welcome = WELCOME[language === 'FR' ? 'FR' : 'EN']
+    setMessages([])
+    setIsTyping(false)
+    setStreamingId(null)
+
+    let cancelled = false
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => {
+        const t = setTimeout(resolve, ms)
+        timeouts.push(t)
+      })
+
+    const run = async () => {
+      await wait(600)
+      for (let i = 0; i < welcome.length; i++) {
+        if (cancelled) return
+        // "…en train d'écrire" (points animés)
+        setIsTyping(true)
+        await wait(750 + Math.min(welcome[i].length * 9, 750))
+        if (cancelled) return
+        setIsTyping(false)
+
+        // Bulle qui s'écrit lettre par lettre
+        const id = `welcome-${i}`
+        setMessages((prev) => [...prev, { id, sender: 'bot', text: '', timestamp: new Date() }])
+        setStreamingId(id)
+        const full = welcome[i]
+        for (let c = 1; c <= full.length; c++) {
+          if (cancelled) return
+          setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: full.slice(0, c) } : m)))
+          await wait(16)
+        }
+        setStreamingId((s) => (s === id ? null : s))
+        await wait(500)
+      }
+    }
+    run()
+
+    return () => {
+      cancelled = true
+      timeouts.forEach(clearTimeout)
     }
   }, [language])
+
+  // Nettoyage des timeouts de réponse au démontage
+  useEffect(() => {
+    const timeouts = timeoutsRef.current
+    return () => timeouts.forEach(clearTimeout)
+  }, [])
 
   // Auto scroll to bottom
   useEffect(() => {
@@ -77,121 +126,38 @@ export default function ChatWidget({ isOpen, onClose, language = 'FR' }: ChatWid
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim()) return
+    if (!input.trim() || isTyping || streamingId) return
 
     const userText = input.trim()
-    const userMsg: Message = {
-      id: Math.random().toString(36).substr(2, 9),
-      sender: 'user',
-      text: userText,
-      timestamp: new Date(),
-    }
+    const userMsg: Message = { id: rid(), sender: 'user', text: userText, timestamp: new Date() }
 
     setMessages((prev) => [...prev, userMsg])
     setInput('')
     setIsTyping(true)
 
-    // Simulate smart AI response after 1.2s delay
-    setTimeout(() => {
-      let botResponse = ''
-      const lowerText = userText.toLowerCase()
-
-      if (language === 'FR') {
-        if (
-          lowerText.includes('demo') ||
-          lowerText.includes('démo') ||
-          lowerText.includes('rdv') ||
-          lowerText.includes('rendez') ||
-          lowerText.includes('contact') ||
-          lowerText.includes('tester')
-        ) {
-          botResponse =
-            "C'est une excellente idée ! Pour réserver une démonstration personnalisée de CIPA avec nos experts, vous pouvez cliquer sur le bouton 'Demander une démo' dans le menu principal, ou me laisser votre adresse email ici pour que notre équipe vous recontacte."
-        } else if (
-          lowerText.includes('prix') ||
-          lowerText.includes('tarif') ||
-          lowerText.includes('coût') ||
-          lowerText.includes('cout') ||
-          lowerText.includes('abonnement')
-        ) {
-          botResponse =
-            "Nos tarifs s'adaptent à la taille de votre usine et aux modules choisis (Qualité, Production, Maintenance). Nous serions ravis de réaliser un devis ou une estimation rapide lors d'un court échange !"
-        } else if (
-          lowerText.includes('cipa') ||
-          lowerText.includes('produit') ||
-          lowerText.includes('logiciel') ||
-          lowerText.includes('app') ||
-          lowerText.includes('solution') ||
-          lowerText.includes('fonctionne')
-        ) {
-          botResponse =
-            "CIPA est notre suite logicielle modulaire conçue pour collecter les données terrain, digitaliser les formulaires et exploiter l'IA pour optimiser les performances de production. Elle fonctionne sur mobile, tablette et PC."
-        } else if (
-          lowerText.includes('merci') ||
-          lowerText.includes('super') ||
-          lowerText.includes('ok') ||
-          lowerText.includes('parfait')
-        ) {
-          botResponse = "Je vous en prie ! C'est un plaisir de vous aider. N'hésitez pas si vous avez besoin de quoi que ce soit d'autre."
-        } else {
-          botResponse =
-            "Merci pour votre message ! Un membre de l'équipe Industry X.0 va vous répondre sous peu. Comment puis-je vous aider d'autre concernant la digitalisation de vos usines ?"
-        }
-      } else {
-        if (
-          lowerText.includes('demo') ||
-          lowerText.includes('book') ||
-          lowerText.includes('schedule') ||
-          lowerText.includes('meeting') ||
-          lowerText.includes('contact') ||
-          lowerText.includes('test')
-        ) {
-          botResponse =
-            "Excellent choice! To book a live personalized demonstration of CIPA, you can click the 'Request a Demo' button in the navbar, or drop your email here and our team will get in touch with you."
-        } else if (
-          lowerText.includes('price') ||
-          lowerText.includes('pricing') ||
-          lowerText.includes('cost') ||
-          lowerText.includes('license') ||
-          lowerText.includes('subscription')
-        ) {
-          botResponse =
-            "Our pricing plans are tailored to your factory scale and the modules you activate (Quality, Production, Maintenance). Let's schedule a brief call to estimate your needs!"
-        } else if (
-          lowerText.includes('cipa') ||
-          lowerText.includes('product') ||
-          lowerText.includes('software') ||
-          lowerText.includes('app') ||
-          lowerText.includes('solution') ||
-          lowerText.includes('works') ||
-          lowerText.includes('platform')
-        ) {
-          botResponse =
-            "CIPA is our modular industrial platform built to capture shop-floor data, digitize quality checklists, and leverage AI insights. It is fully responsive and runs on mobile, tablet, and desktop."
-        } else if (
-          lowerText.includes('thanks') ||
-          lowerText.includes('thank you') ||
-          lowerText.includes('awesome') ||
-          lowerText.includes('ok') ||
-          lowerText.includes('perfect')
-        ) {
-          botResponse = "You're very welcome! It's my pleasure to help. Let me know if you have other questions."
-        } else {
-          botResponse =
-            "Thank you for your message! A member of the Industry X.0 team will get back to you shortly. In the meantime, is there anything else I can help you with?"
-        }
-      }
-
-      const botMsg: Message = {
-        id: Math.random().toString(36).substr(2, 9),
-        sender: 'bot',
-        text: botResponse,
-        timestamp: new Date(),
-      }
-
-      setMessages((prev) => [...prev, botMsg])
+    // Réflexion (points animés) puis réponse écrite lettre par lettre
+    const think = setTimeout(() => {
+      const full = getBotResponse(userText, language)
       setIsTyping(false)
-    }, 1200)
+
+      const id = rid()
+      setMessages((prev) => [...prev, { id, sender: 'bot', text: '', timestamp: new Date() }])
+      setStreamingId(id)
+
+      let c = 0
+      const typeNext = () => {
+        c += 1
+        setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: full.slice(0, c) } : m)))
+        if (c < full.length) {
+          const t = setTimeout(typeNext, 14)
+          timeoutsRef.current.push(t)
+        } else {
+          setStreamingId((s) => (s === id ? null : s))
+        }
+      }
+      typeNext()
+    }, 1000)
+    timeoutsRef.current.push(think)
   }
 
   return (
@@ -210,16 +176,14 @@ export default function ChatWidget({ isOpen, onClose, language = 'FR' }: ChatWid
               {/* Avatar Container with glowing active status */}
               <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A1B24] border border-[#DAA250]/30 shadow-inner">
                 <Bot size={20} className="text-[#DAA250]" />
-                <span className="absolute bottom-0 right-0 flex h-2.5 w-2.5 rounded-full border-2 border-[#0C0D12] bg-emerald-500">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                </span>
               </div>
               <div>
                 <h3 className="text-sm font-semibold font-display tracking-wide text-white">
-                  Mehdi Tarchella
+                  {language === 'FR' ? 'Assistant CIPA' : 'CIPA Assistant'}
                 </h3>
                 <div className="flex items-center gap-1.5 text-[11px] text-[#A8A29E] font-medium">
-                  <span>{language === 'FR' ? 'Conseiller Digital' : 'Digital Advisor'}</span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span>{language === 'FR' ? 'En ligne' : 'Online'}</span>
                 </div>
               </div>
             </div>
@@ -256,6 +220,9 @@ export default function ChatWidget({ isOpen, onClose, language = 'FR' }: ChatWid
                     </div>
                     <div className="rounded-2xl rounded-tl-none bg-white border border-[#ECE7DD] px-4 py-2.5 text-[13px] text-[#292524] leading-relaxed shadow-sm font-normal">
                       {msg.text}
+                      {streamingId === msg.id && (
+                        <span className="animate-blink ml-0.5 inline-block text-[#DAA250]">▌</span>
+                      )}
                     </div>
                   </div>
                 ) : (
