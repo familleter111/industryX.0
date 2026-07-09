@@ -15,11 +15,13 @@ import CollaborationSection from '@/components/CollaborationSection'
 import BeneficeSection from '@/components/BeneficeSection'
 import CasesSection from '@/components/CasesSection'
 import DifferenciationSection from '@/components/Diferrenciationsection'
+import WelcomeIntro from '@/components/WelcomeIntro'
 
 
 export default function HomePage() {
   return (
     <main className="min-h-screen overflow-x-hidden">
+      <WelcomeIntro />
       <Navbar />
       <Hero />
       <HowItWorks />
