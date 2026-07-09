@@ -9,32 +9,36 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 
-// Logos partenaires — barre déplacée depuis la section CIPA (#2)
-const PARTNER_LOGOS = [
-  '/image1.png',
-  '/image3.png',
-  '/image4.png',
-  '/image5.png',
-  '/image6.png',
+interface PartnerLogo {
+  src: string
+  alt: string
+  hClass: string
+  invert?: boolean
+}
+
+const PARTNER_LOGOS: PartnerLogo[] = [
+  { src: '/image1.png', alt: 'Spiga', hClass: 'h-[78px] sm:h-[96px] md:h-[114px]', invert: true },
+  { src: '/image2.png', alt: 'Diari', hClass: 'h-[78px] sm:h-[96px] md:h-[114px]' },
+  { src: '/image3.png', alt: 'Tunisie Telecom', hClass: 'h-[54px] sm:h-[66px] md:h-[78px]' },
+  { src: '/image4.png', alt: 'Bako', hClass: 'h-[54px] sm:h-[66px] md:h-[78px]' },
+  { src: '/image5.png', alt: 'Novation City', hClass: 'h-[72px] sm:h-[90px] md:h-[105px]' },
+  { src: '/image6.png', alt: 'Warda', hClass: 'h-[84px] sm:h-[105px] md:h-[126px]' },
+  { src: '/image7.png', alt: 'Polyroto', hClass: 'h-[60px] sm:h-[75px] md:h-[90px]' },
+  { src: '/image8.png', alt: 'Somfy', hClass: 'h-[54px] sm:h-[66px] md:h-[78px]' },
 ]
 
-function LogoCard({ src }: { src: string }) {
+function LogoCard({ logo }: { logo: PartnerLogo }) {
   return (
-    <div className="group/logo mx-5 flex items-center justify-center">
-      <div
-        className="relative flex h-24 w-40 items-center justify-center rounded-2xl
-                   border border-black/[0.06] bg-white shadow-sm transition-all duration-300
-                   hover:scale-[1.06] hover:border-[#DAA250]/30 hover:shadow-lg
-                   sm:h-26 sm:w-44 md:h-28 md:w-48"
-      >
-        <Image
-          src={src}
-          alt="logo partenaire"
-          fill
-          className="object-contain p-5 transition duration-300
-                     group-hover/marquee:grayscale group-hover/logo:!grayscale-0"
-        />
-      </div>
+    <div className="group/logo mx-8 sm:mx-12 md:mx-16 flex items-center justify-center shrink-0">
+      <img
+        src={logo.src}
+        alt={logo.alt}
+        className={`${logo.hClass} w-auto object-contain opacity-80 grayscale contrast-125 transition-all duration-300
+                   group-hover/marquee:opacity-40 group-hover/marquee:grayscale
+                   group-hover/logo:!opacity-100 group-hover/logo:!grayscale-0 group-hover/logo:!contrast-100
+                   group-hover/logo:scale-108
+                   ${logo.invert ? 'invert' : ''}`}
+      />
     </div>
   )
 }
@@ -49,7 +53,7 @@ const PILLS = [
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[#F7F7F6] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-28">
+    <section className="relative overflow-hidden bg-[#F7F7F6] py-16 sm:py-20 lg:py-28">
       {/* BACKGROUND */}
 
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -109,7 +113,7 @@ export default function Hero() {
 
       </div>
 
-      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:gap-16 lg:grid-cols-[1fr_1.05fr]">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:gap-16 lg:grid-cols-[1fr_1.05fr] px-4 sm:px-6 lg:px-10">
         {/* LEFT */}
 
         <motion.div
@@ -369,20 +373,20 @@ export default function Hero() {
           delay: 0.2,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="relative z-10 mx-auto mt-12 max-w-6xl sm:mt-20"
+        className="relative z-10 mt-12 w-full sm:mt-20"
       >
         <p className="mb-6 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-[#78716C]">
           Ils nous font confiance
         </p>
 
-        <div className="group/marquee relative overflow-hidden py-4">
+        <div className="group/marquee relative overflow-hidden py-8 sm:py-12 w-full">
           {/* fade edges */}
           <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-r from-[#F7F7F6] to-transparent sm:w-32" />
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-l from-[#F7F7F6] to-transparent sm:w-32" />
 
           <div className="flex w-max animate-marquee items-center group-hover/marquee:[animation-play-state:paused]">
-            {[...PARTNER_LOGOS, ...PARTNER_LOGOS].map((logo, i) => (
-              <LogoCard key={i} src={logo} />
+            {[...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS].map((logo, i) => (
+              <LogoCard key={i} logo={logo} />
             ))}
           </div>
         </div>
