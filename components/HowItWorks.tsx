@@ -58,7 +58,7 @@ export default function ProblemsSection() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden py-16 lg:py-24"
+      className="relative overflow-hidden pt-8 lg:pt-10 pb-16 lg:pb-24"
       style={{
         background: '#F7F7F6',
       }}

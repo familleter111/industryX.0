@@ -16,12 +16,12 @@ interface CtaLogo {
 }
 
 const ctaLogos: CtaLogo[] = [
-  { src: '/Microsoft.png', alt: 'Microsoft', hClass: 'h-[78px] sm:h-[96px] md:h-[114px]' },
-  { src: '/DOT.tn.png', alt: 'DOT.tn', hClass: 'h-[90px] sm:h-[114px] md:h-[132px]' },
-  { src: '/AWS.png', alt: 'AWS', hClass: 'h-[72px] sm:h-[90px] md:h-[108px]' },
-  { src: '/Deloitte.png', alt: 'Deloitte', hClass: 'h-[48px] sm:h-[60px] md:h-[72px]' },
-  { src: '/Ey.png', alt: 'EY', hClass: 'h-[96px] sm:h-[120px] md:h-[144px]' },
-  { src: '/GIZ.png', alt: 'GIZ', hClass: 'h-[72px] sm:h-[90px] md:h-[108px]' },
+  { src: '/Microsoft.png', alt: 'Microsoft', hClass: 'h-[40px] sm:h-[48px] md:h-[56px]' },
+  { src: '/DOT.tn.png', alt: 'DOT.tn', hClass: 'h-[46px] sm:h-[56px] md:h-[64px]' },
+  { src: '/AWS.png', alt: 'AWS', hClass: 'h-[38px] sm:h-[46px] md:h-[54px]' },
+  { src: '/Deloitte.png', alt: 'Deloitte', hClass: 'h-[26px] sm:h-[32px] md:h-[38px]' },
+  { src: '/Ey.png', alt: 'EY', hClass: 'h-[48px] sm:h-[58px] md:h-[68px]' },
+  { src: '/GIZ.png', alt: 'GIZ', hClass: 'h-[38px] sm:h-[46px] md:h-[54px]' },
 ]
 
 function LogoCard({ logo }: { logo: CtaLogo }) {

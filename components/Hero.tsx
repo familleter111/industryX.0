@@ -53,7 +53,7 @@ const PILLS = [
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[#F7F7F6] py-16 sm:py-20 lg:py-28">
+    <section className="relative overflow-hidden bg-[#F7F7F6] pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
       {/* BACKGROUND */}
 
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -372,13 +372,13 @@ export default function Hero() {
           delay: 0.2,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="relative z-10 mt-12 w-full sm:mt-20"
+        className="relative z-10 mt-8 w-full sm:mt-12"
       >
-        <p className="mb-6 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-[#78716C]">
+        <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-[#78716C]">
           Ils nous font confiance
         </p>
 
-        <div className="group/marquee relative overflow-hidden py-8 sm:py-12 w-full">
+        <div className="group/marquee relative overflow-hidden py-4 sm:py-6 w-full">
           {/* fade edges */}
           <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-r from-[#F7F7F6] to-transparent sm:w-32" />
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-l from-[#F7F7F6] to-transparent sm:w-32" />

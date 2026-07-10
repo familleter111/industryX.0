@@ -9,7 +9,6 @@ import {
   Mail,
   MapPin,
   Phone,
-  Sparkles,
   ChevronRight,
 } from 'lucide-react'
 
@@ -102,49 +101,6 @@ export default function Footer() {
               performances industrielles.
             </p>
 
-            {/* featured card */}
-
-            <div className="relative mt-6 overflow-hidden rounded-[20px] border border-yellow-500/20 bg-white/[0.03] p-5 backdrop-blur-xl">
-              {/* glow */}
-
-              <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-yellow-400 to-yellow-600" />
-
-              <div className="flex gap-4">
-                {/* icon */}
-
-                <div
-                  className="
-                  flex h-12 w-12 shrink-0 items-center justify-center
-                  rounded-2xl
-                  border border-yellow-500/20
-                  bg-yellow-500/10
-                  "
-                >
-                  <Sparkles
-                    size={18}
-                    className="text-yellow-400"
-                  />
-                </div>
-
-                {/* content */}
-
-                <div>
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-yellow-400">
-                    Notre produit phare
-                  </span>
-
-                  <h3 className="mt-2 text-xl font-bold leading-tight">
-                    Une solution intelligente
-                  </h3>
-
-                  <p className="mt-3 max-w-lg text-[13px] leading-7 text-white/60">
-                    Combinant IA, automatisation et analyse
-                    de données pour accompagner les
-                    entreprises vers l’Industrie 4.0.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* RIGHT SIDE */}
