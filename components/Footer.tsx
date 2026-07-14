@@ -9,7 +9,6 @@ import {
   Mail,
   MapPin,
   Phone,
-  Sparkles,
   ChevronRight,
 } from 'lucide-react'
 
@@ -46,7 +45,14 @@ const footerLinks = [
   },
 ]
 
-export default function Footer() {
+// 'full' = footer complet (page d'accueil) — 'compact' = logos + informations + copyright (pages secteurs)
+type FooterProps = {
+  variant?: 'full' | 'compact'
+}
+
+export default function Footer({ variant = 'full' }: FooterProps) {
+  const isCompact = variant === 'compact'
+
   return (
     <footer
       className={`${inter.className} relative overflow-hidden bg-black text-white`}
@@ -66,7 +72,13 @@ export default function Footer() {
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 lg:px-8">
         {/* MAIN GRID */}
 
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+        <div
+          className={
+            isCompact
+              ? 'grid gap-10'
+              : 'grid gap-10 lg:grid-cols-[1.2fr_0.8fr]'
+          }
+        >
           {/* LEFT SIDE */}
 
           <div>
@@ -94,61 +106,21 @@ export default function Footer() {
 
             {/* description */}
 
-            <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
-              Plateforme de transformation digitale dédiée à
-              l’industrie africaine et méditerranéenne,
-              conçue pour accélérer l’adoption des
-              technologies Industrie 4.0 et optimiser les
-              performances industrielles.
-            </p>
+            {!isCompact && (
+              <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
+                Plateforme de transformation digitale dédiée à
+                l’industrie africaine et méditerranéenne,
+                conçue pour accélérer l’adoption des
+                technologies Industrie 4.0 et optimiser les
+                performances industrielles.
+              </p>
+            )}
 
-            {/* featured card */}
-
-            <div className="relative mt-6 overflow-hidden rounded-[20px] border border-yellow-500/20 bg-white/[0.03] p-5 backdrop-blur-xl">
-              {/* glow */}
-
-              <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-yellow-400 to-yellow-600" />
-
-              <div className="flex gap-4">
-                {/* icon */}
-
-                <div
-                  className="
-                  flex h-12 w-12 shrink-0 items-center justify-center
-                  rounded-2xl
-                  border border-yellow-500/20
-                  bg-yellow-500/10
-                  "
-                >
-                  <Sparkles
-                    size={18}
-                    className="text-yellow-400"
-                  />
-                </div>
-
-                {/* content */}
-
-                <div>
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-yellow-400">
-                    Notre produit phare
-                  </span>
-
-                  <h3 className="mt-2 text-xl font-bold leading-tight">
-                    Une solution intelligente
-                  </h3>
-
-                  <p className="mt-3 max-w-lg text-[13px] leading-7 text-white/60">
-                    Combinant IA, automatisation et analyse
-                    de données pour accompagner les
-                    entreprises vers l’Industrie 4.0.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* RIGHT SIDE */}
 
+          {!isCompact && (
           <div className="grid grid-cols-3 gap-8">
             {footerLinks.map((section) => (
               <div key={section.title}>
@@ -193,6 +165,7 @@ export default function Footer() {
               </div>
             ))}
           </div>
+          )}
         </div>
 
         {/* CONTACT BAR */}
