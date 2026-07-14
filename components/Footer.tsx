@@ -45,7 +45,14 @@ const footerLinks = [
   },
 ]
 
-export default function Footer() {
+// 'full' = footer complet (page d'accueil) — 'compact' = logos + informations + copyright (pages secteurs)
+type FooterProps = {
+  variant?: 'full' | 'compact'
+}
+
+export default function Footer({ variant = 'full' }: FooterProps) {
+  const isCompact = variant === 'compact'
+
   return (
     <footer
       className={`${inter.className} relative overflow-hidden bg-black text-white`}
@@ -65,7 +72,13 @@ export default function Footer() {
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 lg:px-8">
         {/* MAIN GRID */}
 
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+        <div
+          className={
+            isCompact
+              ? 'grid gap-10'
+              : 'grid gap-10 lg:grid-cols-[1.2fr_0.8fr]'
+          }
+        >
           {/* LEFT SIDE */}
 
           <div>
@@ -93,18 +106,21 @@ export default function Footer() {
 
             {/* description */}
 
-            <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
-              Plateforme de transformation digitale dédiée à
-              l’industrie africaine et méditerranéenne,
-              conçue pour accélérer l’adoption des
-              technologies Industrie 4.0 et optimiser les
-              performances industrielles.
-            </p>
+            {!isCompact && (
+              <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
+                Plateforme de transformation digitale dédiée à
+                l’industrie africaine et méditerranéenne,
+                conçue pour accélérer l’adoption des
+                technologies Industrie 4.0 et optimiser les
+                performances industrielles.
+              </p>
+            )}
 
           </div>
 
           {/* RIGHT SIDE */}
 
+          {!isCompact && (
           <div className="grid grid-cols-3 gap-8">
             {footerLinks.map((section) => (
               <div key={section.title}>
@@ -149,6 +165,7 @@ export default function Footer() {
               </div>
             ))}
           </div>
+          )}
         </div>
 
         {/* CONTACT BAR */}
