@@ -933,7 +933,7 @@ export default function ElectronicsPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer variant="compact" />
     </main>
   )
 }

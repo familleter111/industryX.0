@@ -995,7 +995,7 @@ export default function PharmaPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer variant="compact" />
     </main>
   )
 }
