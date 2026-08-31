@@ -4,6 +4,7 @@ import HowItWorks from '@/components/sections/HowItWorks'
 import IndustriesSection from '@/components/sections/IndustriesSection'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import PartnersOrbit from '@/components/sections/PartnersOrbit'
+import ArchitectureSection from '@/components/sections/ArchitectureSection'
 import CTASection from '@/components/sections/CTASection'
 import CasesSection from '@/components/sections/CasesSection'
 import WelcomeIntro from '@/components/layout/WelcomeIntro'
@@ -20,6 +21,7 @@ export default function HomePage() {
       <IndustriesSection />
       <TestimonialsSection />
       <PartnersOrbit />
+      <ArchitectureSection />
       <CTASection />
       <Footer />
     </main>

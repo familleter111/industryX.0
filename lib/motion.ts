@@ -81,6 +81,31 @@ export const scaleX: Variants = {
   visible: { opacity: 1, scaleX: 1, transition: enter },
 }
 
+/**
+ * Trace d'une ligne SVG, du depart vers l'arrivee.
+ *
+ * `strokeDashoffset` n'est ni une transformation ni une opacite : c'est la
+ * seule exception a la regle, et elle se limite au schema d'architecture. Elle
+ * ne declenche aucun layout — le navigateur ne recalcule que le pointille du
+ * trace — mais elle reste un repaint, d'ou la limitation a un seul endroit.
+ *
+ * Le chemin doit porter `pathLength={1}` et `strokeDasharray={1}` pour que
+ * l'offset s'exprime en fraction de sa longueur, quelle que soit sa taille.
+ */
+export const drawLine: Variants = {
+  hidden: { strokeDashoffset: 1 },
+  visible: {
+    strokeDashoffset: 0,
+    transition: { duration: tokens.duration.slow, ease: EASE },
+  },
+}
+
+/** Ligne deja tracee, servie quand l'utilisateur prefere moins de mouvement. */
+export const STATIC_LINE: Variants = {
+  hidden: { strokeDashoffset: 0 },
+  visible: { strokeDashoffset: 0, transition: { duration: 0 } },
+}
+
 /** Conteneur qui décale l'entrée de ses enfants. */
 export const staggerContainer = (
   stagger: number = tokens.stagger,

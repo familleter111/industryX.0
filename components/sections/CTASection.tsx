@@ -15,7 +15,7 @@ export default function CTASection() {
   return (
     <Section
       variant="default"
-      background="white"
+      background="cream"
       id="contact"
       backdrop={
         <AnimatedMeshBackground

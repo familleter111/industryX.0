@@ -5,11 +5,13 @@ import type { Variants } from 'framer-motion'
 
 import {
   STATIC,
+  STATIC_LINE,
   STATIC_CONTAINER,
   fadeIn,
   fadeUp,
   scaleIn,
   scaleX,
+  drawLine,
   staggerContainer,
   viewport,
 } from './motion'
@@ -36,6 +38,7 @@ export function useMotion() {
     fadeIn: reduce ? STATIC : fadeIn,
     scaleIn: reduce ? STATIC : scaleIn,
     scaleX: reduce ? STATIC : scaleX,
+    drawLine: reduce ? STATIC_LINE : drawLine,
     stagger: (stagger?: number, delayChildren?: number): Variants =>
       reduce ? STATIC_CONTAINER : staggerContainer(stagger, delayChildren),
   }
