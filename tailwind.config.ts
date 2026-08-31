@@ -85,9 +85,14 @@ const config: Config = {
           from: { strokeDashoffset: '0' },
           to: { strokeDashoffset: '-20' },
         },
+        // Flottement leger de la barre ODD. Pas de variation d'opacite : ces
+        // pastilles sont du contenu, pas un decor de fond — les faire pulser
+        // entre 0.6 et 0.9 les rendrait delavees en permanence. L'amplitude
+        // reste faible (6 px) pour que la barre respire sans se disloquer :
+        // le decalage de phase entre pastilles vient de --tilt et du delay.
         floatSoft: {
-          '0%, 100%': { transform: 'translateY(0) rotate(0deg)', opacity: '0.6' },
-          '50%': { transform: 'translateY(-15px) rotate(var(--tilt, 0deg))', opacity: '0.9' },
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-6px) rotate(var(--tilt, 0deg))' },
         },
         orbDrift: {
           '0%, 100%': { transform: 'scale(1) translateX(0px)' },
