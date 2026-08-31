@@ -5,6 +5,7 @@ import FeaturesGrid from '@/components/FeaturesGrid'
 import HowItWorks from '@/components/HowItWorks'
 import IndustriesSection from '@/components/IndustriesSection'
 import TestimonialsSection from '@/components/TestimonialsSection'
+import PartnersOrbit from '@/components/PartnersOrbit'
 import CTASection from '@/components/CTASection'
 import Footer from '@/components/Footer'
 import ModuleSection from '@/components/Module'
@@ -29,6 +30,7 @@ export default function HomePage() {
       <CasesSection />
       <IndustriesSection />
       <TestimonialsSection />
+      <PartnersOrbit />
       <CTASection />
       <Footer />
     </main>

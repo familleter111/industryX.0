@@ -10,8 +10,8 @@ import {
   Workflow,
   Activity,
 } from 'lucide-react'
-import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
+import AnimatedMeshBackground from './AnimatedMeshBackground'
 
 const colors = {
   gold: '#DAA250',
@@ -133,7 +133,7 @@ function SectorLogoCard({
 
 export default function CipaSection() {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true })
+  const inView = useInView(ref, { once: false })
   const [open, setOpen] = useState(false)
 
   return (
@@ -143,46 +143,16 @@ export default function CipaSection() {
       className="relative overflow-hidden py-12 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:py-10"
       style={{ background: '#F6F7F4', fontFamily: 'var(--font-inter)' }}
     >
-      {/* ================= BACKGROUND ================= */}
-      <div className="absolute inset-0 -z-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(circle at top left, rgba(218,162,80,.08), transparent 26%),
-              radial-gradient(circle at bottom right, rgba(199,255,58,.06), transparent 26%),
-              linear-gradient(180deg, #FFFFFF 0%, #F6F7F4 100%)
-            `,
-          }}
-        />
-
-        <div
-          className="absolute left-0 top-0 h-[700px] w-[700px] rounded-full"
-          style={{
-            background: 'rgba(218,162,80,.09)',
-            filter: 'blur(150px)',
-          }}
-        />
-
-        <div
-          className="absolute right-0 bottom-0 h-[650px] w-[650px] rounded-full"
-          style={{
-            background: 'rgba(199,255,58,.05)',
-            filter: 'blur(150px)',
-          }}
-        />
-
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-          }}
-        />
-      </div>
+      {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
+      <AnimatedMeshBackground
+        gradient="linear-gradient(180deg, #FFFFFF 0%, #F6F7F4 100%)"
+        gridColor="rgba(0,0,0,.1)"
+        orbs={[
+          { color: 'rgba(218,162,80,.10)', size: 600, position: { left: '-96px', top: '-96px' }, duration: 10, parallax: 35 },
+          { color: 'rgba(199,255,58,.07)', size: 600, position: { right: '-96px', bottom: '-96px' }, duration: 12, parallax: 45 },
+          { color: 'rgba(63,174,90,.06)', size: 420, position: { left: 'calc(50% - 210px)', top: '33%' }, duration: 8, parallax: 25 },
+        ]}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10">
         
@@ -190,7 +160,8 @@ export default function CipaSection() {
         <div className="mx-auto max-w-5xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="flex justify-center">
               <Image
@@ -226,122 +197,72 @@ export default function CipaSection() {
           </motion.div>
         </div>
 
-        {/* ================= FLÈCHE EXPLICATIVE : problèmes → CIPA (#5/#6) ================= */}
+        {/* ================= TRANSITION : problèmes → CIPA ================= */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="relative mt-5 lg:mt-6"
+          initial={{ opacity: 0, y: 14 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+          transition={{ duration: 0.4, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mt-6 lg:mt-8"
         >
-          {/* Badge de transition */}
-          <div className="flex justify-center">
-            <div
-              className="inline-flex items-center gap-2.5 rounded-full border bg-white px-5 py-2.5"
-              style={{
-                borderColor: 'rgba(218,162,80,.3)',
-                boxShadow: '0 12px 34px rgba(218,162,80,.14)',
-              }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-70" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
-              </span>
-              <span className="text-[12.5px] font-semibold" style={{ color: colors.muted }}>
-                Des opérations déconnectées
-              </span>
-              <ArrowRight size={15} style={{ color: colors.gold }} />
-              <span className="text-[12.5px] font-bold" style={{ color: colors.gold }}>
-                à la maîtrise CIPA
-              </span>
-            </div>
-          </div>
+          <p
+            className="mx-auto max-w-2xl text-center text-[13px] font-medium leading-6"
+            style={{ color: colors.muted }}
+          >
+            CIPA reconnecte vos opérations, vos équipes et vos données.{' '}
+            <span className="font-bold" style={{ color: colors.text }}>
+              Trois pouvoirs pour reprendre le contrôle.
+            </span>
+          </p>
 
-          {/* Tige verticale + chevron */}
-          <div className="flex flex-col items-center">
-            <div
-              className="mt-3 h-6 w-[2px] rounded-full"
-              style={{ background: 'linear-gradient(to bottom, rgba(218,162,80,0), #DAA250)' }}
-            />
-            <ChevronDown size={20} className="-mt-1" style={{ color: colors.gold }} />
-            <p
-              className="mt-2 max-w-2xl text-center text-[13px] font-medium leading-6"
-              style={{ color: colors.muted }}
-            >
-              CIPA reconnecte vos opérations, vos équipes et vos données.{' '}
-              <span className="font-bold" style={{ color: colors.text }}>
-                Trois pouvoirs pour reprendre le contrôle.
-              </span>
-            </p>
-          </div>
-
-          {/* Branche desktop qui se déploie vers les 3 cartes */}
-          <div className="relative mx-auto mt-3 hidden h-8 max-w-5xl lg:block">
-            <div
-              className="absolute left-1/2 top-0 h-4 w-[2px] -translate-x-1/2"
-              style={{ background: 'rgba(218,162,80,.7)' }}
-            />
-            <div
-              className="absolute left-[16.66%] right-[16.66%] top-4 h-[2px]"
+          {/* Ligne d'énergie animée — remplace les flèches/branches */}
+          <div className="relative mx-auto mt-6 h-px w-full max-w-md overflow-hidden rounded-full lg:max-w-lg">
+            <div className="absolute inset-0" style={{ background: 'rgba(218,162,80,.15)' }} />
+            <motion.div
+              className="absolute inset-y-0 w-1/4"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(218,162,80,.25), #DAA250, rgba(218,162,80,.25))',
+                  'linear-gradient(90deg, transparent, #DAA250, #C7FF3A, transparent)',
               }}
+              animate={{ x: ['-100%', '500%'] }}
+              transition={{ duration: 2.6, repeat: Infinity, ease: 'linear' }}
             />
-            {[16.66, 50, 83.34].map((left, i) => (
-              <div
-                key={i}
-                className="absolute top-4 flex flex-col items-center"
-                style={{ left: `${left}%`, transform: 'translateX(-50%)' }}
-              >
-                <div className="h-4 w-[2px]" style={{ background: 'rgba(218,162,80,.7)' }} />
-                <div
-                  className="-mt-[3px] h-2 w-2 rotate-45 border-b-2 border-r-2"
-                  style={{ borderColor: '#DAA250' }}
-                />
-              </div>
-            ))}
           </div>
         </motion.div>
 
-        {/* ================= PILLARS / CARDS — les 3 pouvoirs (#6) ================= */}
-        <div className="mt-4 grid gap-5 lg:mt-3 lg:grid-cols-3 lg:gap-6">
+        {/* ================= PILLARS / CARDS — les 3 pouvoirs ================= */}
+        <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3 lg:gap-6">
           {pillars.map((pillar, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.12 }}
-              className="relative overflow-hidden rounded-[24px] border p-5 text-center lg:p-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ delay: 0.08 + i * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className={`group relative overflow-visible rounded-[24px] border p-6 pt-8 text-center transition-shadow duration-300 hover:shadow-[0_35px_80px_rgba(0,0,0,0.12)] lg:p-7 lg:pt-9 ${
+                i === 1 ? 'lg:-translate-y-4' : ''
+              }`}
               style={{
                 background: 'rgba(255,255,255,.9)',
                 borderColor: 'rgba(0,0,0,.06)',
                 boxShadow: '0 25px 70px rgba(0,0,0,.08)',
               }}
             >
-              {/* Liseré gold haut de carte (continuité de la flèche) */}
+              {/* Numéro flottant */}
               <div
-                className="absolute inset-x-0 top-0 h-[3px]"
-                style={{
-                  background:
-                    'linear-gradient(to right, transparent, rgba(218,162,80,.7), transparent)',
-                }}
-              />
+                className="absolute -top-5 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full text-[13px] font-black text-white shadow-lg transition-transform duration-300 group-hover:scale-110"
+                style={{ background: pillar.iconColor }}
+              >
+                0{i + 1}
+              </div>
 
               <div
-                className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl"
+                className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
                 style={{ background: '#fff', border: '1px solid rgba(0,0,0,.05)' }}
               >
                 <pillar.icon size={22} style={{ color: pillar.iconColor }} />
               </div>
 
-              <span
-                className="mt-3 inline-block text-[11px] font-bold uppercase tracking-[0.2em]"
-                style={{ color: colors.gold }}
-              >
-                Pouvoir 0{i + 1}
-              </span>
-
-              <h3 className="mt-1.5 text-xl font-black" style={{ color: colors.text }}>
+              <h3 className="mt-3 text-xl font-black" style={{ color: colors.text }}>
                 {pillar.title}
               </h3>
 
@@ -354,9 +275,9 @@ export default function CipaSection() {
 
         {/* ================= BARRE DES SECTEURS — sous la flèche (#2/#7) ================= */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+          transition={{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto mt-10 max-w-6xl lg:mt-12"
         >
           <div className="mb-3 text-center">

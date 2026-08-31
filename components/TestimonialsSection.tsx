@@ -4,54 +4,43 @@ import { useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import AnimatedMeshBackground from './AnimatedMeshBackground'
+import { findClientLogo, logoFrameWidth } from './clientLogos'
+import { getTestimonials, type Testimonial } from './testimonials'
 
-const testimonials = [
-  {
-    quote:
-      "L’intégration de CIPA a considérablement simplifié nos audits et nos opérations quotidiennes. La plateforme a amélioré notre conformité réglementaire tout en nous aidant à résoudre efficacement des problématiques récurrentes de qualité et de suivi.",
-    author: 'Quality Manager',
-    company: 'Warda Company',
-    sector: 'Industrie Agroalimentaire',
-    image: '/image2.png',
-    color: '#DAA250',
-    rating: 5,
-  },
-  {
-    quote:
-      "Grâce à CIPA, nous avons simplifié la gestion de nos lots de production et renforcé la fiabilité de nos processus industriels. Les plans d’action automatisés ainsi que le suivi qualité garantissent désormais une production conforme, fluide et performante.",
-    author: 'General Manager',
-    company: 'Polyroto Group',
-    sector: 'Industrie Navale',
-    image: '/image3.png',
-    color: '#22C55E',
-    rating: 5,
-  },
-  {
-    quote:
-      "CIPA nous a permis d’obtenir une meilleure visibilité sur nos opérations techniques et nos performances industrielles. Les outils d’analyse et le suivi intelligent des interventions ont réduit les temps d’arrêt et amélioré l’efficacité globale de nos équipes.",
-    author: 'Directeur Technique',
-    company: 'Bakou Motors',
-    sector: 'Industrie Automobile',
-    image: '/image8.png',
-    color: '#3B82F6',
-    rating: 5,
-  },
-]
+/**
+ * Témoignages : source unique dans components/testimonials.ts.
+ * Seuls les verbatims validés (`status: 'published'`) sont affichés.
+ */
+const testimonials = getTestimonials(false)
 
-/* ✅ Avatar robuste avec fallback réel */
-function SafeAvatar({ src, alt }: { src: string; alt: string }) {
-  const [imgSrc, setImgSrc] = useState(src)
+/* Vignette du client : logo si /public/logos en contient un, initiales sinon.
+   `logoFrameWidth` inscrit le contenu réel dans une boîte commune pour que
+   tous les logos paraissent de la même taille. */
+function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
+  const logo = testimonial.logoAlt ? findClientLogo(testimonial.logoAlt) : undefined
 
   return (
-    <div className="h-16 w-16 overflow-hidden rounded-2xl ring-2 ring-white shadow-md">
-      <Image
-        src={imgSrc}
-        alt={alt}
-        width={64}
-        height={64}
-        className="h-full w-full object-cover"
-        onError={() => setImgSrc('/fallback-avatar.png')}
-      />
+    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-2 ring-white shadow-md">
+      {logo ? (
+        <Image
+          src={logo.src}
+          alt={logo.alt}
+          width={512}
+          height={512}
+          /* contenu inscrit dans 44×34 */
+          style={{ width: logoFrameWidth(logo, 44, 34) }}
+          className="h-auto max-w-full shrink-0 object-contain"
+        />
+      ) : (
+        <span className="font-display text-[17px] font-black text-[#B6842B]">
+          {testimonial.company
+            .split(' ')
+            .map((word) => word[0])
+            .slice(0, 2)
+            .join('')}
+        </span>
+      )}
     </div>
   )
 }
@@ -71,19 +60,24 @@ export default function TestimonialsSection() {
   return (
     <section className="relative overflow-hidden bg-[#F9F8F6] py-14 sm:py-16 lg:py-20">
 
-      {/* glow background */}
-      <div className="absolute left-0 top-0 h-[300px] w-[300px] rounded-full bg-yellow-200/20 blur-[120px]" />
-      <div className="absolute bottom-0 right-0 h-[300px] w-[300px] rounded-full bg-yellow-100/30 blur-[120px]" />
+      {/* glow background — mesh animé avec parallax léger */}
+      <AnimatedMeshBackground
+        grid={false}
+        orbs={[
+          { color: 'rgba(254,240,138,0.4)', size: 300, position: { left: '0', top: '0' }, duration: 9, parallax: 25 },
+          { color: 'rgba(254,249,195,0.5)', size: 300, position: { right: '0', bottom: '0' }, duration: 11, parallax: 30 },
+        ]}
+      />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
 
         {/* HEADER */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.7 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16 text-center"
         >
           <h2 className="text-4xl font-bold text-[#111] sm:text-5xl">
@@ -100,10 +94,10 @@ export default function TestimonialsSection() {
             return (
               <motion.div
                 key={t.company}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: i * 0.12 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 0.4, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => setCurrent(i)}
                 className={`
                   cursor-pointer rounded-[32px] border bg-white/90 p-7 backdrop-blur-xl transition-all
@@ -136,7 +130,7 @@ export default function TestimonialsSection() {
 
                 {/* PROFILE */}
                 <div className="flex items-center gap-4">
-                  <SafeAvatar src={t.image} alt={t.company} />
+                  <ClientAvatar testimonial={t} />
 
                   <div>
                     <h3 className="text-base font-bold text-[#111]">
@@ -165,13 +159,15 @@ export default function TestimonialsSection() {
 
         {/* NAVIGATION */}
         <div className="mt-12 flex items-center justify-center gap-4">
-          <button
+          <motion.button
             type="button"
             onClick={prev}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-[#DAA250] hover:text-white"
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition-colors hover:bg-[#DAA250] hover:text-white"
           >
             <ChevronLeft size={18} />
-          </button>
+          </motion.button>
 
           <div className="flex gap-2">
             {testimonials.map((_, i) => (
@@ -187,13 +183,15 @@ export default function TestimonialsSection() {
             ))}
           </div>
 
-          <button
+          <motion.button
             type="button"
             onClick={next}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-[#DAA250] hover:text-white"
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition-colors hover:bg-[#DAA250] hover:text-white"
           >
             <ChevronRight size={18} />
-          </button>
+          </motion.button>
         </div>
       </div>
     </section>

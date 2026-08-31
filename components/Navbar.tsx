@@ -34,6 +34,7 @@ import {
 } from 'lucide-react'
 
 import Image from 'next/image'
+import { LINKEDIN_URL } from './socials'
 import ChatWidget from './ChatWidget'
 
 const inter = Inter({
@@ -505,7 +506,7 @@ export default function Navbar() {
 
                 {/* LINKEDIN */}
                 <a
-                  href="https://tn.linkedin.com/company/industryx0"
+                  href={LINKEDIN_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="group flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-black/[0.04]"
@@ -721,7 +722,7 @@ export default function Navbar() {
 
                 {/* MOBILE LINKEDIN */}
                 <a
-                  href="https://tn.linkedin.com/company/industryx0"
+                  href={LINKEDIN_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="flex h-full w-[52px] items-center justify-center rounded-xl border border-[#ECE7DD] bg-[#FAFAF9]"

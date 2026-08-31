@@ -9,6 +9,7 @@ import {
   ArrowRight,
   CheckCircle2,
 } from 'lucide-react'
+import AnimatedMeshBackground from './AnimatedMeshBackground'
 
 const ODD_LOGOS = [
   '/ODD/ODD7.png',
@@ -156,8 +157,8 @@ export default function IndustriesSection() {
   const ref = useRef(null)
 
   const inView = useInView(ref, {
-    once: true,
-    margin: '-100px',
+    once: false,
+    margin: '-40px',
   })
 
   return (
@@ -166,35 +167,17 @@ export default function IndustriesSection() {
       className="relative overflow-hidden py-16 lg:py-24"
       style={{ background: '#F7F7F6', fontFamily: 'var(--font-inter)' }}
     >
-      {/* BACKGROUND — identique au Hero */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)',
-          }}
-        />
-        {/* Green glow */}
-        <div
-          className="absolute left-0 top-[-5%] h-[480px] w-[480px] rounded-full"
-          style={{ background: 'rgba(34,197,94,0.09)', filter: 'blur(130px)' }}
-        />
-        {/* Gold glow */}
-        <div
-          className="absolute bottom-[-5%] right-0 h-[480px] w-[480px] rounded-full"
-          style={{ background: 'rgba(218,162,80,0.09)', filter: 'blur(130px)' }}
-        />
-        {/* Grid */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(15,23,42,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.12) 1px, transparent 1px)',
-            backgroundSize: '90px 90px',
-          }}
-        />
+      {/* BACKGROUND — mesh animé (identique au Hero) */}
+      <AnimatedMeshBackground
+        gradient="linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)"
+        orbs={[
+          { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
+          { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
+        ]}
+      />
 
-        {/* ANIMATIONS ODD FLOTTANTES — masquées sur mobile */}
+      {/* ANIMATIONS ODD FLOTTANTES — masquées sur mobile */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute inset-0 z-0 hidden lg:block">
           {ODD_ANIMATIONS.map((odd) => (
             <motion.img
@@ -243,9 +226,9 @@ export default function IndustriesSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-16">
         {/* HEADER */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="mb-20 text-center"
         >
 
@@ -273,11 +256,11 @@ export default function IndustriesSection() {
             {steps.map((step, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 40 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{
-                  duration: 0.7,
-                  delay: i * 0.15,
+                  duration: 0.45,
+                  delay: i * 0.08,
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 className="group relative"
@@ -349,11 +332,11 @@ export default function IndustriesSection() {
 
         {/* ODD LOGOS BAR */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, y: 14 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
           transition={{
-            duration: 0.8,
-            delay: 0.5,
+            duration: 0.45,
+            delay: 0.15,
             ease: [0.22, 1, 0.36, 1],
           }}
           className="mx-auto mt-20 sm:mt-28 max-w-6xl relative z-10 px-4 sm:px-10"

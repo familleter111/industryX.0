@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Image as ImageIcon,
 } from 'lucide-react'
+import AnimatedMeshBackground from './AnimatedMeshBackground'
 
 /* ─────────────────────────── PALETTE (aligne sur Hero) ─────────────────────────── */
 const colors = {
@@ -113,7 +114,7 @@ const useCases = [
 export default function CasesSection() {
   const [activeTab, setActiveTab] = useState(0)
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-100px' })
+  const inView = useInView(ref, { once: false, margin: '-40px' })
 
   const active = useCases[activeTab]
   const Icon = active.icon
@@ -124,53 +125,22 @@ export default function CasesSection() {
       className="relative overflow-hidden py-8 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:py-8"
       style={{ background: colors.bg, fontFamily: 'var(--font-inter)' }}
     >
-      {/* ─── BACKGROUND (identique au Hero) ─── */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        {/* Base gradient */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)',
-          }}
-        />
-
-        {/* Green glow — coin haut gauche */}
-        <div
-          className="absolute left-0 top-[-5%] h-[480px] w-[480px] rounded-full"
-          style={{
-            background: 'rgba(34,197,94,0.09)',
-            filter: 'blur(130px)',
-          }}
-        />
-
-        {/* Gold glow — coin bas droite */}
-        <div
-          className="absolute bottom-[-5%] right-0 h-[480px] w-[480px] rounded-full"
-          style={{
-            background: 'rgba(218,162,80,0.09)',
-            filter: 'blur(130px)',
-          }}
-        />
-
-        {/* Subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(15,23,42,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.12) 1px, transparent 1px)',
-            backgroundSize: '90px 90px',
-          }}
-        />
-      </div>
+      {/* ─── BACKGROUND — mesh animé (identique au Hero) ─── */}
+      <AnimatedMeshBackground
+        gradient="linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)"
+        orbs={[
+          { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
+          { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
+        ]}
+      />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
 
         {/* ─── HEADER ─── */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto max-w-4xl text-center"
         >
 
@@ -202,8 +172,8 @@ export default function CasesSection() {
         {/* ─── TABS ─── */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.2 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className="mt-4 flex w-full justify-between gap-2 overflow-x-auto pb-1 lg:mt-5"
           style={{ scrollbarWidth: 'none' }}
         >
@@ -211,11 +181,14 @@ export default function CasesSection() {
             const TabIcon = item.icon
             const isActive = activeTab === index
             return (
-              <button
+              <motion.button
                 key={index}
                 onClick={() => setActiveTab(index)}
                 title={item.title}
-                className="group flex shrink-0 items-center justify-center gap-2 rounded-xl border px-3 py-2 sm:px-4 text-sm font-semibold transition-all duration-300"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                className="group flex shrink-0 items-center justify-center gap-2 rounded-xl border px-3 py-2 sm:px-4 text-sm font-semibold transition-colors duration-300"
                 style={{
                   background: isActive ? colors.gold : 'rgba(255,255,255,0.80)',
                   borderColor: isActive ? colors.gold : colors.border,
@@ -228,7 +201,7 @@ export default function CasesSection() {
               >
                 <TabIcon size={16} className="shrink-0" />
                 <span className="hidden md:inline">{item.title}</span>
-              </button>
+              </motion.button>
             )
           })}
         </motion.div>

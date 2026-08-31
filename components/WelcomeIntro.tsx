@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Cog } from 'lucide-react'
+import Image from 'next/image'
 
 export default function WelcomeIntro() {
   const [show, setShow] = useState(true)
@@ -12,16 +12,16 @@ export default function WelcomeIntro() {
     // L'intro « Bienvenue » se joue à chaque chargement/refresh, ~2s, puis se cache
     document.body.style.overflow = 'hidden'
 
-    // Welcome -> Exit (sortie déclenchée à 1.5s)
+    // Welcome -> Exit (sortie déclenchée après un temps de lecture court)
     const timer2 = setTimeout(() => {
       setStep(2)
-    }, 1500)
+    }, 1800)
 
-    // Démontage complet à 2s
+    // Démontage complet une fois l'animation de sortie terminée
     const timer3 = setTimeout(() => {
       setShow(false)
       document.body.style.overflow = ''
-    }, 2000)
+    }, 2300)
 
     return () => {
       clearTimeout(timer2)
@@ -39,8 +39,8 @@ export default function WelcomeIntro() {
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            y: -100,
-            transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
+            y: -60,
+            transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },
           }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-[#fdf8ee] via-[#F4F3EE] to-[#f9edcc] overflow-hidden"
         >
@@ -58,10 +58,10 @@ export default function WelcomeIntro() {
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="absolute -top-10 -left-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-[#DAA250]/10 blur-[100px] sm:blur-[140px]"
+              className="absolute -top-10 -left-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-[#F5A623]/12 blur-[100px] sm:blur-[140px]"
             />
 
-            {/* Glowing Green Orb */}
+            {/* Glowing Graphite Orb */}
             <motion.div
               animate={{
                 scale: [1.1, 0.9, 1.1],
@@ -73,7 +73,7 @@ export default function WelcomeIntro() {
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="absolute -bottom-10 -right-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-[#22C55E]/8 blur-[100px] sm:blur-[140px]"
+              className="absolute -bottom-10 -right-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-[#58595B]/10 blur-[100px] sm:blur-[140px]"
             />
 
             {/* Elegant grid overlay */}
@@ -81,8 +81,8 @@ export default function WelcomeIntro() {
               className="absolute inset-0 opacity-[0.04]"
               style={{
                 backgroundImage: `
-                  linear-gradient(rgba(218,162,80,0.12) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(218,162,80,0.12) 1px, transparent 1px)
+                  linear-gradient(rgba(245,166,35,0.14) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(245,166,35,0.14) 1px, transparent 1px)
                 `,
                 backgroundSize: '80px 80px',
               }}
@@ -98,30 +98,52 @@ export default function WelcomeIntro() {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col items-center"
             >
-              {/* Rotating Cog with premium gold glow */}
               <motion.div
-                initial={{ scale: 0.6, rotate: -45 }}
-                animate={{ scale: 1, rotate: 180 }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="mb-8 p-4 rounded-3xl border border-[#DAA250]/30 bg-white/65 backdrop-blur-md shadow-[0_10px_35px_rgba(218,162,80,0.12)] text-[#DAA250]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.15, duration: 0.7 }}
+                className="flex items-center gap-4 mb-6"
               >
-                <Cog size={48} strokeWidth={1.8} className="animate-[spin_20s_linear_infinite]" />
+                <motion.span
+                  initial={{ width: 0 }}
+                  animate={{ width: 32 }}
+                  transition={{ delay: 0.25, duration: 0.6, ease: 'easeOut' }}
+                  className="h-px bg-gradient-to-r from-transparent to-[#F5A623]/70"
+                />
+                <p className="font-[family-name:var(--font-inter)] text-[11px] sm:text-sm font-semibold uppercase tracking-[0.4em] bg-gradient-to-r from-[#58595B] via-[#F5A623] to-[#58595B] bg-clip-text text-transparent">
+                  Bienvenue sur le site
+                </p>
+                <motion.span
+                  initial={{ width: 0 }}
+                  animate={{ width: 32 }}
+                  transition={{ delay: 0.25, duration: 0.6, ease: 'easeOut' }}
+                  className="h-px bg-gradient-to-l from-transparent to-[#F5A623]/70"
+                />
               </motion.div>
 
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] text-[#78716C] mb-3">
-                Bienvenue sur le site
-              </p>
-
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-[#0C0D12]">
-                Industry <span className="text-[#DAA250]">X.0</span>
-              </h2>
+              {/* Logo with premium gold glow */}
+              <motion.div
+                initial={{ scale: 0.7, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                className="drop-shadow-[0_10px_45px_rgba(245,166,35,0.25)]"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Industry X.0"
+                  width={640}
+                  height={237}
+                  priority
+                  className="w-[280px] sm:w-[420px] lg:w-[520px] h-auto"
+                />
+              </motion.div>
 
               {/* Decorative thin accent line */}
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: 80 }}
                 transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
-                className="h-[2px] bg-gradient-to-r from-transparent via-[#DAA250] to-transparent mt-6"
+                className="h-[2px] bg-gradient-to-r from-transparent via-[#F5A623] to-transparent mt-6"
               />
             </motion.div>
           </div>

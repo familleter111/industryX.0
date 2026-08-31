@@ -51,6 +51,8 @@ const config: Config = {
         'marquee': 'marquee 25s linear infinite',
         'gradient-shift': 'gradientShift 8s ease infinite',
         'progress': 'progressFill 1.5s ease-out forwards',
+        'orbit': 'orbit 90s linear infinite',
+        'orbit-reverse': 'orbitReverse 90s linear infinite',
       },
       keyframes: {
         float: {
@@ -64,6 +66,14 @@ const config: Config = {
         gradientShift: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+        },
+        orbit: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        orbitReverse: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(-360deg)' },
         },
         progressFill: {
           '0%': { width: '0%' },

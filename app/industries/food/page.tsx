@@ -688,10 +688,15 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
                 <p className="text-sm text-slate-600 leading-relaxed mb-6">{slide.desc}</p>
 
                 {/* Avant / Après */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                  <div className="p-4 rounded-xl bg-white border border-red-100">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-red-400 mb-2.5">Avant CIPA</div>
-                    <ul className="space-y-2">
+                <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-0 mb-6">
+                  <div className="relative rounded-2xl sm:rounded-r-none border border-red-100 sm:border-r-0 bg-gradient-to-br from-red-50/70 to-white p-4 sm:p-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100">
+                        <XCircle size={13} className="text-red-500" />
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-500">Avant CIPA</span>
+                    </div>
+                    <ul className="space-y-2.5">
                       {slide.before.map((b, i) => (
                         <li key={i} className="flex items-start gap-2 text-[11px] text-slate-500 leading-snug">
                           <XCircle size={13} className="text-red-300 shrink-0 mt-[1px]" />
@@ -700,9 +705,19 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
                       ))}
                     </ul>
                   </div>
-                  <div className="p-4 rounded-xl bg-white border border-emerald-100">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-500 mb-2.5">Avec CIPA</div>
-                    <ul className="space-y-2">
+
+                  <div className="hidden sm:flex absolute left-1/2 top-1/2 z-10 h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200 bg-white shadow-[0_6px_16px_rgba(0,0,0,0.08)]">
+                    <ArrowRight size={15} className="text-emerald-500" />
+                  </div>
+
+                  <div className="relative rounded-2xl sm:rounded-l-none border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/70 to-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(16,185,129,0.08)]">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                        <CheckCircle2 size={13} className="text-emerald-600" />
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Avec CIPA</span>
+                    </div>
+                    <ul className="space-y-2.5">
                       {slide.after.map((a, i) => (
                         <li key={i} className="flex items-start gap-2 text-[11px] text-slate-600 leading-snug">
                           <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-[1px]" />
@@ -714,13 +729,16 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
                 </div>
 
                 {/* KPIs */}
-                <div className="mt-auto grid grid-cols-2 gap-3">
-                  {slide.kpis.map((k, i) => (
-                    <div key={i} className="p-3.5 rounded-xl bg-white border border-black/[0.05] shadow-sm">
-                      <div className="text-xl sm:text-2xl font-black font-display text-gold">{k.value}</div>
-                      <div className="text-[10px] text-slate-500 mt-0.5 leading-snug">{k.label}</div>
-                    </div>
-                  ))}
+                <div className="mt-auto">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">Résultats mesurés</p>
+                  <div className="grid grid-cols-2 divide-x divide-black/[0.06] overflow-hidden rounded-2xl border border-black/[0.05] bg-gradient-to-br from-gold/[0.06] to-white shadow-sm">
+                    {slide.kpis.map((k, i) => (
+                      <div key={i} className="p-4">
+                        <div className="text-xl sm:text-2xl font-black font-display text-gold">{k.value}</div>
+                        <div className="text-[10px] text-slate-500 mt-0.5 leading-snug">{k.label}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 

@@ -8,32 +8,34 @@ import {
   Sparkles,
 } from 'lucide-react'
 import Image from 'next/image'
+import AnimatedMeshBackground from './AnimatedMeshBackground'
+import { logoFrameWidth } from './logoSizing'
+import { PARTNERS, type Partner } from './partnerLogos'
 
-interface CtaLogo {
-  src: string
-  alt: string
-  hClass: string
-}
+/**
+ * Bandeau partenaires du bloc CTA.
+ *
+ * Les anciens fichiers, à la racine de /public, étaient sur fond
+ * blanc et dimensionnés par une hauteur devinée logo par logo. Ceux de
+ * /logos-partenaires sont transparents, et `logoFrameWidth` les inscrit tous
+ * dans la même boîte : les tailles perçues s'égalisent sans réglage manuel.
+ */
+const CTA_BOX = { w: 132, h: 52 }
 
-const ctaLogos: CtaLogo[] = [
-  { src: '/Microsoft.png', alt: 'Microsoft', hClass: 'h-[40px] sm:h-[48px] md:h-[56px]' },
-  { src: '/DOT.tn.png', alt: 'DOT.tn', hClass: 'h-[46px] sm:h-[56px] md:h-[64px]' },
-  { src: '/AWS.png', alt: 'AWS', hClass: 'h-[38px] sm:h-[46px] md:h-[54px]' },
-  { src: '/Deloitte.png', alt: 'Deloitte', hClass: 'h-[26px] sm:h-[32px] md:h-[38px]' },
-  { src: '/Ey.png', alt: 'EY', hClass: 'h-[48px] sm:h-[58px] md:h-[68px]' },
-  { src: '/GIZ.png', alt: 'GIZ', hClass: 'h-[38px] sm:h-[46px] md:h-[54px]' },
-]
-
-function LogoCard({ logo }: { logo: CtaLogo }) {
+function LogoCard({ partner }: { partner: Partner }) {
   return (
-    <div className="group/logo mx-8 sm:mx-12 md:mx-16 flex items-center justify-center shrink-0">
-      <img
-        src={logo.src}
-        alt={logo.alt}
-        className={`${logo.hClass} w-auto object-contain opacity-80 grayscale contrast-125 transition-all duration-300
+    <div className="group/logo mx-8 flex shrink-0 items-center justify-center sm:mx-12 md:mx-16">
+      <Image
+        src={partner.src}
+        alt={partner.alt}
+        title={partner.tagline}
+        width={512}
+        height={512}
+        style={{ width: logoFrameWidth(partner, CTA_BOX.w, CTA_BOX.h) }}
+        className="h-auto max-w-full shrink-0 object-contain opacity-80 grayscale contrast-125 transition-all duration-300
                    group-hover/marquee:opacity-40 group-hover/marquee:grayscale
                    group-hover/logo:!opacity-100 group-hover/logo:!grayscale-0 group-hover/logo:!contrast-100
-                   group-hover/logo:scale-108`}
+                   group-hover/logo:scale-105"
       />
     </div>
   )
@@ -43,8 +45,8 @@ export default function CTASection() {
   const ref = useRef(null)
 
   const inView = useInView(ref, {
-    once: true,
-    margin: '-100px',
+    once: false,
+    margin: '-40px',
   })
 
   return (
@@ -54,35 +56,22 @@ export default function CTASection() {
       className="relative overflow-hidden bg-[#F9F8F6] py-16 lg:py-24"
     >
 
-      {/* ================= BACKGROUND ================= */}
-      <div className="absolute inset-0">
-
-        {/* GRID */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)
-            `,
-            backgroundSize: '70px 70px',
-          }}
-        />
-
-        {/* LIGHTS */}
-        <div className="absolute -top-32 left-0 w-[420px] h-[420px] bg-gold/10 blur-[140px]" />
-
-        <div className="absolute bottom-0 right-0 w-[420px] h-[420px] bg-green-500/5 blur-[140px]" />
-
-      </div>
+      {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
+      <AnimatedMeshBackground
+        gridColor="rgba(0,0,0,0.04)"
+        orbs={[
+          { color: 'rgba(218,162,80,0.10)', size: 420, position: { left: '0', top: '-128px' }, duration: 12, parallax: 35 },
+          { color: 'rgba(34,197,94,0.05)', size: 420, position: { right: '0', bottom: '0' }, duration: 10, parallax: 30 },
+        ]}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-16">
 
         {/* ================= MAIN CARD ================= */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="relative overflow-hidden rounded-[40px] border border-white/10 bg-[#0B1110] shadow-[0_30px_120px_rgba(0,0,0,0.25)]"
         >
 
@@ -261,8 +250,8 @@ export default function CTASection() {
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F9F8F6] to-transparent z-10" />
 
         <div className="flex animate-marquee w-max items-center py-8 sm:py-12 group-hover/marquee:[animation-play-state:paused]">
-          {[...ctaLogos, ...ctaLogos, ...ctaLogos, ...ctaLogos].map((logo, i) => (
-            <LogoCard key={i} logo={logo} />
+          {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((partner, i) => (
+            <LogoCard key={i} partner={partner} />
           ))}
         </div>
       </div>

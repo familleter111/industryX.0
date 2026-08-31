@@ -8,36 +8,30 @@ import {
   PlayCircle,
   CheckCircle2,
 } from 'lucide-react'
+import AnimatedMeshBackground from './AnimatedMeshBackground'
+import { CLIENT_LOGOS, logoFrameWidth, type ClientLogo } from './clientLogos'
 
-interface PartnerLogo {
-  src: string
-  alt: string
-  hClass: string
-  invert?: boolean
-}
+/*
+ * Logos clients : source unique dans components/clientLogos.ts.
+ * `logoFrameWidth` inscrit le contenu réel de chaque fichier dans une même
+ * boîte, ce qui égalise la taille perçue malgré des marges internes qui vont
+ * du simple au septuple d'un logo à l'autre.
+ */
+const PARTNER_LOGOS = CLIENT_LOGOS
 
-const PARTNER_LOGOS: PartnerLogo[] = [
-  { src: '/image1.png', alt: 'Spiga', hClass: 'h-[78px] sm:h-[96px] md:h-[114px]', invert: true },
-  { src: '/image2.png', alt: 'Diari', hClass: 'h-[78px] sm:h-[96px] md:h-[114px]' },
-  { src: '/image3.png', alt: 'Tunisie Telecom', hClass: 'h-[54px] sm:h-[66px] md:h-[78px]' },
-  { src: '/image4.png', alt: 'Bako', hClass: 'h-[54px] sm:h-[66px] md:h-[78px]' },
-  { src: '/image5.png', alt: 'Novation City', hClass: 'h-[72px] sm:h-[90px] md:h-[105px]' },
-  { src: '/image6.png', alt: 'Warda', hClass: 'h-[84px] sm:h-[105px] md:h-[126px]' },
-  { src: '/image7.png', alt: 'Polyroto', hClass: 'h-[60px] sm:h-[75px] md:h-[90px]' },
-  { src: '/image8.png', alt: 'Somfy', hClass: 'h-[54px] sm:h-[66px] md:h-[78px]' },
-]
-
-function LogoCard({ logo }: { logo: PartnerLogo }) {
+function LogoCard({ logo }: { logo: ClientLogo }) {
   return (
-    <div className="group/logo mx-8 sm:mx-12 md:mx-16 flex items-center justify-center shrink-0">
-      <img
+    <div className="group/logo mx-6 sm:mx-8 md:mx-10 flex h-[110px] w-[150px] shrink-0 items-center justify-center overflow-hidden sm:w-[170px] md:w-[185px]">
+      <Image
         src={logo.src}
         alt={logo.alt}
-        className={`${logo.hClass} w-auto object-contain opacity-80 grayscale contrast-125 transition-all duration-300
+        width={512}
+        height={512}
+        /* contenu inscrit dans 120×54 — cadre max ≈ 140 px, sous les 150 px de cellule */
+        style={{ width: logoFrameWidth(logo, 120, 54) }}
+        className="h-auto max-w-full shrink-0 object-contain opacity-80 grayscale contrast-125 transition-all duration-300
                    group-hover/marquee:opacity-40 group-hover/marquee:grayscale
-                   group-hover/logo:!opacity-100 group-hover/logo:!grayscale-0 group-hover/logo:!contrast-100
-                   group-hover/logo:scale-108
-                   ${logo.invert ? 'invert' : ''}`}
+                   group-hover/logo:!opacity-100 group-hover/logo:!grayscale-0 group-hover/logo:!contrast-100"
       />
     </div>
   )
@@ -54,73 +48,23 @@ const PILLS = [
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#F7F7F6] pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
-      {/* BACKGROUND */}
-
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              linear-gradient(
-                135deg,
-                #F8F8F7 0%,
-                #F3F4F6 40%,
-                #FAFAF9 100%
-              )
-            `,
-          }}
-        />
-
-        {/* GREEN GLOW */}
-
-        <div
-          className="absolute left-0 top-10 h-[420px] w-[420px] rounded-full"
-          style={{
-            background: 'rgba(34,197,94,0.10)',
-            filter: 'blur(120px)',
-          }}
-        />
-
-        {/* GOLD GLOW */}
-
-        <div
-          className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full"
-          style={{
-            background: 'rgba(218,162,80,0.10)',
-            filter: 'blur(120px)',
-          }}
-        />
-
-        {/* GRID */}
-
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(
-                rgba(15,23,42,0.12) 1px,
-                transparent 1px
-              ),
-              linear-gradient(
-                90deg,
-                rgba(15,23,42,0.12) 1px,
-                transparent 1px
-              )
-            `,
-            backgroundSize: '90px 90px',
-          }}
-        />
-
-      </div>
+      {/* BACKGROUND — mesh animé avec parallax léger au scroll */}
+      <AnimatedMeshBackground
+        gradient="linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)"
+        orbs={[
+          { color: 'rgba(34,197,94,0.10)', size: 420, position: { left: '0', top: '40px' }, duration: 11, parallax: 30 },
+          { color: 'rgba(218,162,80,0.10)', size: 420, position: { right: '0', bottom: '0' }, duration: 13, parallax: 40 },
+        ]}
+      />
 
       <div className="mx-auto grid max-w-7xl items-center gap-8 lg:gap-6 lg:grid-cols-[0.9fr_1.7fr] px-4 sm:px-6 lg:px-10">
         {/* LEFT */}
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            duration: 0.7,
+            duration: 0.5,
             ease: [0.22, 1, 0.36, 1],
           }}
           className="relative z-10 text-center lg:text-left"
@@ -329,7 +273,7 @@ export default function Hero() {
         <motion.div
           initial={{
             opacity: 0,
-            y: 20,
+            y: 14,
             scale: 0.98,
           }}
           animate={{
@@ -338,8 +282,8 @@ export default function Hero() {
             scale: 1,
           }}
           transition={{
-            duration: 0.8,
-            delay: 0.1,
+            duration: 0.55,
+            delay: 0.08,
             ease: [0.22, 1, 0.36, 1],
           }}
           className="relative z-10"
@@ -365,11 +309,11 @@ export default function Hero() {
 
       {/* PARTNER LOGOS MARQUEE — déplacée depuis CIPA (#2) */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{
-          duration: 0.8,
-          delay: 0.2,
+          duration: 0.5,
+          delay: 0.15,
           ease: [0.22, 1, 0.36, 1],
         }}
         className="relative z-10 mt-8 w-full sm:mt-12"
@@ -384,7 +328,8 @@ export default function Hero() {
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-l from-[#F7F7F6] to-transparent sm:w-32" />
 
           <div className="flex w-max animate-marquee items-center group-hover/marquee:[animation-play-state:paused]">
-            {[...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS].map((logo, i) => (
+            {/* 2 copies suffisent : l'animation translate de -50%, soit exactement une copie */}
+            {[...PARTNER_LOGOS, ...PARTNER_LOGOS].map((logo, i) => (
               <LogoCard key={i} logo={logo} />
             ))}
           </div>

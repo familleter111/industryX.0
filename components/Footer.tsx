@@ -11,6 +11,8 @@ import {
   Phone,
   ChevronRight,
 } from 'lucide-react'
+import { LINKEDIN_URL } from './socials'
+import AnimatedMeshBackground from './AnimatedMeshBackground'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -61,13 +63,15 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-yellow-500 to-transparent" />
 
-      {/* background glow */}
+      {/* background glow — mesh animé */}
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-[-60px] top-[-60px] h-[180px] w-[180px] rounded-full bg-yellow-500/10 blur-[90px]" />
-
-        <div className="absolute bottom-[-100px] right-[-60px] h-[180px] w-[180px] rounded-full bg-yellow-500/5 blur-[100px]" />
-      </div>
+      <AnimatedMeshBackground
+        grid={false}
+        orbs={[
+          { color: 'rgba(234,179,8,0.10)', size: 220, position: { left: '-60px', top: '-60px' }, duration: 9, parallax: 20 },
+          { color: 'rgba(234,179,8,0.05)', size: 220, position: { right: '-60px', bottom: '-100px' }, duration: 11, parallax: 25 },
+        ]}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 lg:px-8">
         {/* MAIN GRID */}
@@ -96,7 +100,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               <div className="hidden h-6 w-px bg-white/10 md:block" />
 
               <Image
-                src="/logoCipa.png"
+                src="/logoCIPA.png"
                 alt="CIPA"
                 width={80}
                 height={35}
@@ -295,7 +299,10 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                 </a>
 
                 <a
-                  href="/"
+                  href={LINKEDIN_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Industry X.0 sur LinkedIn"
                   className="
                   flex h-12 w-12 items-center justify-center
                   rounded-2xl
