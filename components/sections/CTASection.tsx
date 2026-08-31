@@ -1,70 +1,23 @@
 'use client'
 
-import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
   MessageCircle,
   Sparkles,
 } from 'lucide-react'
-import Image from 'next/image'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
-import { logoFrameWidth } from '@/lib/data/logoSizing'
-import { PARTNERS, type Partner } from '@/lib/data/partnerLogos'
 import { useMotion } from '@/lib/useMotion'
 import Section from '@/components/ui/Section'
 
-/**
- * Bandeau partenaires du bloc CTA.
- *
- * Les anciens fichiers, à la racine de /public, étaient sur fond
- * blanc et dimensionnés par une hauteur devinée logo par logo. Ceux de
- * /logos-partenaires sont transparents, et `logoFrameWidth` les inscrit tous
- * dans la même boîte : les tailles perçues s'égalisent sans réglage manuel.
- */
-const CTA_BOX = { w: 132, h: 52 }
-
-function LogoCard({ partner }: { partner: Partner }) {
-  return (
-    <div className="group/logo mx-8 flex shrink-0 items-center justify-center sm:mx-12 md:mx-16">
-      <Image
-        src={partner.src}
-        alt={partner.alt}
-        title={partner.tagline}
-        width={512}
-        height={512}
-        style={{ width: logoFrameWidth(partner, CTA_BOX.w, CTA_BOX.h) }}
-        className="h-auto max-w-full shrink-0 object-contain opacity-80 grayscale contrast-125 transition-all duration-300
-                   group-hover/marquee:opacity-40 group-hover/marquee:grayscale
-                   group-hover/logo:!opacity-100 group-hover/logo:!grayscale-0 group-hover/logo:!contrast-100
-                   group-hover/logo:scale-105"
-      />
-    </div>
-  )
-}
-
 export default function CTASection() {
   const m = useMotion()
-
 
   return (
     <Section
       variant="default"
       background="white"
       id="contact"
-      bleed={
-        <div className="group/marquee relative overflow-hidden py-8 mt-16 w-full z-10">
-          {/* fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-stone-100 to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-stone-100 to-transparent z-10" />
-
-          <div className="flex animate-marquee w-max items-center py-8 sm:py-12 group-hover/marquee:[animation-play-state:paused]">
-            {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((partner, i) => (
-              <LogoCard key={i} partner={partner} />
-            ))}
-          </div>
-        </div>
-      }
       backdrop={
         <AnimatedMeshBackground
           gridColor="rgba(0,0,0,0.04)"
@@ -77,7 +30,6 @@ export default function CTASection() {
     >
 
       {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
-
 
         {/* ================= MAIN CARD ================= */}
         <motion.div
@@ -254,8 +206,6 @@ export default function CTASection() {
 
         </motion.div>
 
-
-      {/* ================= PARTNERS MARQUEE ================= */}
     </Section>
   )
 }

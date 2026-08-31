@@ -28,6 +28,7 @@ import { LINKEDIN_URL } from '@/lib/data/socials'
 import { PARTNERS } from '@/lib/data/partnerLogos'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
 import { viewport } from '@/lib/motion'
+import LogoMarquee from '@/components/ui/LogoMarquee'
 
 /* ============================================================
    DONNÉES
@@ -295,40 +296,12 @@ export default function AboutPage() {
           Notre écosystème de partenaires
         </p>
 
-        <div className="group/marquee relative mt-8 overflow-hidden">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-[#F7F7F6] to-transparent sm:w-32" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[#F7F7F6] to-transparent sm:w-32" />
-
-          {/* Quatre copies : la piste défile de -50 %, il faut donc que chaque
-              moitié soit plus large que l'écran pour que la boucle soit
-              invisible. 14 cellules × 170 px = 2380 px. */}
-          <div className="flex w-max animate-marquee items-center group-hover/marquee:[animation-play-state:paused]">
-            {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map(
-              (partner, index) => (
-                <div
-                  key={`${partner.alt}-${index}`}
-                  className="flex w-[170px] shrink-0 items-center justify-center px-4 sm:w-[200px]"
-                >
-                  <Image
-                    src={partner.src}
-                    alt={partner.alt}
-                    title={partner.tagline}
-                    width={512}
-                    height={512}
-                    style={{
-                      width: logoFrameWidth(
-                        partner,
-                        ECOSYSTEM_BOX.w,
-                        ECOSYSTEM_BOX.h
-                      ),
-                    }}
-                    className="h-auto max-w-full shrink-0 object-contain opacity-80 transition-opacity duration-300 hover:opacity-100"
-                  />
-                </div>
-              )
-            )}
-          </div>
-        </div>
+        <LogoMarquee
+          logos={PARTNERS}
+          className="mt-8"
+          copies={4}
+          cellClassName="w-[170px] px-4 sm:w-[200px]"
+        />
       </section>
 
       {/* ==================== RÉSEAUX SOCIAUX ==================== */}

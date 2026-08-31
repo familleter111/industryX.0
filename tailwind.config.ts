@@ -60,7 +60,7 @@ const config: Config = {
         intro: '9999',
       },
       animation: {
-        marquee: 'marquee 25s linear infinite',
+        marquee: 'marquee 40s linear infinite',
         // Derive d'ambiance des orbes de fond : boucle autonome, donc CSS.
         // La duree et le decalage sont surcharges par element via style.
         'orb-drift': 'orbDrift 10s ease-in-out infinite',
