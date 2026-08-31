@@ -10,6 +10,31 @@
  * tailwind.config.ts importe ce fichier : aucune valeur n'est recopiée.
  */
 
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ *  REGLE DES ACCENTS — deux couleurs, deux roles, aucune exception
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ *  gold   Action. Boutons et liens d'action, etat actif d'un onglet ou d'une
+ *         pastille, element survole ou focalise. Rien d'autre. Un titre, une
+ *         icone decorative ou un intertitre ne sont pas des actions : ils ne
+ *         prennent pas d'or.
+ *
+ *  green  Validation. Confirmation, conformite, succes, seuil respecte. Rien
+ *         d'autre. Un chiffre qui monte n'est pas une validation.
+ *
+ *  Aucun troisieme accent. Le rouge reste possible pour une erreur ou une
+ *  alerte reelle — c'est un etat, pas un accent de marque, et il ne doit
+ *  jamais servir a mettre un mot en valeur dans un titre.
+ *
+ *  Pourquoi : trois accents en concurrence ne signalent plus rien. Quand l'or
+ *  souligne a la fois un bouton, un mot de titre, une icone et un intertitre,
+ *  le lecteur cesse de lui accorder un sens et le percoit comme une
+ *  decoration. Le jaune des icones ODD et le vert du logo CIPA sont des
+ *  couleurs imposees par des tiers : elles vivent dans leur propre bloc et ne
+ *  se propagent pas au reste de l'interface.
+ */
+
 export const tokens = {
   color: {
     /** Or de marque. `DEFAULT` est l'unique or d'accent du site. */

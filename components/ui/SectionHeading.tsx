@@ -35,7 +35,7 @@ export function SectionBadge({
  * + sous-titre. Partagé par les pages Société et Ressources.
  */
 export default function SectionHeading({
-  badge = 'Industry X.0',
+  badge = null,
   title,
   accent,
   subtitle,
@@ -43,6 +43,13 @@ export default function SectionHeading({
   className = '',
   orchestrated = false,
 }: {
+  /**
+   * Pastille en capitales au-dessus du titre. Volontairement `null` par
+   * defaut : un label lettre-espace pose au-dessus de chaque section se lit
+   * comme un tic de gabarit et cesse de porter de l'information. Il faut donc
+   * le demander, et seulement quand il dit quelque chose que le titre ne dit
+   * pas deja.
+   */
   badge?: string | null
   title: string
   /** Fin du titre, rendue en doré. */

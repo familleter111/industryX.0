@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import {
   ArrowRight,
   MessageCircle,
-  Sparkles,
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { useMotion } from '@/lib/useMotion'
@@ -47,17 +46,6 @@ export default function CTASection() {
 
             {/* ================= LEFT ================= */}
             <div className="relative p-8 sm:p-12 lg:p-16">
-
-              {/* SMALL BADGE */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/10 px-4 py-2 mb-8">
-
-                <Sparkles size={14} className="text-gold" />
-
-                <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">
-                  Plateforme CIPA
-                </span>
-
-              </div>
 
               {/* TITLE */}
               <h2 className="max-w-3xl text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.02] text-white mb-7">
@@ -110,9 +98,6 @@ export default function CTASection() {
                 {/* TITLE */}
                 <div className="mb-10">
 
-                  <p className="text-sm uppercase tracking-[0.18em] text-gold font-semibold mb-4">
-                    Démo personnalisée
-                  </p>
 
                   <h3 className="text-3xl font-bold leading-tight text-white mb-4">
                     Voyez comment CIPA s’adapte à vos opérations terrain.

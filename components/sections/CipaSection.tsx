@@ -60,66 +60,19 @@ const SECTORS = [
   { logo: '/Secteur/Autres.png', label: 'Autres Secteurs' },
 ]
 
-function SectorLogoCard({
-  logo,
-  label,
-  index,
-}: {
-  logo: string
-  label: string
-  index: number
-}) {
-  const [isHovered, setIsHovered] = useState(false)
-  const floatDuration = 3 + (index % 3) * 0.5
-
+function SectorLogoCard({ logo, label }: { logo: string; label: string }) {
   return (
-    <motion.div
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      animate={isHovered ? { y: [0, -10, 0] } : { y: 0 }}
-      whileHover={{ scale: 1.12, zIndex: 40 }}
-      transition={
-        isHovered
-          ? {
-              y: { duration: floatDuration, repeat: Infinity, ease: 'easeInOut' },
-              scale: { type: 'spring', stiffness: 400, damping: 20 },
-            }
-          : {
-              y: { duration: 0.3, ease: 'easeOut' },
-              scale: { type: 'spring', stiffness: 400, damping: 20 },
-            }
-      }
-      className="
-        group relative flex h-16 w-16 cursor-pointer items-center justify-center
-        overflow-visible rounded-2xl border border-black/[0.06] bg-white
-        shadow-[0_4px_16px_rgba(0,0,0,0.03)] transition-shadow duration-300
-        hover:border-black/[0.12] hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]
-      "
-    >
-      <div className="absolute inset-0 overflow-hidden rounded-2xl p-3">
+    <figure className="flex w-full flex-col items-center gap-2">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-black/[0.06] bg-white p-3 shadow-[0_4px_16px_rgba(0,0,0,0.03)] transition-shadow duration-base ease-smooth hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logo} alt={label} className="h-full w-full object-contain" />
+        <img src={logo} alt="" className="h-full w-full object-contain" />
       </div>
-
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9, x: '-50%' }}
-            animate={{ opacity: 1, y: -14, scale: 1, x: '-50%' }}
-            exit={{ opacity: 0, y: 8, scale: 0.95, x: '-50%' }}
-            transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-            className="
-              pointer-events-none absolute bottom-full left-1/2 z-50 mb-1
-              whitespace-nowrap rounded-xl bg-gray-900 px-3 py-2 text-[12px]
-              font-semibold text-white shadow-xl
-            "
-          >
-            {label}
-            <div className="absolute left-1/2 top-full -mt-1 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      {/* Le nom du secteur est ecrit, pas cache derriere un survol : une
+          rangee d'icones muettes se lit comme une barre d'outils. */}
+      <figcaption className="text-center text-[10.5px] font-semibold leading-tight text-stone-600">
+        {label}
+      </figcaption>
+    </figure>
   )
 }
 
@@ -174,7 +127,6 @@ export default function CipaSection() {
               La plateforme qui transforme
               <span
                 className="block mt-1"
-                style={{ color: colors.gold }}
               >
                 vos opérations industrielles.
               </span>
@@ -182,8 +134,7 @@ export default function CipaSection() {
 
             <div className="mx-auto mt-3 max-w-3xl">
               <p
-                className="text-base lg:text-lg font-semibold leading-7"
-                style={{ color: colors.gold }}
+                className="text-base lg:text-lg font-semibold leading-7 text-stone-600"
               >
                 La réponse à vos opérations déconnectées.
               </p>
@@ -288,12 +239,11 @@ export default function CipaSection() {
           </div>
 
           <div className="grid grid-cols-4 items-center justify-items-center gap-3 py-1 sm:grid-cols-4 sm:gap-4 lg:grid-cols-8">
-            {SECTORS.map((sector, index) => (
+            {SECTORS.map((sector) => (
               <SectorLogoCard
                 key={sector.logo}
                 logo={sector.logo}
                 label={sector.label}
-                index={index}
               />
             ))}
           </div>

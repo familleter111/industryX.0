@@ -447,7 +447,7 @@ export default function ClientsConstellation() {
 
             <h2 className="mt-5 font-display text-[38px] font-black leading-[1.04] tracking-[-0.04em] text-gray-900 sm:text-[56px] xl:text-[68px] 2xl:text-[76px]">
               Des industriels qui transforment leurs opérations avec{' '}
-              <span className="text-gold">Industry X.0</span>
+              Industry X.0
             </h2>
 
             <p className="mt-6 max-w-2xl text-pretty text-[16px] leading-[1.7] text-stone-600 sm:text-[18px] xl:text-[19px]">

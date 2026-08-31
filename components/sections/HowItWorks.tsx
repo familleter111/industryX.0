@@ -182,15 +182,11 @@ export default function ProblemsSection() {
             className="lg:col-span-5 flex flex-col items-start"
           >
             {/* BADGE */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-red-500/15 bg-red-500/5 text-red-600 mb-6">
-              <AlertTriangle size={13} className="text-red-500 animate-pulse" />
-              <span className="text-[10px] font-bold tracking-wider uppercase">Le coût caché</span>
-            </div>
 
             {/* TITRE PRINCIPAL */}
             <h2 className="text-3xl font-black leading-tight tracking-[-0.04em] text-gray-900 sm:text-4xl lg:text-[2.65rem]">
               Le coût caché des{' '}
-              <span className="text-red-600 block mt-2" style={{ textShadow: '0 10px 30px rgba(220,38,38,0.06)' }}>
+              <span className="block mt-2">
                 opérations déconnectées.
               </span>
             </h2>

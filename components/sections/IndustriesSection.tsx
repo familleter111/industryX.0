@@ -275,9 +275,6 @@ export default function IndustriesSection() {
                     </div>
 
                     <div className="text-right">
-                      <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-dark/35">
-                        Processus
-                      </p>
 
                       <span
                         className="text-sm font-bold"

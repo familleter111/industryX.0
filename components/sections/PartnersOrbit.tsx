@@ -125,15 +125,11 @@ export default function PartnersOrbit({
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-12">
             {/* DISCOURS */}
             <motion.div {...reveal}>
-              <span className="inline-flex items-center gap-2 rounded-full bg-gold/[0.09] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gold-deep ring-1 ring-gold/20 sm:text-[10.5px]">
-                <span className="h-[5px] w-[5px] rounded-full bg-gold" />
-                Nos partenaires
-              </span>
 
               <h2 className="mt-6 font-display text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-gray-900 sm:text-[40px] lg:text-[46px]">
                 Des partenaires
                 <br />
-                qui <span className="text-gold">avancent</span>
+                qui avancent
                 <br />
                 avec nous
               </h2>
@@ -192,7 +188,7 @@ export default function PartnersOrbit({
               <h2 className="mt-6 font-display text-[30px] font-black leading-[1.1] tracking-[-0.035em] text-gray-900 sm:text-[42px] lg:text-[48px]">
                 Trois familles de partenaires,
                 <br />
-                <span className="text-gold">une seule plateforme</span>
+                une seule plateforme
               </h2>
 
               <p className="mt-6 max-w-2xl text-pretty text-[14.5px] leading-[1.75] text-stone-600 sm:text-[16px]">

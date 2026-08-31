@@ -67,9 +67,7 @@ export default function CasesSection() {
             style={{ color: colors.text }}
           >
             Tout ce qu&apos;il faut pour gérer vos{' '}
-            <span style={{ color: colors.gold }}>
-              opérations industrielles
-            </span>
+            opérations industrielles
           </h2>
 
           {/* Gold divider */}

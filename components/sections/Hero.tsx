@@ -291,7 +291,7 @@ export default function Hero() {
         viewport={m.viewport}
         className="relative z-10 mt-8 w-full sm:mt-12"
       >
-        <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-stone-500">
+        <p className="mb-4 text-center text-[13px] text-stone-500">
           Ils nous font confiance
         </p>
 

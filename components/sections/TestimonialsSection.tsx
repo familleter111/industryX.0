@@ -97,7 +97,7 @@ export default function TestimonialsSection() {
         >
           <h2 className="text-4xl font-bold text-dark sm:text-5xl">
             Ils transforment leur industrie
-            <span className="block text-gold">avec CIPA</span>
+            <span className="block">avec CIPA</span>
           </h2>
         </motion.div>
 
