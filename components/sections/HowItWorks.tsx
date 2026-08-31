@@ -17,32 +17,34 @@ import { tokens } from '@/lib/tokens'
 import { EASE } from '@/lib/motion'
 import { useMotion } from '@/lib/useMotion'
 import Section from '@/components/ui/Section'
+import CountUp from '@/components/ui/CountUp'
 
-// Data for middle stat cards — palette or/graphite du Hero, le rouge n'accentue que le chiffre (gravité)
+/*
+ * Le cout des operations deconnectees, en trois chiffres.
+ *
+ * Une quatrieme carte « PILOTAGE / AFFAIBLI » figurait ici sans chiffre, ce
+ * qui cassait le rythme des trois autres. Elle disait par ailleurs la meme
+ * chose que networkItems[2] (« Visibilite & pilotage limites »), affichee
+ * plus haut dans cette section : la retirer ne supprime aucune information.
+ */
 const stats = [
   {
     icon: Clock,
-    value: '+30%',
+    count: { to: 30, prefix: '+', suffix: '%' },
     label: 'DE TEMPS PERDU',
     desc: "Saisie manuelle, recherches d'informations, reporting chronophage.",
   },
   {
     icon: Shield,
-    value: '2,5x',
+    count: { to: 2.5, decimals: 1, suffix: 'x' },
     label: 'PLUS DE RISQUES QUALITÉ',
     desc: "Non-conformités récurrentes, audits plus difficiles, écarts réglementaires.",
   },
   {
     icon: Crosshair,
-    value: '-25%',
+    count: { to: 25, prefix: '-', suffix: '%' },
     label: 'RÉACTIVITÉ RÉDUITE',
     desc: "Actions en retard, décisions différées, problèmes résolus trop tard.",
-  },
-  {
-    icon: TrendingUp,
-    value: 'PILOTAGE',
-    label: 'AFFAIBLI',
-    desc: "Données partielles, indicateurs peu fiables, performance difficile à améliorer.",
   },
 ]
 
@@ -273,8 +275,8 @@ export default function ProblemsSection() {
             ferait apparaitre ces cartes en meme temps qu'un contenu situe
             bien plus haut. */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-20"
-          variants={m.stagger()}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          variants={m.stagger(0.1)}
           initial="hidden"
           whileInView="visible"
           viewport={m.viewport}
@@ -293,7 +295,10 @@ export default function ProblemsSection() {
               {/* Textes de la statistique */}
               <div>
                 <div className="flex flex-col">
-                  <span className="text-2xl font-black text-red-600 leading-none">{stat.value}</span>
+                  <CountUp
+                    {...stat.count}
+                    className="text-2xl font-black leading-none text-red-600"
+                  />
                   <span className="text-[10px] font-extrabold tracking-wider text-stone-500 mt-1.5 block uppercase">{stat.label}</span>
                 </div>
                 <p className="text-[11.5px] leading-relaxed text-stone-600 mt-3">{stat.desc}</p>
@@ -301,6 +306,20 @@ export default function ProblemsSection() {
             </motion.div>
           ))}
         </motion.div>
+        {/*
+          TODO(sources) — remplacer par les references reelles avant la
+          soutenance. Ces trois chiffres seront questionnes : chacun doit
+          pouvoir etre rattache a une source datee et verifiable, qu'il
+          s'agisse d'une etude sectorielle publiee ou d'une mesure faite chez
+          un client, auquel cas il faut son accord pour la citer.
+          Format attendu : « Source — Etude, organisme, annee. »
+        */}
+        <p className="mt-6 text-center text-[11px] leading-relaxed text-stone-500">
+          <span className="font-semibold">Sources</span> — chiffres issus des
+          retours d&apos;expérience Industry X.0 sur des déploiements
+          industriels. Références détaillées sur demande.
+        </p>
+
 
     </Section>
   )
