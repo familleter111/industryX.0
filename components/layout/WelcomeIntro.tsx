@@ -1,54 +1,49 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 
+const HOLD_MS = 1800
+const EXIT_S = 0.5
+
 export default function WelcomeIntro() {
-  const [show, setShow] = useState(true)
-  const [step, setStep] = useState(1) // 1: Welcome message, 2: Exit (étape « Hello » supprimée)
+  const reduceMotion = useReducedMotion()
+  // `visible` déclenche la sortie, `mounted` retire réellement le noeud du DOM.
+  const [visible, setVisible] = useState(true)
+  const [mounted, setMounted] = useState(true)
 
   useEffect(() => {
-    // L'intro « Bienvenue » se joue à chaque chargement/refresh, ~2s, puis se cache
-    document.body.style.overflow = 'hidden'
-
-    // Welcome -> Exit (sortie déclenchée après un temps de lecture court)
-    const timer2 = setTimeout(() => {
-      setStep(2)
-    }, 1800)
-
-    // Démontage complet une fois l'animation de sortie terminée
-    const timer3 = setTimeout(() => {
-      setShow(false)
-      document.body.style.overflow = ''
-    }, 2300)
-
-    return () => {
-      clearTimeout(timer2)
-      clearTimeout(timer3)
-      document.body.style.overflow = ''
+    // prefers-reduced-motion : pas d'intro du tout.
+    if (reduceMotion) {
+      setVisible(false)
+      setMounted(false)
+      return
     }
-  }, [])
+    const timer = setTimeout(() => setVisible(false), HOLD_MS)
+    return () => clearTimeout(timer)
+  }, [reduceMotion])
 
-  if (!show) return null
+  if (!mounted) return null
 
   return (
-    <AnimatePresence>
-      {step < 2 && (
+    <AnimatePresence onExitComplete={() => setMounted(false)}>
+      {visible && (
         <motion.div
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
             y: -60,
-            transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },
+            transition: { duration: EXIT_S, ease: [0.76, 0, 0.24, 1] },
           }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-[#fdf8ee] via-[#F4F3EE] to-[#f9edcc] overflow-hidden"
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#fdf8ee] via-[#F4F3EE] to-[#f9edcc] motion-reduce:hidden"
         >
           {/* ================= PREMIUM GRADIENT MESH BACKGROUND ================= */}
           <div className="absolute inset-0 pointer-events-none">
             {/* Glowing Golden Orb */}
             <motion.div
-              animate={{
+              animate={reduceMotion ? undefined : {
                 scale: [1, 1.2, 1],
                 x: [0, 30, 0],
                 y: [0, -30, 0],
@@ -63,7 +58,7 @@ export default function WelcomeIntro() {
 
             {/* Glowing Graphite Orb */}
             <motion.div
-              animate={{
+              animate={reduceMotion ? undefined : {
                 scale: [1.1, 0.9, 1.1],
                 x: [0, -40, 0],
                 y: [0, 40, 0],
