@@ -13,121 +13,7 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
 import Section from '@/components/ui/Section'
-
-const ODD_LOGOS = [
-  '/ODD/ODD7.png',
-  '/ODD/ODD8.png',
-  '/ODD/ODD9.png',
-  '/ODD/ODD12.png',
-  '/ODD/ODD13.png',
-  '/ODD/ODD17.png',
-]
-
-// CONFIGURATION DES ODD ANIMÉS DANS LES ESPACES VIDES
-const ODD_ANIMATIONS = [
-  { id: 'ODD7', top: '12%', left: '6%', size: 70, delay: 0, duration: 4, rotate: 6 },
-  { id: 'ODD8', bottom: '15%', left: '3%', size: 85, delay: 1.2, duration: 5.5, rotate: -4 },
-  { id: 'ODD9', top: '8%', right: '8%', size: 65, delay: 0.5, duration: 4.5, rotate: 5 },
-  { id: 'ODD12', bottom: '22%', right: '4%', size: 90, delay: 2, duration: 6, rotate: -6 },
-  { id: 'ODD13', top: '38%', left: '46%', size: 55, delay: 1.8, duration: 3.8, rotate: 3 },
-  { id: 'ODD17', bottom: '38%', right: '12%', size: 75, delay: 0.8, duration: 4.2, rotate: -5 },
-]
-
-interface ODDLogoCardProps {
-  logo: string
-  num: string
-  label: string
-}
-
-function ODDLogoCard({ logo, num, label }: ODDLogoCardProps) {
-  const [isHovered, setIsHovered] = useState(false)
-
-  // Varier la durée du flottement selon le numéro pour un effet organique
-  const floatDuration = 3 + (parseInt(num) % 3) * 0.5;
-
-  return (
-    <motion.div
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      animate={isHovered ? {
-        y: [0, -10, 0],
-      } : {
-        y: 0,
-      }}
-      whileHover={{
-        scale: 1.12,
-        zIndex: 40,
-      }}
-      transition={isHovered ? {
-        y: {
-          duration: floatDuration,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        },
-        scale: {
-          type: 'spring',
-          stiffness: 400,
-          damping: 20,
-        }
-      } : {
-        y: {
-          duration: 0.3,
-          ease: 'easeOut',
-        },
-        scale: {
-          type: 'spring',
-          stiffness: 400,
-          damping: 20,
-        }
-      }}
-      className="
-        group relative flex h-24 w-24 cursor-pointer items-center justify-center
-        rounded-2xl border border-black/[0.06] bg-white overflow-visible
-        shadow-[0_4px_16px_rgba(0,0,0,0.03)]
-        transition-shadow duration-300
-        hover:border-black/[0.12] hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]
-      "
-    >
-      <div className="absolute inset-0 rounded-2xl overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={logo}
-          alt={`ODD ${num}`}
-          className="h-full w-full object-cover"
-        />
-      </div>
-
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9, x: '-50%' }}
-            animate={{
-              opacity: 1,
-              y: -14,
-              scale: 1,
-              x: '-50%',
-            }}
-            exit={{ opacity: 0, y: 8, scale: 0.95, x: '-50%' }}
-            transition={{
-              type: 'spring',
-              stiffness: 350,
-              damping: 25,
-            }}
-            className="
-              absolute bottom-full left-1/2 mb-1
-              pointer-events-none bg-gray-900 text-white text-[12px] font-semibold
-              py-2 px-3 rounded-xl whitespace-nowrap shadow-xl z-50
-            "
-          >
-            <span className="text-yellow-300">ODD {num} :</span> {label}
-            {/* Tooltip Arrow */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  )
-}
+import Image from 'next/image'
 
 const steps = [
   {
@@ -156,6 +42,33 @@ const steps = [
   },
 ]
 
+/**
+ * Objectifs de Developpement Durable retenus.
+ *
+ * Trois, choisis pour ceux ou la contribution de la plateforme est concrete
+ * et defendable. En afficher six revenait a reciter une liste.
+ */
+const SDG_GOALS = [
+  {
+    num: 8,
+    title: 'Travail décent et croissance économique',
+    contribution:
+      'Instructions digitalisées et validations horodatées : les opérateurs terrain travaillent sur des procédures à jour, tracées et opposables.',
+  },
+  {
+    num: 9,
+    title: 'Industrie, innovation et infrastructure',
+    contribution:
+      'Une base de données industrielle unique remplace les fichiers dispersés et rend le pilotage de la production mesurable.',
+  },
+  {
+    num: 12,
+    title: 'Consommation et production responsables',
+    contribution:
+      'Détection des dérives avant impact qualité : moins de rebuts, moins de retouches, moins de lots bloqués.',
+  },
+] as const
+
 export default function IndustriesSection() {
   const m = useMotion()
 
@@ -177,40 +90,6 @@ export default function IndustriesSection() {
     >
       {/* BACKGROUND — mesh animé (identique au Hero) */}
 
-      {/* ANIMATIONS ODD FLOTTANTES — masquées sur mobile */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 z-0 hidden lg:block">
-          {ODD_ANIMATIONS.map((odd) => (
-            <motion.img
-              key={odd.id}
-              src={`/ODD/${odd.id}.png`}
-              alt={`Objectif de Développement Durable ${odd.id}`}
-              style={{
-                top: odd.top,
-                bottom: odd.bottom,
-                left: odd.left,
-                right: odd.right,
-                width: odd.size,
-                height: odd.size,
-                borderRadius: '12px',
-                opacity: 0.85,
-                animationDuration: `${odd.duration}s`,
-                animationDelay: `${odd.delay}s`,
-                ['--tilt' as string]: `${odd.rotate}deg`,
-              }}
-              // Le flottement d'ambiance est une boucle autonome : il passe en
-              // CSS (animate-float-soft), ou il ne coute rien au fil principal
-              // et respecte prefers-reduced-motion sans code supplementaire.
-              // Seule l'entree reste pilotee par Framer.
-              className="absolute animate-float-soft drop-shadow-xl"
-              variants={m.scaleIn}
-              initial="hidden"
-              whileInView="visible"
-              viewport={m.viewport}
-            />
-          ))}
-        </div>
-      </div>
 
         {/* HEADER */}
         <motion.div
@@ -313,47 +192,65 @@ export default function IndustriesSection() {
 
 
 
-        {/* ODD LOGOS BAR */}
+        {/* ================= OBJECTIFS DE DEVELOPPEMENT DURABLE =================
+
+            Trois objectifs, pas six, et chacun avec la phrase qui dit ce que
+            CIPA y apporte concretement. Six pastilles muettes ne disaient
+            qu'une chose — qu'on connait la liste — et leurs sept couleurs
+            officielles rompaient la palette de la page sur toute sa largeur.
+
+            TODO(licence) — verifier avant la soutenance les conditions
+            d'utilisation des logos ODD de l'ONU. Les Guidelines on the Use of
+            the SDG Logo and the 17 SDG Icons distinguent l'usage informatif
+            de l'usage commercial : le second exige une autorisation ecrite,
+            et interdit de laisser entendre que l'ONU soutient le produit. Un
+            site vitrine d'editeur logiciel releve du second cas.
+            Reference : un.org/sustainabledevelopment/news/communications-material/
+            ================================================================= */}
         <motion.div
-          variants={m.fadeUp}
+          variants={m.stagger(0.08)}
           initial="hidden"
           whileInView="visible"
           viewport={m.viewport}
-          className="mx-auto mt-20 sm:mt-28 max-w-6xl relative z-10 px-4 sm:px-10"
+          className="relative z-10 mx-auto mt-20 max-w-5xl px-4 sm:mt-28 sm:px-10"
         >
-          <div className="text-center mb-8">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-gold mb-2">
+          <motion.div variants={m.fadeUp} className="mb-8 text-center">
+            <h4 className="mb-2 text-[15px] font-bold text-dark">
               Contribution aux Objectifs de Développement Durable
             </h4>
-            <p className="text-sm text-stone-600 max-w-md mx-auto">
-              CIPA soutient activement les objectifs mondiaux de durabilité, d&apos;industrialisation responsable et de travail décent.
+            <p className="mx-auto max-w-xl text-sm text-stone-600">
+              Trois objectifs sur lesquels la plateforme a un effet mesurable.
             </p>
-          </div>
-          <div className="grid grid-cols-3 sm:grid-cols-6 items-center justify-items-center gap-4 sm:gap-6 py-4">
-            {ODD_LOGOS.map((logo) => {
-              const num = logo.replace(/^\D+/g, '').replace(/\D+$/g, '');
+          </motion.div>
 
-              // Descriptions pour les tooltips des ODD
-              const oddLabels: Record<string, string> = {
-                '7': 'Énergie propre et d\'un coût abordable',
-                '8': 'Travail décent et croissance économique',
-                '9': 'Industrie, innovation et infrastructure',
-                '12': 'Consommation et production responsables',
-                '13': 'Mesures relatives à la lutte contre les changements climatiques',
-                '17': 'Partenariats pour la réalisation des objectifs',
-              };
-              const label = oddLabels[num] || `Objectif ${num}`;
-
-              return (
-                <ODDLogoCard
-                  key={logo}
-                  logo={logo}
-                  num={num}
-                  label={label}
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {SDG_GOALS.map((goal) => (
+              <motion.li
+                key={goal.num}
+                variants={m.fadeUp}
+                className="flex flex-col items-center gap-3 rounded-2xl border border-cream-border bg-white p-5 text-center shadow-[0_8px_24px_rgba(15,23,42,0.04)]"
+              >
+                <Image
+                  src={`/ODD/ODD${goal.num}.png`}
+                  alt=""
+                  width={512}
+                  height={512}
+                  className="h-14 w-14 rounded-lg object-contain"
                 />
-              );
-            })}
-          </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
+                    Objectif {goal.num}
+                  </p>
+                  <h5 className="mt-0.5 text-[15px] font-bold leading-snug text-dark">
+                    {goal.title}
+                  </h5>
+                </div>
+                <p className="text-[13px] leading-relaxed text-stone-600">
+                  {goal.contribution}
+                </p>
+              </motion.li>
+            ))}
+          </ul>
         </motion.div>
     </Section>
   )
