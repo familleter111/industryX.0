@@ -8,6 +8,7 @@ import { ArrowRight } from 'lucide-react'
 import { logoFrameWidth, type LogoAsset } from '@/lib/data/logoSizing'
 import { CLIENT_LOGOS } from '@/lib/data/clientLogos'
 import { PARTNERS, PARTNER_BRANCHES } from '@/lib/data/partnerLogos'
+import { tokens } from '@/lib/tokens'
 
 /* ============================================================
    ORBITE DE L'ÉCOSYSTÈME
@@ -34,7 +35,7 @@ import { PARTNERS, PARTNER_BRANCHES } from '@/lib/data/partnerLogos'
    div de contre-rotation, puis le `motion.div` d'apparition.
    ============================================================ */
 
-const SECTION_BG = '#FAFAF9'
+const SECTION_BG = 'rgb(250 250 249)' // stone-50
 
 /** Côté du repère de travail. */
 const VIEW = 620
@@ -46,8 +47,8 @@ const CORE_SIZE = 150
 /** Agrandissement d'une pastille au survol (miroir de `hover:scale-[1.09]`). */
 const HOVER_SCALE = 1.09
 
-const GOLD = '#DAA250'
-const GREEN = '#22C55E'
+const GOLD = tokens.color.gold.DEFAULT
+const GREEN = 'rgb(34 197 94)' // green-500
 
 /** Cercle de repère à mi-chemin entre les deux anneaux. */
 const GUIDE_RADIUS = 205
@@ -160,7 +161,7 @@ function OrbitChip({ logo, ring }: { logo: LogoAsset; ring: Ring }) {
   const frame = logoFrameWidth(logo, ring.box.w, ring.box.h)
 
   return (
-    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#0C0D12]/[0.05] shadow-[0_8px_24px_rgba(15,23,42,0.07)] transition-[transform,box-shadow] duration-500 hover:scale-[1.09] hover:shadow-[0_16px_38px_rgba(15,23,42,0.15)] hover:ring-gold/40">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-dark/[0.05] shadow-[0_8px_24px_rgba(15,23,42,0.07)] transition-[transform,box-shadow] duration-500 hover:scale-[1.09] hover:shadow-[0_16px_38px_rgba(15,23,42,0.15)] hover:ring-gold/40">
       <Image
         src={logo.src}
         alt={logo.alt}
@@ -347,7 +348,7 @@ function OrbitCanvas() {
         <defs>
           <linearGradient id="orbitPath" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor={GOLD} stopOpacity="0.55" />
-            <stop offset="50%" stopColor="#0C0D12" stopOpacity="0.12" />
+            <stop offset="50%" stopColor={tokens.color.dark.DEFAULT} stopOpacity="0.12" />
             <stop offset="100%" stopColor={GOLD} stopOpacity="0.45" />
           </linearGradient>
         </defs>
@@ -387,7 +388,7 @@ function OrbitCanvas() {
           cy={C}
           r={GUIDE_RADIUS}
           fill="none"
-          stroke="#0C0D12"
+          stroke={tokens.color.dark.DEFAULT}
           strokeOpacity="0.09"
           strokeWidth="1"
           strokeDasharray="2 9"
@@ -440,10 +441,10 @@ function Stats() {
     <div className="mt-10 flex flex-wrap items-start gap-x-10 gap-y-6 sm:mt-12 sm:gap-x-14">
       {STATS.map((stat) => (
         <div key={stat.label}>
-          <p className="font-display text-[26px] font-black leading-none tracking-[-0.03em] text-[#111827] sm:text-[30px]">
+          <p className="font-display text-[26px] font-black leading-none tracking-[-0.03em] text-gray-900 sm:text-[30px]">
             {stat.value}
           </p>
-          <p className="mt-2 text-[12px] font-medium text-[#78716C] sm:text-[12.5px]">
+          <p className="mt-2 text-[12px] font-medium text-stone-500 sm:text-[12.5px]">
             {stat.label}
           </p>
         </div>
@@ -460,14 +461,14 @@ function Stats() {
 
 function BranchLegend() {
   return (
-    <div className="mt-14 grid gap-9 border-t border-[#0C0D12]/[0.07] pt-10 sm:mt-16 sm:grid-cols-3 sm:gap-10">
+    <div className="mt-14 grid gap-9 border-t border-dark/[0.07] pt-10 sm:mt-16 sm:grid-cols-3 sm:gap-10">
       {PARTNER_BRANCHES.map((branch) => (
         <div key={branch.key}>
-          <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-[#C08A2E]">
+          <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-gold-deep">
             {branch.label}
           </p>
 
-          <p className="mt-2.5 text-[13px] leading-[1.65] text-[#78716C]">
+          <p className="mt-2.5 text-[13px] leading-[1.65] text-stone-500">
             {branch.desc}
           </p>
 
@@ -476,10 +477,10 @@ function BranchLegend() {
               <li key={partner.src} className="flex items-baseline gap-2.5">
                 <span className="mt-[1px] h-[5px] w-[5px] shrink-0 rounded-full bg-gold" />
                 <span>
-                  <span className="text-[13.5px] font-semibold text-[#292524]">
+                  <span className="text-[13.5px] font-semibold text-stone-800">
                     {partner.alt}
                   </span>
-                  <span className="ml-2 text-[12.5px] text-[#A8A29E]">
+                  <span className="ml-2 text-[12.5px] text-stone-400">
                     {partner.tagline}
                   </span>
                 </span>
@@ -524,12 +525,12 @@ export default function PartnersOrbit({
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-12">
             {/* DISCOURS */}
             <motion.div {...reveal}>
-              <span className="inline-flex items-center gap-2 rounded-full bg-gold/[0.09] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#B6842B] ring-1 ring-gold/20 sm:text-[10.5px]">
+              <span className="inline-flex items-center gap-2 rounded-full bg-gold/[0.09] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gold-deep ring-1 ring-gold/20 sm:text-[10.5px]">
                 <span className="h-[5px] w-[5px] rounded-full bg-gold" />
                 Nos partenaires
               </span>
 
-              <h2 className="mt-6 font-display text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-[#111827] sm:text-[40px] lg:text-[46px]">
+              <h2 className="mt-6 font-display text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-gray-900 sm:text-[40px] lg:text-[46px]">
                 Des partenaires
                 <br />
                 qui <span className="text-gold">avancent</span>
@@ -537,7 +538,7 @@ export default function PartnersOrbit({
                 avec nous
               </h2>
 
-              <p className="mt-6 max-w-[30rem] text-pretty text-[14.5px] leading-[1.75] text-[#57534E] sm:text-[15.5px]">
+              <p className="mt-6 max-w-[30rem] text-pretty text-[14.5px] leading-[1.75] text-stone-600 sm:text-[15.5px]">
                 CIPA s’entoure de partenaires technologiques, de cabinets de
                 conseil et d’institutions pour construire ensemble l’industrie
                 de demain. Une synergie de compétences au service de vos
@@ -547,7 +548,7 @@ export default function PartnersOrbit({
               <div className="mt-9 flex flex-wrap items-center gap-3.5">
                 <Link
                   href="/partners"
-                  className="group inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-[#0C0D12] shadow-[0_14px_34px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
+                  className="group inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-dark shadow-[0_14px_34px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
                 >
                   Découvrir nos partenaires
                   <ArrowRight
@@ -558,7 +559,7 @@ export default function PartnersOrbit({
 
                 <Link
                   href="/contact"
-                  className="group inline-flex items-center gap-2 rounded-full border border-[#0C0D12]/15 px-6 py-3.5 text-[14px] font-bold text-[#1C1917] transition-all duration-300 hover:border-[#0C0D12]/35 hover:bg-white"
+                  className="group inline-flex items-center gap-2 rounded-full border border-dark/15 px-6 py-3.5 text-[14px] font-bold text-stone-900 transition-all duration-300 hover:border-dark/35 hover:bg-white"
                 >
                   Nous rejoindre
                   <ArrowRight
@@ -582,19 +583,19 @@ export default function PartnersOrbit({
             >
               <div className="flex items-center gap-4">
                 <span className="h-px w-10 bg-gold/55 sm:w-16" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C08A2E] sm:text-[11.5px]">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-deep sm:text-[11.5px]">
                   L’écosystème
                 </span>
                 <span className="h-px w-10 bg-gold/55 sm:w-16" />
               </div>
 
-              <h2 className="mt-6 font-display text-[30px] font-black leading-[1.1] tracking-[-0.035em] text-[#111827] sm:text-[42px] lg:text-[48px]">
+              <h2 className="mt-6 font-display text-[30px] font-black leading-[1.1] tracking-[-0.035em] text-gray-900 sm:text-[42px] lg:text-[48px]">
                 Trois familles de partenaires,
                 <br />
                 <span className="text-gold">une seule plateforme</span>
               </h2>
 
-              <p className="mt-6 max-w-2xl text-pretty text-[14.5px] leading-[1.75] text-[#57534E] sm:text-[16px]">
+              <p className="mt-6 max-w-2xl text-pretty text-[14.5px] leading-[1.75] text-stone-600 sm:text-[16px]">
                 Technologie, conseil, institutions : sept partenaires, trois
                 familles, une seule promesse industrielle.
               </p>

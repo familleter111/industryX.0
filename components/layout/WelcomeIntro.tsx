@@ -37,7 +37,7 @@ export default function WelcomeIntro() {
             transition: { duration: EXIT_S, ease: [0.76, 0, 0.24, 1] },
           }}
           aria-hidden
-          className="pointer-events-none fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#fdf8ee] via-[#F4F3EE] to-[#f9edcc] motion-reduce:hidden"
+          className="pointer-events-none fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-gold-50 via-cream to-gold-100 motion-reduce:hidden"
         >
           {/* ================= PREMIUM GRADIENT MESH BACKGROUND ================= */}
           <div className="absolute inset-0 pointer-events-none">
@@ -53,7 +53,7 @@ export default function WelcomeIntro() {
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="absolute -top-10 -left-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-[#F5A623]/12 blur-[100px] sm:blur-[140px]"
+              className="absolute -top-10 -left-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-gold/12 blur-[100px] sm:blur-[140px]"
             />
 
             {/* Glowing Graphite Orb */}
@@ -68,7 +68,7 @@ export default function WelcomeIntro() {
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="absolute -bottom-10 -right-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-[#58595B]/10 blur-[100px] sm:blur-[140px]"
+              className="absolute -bottom-10 -right-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-stone-600/10 blur-[100px] sm:blur-[140px]"
             />
 
             {/* Elegant grid overlay */}
@@ -103,16 +103,16 @@ export default function WelcomeIntro() {
                   initial={{ width: 0 }}
                   animate={{ width: 32 }}
                   transition={{ delay: 0.25, duration: 0.6, ease: 'easeOut' }}
-                  className="h-px bg-gradient-to-r from-transparent to-[#F5A623]/70"
+                  className="h-px bg-gradient-to-r from-transparent to-gold/70"
                 />
-                <p className="font-[family-name:var(--font-inter)] text-[11px] sm:text-sm font-semibold uppercase tracking-[0.4em] bg-gradient-to-r from-[#58595B] via-[#F5A623] to-[#58595B] bg-clip-text text-transparent">
+                <p className="font-[family-name:var(--font-inter)] text-[11px] sm:text-sm font-semibold uppercase tracking-[0.4em] bg-gradient-to-r from-stone-600 via-gold to-stone-600 bg-clip-text text-transparent">
                   Bienvenue sur le site
                 </p>
                 <motion.span
                   initial={{ width: 0 }}
                   animate={{ width: 32 }}
                   transition={{ delay: 0.25, duration: 0.6, ease: 'easeOut' }}
-                  className="h-px bg-gradient-to-l from-transparent to-[#F5A623]/70"
+                  className="h-px bg-gradient-to-l from-transparent to-gold/70"
                 />
               </motion.div>
 
@@ -138,7 +138,7 @@ export default function WelcomeIntro() {
                 initial={{ width: 0 }}
                 animate={{ width: 80 }}
                 transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
-                className="h-[2px] bg-gradient-to-r from-transparent via-[#F5A623] to-transparent mt-6"
+                className="h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mt-6"
               />
             </motion.div>
           </div>

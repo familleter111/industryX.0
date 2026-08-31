@@ -7,6 +7,7 @@ import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
 import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
+import { tokens } from '@/lib/tokens'
 
 /**
  * Témoignages : source unique dans components/testimonials.ts.
@@ -33,7 +34,7 @@ function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
           className="h-auto max-w-full shrink-0 object-contain"
         />
       ) : (
-        <span className="font-display text-[17px] font-black text-[#B6842B]">
+        <span className="font-display text-[17px] font-black text-gold-deep">
           {testimonial.company
             .split(' ')
             .map((word) => word[0])
@@ -58,7 +59,7 @@ export default function TestimonialsSection() {
   }, [])
 
   return (
-    <section className="relative overflow-hidden bg-[#F9F8F6] py-14 sm:py-16 lg:py-20">
+    <section className="relative overflow-hidden bg-stone-100 py-14 sm:py-16 lg:py-20">
 
       {/* glow background — mesh animé avec parallax léger */}
       <AnimatedMeshBackground
@@ -80,9 +81,9 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16 text-center"
         >
-          <h2 className="text-4xl font-bold text-[#111] sm:text-5xl">
+          <h2 className="text-4xl font-bold text-dark sm:text-5xl">
             Ils transforment leur industrie
-            <span className="block text-[#DAA250]">avec CIPA</span>
+            <span className="block text-gold">avec CIPA</span>
           </h2>
         </motion.div>
 
@@ -102,8 +103,8 @@ export default function TestimonialsSection() {
                 className={`
                   cursor-pointer rounded-[32px] border bg-white/90 p-7 backdrop-blur-xl transition-all
                   ${isActive
-                    ? 'border-[#DAA250]/40 shadow-[0_20px_60px_rgba(218,162,80,0.15)] -translate-y-1'
-                    : 'border-black/10 hover:-translate-y-1 hover:border-[#DAA250]/20 hover:shadow-xl'
+                    ? 'border-gold/40 shadow-[0_20px_60px_rgba(218,162,80,0.15)] -translate-y-1'
+                    : 'border-black/10 hover:-translate-y-1 hover:border-gold/20 hover:shadow-xl'
                   }
                 `}
               >
@@ -118,13 +119,13 @@ export default function TestimonialsSection() {
 
                   <div className="flex gap-1">
                     {Array.from({ length: t.rating }).map((_, idx) => (
-                      <Star key={idx} size={14} fill="#DAA250" stroke="none" />
+                      <Star key={idx} size={14} fill={tokens.color.gold.DEFAULT} stroke="none" />
                     ))}
                   </div>
                 </div>
 
                 {/* TEXT */}
-                <p className="mb-8 text-[15px] leading-8 text-[#555]">
+                <p className="mb-8 text-[15px] leading-8 text-stone-600">
                   “{t.quote}”
                 </p>
 
@@ -133,10 +134,10 @@ export default function TestimonialsSection() {
                   <ClientAvatar testimonial={t} />
 
                   <div>
-                    <h3 className="text-base font-bold text-[#111]">
+                    <h3 className="text-base font-bold text-dark">
                       {t.author}
                     </h3>
-                    <p className="text-sm text-[#666]">{t.company}</p>
+                    <p className="text-sm text-stone-500">{t.company}</p>
                   </div>
                 </div>
 
@@ -164,7 +165,7 @@ export default function TestimonialsSection() {
             onClick={prev}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.94 }}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition-colors hover:bg-[#DAA250] hover:text-white"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition-colors hover:bg-gold hover:text-white"
           >
             <ChevronLeft size={18} />
           </motion.button>
@@ -176,7 +177,7 @@ export default function TestimonialsSection() {
                 type="button"
                 onClick={() => setCurrent(i)}
                 className={`rounded-full transition-all ${current === i
-                  ? 'h-2.5 w-8 bg-[#DAA250]'
+                  ? 'h-2.5 w-8 bg-gold'
                   : 'h-2.5 w-2.5 bg-black/20'
                   }`}
               />
@@ -188,7 +189,7 @@ export default function TestimonialsSection() {
             onClick={next}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.94 }}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition-colors hover:bg-[#DAA250] hover:text-white"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white transition-colors hover:bg-gold hover:text-white"
           >
             <ChevronRight size={18} />
           </motion.button>

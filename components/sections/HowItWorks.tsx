@@ -13,6 +13,7 @@ import {
   Users,
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { tokens } from '@/lib/tokens'
 
 // Data for middle stat cards — palette or/graphite du Hero, le rouge n'accentue que le chiffre (gravité)
 const stats = [
@@ -57,12 +58,12 @@ function NetworkCard({ item }: { item: (typeof networkItems)[number] }) {
   const Icon = item.icon
   return (
     <div className="flex items-start gap-2.5 rounded-xl bg-white/95 backdrop-blur-sm px-3.5 py-3 shadow-[0_12px_28px_rgba(0,0,0,0.22)] border border-white/60 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(218,162,80,0.28)]">
-      <div className="h-9 w-9 shrink-0 rounded-lg bg-[#DAA250]/15 text-[#DAA250] ring-1 ring-[#DAA250]/25 flex items-center justify-center">
+      <div className="h-9 w-9 shrink-0 rounded-lg bg-gold/15 text-gold ring-1 ring-gold/25 flex items-center justify-center">
         <Icon size={16} strokeWidth={2} />
       </div>
       <div className="min-w-0">
-        <p className="text-[9.5px] sm:text-[11.5px] font-extrabold normal-case sm:uppercase tracking-tight sm:tracking-wide text-[#0F172A] leading-snug">{item.title}</p>
-        <p className="text-[8.5px] sm:text-[10.5px] leading-snug text-[#57534E] mt-0.5">{item.desc}</p>
+        <p className="text-[9.5px] sm:text-[11.5px] font-extrabold normal-case sm:uppercase tracking-tight sm:tracking-wide text-gray-900 leading-snug">{item.title}</p>
+        <p className="text-[8.5px] sm:text-[10.5px] leading-snug text-stone-600 mt-0.5">{item.desc}</p>
       </div>
     </div>
   )
@@ -96,7 +97,7 @@ function ConnectorLines({ orientation }: { orientation: 'horizontal' | 'vertical
           key={d}
           d={d}
           fill="none"
-          stroke="#F2C46D"
+          stroke={tokens.color.gold[300]}
           strokeWidth={1.8}
           strokeLinecap="round"
           strokeOpacity={0.85}
@@ -143,14 +144,11 @@ export default function ProblemsSection() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden pt-8 lg:pt-10 pb-16 lg:pb-24"
-      style={{
-        background: '#F7F7F6',
-      }}
+      className="relative overflow-hidden bg-stone-100 pt-8 lg:pt-10 pb-16 lg:pb-24"
     >
       {/* PREMIUM BACKGROUND GLOWS — mesh animé avec parallax léger */}
       <AnimatedMeshBackground
-        gradient="linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)"
+        gradient={tokens.gradient.section}
         orbs={[
           { color: 'rgba(34,197,94,0.08)', size: 500, position: { left: '0', top: '-80px' }, duration: 12, parallax: 35 },
           { color: 'rgba(218,162,80,0.06)', size: 380, position: { right: '0', bottom: '0' }, duration: 10, parallax: 25 },
@@ -176,21 +174,21 @@ export default function ProblemsSection() {
             </div>
 
             {/* TITRE PRINCIPAL */}
-            <h2 className="text-3xl font-black leading-tight tracking-[-0.04em] text-[#0F172A] sm:text-4xl lg:text-[2.65rem]">
+            <h2 className="text-3xl font-black leading-tight tracking-[-0.04em] text-gray-900 sm:text-4xl lg:text-[2.65rem]">
               Le coût caché des{' '}
-              <span className="text-[#DC2626] block mt-2" style={{ textShadow: '0 10px 30px rgba(220,38,38,0.06)' }}>
+              <span className="text-red-600 block mt-2" style={{ textShadow: '0 10px 30px rgba(220,38,38,0.06)' }}>
                 opérations déconnectées.
               </span>
             </h2>
 
             {/* SOUS-TITRE EN GRAS */}
-            <h3 className="mt-8 text-base font-extrabold text-[#0F172A] leading-snug">
+            <h3 className="mt-8 text-base font-extrabold text-gray-900 leading-snug">
               Excel, emails, fichiers partagés, outils isolés.<br />
               Des opérations dispersées qui échappent au contrôle.
             </h3>
 
             {/* PARAGRAPHE DESCRIPTIF */}
-            <p className="mt-4 text-[14px] leading-relaxed text-[#57534E]">
+            <p className="mt-4 text-[14px] leading-relaxed text-stone-600">
               Quand chaque donnée vit dans son propre outil, les écarts deviennent des
               signaux faibles invisibles&nbsp;: non-conformités récurrentes, visibilité
               limitée, traçabilité fragile, actions en retard… jusqu&apos;à la perte de
@@ -217,9 +215,9 @@ export default function ProblemsSection() {
               />
 
               {/* Voile léger — la photo reste bien visible, pas de rouge en fond */}
-              <div className="absolute inset-0 bg-gradient-to-b from-[#0B0C10]/55 via-[#0B0C10]/35 to-[#0B0C10]/60" />
-              <div className="absolute -top-16 -left-16 h-64 w-64 rounded-full bg-[#DAA250]/20 blur-[100px] pointer-events-none" />
-              <div className="absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-[#DAA250]/12 blur-[110px] pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-b from-dark/55 via-dark/35 to-dark/60" />
+              <div className="absolute -top-16 -left-16 h-64 w-64 rounded-full bg-gold/20 blur-[100px] pointer-events-none" />
+              <div className="absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-gold/12 blur-[110px] pointer-events-none" />
 
               {/* Schéma réseau */}
               <div className="absolute inset-0 z-10 p-4 sm:p-6 lg:p-8">
@@ -267,20 +265,20 @@ export default function ProblemsSection() {
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
               transition={{ duration: 0.4, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-white border border-black/[0.05] rounded-3xl p-6 shadow-[0_10px_35px_rgba(15,23,42,0.02)] flex items-start gap-4 transition-all duration-300 hover:shadow-md hover:border-[#DAA250]/30"
+              className="bg-white border border-black/[0.05] rounded-3xl p-6 shadow-[0_10px_35px_rgba(15,23,42,0.02)] flex items-start gap-4 transition-all duration-300 hover:shadow-md hover:border-gold/30"
             >
               {/* Icône */}
-              <div className="h-14 w-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-[#DAA250]/10">
-                <stat.icon size={22} className="text-[#DAA250]" />
+              <div className="h-14 w-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-gold/10">
+                <stat.icon size={22} className="text-gold" />
               </div>
 
               {/* Textes de la statistique */}
               <div>
                 <div className="flex flex-col">
-                  <span className="text-2xl font-black text-[#DC2626] leading-none">{stat.value}</span>
-                  <span className="text-[10px] font-extrabold tracking-wider text-[#78716C] mt-1.5 block uppercase">{stat.label}</span>
+                  <span className="text-2xl font-black text-red-600 leading-none">{stat.value}</span>
+                  <span className="text-[10px] font-extrabold tracking-wider text-stone-500 mt-1.5 block uppercase">{stat.label}</span>
                 </div>
-                <p className="text-[11.5px] leading-relaxed text-[#57534E] mt-3">{stat.desc}</p>
+                <p className="text-[11.5px] leading-relaxed text-stone-600 mt-3">{stat.desc}</p>
               </div>
             </motion.div>
           ))}

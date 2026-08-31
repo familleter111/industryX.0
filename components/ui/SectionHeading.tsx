@@ -17,13 +17,13 @@ export function SectionBadge({
       className={`inline-flex items-center gap-2.5 rounded-full border px-4 py-2 backdrop-blur-sm ${
         tone === 'dark'
           ? 'border-white/12 bg-white/[0.04]'
-          : 'border-[#E7E5E4] bg-white/70'
+          : 'border-stone-200 bg-white/70'
       }`}
     >
       <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-gold" />
       <span
         className={`text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px] ${
-          tone === 'dark' ? 'text-white/75' : 'text-[#57534E]'
+          tone === 'dark' ? 'text-white/75' : 'text-stone-600'
         }`}
       >
         {label}
@@ -64,7 +64,7 @@ export default function SectionHeading({
 
       <h2
         className={`mt-6 max-w-3xl font-display text-[30px] font-black leading-[1.08] tracking-[-0.04em] sm:text-[40px] lg:text-[52px] ${
-          tone === 'dark' ? 'text-white' : 'text-[#111827]'
+          tone === 'dark' ? 'text-white' : 'text-gray-900'
         }`}
       >
         {title}
@@ -74,7 +74,7 @@ export default function SectionHeading({
       {subtitle && (
         <p
           className={`mt-5 max-w-2xl text-[15px] leading-[1.7] sm:text-[16px] ${
-            tone === 'dark' ? 'text-white/60' : 'text-[#57534E]'
+            tone === 'dark' ? 'text-white/60' : 'text-stone-600'
           }`}
         >
           {subtitle}

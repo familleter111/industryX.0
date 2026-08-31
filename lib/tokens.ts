@@ -47,17 +47,29 @@ export const tokens = {
       deep: '#DDD9CF',
     },
 
-    /** Fonds de section quasi blancs. */
-    surface: {
-      DEFAULT: '#F7F7F6',
-      /** Variante chaude, légèrement ivoire. */
-      warm: '#FAF9F5',
+    // Pas de token pour les fonds quasi blancs : ils sont à dE 0,7 et 1,6 de
+    // stone-100 et stone-50, donc indiscernables. On utilise les classes
+    // Tailwind natives plutôt qu'un second nom pour la même couleur.
+
+    /**
+     * Accents ponctuels de CipaSection. Conservés tels quels pour ne rien
+     * changer visuellement ; candidats à la suppression si la section évolue.
+     */
+    accent: {
+      lime: '#C7FF3A',
+      green: '#3FAE5A',
     },
 
     /** Couleurs imposées par des marques tierces. */
     brand: {
       linkedin: '#0A66C2',
     },
+  },
+
+  /** Degrades reutilises tels quels par plusieurs sections. */
+  gradient: {
+    /** Fond de section clair : stone-100 -> gray-100 -> stone-50. */
+    section: 'linear-gradient(135deg, #F5F5F4 0%, #F3F4F6 40%, #FAFAF9 100%)',
   },
 
   radius: {

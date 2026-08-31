@@ -10,6 +10,7 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { tokens } from '@/lib/tokens'
 
 const ODD_LOGOS = [
   '/ODD/ODD7.png',
@@ -112,13 +113,13 @@ function ODDLogoCard({ logo, num, label }: ODDLogoCardProps) {
             }}
             className="
               absolute bottom-full left-1/2 mb-1
-              pointer-events-none bg-[#0F172A] text-white text-[12px] font-semibold
+              pointer-events-none bg-gray-900 text-white text-[12px] font-semibold
               py-2 px-3 rounded-xl whitespace-nowrap shadow-xl z-50
             "
           >
-            <span className="text-[#F2D94E]">ODD {num} :</span> {label}
+            <span className="text-yellow-300">ODD {num} :</span> {label}
             {/* Tooltip Arrow */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-[#0F172A]" />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -133,7 +134,7 @@ const steps = [
     title: 'Collecter l’information au plus proche du terrain',
     description:
       'Les opérateurs, techniciens et équipes qualité saisissent les données directement depuis mobile ou tablette.',
-    accent: '#22C55E',
+    accent: 'rgb(34 197 94)', // green-500
   },
   {
     icon: Layers3,
@@ -141,7 +142,7 @@ const steps = [
     title: 'Structurer les données dans un cadre commun',
     description:
       'CIPA centralise et organise les informations terrain dans des workflows cohérents et standardisés.',
-    accent: '#DAA250',
+    accent: tokens.color.gold.DEFAULT,
   },
   {
     icon: LineChart,
@@ -149,7 +150,7 @@ const steps = [
     title: 'Piloter les actions et améliorer les opérations',
     description:
       'Les équipes gagnent en visibilité, suivent les actions et améliorent les opérations dans le temps.',
-    accent: '#3B82F6',
+    accent: 'rgb(59 130 246)', // blue-500
   },
 ]
 
@@ -164,12 +165,12 @@ export default function IndustriesSection() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden py-16 lg:py-24"
-      style={{ background: '#F7F7F6', fontFamily: 'var(--font-inter)' }}
+      className="relative overflow-hidden bg-stone-100 py-16 lg:py-24"
+      style={{ fontFamily: 'var(--font-inter)' }}
     >
       {/* BACKGROUND — mesh animé (identique au Hero) */}
       <AnimatedMeshBackground
-        gradient="linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)"
+        gradient={tokens.gradient.section}
         orbs={[
           { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
           { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
@@ -342,10 +343,10 @@ export default function IndustriesSection() {
           className="mx-auto mt-20 sm:mt-28 max-w-6xl relative z-10 px-4 sm:px-10"
         >
           <div className="text-center mb-8">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#DAA250] mb-2">
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-gold mb-2">
               Contribution aux Objectifs de Développement Durable
             </h4>
-            <p className="text-sm text-[#57534E] max-w-md mx-auto">
+            <p className="text-sm text-stone-600 max-w-md mx-auto">
               CIPA soutient activement les objectifs mondiaux de durabilité, d&apos;industrialisation responsable et de travail décent.
             </p>
           </div>

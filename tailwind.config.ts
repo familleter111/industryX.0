@@ -20,7 +20,6 @@ const config: Config = {
         gold: color.gold,
         dark: color.dark,
         cream: color.cream,
-        surface: color.surface,
         brand: color.brand,
       },
       fontFamily: {

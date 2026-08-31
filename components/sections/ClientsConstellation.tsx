@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 
 import { CLIENT_LOGOS, type ClientLogo } from '@/lib/data/clientLogos'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
+import { tokens } from '@/lib/tokens'
 
 /* ============================================================
    CONSTELLATION CLIENTS
@@ -32,8 +33,8 @@ import { logoFrameWidth } from '@/lib/data/logoSizing'
 const VIEW_W = 1200
 const VIEW_H = 940
 
-const SECTION_BG = '#F7F7F6'
-const GOLD = '#DAA250'
+const SECTION_BG = 'rgb(245 245 244)' // stone-100
+const GOLD = tokens.color.gold.DEFAULT
 
 /** Boîte d'inscription commune, en unités du repère. */
 const BOX = { w: 168, h: 90 }
@@ -256,7 +257,7 @@ function ConstellationCanvas() {
                 y1={segment.y1}
                 x2={segment.x2}
                 y2={segment.y2}
-                stroke="#0C0D12"
+                stroke={tokens.color.dark.DEFAULT}
                 strokeOpacity="0.16"
                 strokeWidth="1"
                 strokeLinecap="round"
@@ -277,7 +278,7 @@ function ConstellationCanvas() {
               cx={dot.x}
               cy={dot.y}
               r="4"
-              fill="#0C0D12"
+              fill={tokens.color.dark.DEFAULT}
               fillOpacity="0.16"
             />
           ))}
@@ -337,7 +338,7 @@ function ConstellationCanvas() {
         <span
           key={axis.label}
           style={{ left: pctX(axis.x), top: pctY(axis.y) }}
-          className="absolute -translate-y-1/2 whitespace-nowrap text-[clamp(9px,1.05vw,13px)] font-semibold text-[#B6842B]"
+          className="absolute -translate-y-1/2 whitespace-nowrap text-[clamp(9px,1.05vw,13px)] font-semibold text-gold-deep"
         >
           {axis.label}
         </span>
@@ -397,7 +398,7 @@ function LogoGrid() {
       {CLIENT_LOGOS.map((logo) => (
         <div
           key={logo.src}
-          className="flex h-[104px] items-center justify-center overflow-hidden rounded-[20px] border border-[#EFEDE8] bg-white px-2 shadow-[0_10px_28px_rgba(15,23,42,0.04)]"
+          className="flex h-[104px] items-center justify-center overflow-hidden rounded-[20px] border border-cream-border bg-white px-2 shadow-[0_10px_28px_rgba(15,23,42,0.04)]"
         >
           <Image
             src={logo.src}
@@ -441,18 +442,18 @@ export default function ClientsConstellation() {
           >
             <span className="block h-[4px] w-24 rounded-full bg-gold" />
 
-            <p className="mt-6 text-[11.5px] font-bold uppercase tracking-[0.22em] text-[#B6842B] sm:text-[14px]">
+            <p className="mt-6 text-[11.5px] font-bold uppercase tracking-[0.22em] text-gold-deep sm:text-[14px]">
               Ils nous font confiance
             </p>
 
-            <h2 className="mt-5 font-display text-[38px] font-black leading-[1.04] tracking-[-0.04em] text-[#111827] sm:text-[56px] xl:text-[68px] 2xl:text-[76px]">
+            <h2 className="mt-5 font-display text-[38px] font-black leading-[1.04] tracking-[-0.04em] text-gray-900 sm:text-[56px] xl:text-[68px] 2xl:text-[76px]">
               Des industriels qui transforment leurs opérations avec{' '}
               <span className="text-gold">Industry X.0</span>
             </h2>
 
-            <p className="mt-6 max-w-2xl text-pretty text-[16px] leading-[1.7] text-[#57534E] sm:text-[18px] xl:text-[19px]">
+            <p className="mt-6 max-w-2xl text-pretty text-[16px] leading-[1.7] text-stone-600 sm:text-[18px] xl:text-[19px]">
               De la pharma à l’agroalimentaire,{' '}
-              <span className="font-semibold text-[#292524]">CIPA</span> connecte
+              <span className="font-semibold text-stone-800">CIPA</span> connecte
               les équipes, structure les données terrain et accélère
               l’amélioration continue.
             </p>

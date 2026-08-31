@@ -368,12 +368,12 @@ export default function Navbar() {
                         activeMenu === group.label ? null : group.label
                       )
                     }
-                    className="group flex items-center gap-[5px] text-[14px] font-medium tracking-[-0.01em] text-[#44403C] transition-all duration-200 hover:text-black"
+                    className="group flex items-center gap-[5px] text-[14px] font-medium tracking-[-0.01em] text-stone-700 transition-all duration-200 hover:text-black"
                   >
                     <span className="relative">
                       {group.label}
                       <span
-                        className={`absolute -bottom-[7px] left-0 h-[2px] bg-[#D4A017] transition-all duration-300 ${
+                        className={`absolute -bottom-[7px] left-0 h-[2px] bg-gold transition-all duration-300 ${
                           activeMenu === group.label
                             ? 'w-full opacity-100'
                             : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'
@@ -398,7 +398,7 @@ export default function Navbar() {
               {/* CTA */}
               <a
                 href="/contact"
-                className="group inline-flex items-center gap-2 rounded-full bg-[#111827] px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.12)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
+                className="group inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.12)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
               >
                 Demander une démo
                 <ArrowRight
@@ -408,13 +408,13 @@ export default function Navbar() {
               </a>
 
               {/* RIGHT ACTIONS */}
-              <div className="flex items-center gap-3 border-l border-[#E7E5E4] pl-5">
+              <div className="flex items-center gap-3 border-l border-stone-200 pl-5">
                 {/* LANGUAGE SELECT */}
                 <div className="relative">
                   <button
                     type="button"
                     onClick={() => setLanguageOpen(!languageOpen)}
-                    className="group flex items-center gap-2.5 rounded-full border border-[#E7E5E4] bg-white/80 px-3.5 py-2 shadow-[0_4px_20px_rgba(15,23,42,0.04)] backdrop-blur-xl transition-all duration-300 hover:border-[#D4A017]/35 hover:bg-white"
+                    className="group flex items-center gap-2.5 rounded-full border border-stone-200 bg-white/80 px-3.5 py-2 shadow-[0_4px_20px_rgba(15,23,42,0.04)] backdrop-blur-xl transition-all duration-300 hover:border-gold/35 hover:bg-white"
                   >
                     <div className="relative h-4 w-4 overflow-hidden rounded-full">
                       <Image
@@ -428,14 +428,14 @@ export default function Navbar() {
                         className="object-cover"
                       />
                     </div>
-                    <span className="text-[13px] font-semibold tracking-[-0.01em] text-[#44403C]">
+                    <span className="text-[13px] font-semibold tracking-[-0.01em] text-stone-700">
                       {language}
                     </span>
                     <ChevronDown
                       size={14}
                       strokeWidth={2.3}
-                      className={`text-[#A8A29E] transition-all duration-300 ${
-                        languageOpen ? 'rotate-180 text-[#D4A017]' : ''
+                      className={`text-stone-400 transition-all duration-300 ${
+                        languageOpen ? 'rotate-180 text-gold' : ''
                       }`}
                     />
                   </button>
@@ -448,7 +448,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-[-62px] top-[120%] z-50 w-[160px] overflow-hidden rounded-2xl border border-[#ECE7DD] bg-white/95 shadow-[0_20px_45px_rgba(15,23,42,0.10)] backdrop-blur-2xl"
+                        className="absolute right-[-62px] top-[120%] z-50 w-[160px] overflow-hidden rounded-2xl border border-cream-border bg-white/95 shadow-[0_20px_45px_rgba(15,23,42,0.10)] backdrop-blur-2xl"
                       >
                         <button
                           type="button"
@@ -456,8 +456,8 @@ export default function Navbar() {
                             setLanguage('FR')
                             setLanguageOpen(false)
                           }}
-                          className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-all duration-200 hover:bg-[#F8F8F7] ${
-                            language === 'FR' ? 'bg-[#FAF7EF]' : ''
+                          className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-all duration-200 hover:bg-stone-100 ${
+                            language === 'FR' ? 'bg-stone-50' : ''
                           }`}
                         >
                           <div className="relative h-5 w-5 overflow-hidden rounded-full">
@@ -468,7 +468,7 @@ export default function Navbar() {
                               className="object-cover"
                             />
                           </div>
-                          <span className="text-sm font-medium text-[#44403C]">
+                          <span className="text-sm font-medium text-stone-700">
                             FR
                           </span>
                         </button>
@@ -478,8 +478,8 @@ export default function Navbar() {
                             setLanguage('EN')
                             setLanguageOpen(false)
                           }}
-                          className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-all duration-200 hover:bg-[#F8F8F7] ${
-                            language === 'EN' ? 'bg-[#FAF7EF]' : ''
+                          className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-all duration-200 hover:bg-stone-100 ${
+                            language === 'EN' ? 'bg-stone-50' : ''
                           }`}
                         >
                           <div className="relative h-5 w-5 overflow-hidden rounded-full">
@@ -490,7 +490,7 @@ export default function Navbar() {
                               className="object-cover"
                             />
                           </div>
-                          <span className="text-sm font-medium text-[#44403C]">
+                          <span className="text-sm font-medium text-stone-700">
                             EN
                           </span>
                         </button>
@@ -535,7 +535,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.22 }}
-                className="relative border-t border-[#ECE7DD]/80 bg-white/92 backdrop-blur-2xl"
+                className="relative border-t border-cream-border/80 bg-white/92 backdrop-blur-2xl"
               >
                 <div className="mx-auto max-w-[1380px] px-8 py-7">
                   <div
@@ -553,23 +553,23 @@ export default function Navbar() {
                           <a
                             key={item.title}
                             href={item.href}
-                            className="group flex gap-4 rounded-2xl p-4 transition-all duration-300 hover:bg-[#F8F8F7]"
+                            className="group flex gap-4 rounded-2xl p-4 transition-all duration-300 hover:bg-stone-100"
                           >
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#F5F5F4] text-black/70 transition-all duration-300 group-hover:bg-[#FEF3C7] group-hover:text-[#B6842B]">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-stone-100 text-black/70 transition-all duration-300 group-hover:bg-amber-100 group-hover:text-gold-deep">
                               <Icon size={18} />
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <p className="text-[14px] font-semibold text-[#111827]">
+                                <p className="text-[14px] font-semibold text-gray-900">
                                   {item.title}
                                 </p>
                                 {item.badge && (
-                                  <span className="rounded-full bg-[#F4E7BC] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#946200]">
+                                  <span className="rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-700">
                                     {item.badge}
                                   </span>
                                 )}
                               </div>
-                              <p className="mt-1 text-[12.5px] leading-relaxed text-[#57534E]">
+                              <p className="mt-1 text-[12.5px] leading-relaxed text-stone-600">
                                 {item.description}
                               </p>
                             </div>
@@ -580,7 +580,7 @@ export default function Navbar() {
 
                     {/* FEATURED CARD */}
                     {activeGroup.featured && (
-                      <div className="relative overflow-hidden rounded-[28px] bg-[#111827] p-6 text-white">
+                      <div className="relative overflow-hidden rounded-[28px] bg-gray-900 p-6 text-white">
                         <div
                           className="absolute right-0 top-0 h-44 w-44 rounded-full"
                           style={{
@@ -590,7 +590,7 @@ export default function Navbar() {
                           }}
                         />
                         <div className="relative z-10">
-                          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#E7C87E]">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gold-300">
                             <Bot size={12} />
                             CIPA Intelligence
                           </div>
@@ -602,7 +602,7 @@ export default function Navbar() {
                           </p>
                           <a
                             href={activeGroup.featured.href}
-                            className="mt-8 inline-flex items-center gap-2 text-[13px] font-semibold text-[#E7C87E]"
+                            className="mt-8 inline-flex items-center gap-2 text-[13px] font-semibold text-gold-300"
                           >
                             Explorer
                             <ChevronRight size={15} />
@@ -634,7 +634,7 @@ export default function Navbar() {
               <div className="flex flex-col gap-8">
                 {navGroups.map((group) => (
                   <div key={group.label} className="flex flex-col gap-3">
-                    <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#78716C]">
+                    <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-stone-500">
                       {group.label}
                     </h4>
                     <div className="flex flex-col gap-1">
@@ -645,16 +645,16 @@ export default function Navbar() {
                             key={item.title}
                             href={item.href}
                             onClick={() => setMobileOpen(false)} // Ferme le menu au clic
-                            className="flex items-center gap-4 rounded-xl p-2 transition hover:bg-[#F5F5F4]"
+                            className="flex items-center gap-4 rounded-xl p-2 transition hover:bg-stone-100"
                           >
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F5F5F4] text-black/70">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-100 text-black/70">
                               <Icon size={18} />
                             </div>
-                            <span className="text-[14px] font-semibold text-[#111827]">
+                            <span className="text-[14px] font-semibold text-gray-900">
                               {item.title}
                             </span>
                             {item.badge && (
-                              <span className="ml-auto rounded-full bg-[#F4E7BC] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#946200]">
+                              <span className="ml-auto rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-700">
                                 {item.badge}
                               </span>
                             )}
@@ -667,13 +667,13 @@ export default function Navbar() {
               </div>
 
               {/* LIGNE DE SÉPARATION */}
-              <div className="h-px w-full bg-[#ECE7DD]" />
+              <div className="h-px w-full bg-cream-border" />
 
               {/* BOUTON D'APPEL À L'ACTION MOBILE (AJOUTÉ) */}
               <a
                 href="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#111827] px-5 py-3.5 text-[14px] font-semibold text-white shadow-md transition-all hover:bg-black"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-3.5 text-[14px] font-semibold text-white shadow-md transition-all hover:bg-black"
               >
                 Demander une démo
                 <ArrowRight size={16} />
@@ -702,7 +702,7 @@ export default function Navbar() {
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full appearance-none rounded-xl border border-[#ECE7DD] bg-[#FAFAF9] py-3 pl-12 pr-10 text-sm font-medium text-[#44403C] outline-none"
+                      className="w-full appearance-none rounded-xl border border-cream-border bg-stone-50 py-3 pl-12 pr-10 text-sm font-medium text-stone-700 outline-none"
                     >
                       <option value="FR">Français</option>
                       <option value="EN">English</option>
@@ -710,7 +710,7 @@ export default function Navbar() {
 
                     <ChevronDown
                       size={15}
-                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#A8A29E]"
+                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-stone-400"
                     />
                   </div>
                 </div>
@@ -720,7 +720,7 @@ export default function Navbar() {
                   href={LINKEDIN_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex h-full w-[52px] items-center justify-center rounded-xl border border-[#ECE7DD] bg-[#FAFAF9]"
+                  className="flex h-full w-[52px] items-center justify-center rounded-xl border border-cream-border bg-stone-50"
                 >
                   <Image
                     src="/linkedin.png"
@@ -739,10 +739,10 @@ export default function Navbar() {
       {/* CHAT BUTTON & WIDGET */}
       <button
         onClick={() => setIsChatOpen(!isChatOpen)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#0C0D12] border border-[#DAA250]/20 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition-all duration-300 hover:scale-105 hover:border-[#DAA250]/50"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-dark border border-gold/20 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition-all duration-300 hover:scale-105 hover:border-gold/50"
         aria-label="Ouvrir le chat"
       >
-        {isChatOpen ? <X size={20} className="text-[#DAA250]" /> : <MessageCircle size={20} />}
+        {isChatOpen ? <X size={20} className="text-gold" /> : <MessageCircle size={20} />}
       </button>
 
       <ChatWidget isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} language={language} />

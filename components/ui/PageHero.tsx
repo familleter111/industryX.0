@@ -30,7 +30,7 @@ export default function PageHero({
   secondaryCta?: Cta
 }) {
   return (
-    <section className="relative overflow-hidden bg-[#0C0D12] pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pb-24 lg:pt-36">
+    <section className="relative overflow-hidden bg-dark pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pb-24 lg:pt-36">
       {/* dégradé + halos */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -81,7 +81,7 @@ export default function PageHero({
             {primaryCta && (
               <Link
                 href={primaryCta.href}
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-[#0C0D12] shadow-[0_14px_36px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-dark shadow-[0_14px_36px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
               >
                 {primaryCta.label}
                 <ArrowRight

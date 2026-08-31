@@ -53,7 +53,7 @@ export default function CTASection() {
     <section
       ref={ref}
       id="contact"
-      className="relative overflow-hidden bg-[#F9F8F6] py-16 lg:py-24"
+      className="relative overflow-hidden bg-stone-100 py-16 lg:py-24"
     >
 
       {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
@@ -72,7 +72,7 @@ export default function CTASection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="relative overflow-hidden rounded-[40px] border border-white/10 bg-[#0B1110] shadow-[0_30px_120px_rgba(0,0,0,0.25)]"
+          className="relative overflow-hidden rounded-[40px] border border-white/10 bg-dark shadow-[0_30px_120px_rgba(0,0,0,0.25)]"
         >
 
           {/* TOP BORDER LIGHT */}
@@ -246,8 +246,8 @@ export default function CTASection() {
       {/* ================= PARTNERS MARQUEE ================= */}
       <div className="group/marquee relative overflow-hidden py-8 mt-16 w-full z-10">
         {/* fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F9F8F6] to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F9F8F6] to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-stone-100 to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-stone-100 to-transparent z-10" />
 
         <div className="flex animate-marquee w-max items-center py-8 sm:py-12 group-hover/marquee:[animation-play-state:paused]">
           {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((partner, i) => (

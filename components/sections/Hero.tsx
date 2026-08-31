@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { CLIENT_LOGOS, logoFrameWidth, type ClientLogo } from '@/lib/data/clientLogos'
+import { tokens } from '@/lib/tokens'
 
 /*
  * Logos clients : source unique dans components/clientLogos.ts.
@@ -47,10 +48,10 @@ const PILLS = [
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[#F7F7F6] pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
+    <section className="relative overflow-hidden bg-stone-100 pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
       {/* BACKGROUND — mesh animé avec parallax léger au scroll */}
       <AnimatedMeshBackground
-        gradient="linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)"
+        gradient={tokens.gradient.section}
         orbs={[
           { color: 'rgba(34,197,94,0.10)', size: 420, position: { left: '0', top: '40px' }, duration: 11, parallax: 30 },
           { color: 'rgba(218,162,80,0.10)', size: 420, position: { right: '0', bottom: '0' }, duration: 13, parallax: 40 },
@@ -84,19 +85,19 @@ export default function Hero() {
             }}
           >
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#22C55E] opacity-75" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
 
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22C55E]" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
             </span>
 
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] text-[#78716C]">
+            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] text-stone-500">
               Plateforme d&apos;intelligence opérationnelle
             </span>
           </div>
 
           {/* TITLE */}
 
-          <h1 className="font-black leading-[1.04] tracking-[-0.06em] text-[#0F172A]">
+          <h1 className="font-black leading-[1.04] tracking-[-0.06em] text-gray-900">
             {/* LIGNE 1 */}
             <span
               className="block whitespace-nowrap"
@@ -129,7 +130,7 @@ export default function Hero() {
               en{' '}
               <span
                 style={{
-                  color: '#DAA250',
+                  color: tokens.color.gold.DEFAULT,
                   textShadow: '0 10px 30px rgba(218,162,80,0.16)',
                 }}
               >
@@ -141,7 +142,7 @@ export default function Hero() {
           {/* DESCRIPTION */}
 
           <p
-            className="mt-6 mx-auto lg:mx-0 max-w-[42ch] leading-[1.9] text-[#57534E]"
+            className="mt-6 mx-auto lg:mx-0 max-w-[42ch] leading-[1.9] text-stone-600"
             style={{
               fontSize: 'clamp(.95rem,1.25vw,1.06rem)',
             }}
@@ -168,8 +169,8 @@ export default function Hero() {
                 hover:-translate-y-1
               "
               style={{
-                background: '#111827',
-                color: '#DAA250',
+                background: tokens.color.dark.DEFAULT,
+                color: tokens.color.gold.DEFAULT,
                 boxShadow:
                   '0 18px 45px rgba(15,23,42,0.18)',
               }}
@@ -199,14 +200,14 @@ export default function Hero() {
                 "
                 style={{
                   background:
-                    'linear-gradient(135deg,#DAA250 0%,#F2C46D 100%)',
+                    `linear-gradient(135deg, ${tokens.color.gold.DEFAULT} 0%, ${tokens.color.gold[300]} 100%)`,
                 }}
               />
 
               <span
                 className="
                   relative z-10 transition-colors
-                  duration-500 group-hover:text-[#111827]
+                  duration-500 group-hover:text-gray-900
                 "
               >
                 Planifier une démo
@@ -218,7 +219,7 @@ export default function Hero() {
                   relative z-10 ml-2
                   transition-all duration-500
                   group-hover:translate-x-1
-                  group-hover:text-[#111827]
+                  group-hover:text-gray-900
                 "
               />
             </Link>
@@ -238,7 +239,7 @@ export default function Hero() {
               style={{
                 background: 'rgba(255,255,255,0.75)',
                 borderColor: 'rgba(15,23,42,0.08)',
-                color: '#111827',
+                color: tokens.color.dark.DEFAULT,
                 backdropFilter: 'blur(12px)',
               }}
             >
@@ -257,10 +258,10 @@ export default function Hero() {
               >
                 <CheckCircle2
                   size={15}
-                  className="text-[#22C55E]"
+                  className="text-green-500"
                 />
 
-                <span className="text-[13px] font-medium text-[#57534E]">
+                <span className="text-[13px] font-medium text-stone-600">
                   {item}
                 </span>
               </div>
@@ -292,8 +293,8 @@ export default function Hero() {
               l'image se fond dans la section via mix-blend-multiply.
               Agrandi et décalé un peu vers la droite sur grand écran. */}
           <div
-            className="overflow-hidden lg:origin-center lg:translate-x-10 lg:scale-110"
-            style={{ background: '#F7F7F6', isolation: 'isolate' }}
+            className="overflow-hidden bg-stone-100 lg:origin-center lg:translate-x-10 lg:scale-110"
+            style={{ isolation: 'isolate' }}
           >
             <Image
               src="/hero.png"
@@ -318,14 +319,14 @@ export default function Hero() {
         }}
         className="relative z-10 mt-8 w-full sm:mt-12"
       >
-        <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-[#78716C]">
+        <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-stone-500">
           Ils nous font confiance
         </p>
 
         <div className="group/marquee relative overflow-hidden py-4 sm:py-6 w-full">
           {/* fade edges */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-r from-[#F7F7F6] to-transparent sm:w-32" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-l from-[#F7F7F6] to-transparent sm:w-32" />
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-r from-stone-100 to-transparent sm:w-32" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-l from-stone-100 to-transparent sm:w-32" />
 
           <div className="flex w-max animate-marquee items-center group-hover/marquee:[animation-play-state:paused]">
             {/* 2 copies suffisent : l'animation translate de -50%, soit exactement une copie */}

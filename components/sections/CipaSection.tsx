@@ -12,24 +12,14 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { tokens } from '@/lib/tokens'
 
 const colors = {
-  gold: '#DAA250',
-  goldLight: '#F2D94E',
-
-  lime: '#C7FF3A',
-  green: '#3FAE5A',
-  deepGreen: '#0F3D2E',
-
-  black: '#F6F7F4',
-  metal: '#FFFFFF',
-
-  white: '#111111',
-  text: '#111111',
+  gold: tokens.color.gold.DEFAULT,
+  lime: tokens.color.accent.lime,
+  green: tokens.color.accent.green,
+  text: 'rgb(17 17 17)',
   muted: 'rgba(17,17,17,.65)',
-
-  surface: '#FFFFFF',
-  border: 'rgba(0,0,0,.06)',
 }
 
 const pillars = [
@@ -118,12 +108,12 @@ function SectorLogoCard({
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             className="
               pointer-events-none absolute bottom-full left-1/2 z-50 mb-1
-              whitespace-nowrap rounded-xl bg-[#0F172A] px-3 py-2 text-[12px]
+              whitespace-nowrap rounded-xl bg-gray-900 px-3 py-2 text-[12px]
               font-semibold text-white shadow-xl
             "
           >
             {label}
-            <div className="absolute left-1/2 top-full -mt-1 -translate-x-1/2 border-4 border-transparent border-t-[#0F172A]" />
+            <div className="absolute left-1/2 top-full -mt-1 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -140,12 +130,12 @@ export default function CipaSection() {
     <section
       ref={ref}
       id="solutions"
-      className="relative overflow-hidden py-12 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:py-10"
-      style={{ background: '#F6F7F4', fontFamily: 'var(--font-inter)' }}
+      className="relative overflow-hidden bg-stone-100 py-12 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:py-10"
+      style={{ fontFamily: 'var(--font-inter)' }}
     >
       {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
       <AnimatedMeshBackground
-        gradient="linear-gradient(180deg, #FFFFFF 0%, #F6F7F4 100%)"
+        gradient="linear-gradient(180deg, rgb(255 255 255) 0%, rgb(246 247 244) 100%)"
         gridColor="rgba(0,0,0,.1)"
         orbs={[
           { color: 'rgba(218,162,80,.10)', size: 600, position: { left: '-96px', top: '-96px' }, duration: 10, parallax: 35 },
@@ -221,7 +211,7 @@ export default function CipaSection() {
               className="absolute inset-y-0 w-1/4"
               style={{
                 background:
-                  'linear-gradient(90deg, transparent, #DAA250, #C7FF3A, transparent)',
+                  `linear-gradient(90deg, transparent, ${colors.gold}, ${colors.lime}, transparent)`,
               }}
               animate={{ x: ['-100%', '500%'] }}
               transition={{ duration: 2.6, repeat: Infinity, ease: 'linear' }}
@@ -257,7 +247,7 @@ export default function CipaSection() {
 
               <div
                 className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
-                style={{ background: '#fff', border: '1px solid rgba(0,0,0,.05)' }}
+                style={{ background: 'rgb(255 255 255)', border: '1px solid rgba(0,0,0,.05)' }}
               >
                 <pillar.icon size={22} style={{ color: pillar.iconColor }} />
               </div>
@@ -311,13 +301,13 @@ export default function CipaSection() {
               href="/contact"
               className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-3.5 font-bold transition-all duration-500 hover:-translate-y-0.5"
               style={{
-                background: '#0A0A0A',
-                color: '#DAA250',
+                background: tokens.color.dark.DEFAULT,
+                color: colors.gold,
                 border: '1px solid rgba(218,162,80,.5)',
                 boxShadow: '0 20px 60px rgba(0,0,0,.18)',
               }}
             >
-              <div className="absolute inset-0 bg-[#DAA250] opacity-0 transition duration-500 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gold opacity-0 transition duration-500 group-hover:opacity-100" />
 
               <span className="relative z-10 group-hover:text-black">
                 Planifier une démo

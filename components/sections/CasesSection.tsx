@@ -14,17 +14,17 @@ import {
   Image as ImageIcon,
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { tokens } from '@/lib/tokens'
 
 /* ─────────────────────────── PALETTE (aligne sur Hero) ─────────────────────────── */
 const colors = {
-  bg: '#F7F7F6',
-  text: '#0F172A',
-  muted: '#57534E',
-  gold: '#DAA250',
+  bg: 'rgb(245 245 244)', // stone-100
+  text: 'rgb(17 24 39)', // gray-900
+  muted: 'rgb(87 83 78)', // stone-600
+  gold: tokens.color.gold.DEFAULT,
   goldBg: 'rgba(218,162,80,0.08)',
   goldBdr: 'rgba(218,162,80,0.18)',
-  green: '#22C55E',
-  surface: '#FFFFFF',
+  surface: 'rgb(255 255 255)',
   border: 'rgba(15,23,42,0.06)',
 }
 
@@ -127,7 +127,7 @@ export default function CasesSection() {
     >
       {/* ─── BACKGROUND — mesh animé (identique au Hero) ─── */}
       <AnimatedMeshBackground
-        gradient="linear-gradient(135deg, #F8F8F7 0%, #F3F4F6 40%, #FAFAF9 100%)"
+        gradient={tokens.gradient.section}
         orbs={[
           { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
           { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
@@ -192,7 +192,7 @@ export default function CasesSection() {
                 style={{
                   background: isActive ? colors.gold : 'rgba(255,255,255,0.80)',
                   borderColor: isActive ? colors.gold : colors.border,
-                  color: isActive ? '#111827' : colors.muted,
+                  color: isActive ? colors.text : colors.muted,
                   boxShadow: isActive
                     ? '0 8px 28px rgba(218,162,80,0.22)'
                     : '0 2px 8px rgba(15,23,42,0.04)',
@@ -254,7 +254,7 @@ export default function CasesSection() {
                     style={{
                       background: 'rgba(34,197,94,0.08)',
                       border: '1px solid rgba(34,197,94,0.18)',
-                      color: '#16A34A',
+                      color: 'rgb(22 163 74)', // green-600
                     }}
                   >
                     <CheckCircle2 size={16} />
@@ -302,15 +302,15 @@ export default function CasesSection() {
                   style={{
                     borderLeft: `1px solid ${colors.border}`,
                     background:
-                      'radial-gradient(circle at 50% 28%, rgba(218,162,80,0.10), transparent 60%), linear-gradient(160deg, #F8F8F7 0%, #EEEEEA 100%)',
+                      `radial-gradient(circle at 50% 28%, ${colors.goldBg}, transparent 60%), linear-gradient(160deg, ${colors.bg} 0%, ${tokens.color.cream.border} 100%)`,
                   }}
                 >
                   {/* Cadre iPhone */}
-                  <div className="relative h-[320px] w-[158px] rounded-[2rem] border border-black/10 bg-[#0F172A] p-1.5 shadow-[0_30px_70px_rgba(15,23,42,0.30)]">
+                  <div className="relative h-[320px] w-[158px] rounded-[2rem] border border-black/10 bg-gray-900 p-1.5 shadow-[0_30px_70px_rgba(15,23,42,0.30)]">
                     {/* Boutons latéraux */}
-                    <div className="absolute -left-[3px] top-16 h-8 w-[3px] rounded-l-sm bg-[#0F172A]" />
-                    <div className="absolute -left-[3px] top-[104px] h-8 w-[3px] rounded-l-sm bg-[#0F172A]" />
-                    <div className="absolute -right-[3px] top-[88px] h-11 w-[3px] rounded-r-sm bg-[#0F172A]" />
+                    <div className="absolute -left-[3px] top-16 h-8 w-[3px] rounded-l-sm bg-gray-900" />
+                    <div className="absolute -left-[3px] top-[104px] h-8 w-[3px] rounded-l-sm bg-gray-900" />
+                    <div className="absolute -right-[3px] top-[88px] h-11 w-[3px] rounded-r-sm bg-gray-900" />
 
                     {/* Écran */}
                     <div className="relative h-full w-full overflow-hidden rounded-[1.7rem] bg-white">
@@ -318,7 +318,7 @@ export default function CasesSection() {
                       <div className="absolute left-1/2 top-2 z-20 h-4 w-16 -translate-x-1/2 rounded-full bg-black" />
 
                       {/* ===== Zone à personnaliser : ajoutez ici votre image ou GIF ===== */}
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-[#FAFAF9] to-[#F1F1EE]">
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-stone-50 to-stone-100">
                         <div className="flex flex-col items-center gap-2 px-5 text-center opacity-60">
                           <div
                             className="flex h-11 w-11 items-center justify-center rounded-xl"
