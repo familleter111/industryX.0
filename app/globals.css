@@ -4,10 +4,6 @@
 
 @layer base {
   :root {
-    --gold: #DAA250;
-    --dark: #0C0D12;
-    --cream: #F4F3EE;
-    --green: #22C55E;
     --font-syne: 'Syne', sans-serif;
     --font-outfit: 'Outfit', sans-serif;
   }
@@ -80,6 +76,19 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradientShift 4s ease infinite;
+  }
+
+  /* Défini ici et pas dans tailwind.config : Tailwind n'émet les keyframes
+     d'une animation que si l'utilitaire correspondant est employé dans le
+     JSX, ce qui n'est pas le cas de `animate-gradient-shift`. */
+  @keyframes gradientShift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 
   .glass-card {

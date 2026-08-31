@@ -1,8 +1,10 @@
 import type { Config } from 'tailwindcss'
+import { tokens, durationCss, easeCss } from './lib/tokens'
+
+const { color, radius } = tokens
 
 const config: Config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './lib/**/*.{js,ts,jsx,tsx,mdx}',
@@ -11,65 +13,62 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Aucune valeur n'est écrite ici : tout vient de lib/tokens.ts.
+      // Les neutres (stone, gray, slate, red, green, blue…) restent ceux de
+      // Tailwind et se consomment via leurs classes natives.
       colors: {
-        gold: {
-          50: '#fdf8ee',
-          100: '#f9edcc',
-          200: '#f2d995',
-          300: '#e9c15e',
-          400: '#e0a93a',
-          500: '#DAA250',
-          DEFAULT: '#DAA250',
-          600: '#c47e1a',
-          700: '#9e5f18',
-          800: '#7e4a1a',
-          900: '#673d1a',
-        },
-        dark: {
-          DEFAULT: '#0C0D12',
-          50: '#1a1b24',
-          100: '#141520',
-          200: '#0f1018',
-          300: '#0C0D12',
-        },
-        cream: {
-          DEFAULT: '#F4F3EE',
-          50: '#FAFAF7',
-          100: '#F4F3EE',
-          200: '#EDECEA',
-        },
-        metric: {
-          green: '#22C55E',
-          blue: '#3B82F6',
-          amber: '#F59E0B',
-        }
+        gold: color.gold,
+        dark: color.dark,
+        cream: color.cream,
+        surface: color.surface,
+        brand: color.brand,
       },
       fontFamily: {
         display: ['var(--font-syne)', 'serif'],
         body: ['var(--font-outfit)', 'sans-serif'],
         inter: ['var(--font-inter)', 'sans-serif'],
       },
+      borderRadius: {
+        sm: radius.sm,
+        md: radius.md,
+        lg: radius.lg,
+        full: radius.full,
+      },
+      spacing: {
+        // Respiration verticale d'une section.
+        section: '6rem',
+        'section-lg': '8rem',
+      },
+      transitionDuration: {
+        fast: durationCss.fast,
+        DEFAULT: durationCss.base,
+        base: durationCss.base,
+        slow: durationCss.slow,
+      },
+      transitionTimingFunction: {
+        smooth: easeCss.out,
+        'smooth-in-out': easeCss.inOut,
+      },
+      boxShadow: {
+        card: '0 10px 30px rgba(12, 13, 18, 0.06)',
+        lifted: '0 20px 60px rgba(12, 13, 18, 0.10)',
+        gold: `0 10px 45px ${color.gold.DEFAULT}40`,
+      },
+      zIndex: {
+        header: '50',
+        overlay: '80',
+        modal: '90',
+        intro: '9999',
+      },
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float': 'float 6s ease-in-out infinite',
-        'marquee': 'marquee 25s linear infinite',
-        'gradient-shift': 'gradientShift 8s ease infinite',
-        'progress': 'progressFill 1.5s ease-out forwards',
-        'orbit': 'orbit 90s linear infinite',
+        marquee: 'marquee 25s linear infinite',
+        orbit: 'orbit 90s linear infinite',
         'orbit-reverse': 'orbitReverse 90s linear infinite',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-12px)' },
-        },
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
-        },
-        gradientShift: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
         },
         orbit: {
           '0%': { transform: 'rotate(0deg)' },
@@ -79,29 +78,19 @@ const config: Config = {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(-360deg)' },
         },
-        progressFill: {
-          '0%': { width: '0%' },
-          '100%': { width: 'var(--target-width)' },
-        }
       },
       backgroundImage: {
         'mesh-light': `
-          radial-gradient(ellipse at 20% 50%, rgba(218,162,80,0.08) 0%, transparent 55%),
-          radial-gradient(ellipse at 80% 20%, rgba(218,162,80,0.05) 0%, transparent 55%),
+          radial-gradient(ellipse at 20% 50%, ${color.gold.DEFAULT}14 0%, transparent 55%),
+          radial-gradient(ellipse at 80% 20%, ${color.gold.DEFAULT}0d 0%, transparent 55%),
           radial-gradient(ellipse at 50% 85%, rgba(34,197,94,0.04) 0%, transparent 50%)
         `,
         'mesh-dark': `
-          radial-gradient(ellipse at 20% 50%, rgba(218,162,80,0.12) 0%, transparent 55%),
-          radial-gradient(ellipse at 80% 20%, rgba(218,162,80,0.08) 0%, transparent 55%),
+          radial-gradient(ellipse at 20% 50%, ${color.gold.DEFAULT}1f 0%, transparent 55%),
+          radial-gradient(ellipse at 80% 20%, ${color.gold.DEFAULT}14 0%, transparent 55%),
           radial-gradient(ellipse at 50% 85%, rgba(34,197,94,0.06) 0%, transparent 50%)
         `,
       },
-      backdropBlur: {
-        xs: '2px',
-      },
-      transitionTimingFunction: {
-        'smooth': 'cubic-bezier(0.22, 1, 0.36, 1)',
-      }
     },
   },
   plugins: [],
