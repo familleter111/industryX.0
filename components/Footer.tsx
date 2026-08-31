@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Inter } from 'next/font/google'
 import {
   Facebook,
   Linkedin,
@@ -13,10 +12,6 @@ import {
 } from 'lucide-react'
 import { LINKEDIN_URL } from './socials'
 import AnimatedMeshBackground from './AnimatedMeshBackground'
-
-const inter = Inter({
-  subsets: ['latin'],
-})
 
 const footerLinks = [
   {
@@ -57,7 +52,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
   return (
     <footer
-      className={`${inter.className} relative overflow-hidden bg-black text-white`}
+      className="font-inter relative overflow-hidden bg-black text-white"
     >
       {/* top glow line */}
 

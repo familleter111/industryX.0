@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Inter } from 'next/font/google'
 
 import {
   Activity,
@@ -36,10 +35,6 @@ import {
 import Image from 'next/image'
 import { LINKEDIN_URL } from './socials'
 import ChatWidget from './ChatWidget'
-
-const inter = Inter({
-  subsets: ['latin'],
-})
 
 type NavItem = {
   title: string
@@ -300,7 +295,7 @@ export default function Navbar() {
   }, [mobileOpen])
 
   return (
-    <div className={inter.className}>
+    <div className="font-inter">
       {/* HEADER */}
       <motion.header
         initial={{ opacity: 0, y: -14 }}
