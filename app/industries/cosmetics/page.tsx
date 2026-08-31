@@ -28,9 +28,8 @@ import {
   Workflow
 } from 'lucide-react'
 import Image from 'next/image'
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
 
 // Animation réutilisable
 const fadeInUp = {
@@ -773,7 +772,6 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
 export default function CosmeticsPage() {
   return (
     <main className="min-h-screen bg-[#F7F7F6] text-dark overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold-900">
-      <Navbar />
 
       {/* 1. HERO + 3 BÉNÉFICES CLÉS */}
       <section className="relative lg:min-h-screen lg:max-h-[1000px] flex flex-col justify-center pt-24 pb-10 lg:pt-28 lg:pb-8 overflow-hidden bg-mesh-light">

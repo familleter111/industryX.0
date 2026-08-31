@@ -13,10 +13,9 @@ import {
   Users,
 } from 'lucide-react'
 
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
 
 /* ============================================================
    DONNÉES
@@ -280,7 +279,6 @@ function FaqAccordion() {
 export default function FaqPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FDFBF6] font-body text-dark selection:bg-gold/30">
-      <Navbar />
 
       <section className="relative overflow-hidden pb-20 pt-28 sm:pt-32 lg:pb-24 lg:pt-36">
         <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-gold/[0.06] blur-[120px]" />
@@ -305,6 +303,7 @@ export default function FaqPage() {
       </section>
 
       <Footer />
+
     </main>
   )
 }

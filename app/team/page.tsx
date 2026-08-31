@@ -1,8 +1,5 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import {
   ArrowRight,
   ArrowUpRight,
@@ -19,12 +16,11 @@ import {
   Users,
 } from 'lucide-react'
 
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { LINKEDIN_URL } from '@/lib/data/socials'
-import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
+import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 
 /* ============================================================
    DONNÉES
@@ -171,7 +167,6 @@ function PhotoFrame({
 export default function TeamPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
-      <Navbar />
 
       <PageHero
         eyebrow="Équipe"
@@ -192,13 +187,7 @@ export default function TeamPage() {
             subtitle="Derrière CIPA, une équipe qui se déplace sur les salons, travaille en petit comité et se retrouve au complet. Le quotidien est raconté au fil de l’eau sur LinkedIn."
           />
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto mt-12 max-w-[760px] lg:mt-14"
-          >
+          <Reveal className="mx-auto mt-12 max-w-[760px] lg:mt-14">
             <PhotoFrame photo={TEAM_PHOTOS[0]} priority />
 
             <div className="mt-3.5 grid gap-3.5 sm:grid-cols-2">
@@ -219,7 +208,7 @@ export default function TeamPage() {
                 className="transition-transform duration-300 group-hover:-translate-y-[2px] group-hover:translate-x-[2px]"
               />
             </a>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
@@ -233,22 +222,11 @@ export default function TeamPage() {
             subtitle="Quatre compétences complémentaires, réunies dans une même équipe pour couvrir toute la chaîne — du poste de travail à la décision."
           />
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:gap-5">
+          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:gap-5">
             {EXPERTISES.map((expertise, index) => {
               const Icon = expertise.icon
               return (
-                <motion.div
-                  key={expertise.title}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewport}
-                  transition={{
-                    duration: 0.45,
-                    delay: (index % 2) * 0.08,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="rounded-[24px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/25 sm:p-7"
-                >
+                <RevealItem key={expertise.title} className="rounded-[24px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/25 sm:p-7">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#111827] text-gold">
                     <Icon size={20} strokeWidth={1.9} />
                   </div>
@@ -260,10 +238,10 @@ export default function TeamPage() {
                   <p className="mt-2.5 text-[13.5px] leading-[1.7] text-[#78716C]">
                     {expertise.desc}
                   </p>
-                </motion.div>
+                </RevealItem>
               )
             })}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
@@ -318,13 +296,7 @@ export default function TeamPage() {
       {/* ==================== NOTRE FAÇON DE TRAVAILLER ==================== */}
       <section className="bg-[#F7F7F6] pb-16 sm:pb-20 lg:pb-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12"
-          >
+          <Reveal className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12">
             <div
               className="pointer-events-none absolute -left-16 -bottom-16 h-72 w-72 rounded-full"
               style={{
@@ -363,20 +335,14 @@ export default function TeamPage() {
                 })}
               </div>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
       {/* ==================== SUIVRE SUR LINKEDIN ==================== */}
       <section className="bg-[#F7F7F6] pb-16 sm:pb-20 lg:pb-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col items-start gap-6 rounded-[26px] border border-[#EFEDE8] bg-white p-7 sm:p-9 lg:flex-row lg:items-center lg:justify-between lg:gap-10"
-          >
+          <Reveal className="flex flex-col items-start gap-6 rounded-[26px] border border-[#EFEDE8] bg-white p-7 sm:p-9 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
             <div className="flex items-start gap-4 sm:gap-5">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#0A66C2] text-white sm:h-14 sm:w-14">
                 <Linkedin size={22} />
@@ -407,7 +373,7 @@ export default function TeamPage() {
                 className="transition-transform duration-300 group-hover:-translate-y-[2px] group-hover:translate-x-[2px]"
               />
             </a>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
@@ -472,6 +438,7 @@ export default function TeamPage() {
       </section>
 
       <Footer />
+
     </main>
   )
 }

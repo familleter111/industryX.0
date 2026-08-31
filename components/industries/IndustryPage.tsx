@@ -20,11 +20,10 @@ import {
   Zap,
 } from 'lucide-react'
 
-import Footer from '@/components/layout/Footer'
-import Navbar from '@/components/layout/Navbar'
 import SmartCarousel from '@/components/industries/SmartCarousel'
 import { viewport } from '@/lib/motion'
 import { INDUSTRIES } from '@/lib/data/industries'
+import Footer from '@/components/layout/Footer'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 24 },
@@ -46,7 +45,6 @@ export default function IndustryPage({ slug }: { slug: string }) {
   const HeroIcon = data.heroIcon
   return (
     <main className="min-h-screen bg-[#F7F7F6] text-dark overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold-900">
-      <Navbar />
 
       {/* 1. HERO + 3 BÉNÉFICES CLÉS */}
       <section className="relative lg:min-h-screen lg:max-h-[1000px] flex flex-col justify-center pt-24 pb-10 lg:pt-28 lg:pb-8 overflow-hidden bg-mesh-light">

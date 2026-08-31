@@ -1,8 +1,5 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import {
   ArrowRight,
   Award,
@@ -20,15 +17,14 @@ import {
   Target,
 } from 'lucide-react'
 
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import { PARTNERS } from '@/lib/data/partnerLogos'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
-import { viewport } from '@/lib/motion'
 import LogoMarquee from '@/components/ui/LogoMarquee'
+import Footer from '@/components/layout/Footer'
+import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 
 /* ============================================================
    DONNÉES
@@ -113,7 +109,6 @@ const ECOSYSTEM_BOX = { w: 108, h: 42 }
 export default function AboutPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
-      <Navbar />
 
       <PageHero
         eyebrow="À propos"
@@ -134,22 +129,11 @@ export default function AboutPage() {
             subtitle="Ce qui guide chacune de nos décisions, au quotidien."
           />
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-5">
+          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-5">
             {VALUES.map((value, index) => {
               const Icon = value.icon
               return (
-                <motion.div
-                  key={value.title}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewport}
-                  transition={{
-                    duration: 0.45,
-                    delay: (index % 3) * 0.07,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="rounded-[22px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/25 hover:shadow-[0_22px_55px_rgba(15,23,42,0.08)]"
-                >
+                <RevealItem key={value.title} className="rounded-[22px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/25 hover:shadow-[0_22px_55px_rgba(15,23,42,0.08)]">
                   <div
                     className={`flex h-11 w-11 items-center justify-center rounded-xl ${value.tile}`}
                   >
@@ -163,23 +147,17 @@ export default function AboutPage() {
                   <p className="mt-2 text-[13px] leading-[1.65] text-[#78716C]">
                     {value.desc}
                   </p>
-                </motion.div>
+                </RevealItem>
               )
             })}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
       {/* ==================== NOTRE MISSION ==================== */}
       <section className="bg-[#F7F7F6] pb-16 sm:pb-20 lg:pb-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12"
-          >
+          <Reveal className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12">
             <div
               className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full"
               style={{
@@ -231,7 +209,7 @@ export default function AboutPage() {
                 })}
               </div>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
@@ -240,13 +218,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[900px] px-5 sm:px-7 lg:px-8">
           <SectionHeading badge={null} title="Qui" accent="sommes-nous" />
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8 text-center text-[14.5px] leading-[1.85] text-[#57534E] sm:text-[15.5px]"
-          >
+          <Reveal className="mt-8 text-center text-[14.5px] leading-[1.85] text-[#57534E] sm:text-[15.5px]">
             Fondée en 2019 à Tunis, Industry X.0 est le nom que nous avons donné
             à notre startup : nous concevons des solutions technologiques
             permettant aux entreprises de maîtriser leur chaîne de valeur, leurs
@@ -257,7 +229,7 @@ export default function AboutPage() {
             produits, nous vous accompagnons et vous formons jusqu’à la pleine
             maîtrise de{' '}
             <span className="font-semibold text-[#111827]">CIPA</span>.
-          </motion.p>
+          </Reveal>
         </div>
       </section>
 
@@ -378,6 +350,7 @@ export default function AboutPage() {
       </section>
 
       <Footer />
+
     </main>
   )
 }

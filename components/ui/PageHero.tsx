@@ -1,9 +1,6 @@
-'use client'
-
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { ArrowRight, ChevronRight } from 'lucide-react'
-import { useMotion } from '@/lib/useMotion'
+import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 
 type Cta = {
   label: string
@@ -30,7 +27,6 @@ export default function PageHero({
   primaryCta?: Cta
   secondaryCta?: Cta
 }) {
-  const m = useMotion()
   return (
     <section className="relative overflow-hidden bg-dark pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pb-24 lg:pt-36">
       {/* dégradé + halos */}
@@ -43,38 +39,32 @@ export default function PageHero({
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      <motion.div
+      <RevealGroup
+        trigger="mount"
         className="relative z-10 mx-auto flex max-w-[900px] flex-col items-center px-5 text-center sm:px-7 lg:px-8"
-        variants={m.stagger()}
-        initial="hidden"
-        animate="visible"
       >
-        <motion.span
-          variants={m.fadeUp}
+        <RevealItem
           className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/[0.07] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gold sm:text-[11px]"
         >
           <span className="h-[6px] w-[6px] rounded-full bg-gold" />
           {eyebrow}
-        </motion.span>
+        </RevealItem>
 
-        <motion.h1
-          variants={m.fadeUp}
+        <RevealItem
           className="mt-6 font-display text-[32px] font-black leading-[1.06] tracking-[-0.04em] text-white sm:text-[44px] lg:text-[56px]"
         >
           {title}
           {accent && <span className="text-gold"> {accent}</span>}
-        </motion.h1>
+        </RevealItem>
 
-        <motion.p
-          variants={m.fadeUp}
+        <RevealItem
           className="mt-6 max-w-2xl text-[15px] leading-[1.75] text-white/60 sm:text-[16px]"
         >
           {description}
-        </motion.p>
+        </RevealItem>
 
         {(primaryCta || secondaryCta) && (
-          <motion.div
-            variants={m.fadeUp}
+          <RevealItem
             className="mt-9 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center"
           >
             {primaryCta && (
@@ -102,9 +92,9 @@ export default function PageHero({
                 />
               </Link>
             )}
-          </motion.div>
+          </RevealItem>
         )}
-      </motion.div>
+      </RevealGroup>
     </section>
   )
 }

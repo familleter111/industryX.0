@@ -18,8 +18,6 @@ import {
   Zap,
 } from 'lucide-react'
 
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import ClientsConstellation from '@/components/sections/ClientsConstellation'
@@ -29,6 +27,7 @@ import {
 } from '@/lib/data/clientLogos'
 import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
 import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
 
 /* ============================================================
    DONNÉES
@@ -219,7 +218,6 @@ function TestimonialsGrid() {
 export default function CustomersPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
-      <Navbar />
 
       <PageHero
         eyebrow="Cas clients"
@@ -342,6 +340,7 @@ export default function CustomersPage() {
       </section>
 
       <Footer />
+
     </main>
   )
 }

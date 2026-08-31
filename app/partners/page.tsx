@@ -1,14 +1,10 @@
-'use client'
-
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { ArrowRight, Handshake, Rocket, Users } from 'lucide-react'
 
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import PartnersOrbit from '@/components/sections/PartnersOrbit'
-import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
+import Reveal from '@/components/ui/Reveal'
 
 /* ============================================================
    DONNÉES
@@ -41,7 +37,6 @@ const BENEFITS = [
 export default function PartnersPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
-      <Navbar />
 
       <PageHero
         eyebrow="Partenaires"
@@ -57,13 +52,7 @@ export default function PartnersPage() {
       {/* ==================== DEVENIR PARTENAIRE ==================== */}
       <section className="bg-[#F7F7F6] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12"
-          >
+          <Reveal className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12">
             <div
               className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full"
               style={{
@@ -114,11 +103,12 @@ export default function PartnersPage() {
                 />
               </Link>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
       <Footer />
+
     </main>
   )
 }

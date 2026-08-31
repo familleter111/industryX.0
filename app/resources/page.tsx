@@ -1,7 +1,4 @@
-'use client'
-
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import {
   ArrowRight,
   BookOpen,
@@ -18,11 +15,10 @@ import {
   Zap,
 } from 'lucide-react'
 
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
-import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
+import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 
 /* ============================================================
    DONNÉES
@@ -113,7 +109,6 @@ const NEXT_STEPS = [
 export default function ResourcesPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
-      <Navbar />
 
       <PageHero
         eyebrow="Ressources"
@@ -134,21 +129,11 @@ export default function ResourcesPage() {
             subtitle="Les enjeux, les référentiels et les cas d’usage CIPA, détaillés pour chacun des six secteurs que nous couvrons."
           />
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
+          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
             {SECTOR_BRIEFS.map((brief, index) => {
               const Icon = brief.icon
               return (
-                <motion.div
-                  key={brief.href}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewport}
-                  transition={{
-                    duration: 0.45,
-                    delay: (index % 3) * 0.07,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                >
+                <RevealItem key={brief.href}>
                   <Link
                     href={brief.href}
                     className="group flex h-full flex-col rounded-[22px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/30 hover:shadow-[0_22px_55px_rgba(15,23,42,0.08)]"
@@ -173,10 +158,10 @@ export default function ResourcesPage() {
                       />
                     </span>
                   </Link>
-                </motion.div>
+                </RevealItem>
               )
             })}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
@@ -217,13 +202,7 @@ export default function ResourcesPage() {
               ))}
             </div>
           ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewport}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="mx-auto mt-12 flex max-w-2xl flex-col items-center rounded-[26px] border border-dashed border-[#DDD9CF] bg-white/70 px-6 py-12 text-center lg:mt-14"
-            >
+            <Reveal className="mx-auto mt-12 flex max-w-2xl flex-col items-center rounded-[26px] border border-dashed border-[#DDD9CF] bg-white/70 px-6 py-12 text-center lg:mt-14">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#111827] text-gold">
                 <BookOpen size={22} />
               </div>
@@ -250,7 +229,7 @@ export default function ResourcesPage() {
                   className="transition-transform duration-300 group-hover:translate-x-1"
                 />
               </a>
-            </motion.div>
+            </Reveal>
           )}
         </div>
       </section>
@@ -296,6 +275,7 @@ export default function ResourcesPage() {
       </section>
 
       <Footer />
+
     </main>
   )
 }

@@ -24,11 +24,10 @@ import {
   Zap,
 } from 'lucide-react'
 
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import { SectionBadge } from '@/components/ui/SectionHeading'
 import { CLIENT_LOGOS, logoFrameWidth } from '@/lib/data/clientLogos'
 import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
 
 /* ============================================================
    DONNÉES STATIQUES
@@ -835,7 +834,6 @@ function TrustStrip() {
 export default function ContactPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
-      <Navbar />
 
       {/* ==================== HERO — PLEIN ÉCRAN ==================== */}
       <section className="relative flex items-center overflow-hidden bg-mesh-light pb-14 pt-24 sm:pt-28 lg:min-h-[100svh] lg:py-10 lg:pt-[104px]">
@@ -1037,6 +1035,7 @@ export default function ContactPage() {
       <AfterContactSection />
 
       <Footer />
+
     </main>
   )
 }

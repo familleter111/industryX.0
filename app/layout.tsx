@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Syne, Outfit, Inter } from 'next/font/google'
 import './globals.css'
 
+import Navbar from '@/components/layout/Navbar'
+
 const syne = Syne({
   subsets: ['latin'],
   variable: '--font-syne',
@@ -75,6 +77,15 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="font-body antialiased">
+        {/* La Navbar etait importee et rendue a la main dans les quatorze
+            pages : elle vit ici, une seule fois.
+
+            Le Footer, lui, reste au niveau des pages : huit d'entre elles le
+            veulent en version complete et six en version compacte. Le
+            remonter demanderait soit de le rendre client pour qu'il lise la
+            route, soit de reorganiser app/ en groupes de routes — deux prix
+            plus eleves que le gain. */}
+        <Navbar />
         {children}
       </body>
     </html>

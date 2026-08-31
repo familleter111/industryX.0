@@ -1,7 +1,4 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { useMotion } from '@/lib/useMotion'
+import Reveal, { RevealItem } from '@/components/ui/Reveal'
 
 type Tone = 'light' | 'dark'
 
@@ -66,16 +63,8 @@ export default function SectionHeading({
    */
   orchestrated?: boolean
 }) {
-  const m = useMotion()
-  const selfTriggered = !orchestrated
-  return (
-    <motion.div
-      variants={m.fadeUp}
-      {...(selfTriggered
-        ? { initial: 'hidden' as const, whileInView: 'visible' as const, viewport: m.viewport }
-        : {})}
-      className={`flex flex-col items-center text-center ${className}`}
-    >
+  const inner = (
+    <>
       {badge && <SectionBadge label={badge} tone={tone} />}
 
       <h2
@@ -96,6 +85,17 @@ export default function SectionHeading({
           {subtitle}
         </p>
       )}
-    </motion.div>
+    </>
+  )
+
+  const wrapper = `flex flex-col items-center text-center ${className}`
+
+  // Orchestre par un parent : RevealItem ne declare que ses variants et herite
+  // de l'etat du conteneur. Sinon, Reveal fournit son propre declencheur.
+  // Dans les deux cas le contenu reste rendu sur le serveur.
+  return orchestrated ? (
+    <RevealItem className={wrapper}>{inner}</RevealItem>
+  ) : (
+    <Reveal className={wrapper}>{inner}</Reveal>
   )
 }
