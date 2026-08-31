@@ -43,10 +43,38 @@ const steps = [
 ]
 
 /**
+ * Icones ODD flottantes, en fond de section.
+ *
+ * Purement decoratives : elles reprennent les six objectifs detailles plus
+ * bas, donc elles sont retirees de l'arbre d'accessibilite (aria-hidden,
+ * alt vide) pour ne pas faire lire deux fois la meme liste.
+ *
+ * Elles vivent dans les deux bandes laterales laissees libres par le contenu
+ * (max-w-6xl), d'ou le seuil a 1440 px : c'est la largeur a partir de laquelle
+ * ces bandes font environ 180 px et accueillent les six sans en pousser une
+ * seule sous une carte. Mesure a l'appui, en dessous elles repassent dessous —
+ * jusqu'a 59 % de surface masquee a 1280 px. Une icone posee sous une carte au
+ * fond opaque n'est pas une decoration discrete, c'est un fichier telecharge
+ * pour rien.
+ *
+ * Deux coordonnees d'origine ont ete corrigees pour la meme raison : `left:
+ * 46%` tombait entierement derriere la carte centrale et `right: 12%` mordait
+ * de 45 % sur une carte objectif — la mise en page basse a change depuis.
+ */
+const ODD_FLOATING = [
+  { id: 'ODD7', top: '12%', left: '6%', size: 70, delay: 0, duration: 4, rotate: 6 },
+  { id: 'ODD8', bottom: '15%', left: '3%', size: 85, delay: 1.2, duration: 5.5, rotate: -4 },
+  { id: 'ODD9', top: '8%', right: '8%', size: 65, delay: 0.5, duration: 4.5, rotate: 5 },
+  { id: 'ODD12', bottom: '22%', right: '4%', size: 90, delay: 2, duration: 6, rotate: -6 },
+  { id: 'ODD13', top: '42%', left: '2%', size: 55, delay: 1.8, duration: 3.8, rotate: 3 },
+  { id: 'ODD17', bottom: '38%', right: '2%', size: 75, delay: 0.8, duration: 4.2, rotate: -5 },
+] as const
+
+/**
  * Objectifs de Developpement Durable retenus.
  *
- * Trois, choisis pour ceux ou la contribution de la plateforme est concrete
- * et defendable. En afficher six revenait a reciter une liste.
+ * Les six sur lesquels la contribution de la plateforme est concrete et
+ * defendable a l'oral, chacun avec la phrase qui la formule.
  */
 const SDG_GOALS = [
   {
@@ -87,6 +115,59 @@ const SDG_GOALS = [
   },
 ] as const
 
+/**
+ * Le flottement est une boucle autonome : il reste en CSS
+ * (`animate-float-soft`), ou il ne coute rien au fil principal et se neutralise
+ * sous prefers-reduced-motion via la regle globale de globals.css.
+ *
+ * L'entree au scroll, elle, depend de l'etat du viewport : elle reste chez
+ * Framer. Les deux vivent sur deux elements distincts — sur le meme, la
+ * keyframe CSS ecraserait le transform inline pose par Framer et l'entree
+ * serait invisible.
+ */
+function FloatingGoals() {
+  const m = useMotion()
+
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 hidden overflow-hidden min-[1440px]:block"
+    >
+      {ODD_FLOATING.map((odd) => (
+        <motion.div
+          key={odd.id}
+          variants={m.scaleIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
+          style={{
+            top: 'top' in odd ? odd.top : undefined,
+            bottom: 'bottom' in odd ? odd.bottom : undefined,
+            left: 'left' in odd ? odd.left : undefined,
+            right: 'right' in odd ? odd.right : undefined,
+            width: odd.size,
+            height: odd.size,
+          }}
+          className="absolute"
+        >
+          <Image
+            src={`/ODD/${odd.id}.png`}
+            alt=""
+            width={odd.size}
+            height={odd.size}
+            style={{
+              animationDuration: `${odd.duration}s`,
+              animationDelay: `${odd.delay}s`,
+              ['--tilt' as string]: `${odd.rotate}deg`,
+            }}
+            className="h-full w-full animate-float-soft rounded-xl object-contain drop-shadow-xl"
+          />
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
 export default function IndustriesSection() {
   const m = useMotion()
 
@@ -97,18 +178,18 @@ export default function IndustriesSection() {
       variant="default"
       background="cream"
       backdrop={
-        <AnimatedMeshBackground
-          gradient={tokens.gradient.section}
-          orbs={[
-            { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
-            { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
-          ]}
-        />
+        <>
+          <AnimatedMeshBackground
+            gradient={tokens.gradient.section}
+            orbs={[
+              { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
+              { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
+            ]}
+          />
+          <FloatingGoals />
+        </>
       }
     >
-      {/* BACKGROUND — mesh animé (identique au Hero) */}
-
-
         {/* HEADER */}
         <motion.div
           variants={m.fadeUp}
