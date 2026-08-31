@@ -50,6 +50,12 @@ const steps = [
  */
 const SDG_GOALS = [
   {
+    num: 7,
+    title: 'Énergie propre et d’un coût abordable',
+    contribution:
+      'Le suivi de consommation par ligne rend visibles les dérives énergétiques, qui restent invisibles tant qu’elles ne sont pas mesurées poste par poste.',
+  },
+  {
     num: 8,
     title: 'Travail décent et croissance économique',
     contribution:
@@ -66,6 +72,18 @@ const SDG_GOALS = [
     title: 'Consommation et production responsables',
     contribution:
       'Détection des dérives avant impact qualité : moins de rebuts, moins de retouches, moins de lots bloqués.',
+  },
+  {
+    num: 13,
+    title: 'Mesures relatives à la lutte contre les changements climatiques',
+    contribution:
+      'Effet indirect : chaque rebut évité est de la matière et de l’énergie déjà consommées qui ne sont pas perdues.',
+  },
+  {
+    num: 17,
+    title: 'Partenariats pour la réalisation des objectifs',
+    contribution:
+      'Le déploiement s’appuie sur l’écosystème présenté plus haut — cabinets de conseil, fournisseurs cloud, agences de coopération.',
   },
 ] as const
 
@@ -194,10 +212,12 @@ export default function IndustriesSection() {
 
         {/* ================= OBJECTIFS DE DEVELOPPEMENT DURABLE =================
 
-            Trois objectifs, pas six, et chacun avec la phrase qui dit ce que
-            CIPA y apporte concretement. Six pastilles muettes ne disaient
-            qu'une chose — qu'on connait la liste — et leurs sept couleurs
-            officielles rompaient la palette de la page sur toute sa largeur.
+            Les six objectifs, chacun avec la phrase qui dit ce que CIPA y
+            apporte concretement. C'est le format qui compte : six pastilles
+            muettes ne disaient qu'une chose, qu'on connait la liste. La
+            contribution ecrite sous chaque objectif est visible au premier
+            regard, lisible au clavier et au tactile, et lue par une synthese
+            vocale sans dependre d'un survol.
 
             TODO(licence) — verifier avant la soutenance les conditions
             d'utilisation des logos ODD de l'ONU. Les Guidelines on the Use of
@@ -212,18 +232,18 @@ export default function IndustriesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={m.viewport}
-          className="relative z-10 mx-auto mt-20 max-w-5xl px-4 sm:mt-28 sm:px-10"
+          className="relative z-10 mx-auto mt-20 max-w-6xl px-4 sm:mt-28 sm:px-10"
         >
           <motion.div variants={m.fadeUp} className="mb-8 text-center">
             <h4 className="mb-2 text-[15px] font-bold text-dark">
               Contribution aux Objectifs de Développement Durable
             </h4>
             <p className="mx-auto max-w-xl text-sm text-stone-600">
-              Trois objectifs sur lesquels la plateforme a un effet mesurable.
+              Six objectifs, et ce que la plateforme y apporte concrètement.
             </p>
           </motion.div>
 
-          <ul className="grid gap-4 sm:grid-cols-3">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SDG_GOALS.map((goal) => (
               <motion.li
                 key={goal.num}
