@@ -12,6 +12,7 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
 import { PARTNERS, type Partner } from '@/lib/data/partnerLogos'
 import { useMotion } from '@/lib/useMotion'
+import Section from '@/components/ui/Section'
 
 /**
  * Bandeau partenaires du bloc CTA.
@@ -44,26 +45,39 @@ function LogoCard({ partner }: { partner: Partner }) {
 
 export default function CTASection() {
   const m = useMotion()
-  const ref = useRef(null)
 
 
   return (
-    <section
-      ref={ref}
+    <Section
+      variant="default"
+      background="white"
       id="contact"
-      className="relative overflow-hidden bg-stone-100 py-16 lg:py-24"
+      bleed={
+        <div className="group/marquee relative overflow-hidden py-8 mt-16 w-full z-10">
+          {/* fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-stone-100 to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-stone-100 to-transparent z-10" />
+
+          <div className="flex animate-marquee w-max items-center py-8 sm:py-12 group-hover/marquee:[animation-play-state:paused]">
+            {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((partner, i) => (
+              <LogoCard key={i} partner={partner} />
+            ))}
+          </div>
+        </div>
+      }
+      backdrop={
+        <AnimatedMeshBackground
+          gridColor="rgba(0,0,0,0.04)"
+          orbs={[
+            { color: 'rgba(218,162,80,0.10)', size: 420, position: { left: '0', top: '-128px' }, duration: 12, parallax: 35 },
+            { color: 'rgba(34,197,94,0.05)', size: 420, position: { right: '0', bottom: '0' }, duration: 10, parallax: 30 },
+          ]}
+        />
+      }
     >
 
       {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
-      <AnimatedMeshBackground
-        gridColor="rgba(0,0,0,0.04)"
-        orbs={[
-          { color: 'rgba(218,162,80,0.10)', size: 420, position: { left: '0', top: '-128px' }, duration: 12, parallax: 35 },
-          { color: 'rgba(34,197,94,0.05)', size: 420, position: { right: '0', bottom: '0' }, duration: 10, parallax: 30 },
-        ]}
-      />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-16">
 
         {/* ================= MAIN CARD ================= */}
         <motion.div
@@ -240,20 +254,8 @@ export default function CTASection() {
 
         </motion.div>
 
-      </div>
 
       {/* ================= PARTNERS MARQUEE ================= */}
-      <div className="group/marquee relative overflow-hidden py-8 mt-16 w-full z-10">
-        {/* fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-stone-100 to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-stone-100 to-transparent z-10" />
-
-        <div className="flex animate-marquee w-max items-center py-8 sm:py-12 group-hover/marquee:[animation-play-state:paused]">
-          {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((partner, i) => (
-            <LogoCard key={i} partner={partner} />
-          ))}
-        </div>
-      </div>
-    </section>
+    </Section>
   )
 }

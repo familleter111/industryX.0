@@ -16,6 +16,7 @@ import {
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
+import Section from '@/components/ui/Section'
 
 /* ─────────────────────────── PALETTE (aligne sur Hero) ─────────────────────────── */
 const colors = {
@@ -115,27 +116,27 @@ const useCases = [
 export default function CasesSection() {
   const m = useMotion()
   const [activeTab, setActiveTab] = useState(0)
-  const ref = useRef(null)
 
   const active = useCases[activeTab]
   const Icon = active.icon
 
   return (
-    <section
-      ref={ref}
-      className="relative overflow-hidden py-8 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:py-8"
-      style={{ background: colors.bg, fontFamily: 'var(--font-inter)' }}
+    <Section
+      className="font-inter"
+      variant="default"
+      background="white"
+      backdrop={
+        <AnimatedMeshBackground
+          gradient={tokens.gradient.section}
+          orbs={[
+            { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
+            { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
+          ]}
+        />
+      }
     >
       {/* ─── BACKGROUND — mesh animé (identique au Hero) ─── */}
-      <AnimatedMeshBackground
-        gradient={tokens.gradient.section}
-        orbs={[
-          { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
-          { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
-        ]}
-      />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-12">
 
         {/* ─── HEADER ─── */}
         <motion.div
@@ -346,7 +347,6 @@ export default function CasesSection() {
             </motion.div>
           </AnimatePresence>
         </div>
-      </div>
-    </section>
+    </Section>
   )
 }

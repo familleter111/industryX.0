@@ -9,6 +9,7 @@ import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
 import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
+import Section from '@/components/ui/Section'
 
 /**
  * Témoignages : source unique dans components/testimonials.ts.
@@ -61,18 +62,22 @@ export default function TestimonialsSection() {
   }, [])
 
   return (
-    <section className="relative overflow-hidden bg-stone-100 py-14 sm:py-16 lg:py-20">
+    <Section
+      variant="default"
+      background="white"
+      backdrop={
+        <AnimatedMeshBackground
+          grid={false}
+          orbs={[
+            { color: 'rgba(254,240,138,0.4)', size: 300, position: { left: '0', top: '0' }, duration: 9, parallax: 25 },
+            { color: 'rgba(254,249,195,0.5)', size: 300, position: { right: '0', bottom: '0' }, duration: 11, parallax: 30 },
+          ]}
+        />
+      }
+    >
 
       {/* glow background — mesh animé avec parallax léger */}
-      <AnimatedMeshBackground
-        grid={false}
-        orbs={[
-          { color: 'rgba(254,240,138,0.4)', size: 300, position: { left: '0', top: '0' }, duration: 9, parallax: 25 },
-          { color: 'rgba(254,249,195,0.5)', size: 300, position: { right: '0', bottom: '0' }, duration: 11, parallax: 30 },
-        ]}
-      />
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
 
         {/* HEADER */}
         <motion.div
@@ -199,7 +204,6 @@ export default function TestimonialsSection() {
             <ChevronRight size={18} />
           </motion.button>
         </div>
-      </div>
-    </section>
+    </Section>
   )
 }

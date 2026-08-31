@@ -16,6 +16,7 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { EASE } from '@/lib/motion'
 import { useMotion } from '@/lib/useMotion'
+import Section from '@/components/ui/Section'
 
 // Data for middle stat cards — palette or/graphite du Hero, le rouge n'accentue que le chiffre (gravité)
 const stats = [
@@ -145,23 +146,24 @@ const convergeFrom = (x: number): Variants => ({
 
 export default function ProblemsSection() {
   const m = useMotion()
-  const ref = useRef(null)
 
   return (
-    <section
-      ref={ref}
-      className="relative overflow-hidden bg-stone-100 pt-8 lg:pt-10 pb-16 lg:pb-24"
+    <Section
+      variant="dense"
+      background="white"
+      innerClassName="lg:px-10"
+      backdrop={
+        <AnimatedMeshBackground
+          gradient={tokens.gradient.section}
+          orbs={[
+            { color: 'rgba(34,197,94,0.08)', size: 500, position: { left: '0', top: '-80px' }, duration: 12, parallax: 35 },
+            { color: 'rgba(218,162,80,0.06)', size: 380, position: { right: '0', bottom: '0' }, duration: 10, parallax: 25 },
+          ]}
+        />
+      }
     >
       {/* PREMIUM BACKGROUND GLOWS — mesh animé avec parallax léger */}
-      <AnimatedMeshBackground
-        gradient={tokens.gradient.section}
-        orbs={[
-          { color: 'rgba(34,197,94,0.08)', size: 500, position: { left: '0', top: '-80px' }, duration: 12, parallax: 35 },
-          { color: 'rgba(218,162,80,0.06)', size: 380, position: { right: '0', bottom: '0' }, duration: 10, parallax: 25 },
-        ]}
-      />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10">
 
         {/* ================= BLOC SUPÉRIEUR : PROBLÈME & SCHÉMA RÉSEAU ================= */}
         <motion.div
@@ -293,7 +295,6 @@ export default function ProblemsSection() {
           ))}
         </div>
 
-      </div>
-    </section>
+    </Section>
   )
 }

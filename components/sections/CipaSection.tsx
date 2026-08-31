@@ -14,6 +14,7 @@ import Image from 'next/image'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
+import Section from '@/components/ui/Section'
 
 const colors = {
   gold: tokens.color.gold.DEFAULT,
@@ -124,28 +125,29 @@ function SectorLogoCard({
 
 export default function CipaSection() {
   const m = useMotion()
-  const ref = useRef(null)
   const [open, setOpen] = useState(false)
 
   return (
-    <section
-      ref={ref}
+    <Section
+      className="font-inter"
+      variant="default"
+      background="cream"
       id="solutions"
-      className="relative overflow-hidden bg-stone-100 py-12 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:py-10"
-      style={{ fontFamily: 'var(--font-inter)' }}
+      innerClassName="lg:px-10"
+      backdrop={
+        <AnimatedMeshBackground
+          gradient="linear-gradient(180deg, rgb(255 255 255) 0%, rgb(246 247 244) 100%)"
+          gridColor="rgba(0,0,0,.1)"
+          orbs={[
+            { color: 'rgba(218,162,80,.10)', size: 600, position: { left: '-96px', top: '-96px' }, duration: 10, parallax: 35 },
+            { color: 'rgba(199,255,58,.07)', size: 600, position: { right: '-96px', bottom: '-96px' }, duration: 12, parallax: 45 },
+            { color: 'rgba(63,174,90,.06)', size: 420, position: { left: 'calc(50% - 210px)', top: '33%' }, duration: 8, parallax: 25 },
+          ]}
+        />
+      }
     >
       {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
-      <AnimatedMeshBackground
-        gradient="linear-gradient(180deg, rgb(255 255 255) 0%, rgb(246 247 244) 100%)"
-        gridColor="rgba(0,0,0,.1)"
-        orbs={[
-          { color: 'rgba(218,162,80,.10)', size: 600, position: { left: '-96px', top: '-96px' }, duration: 10, parallax: 35 },
-          { color: 'rgba(199,255,58,.07)', size: 600, position: { right: '-96px', bottom: '-96px' }, duration: 12, parallax: 45 },
-          { color: 'rgba(63,174,90,.06)', size: 420, position: { left: 'calc(50% - 210px)', top: '33%' }, duration: 8, parallax: 25 },
-        ]}
-      />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10">
         
         {/* ================= HEADER ================= */}
         <div className="mx-auto max-w-5xl text-center">
@@ -320,7 +322,6 @@ export default function CipaSection() {
             </Link>
           </div>
         </div>
-      </div>
 
       {/* ================= MODAL ================= */}
       <AnimatePresence>
@@ -354,6 +355,6 @@ export default function CipaSection() {
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </Section>
   )
 }

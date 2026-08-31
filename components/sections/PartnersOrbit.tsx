@@ -11,6 +11,7 @@ import { PARTNERS, PARTNER_BRANCHES } from '@/lib/data/partnerLogos'
 import { tokens } from '@/lib/tokens'
 import { EASE } from '@/lib/motion'
 import { useMotion } from '@/lib/useMotion'
+import Section from '@/components/ui/Section'
 
 /* ============================================================
    ORBITE DE L'ÉCOSYSTÈME
@@ -520,11 +521,11 @@ export default function PartnersOrbit({
   }
 
   return (
-    <section
-      className="py-16 sm:py-20 lg:py-24"
-      style={{ background: SECTION_BG }}
+    <Section
+      variant="default"
+      background="cream"
+      innerClassName="max-w-[1180px]"
     >
-      <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
         {isHome ? (
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-12">
             {/* DISCOURS */}
@@ -612,7 +613,6 @@ export default function PartnersOrbit({
             <BranchLegend />
           </>
         )}
-      </div>
-    </section>
+    </Section>
   )
 }

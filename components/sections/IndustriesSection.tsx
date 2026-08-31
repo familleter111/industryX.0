@@ -12,6 +12,7 @@ import {
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
+import Section from '@/components/ui/Section'
 
 const ODD_LOGOS = [
   '/ODD/ODD7.png',
@@ -157,23 +158,24 @@ const steps = [
 
 export default function IndustriesSection() {
   const m = useMotion()
-  const ref = useRef(null)
 
 
   return (
-    <section
-      ref={ref}
-      className="relative overflow-hidden bg-stone-100 py-16 lg:py-24"
-      style={{ fontFamily: 'var(--font-inter)' }}
+    <Section
+      className="font-inter"
+      variant="default"
+      background="cream"
+      backdrop={
+        <AnimatedMeshBackground
+          gradient={tokens.gradient.section}
+          orbs={[
+            { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
+            { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
+          ]}
+        />
+      }
     >
       {/* BACKGROUND — mesh animé (identique au Hero) */}
-      <AnimatedMeshBackground
-        gradient={tokens.gradient.section}
-        orbs={[
-          { color: 'rgba(34,197,94,0.09)', size: 480, position: { left: '0', top: '-5%' }, duration: 11, parallax: 30 },
-          { color: 'rgba(218,162,80,0.09)', size: 480, position: { right: '0', bottom: '-5%' }, duration: 13, parallax: 40 },
-        ]}
-      />
 
       {/* ANIMATIONS ODD FLOTTANTES — masquées sur mobile */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -210,7 +212,6 @@ export default function IndustriesSection() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-16">
         {/* HEADER */}
         <motion.div
           variants={m.fadeUp}
@@ -357,7 +358,6 @@ export default function IndustriesSection() {
             })}
           </div>
         </motion.div>
-      </div>
-    </section>
+    </Section>
   )
 }

@@ -50,7 +50,11 @@ const PILLS = [
 export default function Hero() {
   const m = useMotion()
   return (
-    <section className="relative overflow-hidden bg-stone-100 pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
+    <section className="relative overflow-hidden bg-cream pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
+      {/* Le Hero n'utilise pas <Section> : son padding haut degage la navbar
+          fixe et son padding bas est volontairement asymetrique, deux
+          contraintes que l'echelle de rythme ne doit pas connaitre. Le fond,
+          lui, suit l'alternance. */}
       {/* BACKGROUND — mesh animé avec parallax léger au scroll */}
       <AnimatedMeshBackground
         gradient={tokens.gradient.section}
