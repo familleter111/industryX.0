@@ -10,8 +10,8 @@ import {
   Phone,
   ChevronRight,
 } from 'lucide-react'
-import { LINKEDIN_URL } from './socials'
-import AnimatedMeshBackground from './AnimatedMeshBackground'
+import { LINKEDIN_URL } from '@/lib/data/socials'
+import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 
 const footerLinks = [
   {

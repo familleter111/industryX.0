@@ -20,13 +20,13 @@ import {
   Target,
 } from 'lucide-react'
 
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import PageHero from '@/components/PageHero'
-import SectionHeading from '@/components/SectionHeading'
-import { LINKEDIN_URL } from '@/components/socials'
-import { PARTNERS } from '@/components/partnerLogos'
-import { logoFrameWidth } from '@/components/logoSizing'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
+import PageHero from '@/components/ui/PageHero'
+import SectionHeading from '@/components/ui/SectionHeading'
+import { LINKEDIN_URL } from '@/lib/data/socials'
+import { PARTNERS } from '@/lib/data/partnerLogos'
+import { logoFrameWidth } from '@/lib/data/logoSizing'
 
 /* ============================================================
    DONNÉES

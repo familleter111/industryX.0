@@ -4,10 +4,10 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Handshake, Rocket, Users } from 'lucide-react'
 
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import PageHero from '@/components/PageHero'
-import PartnersOrbit from '@/components/PartnersOrbit'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
+import PageHero from '@/components/ui/PageHero'
+import PartnersOrbit from '@/components/sections/PartnersOrbit'
 
 /* ============================================================
    DONNÉES

@@ -33,8 +33,8 @@ import {
 } from 'lucide-react'
 
 import Image from 'next/image'
-import { LINKEDIN_URL } from './socials'
-import ChatWidget from './ChatWidget'
+import { LINKEDIN_URL } from '@/lib/data/socials'
+import ChatWidget from '@/components/layout/ChatWidget'
 
 type NavItem = {
   title: string

@@ -8,7 +8,7 @@
  * à l'orbite de l'écosystème (components/PartnersOrbit.tsx).
  */
 
-import type { LogoAsset } from './logoSizing'
+import type { LogoAsset } from '@/lib/data/logoSizing'
 
 export type Partner = LogoAsset & {
   /** Signature courte — affichée dans la légende de la page Partenaires. */

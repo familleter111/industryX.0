@@ -8,8 +8,8 @@ import {
   PlayCircle,
   CheckCircle2,
 } from 'lucide-react'
-import AnimatedMeshBackground from './AnimatedMeshBackground'
-import { CLIENT_LOGOS, logoFrameWidth, type ClientLogo } from './clientLogos'
+import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { CLIENT_LOGOS, logoFrameWidth, type ClientLogo } from '@/lib/data/clientLogos'
 
 /*
  * Logos clients : source unique dans components/clientLogos.ts.

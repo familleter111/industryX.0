@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 
-import { logoFrameWidth, type LogoAsset } from './logoSizing'
-import { CLIENT_LOGOS } from './clientLogos'
-import { PARTNERS, PARTNER_BRANCHES } from './partnerLogos'
+import { logoFrameWidth, type LogoAsset } from '@/lib/data/logoSizing'
+import { CLIENT_LOGOS } from '@/lib/data/clientLogos'
+import { PARTNERS, PARTNER_BRANCHES } from '@/lib/data/partnerLogos'
 
 /* ============================================================
    ORBITE DE L'ÉCOSYSTÈME

@@ -24,10 +24,10 @@ import {
   Zap,
 } from 'lucide-react'
 
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { SectionBadge } from '@/components/SectionHeading'
-import { CLIENT_LOGOS, logoFrameWidth } from '@/components/clientLogos'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
+import { SectionBadge } from '@/components/ui/SectionHeading'
+import { CLIENT_LOGOS, logoFrameWidth } from '@/lib/data/clientLogos'
 
 /* ============================================================
    DONNÉES STATIQUES

@@ -12,12 +12,12 @@
  * dans une boîte commune — c'est ce qui uniformise la taille perçue.
  */
 
-import type { LogoAsset } from './logoSizing'
+import type { LogoAsset } from '@/lib/data/logoSizing'
 
 export type ClientLogo = LogoAsset
 
 // Règle de dimensionnement commune aux clients et aux partenaires.
-export { logoFrameWidth } from './logoSizing'
+export { logoFrameWidth } from '@/lib/data/logoSizing'
 
 const W = 0.86 // largeur commune à laquelle les fichiers ont été normalisés
 

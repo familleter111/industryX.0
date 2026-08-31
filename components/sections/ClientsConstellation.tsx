@@ -3,8 +3,8 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
-import { CLIENT_LOGOS, type ClientLogo } from './clientLogos'
-import { logoFrameWidth } from './logoSizing'
+import { CLIENT_LOGOS, type ClientLogo } from '@/lib/data/clientLogos'
+import { logoFrameWidth } from '@/lib/data/logoSizing'
 
 /* ============================================================
    CONSTELLATION CLIENTS

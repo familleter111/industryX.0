@@ -8,9 +8,9 @@ import {
   Sparkles,
 } from 'lucide-react'
 import Image from 'next/image'
-import AnimatedMeshBackground from './AnimatedMeshBackground'
-import { logoFrameWidth } from './logoSizing'
-import { PARTNERS, type Partner } from './partnerLogos'
+import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { logoFrameWidth } from '@/lib/data/logoSizing'
+import { PARTNERS, type Partner } from '@/lib/data/partnerLogos'
 
 /**
  * Bandeau partenaires du bloc CTA.

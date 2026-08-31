@@ -18,16 +18,16 @@ import {
   Zap,
 } from 'lucide-react'
 
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import PageHero from '@/components/PageHero'
-import SectionHeading from '@/components/SectionHeading'
-import ClientsConstellation from '@/components/ClientsConstellation'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
+import PageHero from '@/components/ui/PageHero'
+import SectionHeading from '@/components/ui/SectionHeading'
+import ClientsConstellation from '@/components/sections/ClientsConstellation'
 import {
   findClientLogo,
   logoFrameWidth,
-} from '@/components/clientLogos'
-import { getTestimonials, type Testimonial } from '@/components/testimonials'
+} from '@/lib/data/clientLogos'
+import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
 
 /* ============================================================
    DONNÉES

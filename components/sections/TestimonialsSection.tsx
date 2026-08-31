@@ -4,9 +4,9 @@ import { useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react'
-import AnimatedMeshBackground from './AnimatedMeshBackground'
-import { findClientLogo, logoFrameWidth } from './clientLogos'
-import { getTestimonials, type Testimonial } from './testimonials'
+import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
+import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
 
 /**
  * Témoignages : source unique dans components/testimonials.ts.
