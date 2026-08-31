@@ -2,21 +2,15 @@
 
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  ClipboardCheck,
-  SearchCheck,
-  GitBranch,
-  Factory,
-  Route,
-  TrendingUp,
-  CheckCircle2,
-  ChevronRight,
-  Image as ImageIcon,
-} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { CheckCircle2, ChevronRight } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
 import Section from '@/components/ui/Section'
+import AppScreenPlaceholder from '@/components/ui/AppScreenPlaceholder'
+import { FEATURE_TABS } from '@/lib/data/features'
 
 /* ─────────────────────────── PALETTE (aligne sur Hero) ─────────────────────────── */
 const colors = {
@@ -30,95 +24,16 @@ const colors = {
   border: 'rgba(15,23,42,0.06)',
 }
 
-/* ─────────────────────────── DATA ─────────────────────────── */
-const useCases = [
-  {
-    icon: ClipboardCheck,
-    title: 'Audits internes',
-    description:
-      "Préparez, exécutez et suivez vos audits dans un environnement standardisé avec une traçabilité complète.",
-    benefits: [
-      'Checklists intelligentes',
-      'Rapports automatiques',
-      'Suivi des écarts',
-      'Validation numérique',
-    ],
-    image: '/audit.png',
-  },
-  {
-    icon: SearchCheck,
-    title: 'Inspections qualité',
-    description:
-      "Digitalisez les inspections terrain pour améliorer la qualité des données et accélérer les prises de décision.",
-    benefits: [
-      'Collecte mobile',
-      'Photos annotées',
-      'Contrôles standardisés',
-      'Historique complet',
-    ],
-    image: '/audit.png',
-  },
-  {
-    icon: GitBranch,
-    title: 'Déviations & NC',
-    description:
-      "Centralisez la gestion des non-conformités depuis leur détection jusqu'à leur clôture.",
-    benefits: [
-      'Workflow automatisé',
-      'Actions correctives',
-      'Validation multi-niveaux',
-      'Suivi temps réel',
-    ],
-    image: '/audit.png',
-  },
-  {
-    icon: Factory,
-    title: 'Contrôles production',
-    description:
-      'Renforcez le pilotage qualité directement sur les lignes de fabrication.',
-    benefits: [
-      'Contrôles périodiques',
-      'Alertes instantanées',
-      'Indicateurs terrain',
-      'Traçabilité totale',
-    ],
-    image: '/audit.png',
-  },
-  {
-    icon: Route,
-    title: 'Tournées terrain',
-    description:
-      'Organisez les rondes et inspections opérationnelles avec une exécution homogène.',
-    benefits: [
-      'Planification simple',
-      'Suivi GPS',
-      'Checklists terrain',
-      'Historique des visites',
-    ],
-    image: '/audit.png',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Amélioration continue',
-    description:
-      'Transformez vos données terrain en plans d\u2019actions et en gains de performance.',
-    benefits: [
-      'Tableaux de bord',
-      'KPIs en temps réel',
-      'Analyses avancées',
-      'Suivi des progrès',
-    ],
-    image: '/audit.png',
-  },
-]
-
 /* ─────────────────────────── COMPONENT ─────────────────────────── */
 export default function CasesSection() {
   const m = useMotion()
   const [activeTab, setActiveTab] = useState(0)
+  // Une capture qui echoue bascule sur le placeholder sans casser la page.
+  const [failed, setFailed] = useState<Record<string, true>>({})
 
-  const active = useCases[activeTab]
+  const active = FEATURE_TABS[activeTab]
   const Icon = active.icon
+  const showPlaceholder = failed[active.id] === true
 
   return (
     <Section
@@ -181,14 +96,14 @@ export default function CasesSection() {
           className="mt-4 flex w-full justify-between gap-2 overflow-x-auto pb-1 lg:mt-5"
           style={{ scrollbarWidth: 'none' }}
         >
-          {useCases.map((item, index) => {
+          {FEATURE_TABS.map((item, index) => {
             const TabIcon = item.icon
             const isActive = activeTab === index
             return (
               <motion.button
                 key={index}
                 onClick={() => setActiveTab(index)}
-                title={item.title}
+                title={item.label}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
@@ -204,7 +119,7 @@ export default function CasesSection() {
                 }}
               >
                 <TabIcon size={16} className="shrink-0" />
-                <span className="hidden md:inline">{item.title}</span>
+                <span className="hidden md:inline">{item.label}</span>
               </motion.button>
             )
           })}
@@ -252,7 +167,8 @@ export default function CasesSection() {
                     {active.description}
                   </p>
 
-                  {/* Traçabilité badge */}
+                  {/* Badge, optionnel : porte par la donnee de l'onglet */}
+                  {active.badge && (
                   <div
                     className="mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-semibold"
                     style={{
@@ -262,12 +178,13 @@ export default function CasesSection() {
                     }}
                   >
                     <CheckCircle2 size={16} />
-                    Processus entièrement traçable
+                    {active.badge}
                   </div>
+                  )}
 
                   {/* Benefits grid */}
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                    {active.benefits.map((benefit, index) => (
+                    {active.bullets.map((benefit, index) => (
                       <div
                         key={index}
                         className="flex items-center gap-2.5 rounded-xl p-2"
@@ -291,13 +208,17 @@ export default function CasesSection() {
                   </div>
 
                   {/* CTA link */}
-                  <button
+                  <Link
+                    href={active.href}
+                    // Les pages /solutions/* n'existent pas encore : sans ce
+                    // drapeau Next les precharge et la home emet six 404.
+                    prefetch={false}
                     className="mt-4 flex items-center gap-2 text-sm font-semibold transition-all duration-300 hover:gap-3"
                     style={{ color: colors.gold }}
                   >
                     Découvrir la fonctionnalité
                     <ChevronRight size={18} />
-                  </button>
+                  </Link>
                 </div>
 
                 {/* RIGHT — Mockup iPhone vierge (#9 : à personnaliser avec image/GIF) */}
@@ -321,25 +242,25 @@ export default function CasesSection() {
                       {/* Dynamic island */}
                       <div className="absolute left-1/2 top-2 z-20 h-4 w-16 -translate-x-1/2 rounded-full bg-black" />
 
-                      {/* ===== Zone à personnaliser : ajoutez ici votre image ou GIF ===== */}
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-stone-50 to-stone-100">
-                        <div className="flex flex-col items-center gap-2 px-5 text-center opacity-60">
-                          <div
-                            className="flex h-11 w-11 items-center justify-center rounded-xl"
-                            style={{
-                              background: colors.goldBg,
-                              border: `1px solid ${colors.goldBdr}`,
-                            }}
-                          >
-                            <ImageIcon size={20} style={{ color: colors.gold }} />
-                          </div>
-                          <p className="text-[11px] font-medium leading-relaxed" style={{ color: colors.muted }}>
-                            Votre visuel ici
-                            <br />
-                            (image ou GIF)
-                          </p>
-                        </div>
-                      </div>
+                      {/* Capture de l'onglet actif. Tant que le fichier n'existe
+                          pas, onError bascule sur l'ecran schematique : la page
+                          ne montre jamais d'image cassee. */}
+                      {showPlaceholder ? (
+                        <AppScreenPlaceholder className="h-full w-full" />
+                      ) : (
+                        <Image
+                          key={active.id}
+                          src={active.screenshot.src}
+                          alt={active.screenshot.alt}
+                          width={active.screenshot.width}
+                          height={active.screenshot.height}
+                          sizes="144px"
+                          className="h-full w-full object-cover"
+                          onError={() =>
+                            setFailed((prev) => ({ ...prev, [active.id]: true }))
+                          }
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
