@@ -265,7 +265,7 @@ function ConstellationCanvas() {
                 strokeLinecap="round"
                 initial={{ pathLength: 0, opacity: 0 }}
                 whileInView={{ pathLength: 1, opacity: 1 }}
-                viewport={{ once: true, margin: '-80px' }}
+                viewport={m.viewport}
                 transition={{ duration: 0.9, ease: 'easeInOut' }}
               />
             )

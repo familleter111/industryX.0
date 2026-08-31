@@ -28,6 +28,7 @@ import {
   logoFrameWidth,
 } from '@/lib/data/clientLogos'
 import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
+import { viewport } from '@/lib/motion'
 
 /* ============================================================
    DONNÉES
@@ -132,7 +133,7 @@ function TestimonialCard({
     <motion.figure
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={viewport}
       transition={{
         duration: 0.5,
         delay: (index % 3) * 0.08,

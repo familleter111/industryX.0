@@ -24,6 +24,7 @@ import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { LINKEDIN_URL } from '@/lib/data/socials'
+import { viewport } from '@/lib/motion'
 
 /* ============================================================
    DONNÉES
@@ -194,7 +195,7 @@ export default function TeamPage() {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={viewport}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="mx-auto mt-12 max-w-[760px] lg:mt-14"
           >
@@ -240,7 +241,7 @@ export default function TeamPage() {
                   key={expertise.title}
                   initial={{ opacity: 0, y: 22 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
+                  viewport={viewport}
                   transition={{
                     duration: 0.45,
                     delay: (index % 2) * 0.08,
@@ -320,7 +321,7 @@ export default function TeamPage() {
           <motion.div
             initial={{ opacity: 0, y: 26 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={viewport}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12"
           >
@@ -372,7 +373,7 @@ export default function TeamPage() {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={viewport}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-start gap-6 rounded-[26px] border border-[#EFEDE8] bg-white p-7 sm:p-9 lg:flex-row lg:items-center lg:justify-between lg:gap-10"
           >

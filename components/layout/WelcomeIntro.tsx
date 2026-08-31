@@ -39,6 +39,7 @@ export default function WelcomeIntro() {
             transition: { duration: EXIT_S, ease: [0.76, 0, 0.24, 1] },
           }}
           aria-hidden
+          data-welcome-intro
           className="pointer-events-none fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-gold-50 via-cream to-gold-100 motion-reduce:hidden"
         >
           {/* ================= PREMIUM GRADIENT MESH BACKGROUND ================= */}

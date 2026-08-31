@@ -44,6 +44,36 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className={`${syne.variable} ${outfit.variable} ${inter.variable}`}>
+      <head>
+        {/*
+          Les entrees au scroll sont rendues cote serveur dans leur etat de
+          depart, soit `style="opacity:0"` — une cinquantaine d'elements sur la
+          page d'accueil. Sans JavaScript pour les animer, ils resteraient
+          invisibles pour toujours.
+
+          Meme chose pour l'ecran d'introduction : il se retire via un
+          setTimeout, donc sans script il recouvrirait la page indefiniment.
+
+          Ces regles ne s'appliquent que si le navigateur n'execute pas de
+          script : le contenu reste alors lisible, sans animation. Elles
+          n'introduisent aucun clignotement puisqu'elles n'existent pas quand
+          le JavaScript fonctionne.
+        */}
+        <noscript>
+          {/*
+            dangerouslySetInnerHTML est indispensable ici : passe en enfant
+            texte, React echapperait les guillemets du selecteur en &quot;, que
+            le parseur CSS rejette — la regle serait silencieusement ignoree.
+          */}
+          <style
+            dangerouslySetInnerHTML={{
+              __html:
+                '[style*="opacity:0"]{opacity:1!important;transform:none!important}' +
+                '[data-welcome-intro]{display:none!important}',
+            }}
+          />
+        </noscript>
+      </head>
       <body className="font-body antialiased">
         {children}
       </body>

@@ -28,6 +28,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { SectionBadge } from '@/components/ui/SectionHeading'
 import { CLIENT_LOGOS, logoFrameWidth } from '@/lib/data/clientLogos'
+import { viewport } from '@/lib/motion'
 
 /* ============================================================
    DONNÉES STATIQUES
@@ -582,7 +583,7 @@ function AfterContactSection() {
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={viewport}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col items-center text-center"
         >
@@ -608,7 +609,7 @@ function AfterContactSection() {
                 key={step.num}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
+                viewport={viewport}
                 transition={{
                   duration: 0.5,
                   delay: index * 0.08,

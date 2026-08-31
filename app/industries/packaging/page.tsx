@@ -27,6 +27,7 @@ import {
 import Image from 'next/image'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import { viewport } from '@/lib/motion'
 
 // Animation réutilisable
 const fadeInUp = {
@@ -502,7 +503,7 @@ function LaunchTimelineVisual() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: `${p.after}%` }}
-                viewport={{ once: true }}
+                viewport={viewport}
                 transition={{ duration: 0.9, delay: i * 0.12 }}
                 className="bg-gold h-full rounded-full"
               />
@@ -1040,7 +1041,7 @@ export default function PackagingPage() {
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={viewport}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   className="relative z-10 flex flex-col items-center text-center"
                 >

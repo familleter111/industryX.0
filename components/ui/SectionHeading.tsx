@@ -44,6 +44,7 @@ export default function SectionHeading({
   subtitle,
   tone = 'light',
   className = '',
+  orchestrated = false,
 }: {
   badge?: string | null
   title: string
@@ -52,14 +53,27 @@ export default function SectionHeading({
   subtitle?: string
   tone?: Tone
   className?: string
+  /**
+   * `true` quand un conteneur parent orchestre deja l'entree (stagger). Le
+   * titre se contente alors de declarer ses variants et herite de l'etat du
+   * parent.
+   *
+   * Sans ce drapeau, un enfant qui declare son propre `initial` et son propre
+   * `whileInView` se detache de l'orchestration : Framer ne propage l'etat
+   * d'un parent qu'aux enfants qui ne declarent pas les leurs. On obtient
+   * alors deux declencheurs concurrents, et le titre apparait avant le
+   * contenu qu'il annonce.
+   */
+  orchestrated?: boolean
 }) {
   const m = useMotion()
+  const selfTriggered = !orchestrated
   return (
     <motion.div
       variants={m.fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={m.viewport}
+      {...(selfTriggered
+        ? { initial: 'hidden' as const, whileInView: 'visible' as const, viewport: m.viewport }
+        : {})}
       className={`flex flex-col items-center text-center ${className}`}
     >
       {badge && <SectionBadge label={badge} tone={tone} />}

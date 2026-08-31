@@ -27,6 +27,7 @@ import SectionHeading from '@/components/ui/SectionHeading'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import { PARTNERS } from '@/lib/data/partnerLogos'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
+import { viewport } from '@/lib/motion'
 
 /* ============================================================
    DONNÉES
@@ -140,7 +141,7 @@ export default function AboutPage() {
                   key={value.title}
                   initial={{ opacity: 0, y: 22 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
+                  viewport={viewport}
                   transition={{
                     duration: 0.45,
                     delay: (index % 3) * 0.07,
@@ -174,7 +175,7 @@ export default function AboutPage() {
           <motion.div
             initial={{ opacity: 0, y: 26 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={viewport}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12"
           >
@@ -241,7 +242,7 @@ export default function AboutPage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
+            viewport={viewport}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 text-center text-[14.5px] leading-[1.85] text-[#57534E] sm:text-[15.5px]"
           >

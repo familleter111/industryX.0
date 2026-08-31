@@ -8,6 +8,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import PartnersOrbit from '@/components/sections/PartnersOrbit'
+import { viewport } from '@/lib/motion'
 
 /* ============================================================
    DONNÉES
@@ -59,7 +60,7 @@ export default function PartnersPage() {
           <motion.div
             initial={{ opacity: 0, y: 26 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={viewport}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="relative overflow-hidden rounded-[30px] bg-[#0C0D12] p-7 sm:p-10 lg:p-12"
           >

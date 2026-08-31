@@ -268,14 +268,21 @@ export default function ProblemsSection() {
         </motion.div>
 
         {/* ================= BLOC CENTRAL : CARTES STATISTIQUES ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-20">
+        {/* Un declencheur pour les quatre cartes, pas quatre. Ce bloc reste
+            distinct de celui du haut : 80 px les separent, les fusionner
+            ferait apparaitre ces cartes en meme temps qu'un contenu situe
+            bien plus haut. */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-20"
+          variants={m.stagger()}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
+        >
           {stats.map((stat, index) => (
             <motion.div
               key={index}
               variants={m.fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={m.viewport}
               className="bg-white border border-black/[0.05] rounded-3xl p-6 shadow-[0_10px_35px_rgba(15,23,42,0.02)] flex items-start gap-4 transition-all duration-300 hover:shadow-md hover:border-gold/30"
             >
               {/* Icône */}
@@ -293,7 +300,7 @@ export default function ProblemsSection() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
     </Section>
   )

@@ -16,6 +16,7 @@ import {
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import SectionHeading from '@/components/ui/SectionHeading'
+import { viewport } from '@/lib/motion'
 
 /* ============================================================
    DONNÉES
@@ -86,7 +87,7 @@ function HighlightsPanel() {
     <motion.aside
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={viewport}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className="order-2 flex h-full flex-col overflow-hidden rounded-[28px] bg-[#0C0D12] shadow-[0_28px_70px_rgba(15,23,42,0.20)] lg:order-1"
     >
@@ -170,7 +171,7 @@ function FaqAccordion() {
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={viewport}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className="order-1 flex h-full flex-col overflow-hidden rounded-[28px] border border-[#EDEAE3] bg-white shadow-[0_24px_60px_rgba(15,23,42,0.06)] lg:order-2"
     >

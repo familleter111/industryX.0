@@ -79,13 +79,20 @@ export default function TestimonialsSection() {
       {/* glow background — mesh animé avec parallax léger */}
 
 
-        {/* HEADER */}
+        {/* Un seul declencheur pour le titre ET les cartes : le conteneur
+            orchestre, les enfants ne declarent que leurs variants. Deux
+            declencheurs separes laissaient le titre seul a l'ecran, le temps
+            que les cartes atteignent a leur tour le seuil. */}
         <motion.div
           ref={ref}
-          variants={m.fadeUp}
+          variants={m.stagger()}
           initial="hidden"
           whileInView="visible"
           viewport={m.viewport}
+        >
+        {/* HEADER */}
+        <motion.div
+          variants={m.fadeUp}
           className="mb-16 text-center"
         >
           <h2 className="text-4xl font-bold text-dark sm:text-5xl">
@@ -98,9 +105,6 @@ export default function TestimonialsSection() {
         <motion.div
           className="grid gap-6 lg:grid-cols-3"
           variants={m.stagger()}
-          initial="hidden"
-          whileInView="visible"
-          viewport={m.viewport}
         >
           {testimonials.map((t, i) => {
             const isActive = current === i
@@ -166,6 +170,7 @@ export default function TestimonialsSection() {
               </motion.div>
             )
           })}
+        </motion.div>
         </motion.div>
 
         {/* NAVIGATION */}

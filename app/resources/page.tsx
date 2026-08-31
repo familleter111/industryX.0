@@ -22,6 +22,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
+import { viewport } from '@/lib/motion'
 
 /* ============================================================
    DONNÉES
@@ -141,7 +142,7 @@ export default function ResourcesPage() {
                   key={brief.href}
                   initial={{ opacity: 0, y: 22 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
+                  viewport={viewport}
                   transition={{
                     duration: 0.45,
                     delay: (index % 3) * 0.07,
@@ -219,7 +220,7 @@ export default function ResourcesPage() {
             <motion.div
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={viewport}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="mx-auto mt-12 flex max-w-2xl flex-col items-center rounded-[26px] border border-dashed border-[#DDD9CF] bg-white/70 px-6 py-12 text-center lg:mt-14"
             >
