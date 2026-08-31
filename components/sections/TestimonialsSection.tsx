@@ -8,6 +8,7 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
 import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
 import { tokens } from '@/lib/tokens'
+import { useMotion } from '@/lib/useMotion'
 
 /**
  * Témoignages : source unique dans components/testimonials.ts.
@@ -47,6 +48,7 @@ function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
 }
 
 export default function TestimonialsSection() {
+  const m = useMotion()
   const [current, setCurrent] = useState(0)
   const ref = useRef(null)
 
@@ -75,10 +77,10 @@ export default function TestimonialsSection() {
         {/* HEADER */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="mb-16 text-center"
         >
           <h2 className="text-4xl font-bold text-dark sm:text-5xl">
@@ -88,17 +90,20 @@ export default function TestimonialsSection() {
         </motion.div>
 
         {/* CARDS */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <motion.div
+          className="grid gap-6 lg:grid-cols-3"
+          variants={m.stagger()}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
+        >
           {testimonials.map((t, i) => {
             const isActive = current === i
 
             return (
               <motion.div
                 key={t.company}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.4, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                variants={m.fadeUp}
                 onClick={() => setCurrent(i)}
                 className={`
                   cursor-pointer rounded-[32px] border bg-white/90 p-7 backdrop-blur-xl transition-all
@@ -156,7 +161,7 @@ export default function TestimonialsSection() {
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
 
         {/* NAVIGATION */}
         <div className="mt-12 flex items-center justify-center gap-4">

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ClipboardCheck,
   SearchCheck,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
+import { useMotion } from '@/lib/useMotion'
 
 /* ─────────────────────────── PALETTE (aligne sur Hero) ─────────────────────────── */
 const colors = {
@@ -112,9 +113,9 @@ const useCases = [
 
 /* ─────────────────────────── COMPONENT ─────────────────────────── */
 export default function CasesSection() {
+  const m = useMotion()
   const [activeTab, setActiveTab] = useState(0)
   const ref = useRef(null)
-  const inView = useInView(ref, { once: false, margin: '-40px' })
 
   const active = useCases[activeTab]
   const Icon = active.icon
@@ -138,9 +139,10 @@ export default function CasesSection() {
 
         {/* ─── HEADER ─── */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="mx-auto max-w-4xl text-center"
         >
 
@@ -171,9 +173,10 @@ export default function CasesSection() {
 
         {/* ─── TABS ─── */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          variants={m.fadeIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="mt-4 flex w-full justify-between gap-2 overflow-x-auto pb-1 lg:mt-5"
           style={{ scrollbarWidth: 'none' }}
         >

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   ArrowRight,
   MessageCircle,
@@ -11,6 +11,7 @@ import Image from 'next/image'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
 import { PARTNERS, type Partner } from '@/lib/data/partnerLogos'
+import { useMotion } from '@/lib/useMotion'
 
 /**
  * Bandeau partenaires du bloc CTA.
@@ -42,12 +43,9 @@ function LogoCard({ partner }: { partner: Partner }) {
 }
 
 export default function CTASection() {
+  const m = useMotion()
   const ref = useRef(null)
 
-  const inView = useInView(ref, {
-    once: false,
-    margin: '-40px',
-  })
 
   return (
     <section
@@ -69,9 +67,10 @@ export default function CTASection() {
 
         {/* ================= MAIN CARD ================= */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="relative overflow-hidden rounded-[40px] border border-white/10 bg-dark shadow-[0_30px_120px_rgba(0,0,0,0.25)]"
         >
 

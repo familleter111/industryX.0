@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { CLIENT_LOGOS, type ClientLogo } from '@/lib/data/clientLogos'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
 import { tokens } from '@/lib/tokens'
+import { useMotion } from '@/lib/useMotion'
 
 /* ============================================================
    CONSTELLATION CLIENTS
@@ -237,6 +238,7 @@ function trimmedEdge(from: string, to: string) {
    ============================================================ */
 
 function ConstellationCanvas() {
+  const m = useMotion()
   return (
     <div className="relative mx-auto aspect-[1200/940] w-full">
       <svg
@@ -310,14 +312,10 @@ function ConstellationCanvas() {
             className="absolute -translate-x-1/2 -translate-y-1/2"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.82 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{
-                duration: 0.45,
-                delay: 0.35 + index * 0.04,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+              variants={m.scaleIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={m.viewport}
               className="transition-transform duration-500 hover:scale-[1.08]"
             >
               <Image
@@ -360,10 +358,10 @@ function ConstellationCanvas() {
         className="absolute aspect-square -translate-x-1/2 -translate-y-1/2"
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.86 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          variants={m.scaleIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="relative flex h-full w-full items-center justify-center rounded-full bg-white shadow-[0_26px_70px_rgba(15,23,42,0.16)] ring-[1.5px] ring-gold/45"
         >
           <span
@@ -420,6 +418,7 @@ function LogoGrid() {
    ============================================================ */
 
 export default function ClientsConstellation() {
+  const m = useMotion()
   return (
     <section
       className="overflow-hidden py-16 sm:py-20 lg:py-24"
@@ -434,10 +433,10 @@ export default function ClientsConstellation() {
             lisibles sur les écrans intermédiaires. */}
         <div className="grid gap-10 xl:grid-cols-2 xl:items-center xl:gap-12">
           <motion.div
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            variants={m.fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={m.viewport}
             className="xl:max-w-[780px]"
           >
             <span className="block h-[4px] w-24 rounded-full bg-gold" />

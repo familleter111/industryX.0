@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Database,
   Layers3,
@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
+import { useMotion } from '@/lib/useMotion'
 
 const ODD_LOGOS = [
   '/ODD/ODD7.png',
@@ -155,12 +156,9 @@ const steps = [
 ]
 
 export default function IndustriesSection() {
+  const m = useMotion()
   const ref = useRef(null)
 
-  const inView = useInView(ref, {
-    once: false,
-    margin: '-40px',
-  })
 
   return (
     <section
@@ -185,7 +183,6 @@ export default function IndustriesSection() {
               key={odd.id}
               src={`/ODD/${odd.id}.png`}
               alt={`Objectif de Développement Durable ${odd.id}`}
-              className="absolute drop-shadow-xl"
               style={{
                 top: odd.top,
                 bottom: odd.bottom,
@@ -195,30 +192,19 @@ export default function IndustriesSection() {
                 height: odd.size,
                 borderRadius: '12px',
                 opacity: 0.85,
+                animationDuration: `${odd.duration}s`,
+                animationDelay: `${odd.delay}s`,
+                ['--tilt' as string]: `${odd.rotate}deg`,
               }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{
-                opacity: [0.6, 0.9, 0.6],
-                scale: 1,
-                y: [0, -15, 0],
-                rotate: [0, odd.rotate, 0, -odd.rotate, 0],
-              }}
-              transition={{
-                opacity: { duration: odd.duration * 2, repeat: Infinity, ease: 'easeInOut' },
-                y: {
-                  duration: odd.duration,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: odd.delay,
-                },
-                rotate: {
-                  duration: odd.duration * 1.5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: odd.delay,
-                },
-                scale: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
-              }}
+              // Le flottement d'ambiance est une boucle autonome : il passe en
+              // CSS (animate-float-soft), ou il ne coute rien au fil principal
+              // et respecte prefers-reduced-motion sans code supplementaire.
+              // Seule l'entree reste pilotee par Framer.
+              className="absolute animate-float-soft drop-shadow-xl"
+              variants={m.scaleIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={m.viewport}
             />
           ))}
         </div>
@@ -227,9 +213,10 @@ export default function IndustriesSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-16">
         {/* HEADER */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="mb-20 text-center"
         >
 
@@ -257,13 +244,10 @@ export default function IndustriesSection() {
             {steps.map((step, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{
-                  duration: 0.45,
-                  delay: i * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+                variants={m.fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={m.viewport}
                 className="group relative"
               >
                 <div className="relative h-full rounded-3xl border border-black/[0.06] bg-white/90 p-7 shadow-[0_10px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl lg:p-8">
@@ -333,13 +317,10 @@ export default function IndustriesSection() {
 
         {/* ODD LOGOS BAR */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
-          transition={{
-            duration: 0.45,
-            delay: 0.15,
-            ease: [0.22, 1, 0.36, 1],
-          }}
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="mx-auto mt-20 sm:mt-28 max-w-6xl relative z-10 px-4 sm:px-10"
         >
           <div className="text-center mb-8">

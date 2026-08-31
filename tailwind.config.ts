@@ -61,10 +61,38 @@ const config: Config = {
       },
       animation: {
         marquee: 'marquee 25s linear infinite',
+        // Derive d'ambiance des orbes de fond : boucle autonome, donc CSS.
+        // La duree et le decalage sont surcharges par element via style.
+        'orb-drift': 'orbDrift 10s ease-in-out infinite',
+        // Boucles autonomes : aucune ne depend d'un etat React ni du scroll.
+        shimmer: 'shimmer 3s linear infinite',
+        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+        'dash-march': 'dashMarch 1s linear infinite',
+        'float-soft': 'floatSoft 8s ease-in-out infinite',
         orbit: 'orbit 90s linear infinite',
         'orbit-reverse': 'orbitReverse 90s linear infinite',
       },
       keyframes: {
+        shimmer: {
+          from: { transform: 'translateX(-100%)' },
+          to: { transform: 'translateX(500%)' },
+        },
+        pulseSoft: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' },
+        },
+        dashMarch: {
+          from: { strokeDashoffset: '0' },
+          to: { strokeDashoffset: '-20' },
+        },
+        floatSoft: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)', opacity: '0.6' },
+          '50%': { transform: 'translateY(-15px) rotate(var(--tilt, 0deg))', opacity: '0.9' },
+        },
+        orbDrift: {
+          '0%, 100%': { transform: 'scale(1) translateX(0px)' },
+          '50%': { transform: 'scale(1.15) translateX(30px)' },
+        },
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },

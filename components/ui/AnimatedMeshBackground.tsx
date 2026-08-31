@@ -35,19 +35,29 @@ function ParallaxOrb({
 
   return (
     <motion.div
+      // Framer ne pilote que le parallax, qui depend du scroll.
       style={{
         position: 'absolute',
         ...orb.position,
         width: orb.size,
         height: orb.size,
-        borderRadius: '9999px',
-        background: orb.color,
-        filter: 'blur(140px)',
         y,
       }}
-      animate={{ scale: [1, 1.15, 1], x: [0, 30, 0] }}
-      transition={{ duration: orb.duration ?? 10, repeat: Infinity, ease: 'easeInOut', delay }}
-    />
+    >
+      {/* La derive d'ambiance est une boucle autonome : elle appartient au
+          CSS, ou le compositeur l'execute sans occuper le fil principal.
+          Elle herite ainsi du respect de prefers-reduced-motion defini dans
+          globals.css, que Framer Motion ignore. */}
+      <div
+        className="h-full w-full animate-orb-drift rounded-full"
+        style={{
+          background: orb.color,
+          filter: 'blur(140px)',
+          animationDuration: `${orb.duration ?? 10}s`,
+          animationDelay: `${delay}s`,
+        }}
+      />
+    </motion.div>
   )
 }
 

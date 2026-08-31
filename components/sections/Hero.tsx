@@ -11,6 +11,7 @@ import {
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { CLIENT_LOGOS, logoFrameWidth, type ClientLogo } from '@/lib/data/clientLogos'
 import { tokens } from '@/lib/tokens'
+import { useMotion } from '@/lib/useMotion'
 
 /*
  * Logos clients : source unique dans components/clientLogos.ts.
@@ -47,6 +48,7 @@ const PILLS = [
 
 
 export default function Hero() {
+  const m = useMotion()
   return (
     <section className="relative overflow-hidden bg-stone-100 pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
       {/* BACKGROUND — mesh animé avec parallax léger au scroll */}
@@ -272,21 +274,9 @@ export default function Hero() {
         {/* RIGHT SIDE */}
 
         <motion.div
-          initial={{
-            opacity: 0,
-            y: 14,
-            scale: 0.98,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-          }}
-          transition={{
-            duration: 0.55,
-            delay: 0.08,
-            ease: [0.22, 1, 0.36, 1],
-          }}
+          variants={m.scaleIn}
+          initial="hidden"
+          animate="visible"
           className="relative z-10"
         >
           {/* Conteneur isolé à la couleur de la section : le fond blanc de
@@ -310,13 +300,10 @@ export default function Hero() {
 
       {/* PARTNER LOGOS MARQUEE — déplacée depuis CIPA (#2) */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.5,
-          delay: 0.15,
-          ease: [0.22, 1, 0.36, 1],
-        }}
+        variants={m.fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={m.viewport}
         className="relative z-10 mt-8 w-full sm:mt-12"
       >
         <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-stone-500">

@@ -9,6 +9,8 @@ import { logoFrameWidth, type LogoAsset } from '@/lib/data/logoSizing'
 import { CLIENT_LOGOS } from '@/lib/data/clientLogos'
 import { PARTNERS, PARTNER_BRANCHES } from '@/lib/data/partnerLogos'
 import { tokens } from '@/lib/tokens'
+import { EASE } from '@/lib/motion'
+import { useMotion } from '@/lib/useMotion'
 
 /* ============================================================
    ORBITE DE L'ÉCOSYSTÈME
@@ -216,6 +218,7 @@ function RingSpokes({ ring }: { ring: Ring }) {
 }
 
 function OrbitRing({ ring, delay }: { ring: Ring; delay: number }) {
+  const m = useMotion()
   const spin = ring.clockwise ? 'animate-orbit' : 'animate-orbit-reverse'
   const counterSpin = ring.clockwise ? 'animate-orbit-reverse' : 'animate-orbit'
   const spinClasses = `motion-reduce:animate-none group-hover/orbit:[animation-play-state:paused]`
@@ -270,14 +273,10 @@ function OrbitRing({ ring, delay }: { ring: Ring; delay: number }) {
             >
               {/* 3. apparition au scroll */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.7 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{
-                  duration: 0.5,
-                  delay: delay + index * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+                variants={m.scaleIn}
+                initial="hidden"
+                whileInView="visible"
+                viewport={m.viewport}
                 className="h-full w-full"
               >
                 <OrbitChip logo={logo} ring={ring} />
@@ -300,16 +299,17 @@ function OrbitRing({ ring, delay }: { ring: Ring; delay: number }) {
    ============================================================ */
 
 function OrbitCore() {
+  const m = useMotion()
   return (
     <div
       style={{ width: pct(CORE_SIZE), height: pct(CORE_SIZE) }}
       className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.86 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        variants={m.scaleIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={m.viewport}
         className="relative flex h-full w-full items-center justify-center rounded-full bg-white shadow-[0_26px_70px_rgba(15,23,42,0.16)] ring-[1.5px] ring-gold/45"
       >
         <span className="pointer-events-none absolute inset-[7%] rounded-full ring-1 ring-gold/15" />
@@ -336,6 +336,7 @@ function OrbitCore() {
    ============================================================ */
 
 function OrbitCanvas() {
+  const m = useMotion()
   const [inner, outer] = RINGS
 
   return (
@@ -362,10 +363,10 @@ function OrbitCanvas() {
           stroke={GOLD}
           strokeOpacity="0.18"
           strokeWidth="1"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.8, delay: 0.25 }}
+          variants={m.fadeIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
         />
 
         {/* trajectoire intérieure */}
@@ -378,8 +379,10 @@ function OrbitCanvas() {
           strokeWidth="1.2"
           initial={{ pathLength: 0, opacity: 0 }}
           whileInView={{ pathLength: 1, opacity: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 1.1, ease: 'easeInOut', delay: 0.15 }}
+          viewport={m.viewport}
+          // EXCEPTION — pathLength n'est pas une transformation, mais c'est la
+          // seule facon de tracer un chemin SVG. Aucun layout n'est declenche.
+          transition={{ duration: tokens.duration.slow, ease: EASE }}
         />
 
         {/* repère à mi-distance */}
@@ -392,10 +395,10 @@ function OrbitCanvas() {
           strokeOpacity="0.09"
           strokeWidth="1"
           strokeDasharray="2 9"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9, delay: 0.55 }}
+          variants={m.fadeIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
         />
 
         {/* trajectoire extérieure */}
@@ -407,10 +410,10 @@ function OrbitCanvas() {
           stroke="url(#orbitPath)"
           strokeWidth="1.2"
           strokeDasharray="3 8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9, delay: 0.45 }}
+          variants={m.fadeIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
         />
       </svg>
 
@@ -506,6 +509,7 @@ export default function PartnersOrbit({
 }: {
   variant?: 'home' | 'page'
 }) {
+  const m = useMotion()
   const isHome = variant === 'home'
 
   const reveal = {

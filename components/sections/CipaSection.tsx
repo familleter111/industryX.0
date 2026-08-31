@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useRef, useState } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight,
   X,
@@ -13,6 +13,7 @@ import {
 import Image from 'next/image'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
+import { useMotion } from '@/lib/useMotion'
 
 const colors = {
   gold: tokens.color.gold.DEFAULT,
@@ -122,8 +123,8 @@ function SectorLogoCard({
 }
 
 export default function CipaSection() {
+  const m = useMotion()
   const ref = useRef(null)
-  const inView = useInView(ref, { once: false })
   const [open, setOpen] = useState(false)
 
   return (
@@ -149,9 +150,10 @@ export default function CipaSection() {
         {/* ================= HEADER ================= */}
         <div className="mx-auto max-w-5xl text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            variants={m.fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={m.viewport}
           >
             <div className="flex justify-center">
               <Image
@@ -189,9 +191,10 @@ export default function CipaSection() {
 
         {/* ================= TRANSITION : problèmes → CIPA ================= */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
-          transition={{ duration: 0.4, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="relative mt-6 lg:mt-8"
         >
           <p
@@ -207,14 +210,12 @@ export default function CipaSection() {
           {/* Ligne d'énergie animée — remplace les flèches/branches */}
           <div className="relative mx-auto mt-6 h-px w-full max-w-md overflow-hidden rounded-full lg:max-w-lg">
             <div className="absolute inset-0" style={{ background: 'rgba(218,162,80,.15)' }} />
-            <motion.div
-              className="absolute inset-y-0 w-1/4"
+            <div
+              className="absolute inset-y-0 w-1/4 animate-shimmer"
               style={{
                 background:
                   `linear-gradient(90deg, transparent, ${colors.gold}, ${colors.lime}, transparent)`,
               }}
-              animate={{ x: ['-100%', '500%'] }}
-              transition={{ duration: 2.6, repeat: Infinity, ease: 'linear' }}
             />
           </div>
         </motion.div>
@@ -224,9 +225,10 @@ export default function CipaSection() {
           {pillars.map((pillar, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ delay: 0.08 + i * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              variants={m.fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={m.viewport}
               whileHover={{ y: -10, scale: 1.02 }}
               className={`group relative overflow-visible rounded-[24px] border p-6 pt-8 text-center transition-shadow duration-300 hover:shadow-[0_35px_80px_rgba(0,0,0,0.12)] lg:p-7 lg:pt-9 ${
                 i === 1 ? 'lg:-translate-y-4' : ''
@@ -265,9 +267,10 @@ export default function CipaSection() {
 
         {/* ================= BARRE DES SECTEURS — sous la flèche (#2/#7) ================= */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
-          transition={{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
           className="mx-auto mt-10 max-w-6xl lg:mt-12"
         >
           <div className="mb-3 text-center">

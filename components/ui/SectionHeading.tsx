@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useMotion } from '@/lib/useMotion'
 
 type Tone = 'light' | 'dark'
 
@@ -52,12 +53,13 @@ export default function SectionHeading({
   tone?: Tone
   className?: string
 }) {
+  const m = useMotion()
   return (
     <motion.div
-      initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      variants={m.fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={m.viewport}
       className={`flex flex-col items-center text-center ${className}`}
     >
       {badge && <SectionBadge label={badge} tone={tone} />}

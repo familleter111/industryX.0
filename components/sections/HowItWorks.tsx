@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import Image from 'next/image'
-import { motion, useInView } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import {
   Clock,
   AlertTriangle,
@@ -14,6 +14,8 @@ import {
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
+import { EASE } from '@/lib/motion'
+import { useMotion } from '@/lib/useMotion'
 
 // Data for middle stat cards — palette or/graphite du Hero, le rouge n'accentue que le chiffre (gravité)
 const stats = [
@@ -93,7 +95,7 @@ function ConnectorLines({ orientation }: { orientation: 'horizontal' | 'vertical
       preserveAspectRatio="none"
     >
       {paths.map((d, i) => (
-        <motion.path
+        <path
           key={d}
           d={d}
           fill="none"
@@ -102,10 +104,9 @@ function ConnectorLines({ orientation }: { orientation: 'horizontal' | 'vertical
           strokeLinecap="round"
           strokeOpacity={0.85}
           strokeDasharray="5 5"
+          className="animate-dash-march"
           vectorEffect="non-scaling-stroke"
           style={{ filter: 'drop-shadow(0 0 3px rgba(218,162,80,0.7))' }}
-          animate={{ strokeDashoffset: [0, -20] }}
-          transition={{ duration: 1.1, repeat: Infinity, ease: 'linear', delay: i * 0.15 }}
         />
       ))}
     </svg>
@@ -117,10 +118,9 @@ function RiskHub({ compact = false }: { compact?: boolean }) {
   return (
     <div className="relative z-10 flex items-center justify-center">
       {!compact && <div className="absolute h-[130%] w-[130%] rounded-full border border-white/10" />}
-      <motion.div
-        animate={{ scale: [1, 1.05, 1] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-        className={`relative ${size} rounded-full bg-gradient-to-br from-red-600 to-red-800 shadow-[0_0_35px_rgba(220,38,38,0.5)] ring-4 ring-red-500/20 flex flex-col items-center justify-center text-white`}
+      {/* Pulsation d'ambiance : boucle autonome, donc CSS. */}
+      <div
+        className={`animate-pulse-soft relative ${size} rounded-full bg-gradient-to-br from-red-600 to-red-800 shadow-[0_0_35px_rgba(220,38,38,0.5)] ring-4 ring-red-500/20 flex flex-col items-center justify-center text-white`}
       >
         <AlertTriangle size={compact ? 14 : 18} strokeWidth={2} />
         <span className={`mt-0.5 font-black uppercase tracking-wider text-center leading-tight ${compact ? 'text-[7px]' : 'text-[8px] lg:text-[9px]'}`}>
@@ -128,18 +128,24 @@ function RiskHub({ compact = false }: { compact?: boolean }) {
           <br />
           Latent
         </span>
-      </motion.div>
+      </div>
     </div>
   )
 }
 
-export default function ProblemsSection() {
-  const ref = useRef(null)
+/* EXCEPTION AU SYSTEME PARTAGE — les deux colonnes convergent l'une vers
+   l'autre, geste que fadeUp / fadeIn / scaleIn ne savent pas exprimer. La
+   duree, la courbe et le seuil de declenchement restent ceux du systeme :
+   seule la direction change. A promouvoir dans lib/motion.ts si le motif
+   reapparait ailleurs. */
+const convergeFrom = (x: number): Variants => ({
+  hidden: { opacity: 0, x },
+  visible: { opacity: 1, x: 0, transition: { duration: tokens.duration.base, ease: EASE } },
+})
 
-  const inView = useInView(ref, {
-    once: false,
-    margin: '-40px',
-  })
+export default function ProblemsSection() {
+  const m = useMotion()
+  const ref = useRef(null)
 
   return (
     <section
@@ -158,13 +164,17 @@ export default function ProblemsSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10">
 
         {/* ================= BLOC SUPÉRIEUR : PROBLÈME & SCHÉMA RÉSEAU ================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+          variants={m.stagger()}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
+        >
 
           {/* GAUCHE : TEXTES DE PRÉSENTATION */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            variants={m.reduce ? undefined : convergeFrom(-20)}
             className="lg:col-span-5 flex flex-col items-start"
           >
             {/* BADGE */}
@@ -198,9 +208,7 @@ export default function ProblemsSection() {
 
           {/* DROITE : SCHÉMA RÉSEAU D'USINE (reconstruit en HTML, photo usine en fond) */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-            transition={{ duration: 0.45, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            variants={m.reduce ? undefined : convergeFrom(20)}
             className="lg:col-span-7"
           >
             <div className="relative w-full overflow-hidden rounded-2xl border border-black/5 shadow-[0_20px_50px_rgba(15,23,42,0.1)] aspect-[4/5] sm:aspect-[16/11] lg:aspect-[16/9]">
@@ -255,16 +263,17 @@ export default function ProblemsSection() {
             </div>
           </motion.div>
 
-        </div>
+        </motion.div>
 
         {/* ================= BLOC CENTRAL : CARTES STATISTIQUES ================= */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-20">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-              transition={{ duration: 0.4, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+              variants={m.fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={m.viewport}
               className="bg-white border border-black/[0.05] rounded-3xl p-6 shadow-[0_10px_35px_rgba(15,23,42,0.02)] flex items-start gap-4 transition-all duration-300 hover:shadow-md hover:border-gold/30"
             >
               {/* Icône */}
