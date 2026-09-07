@@ -1,19 +1,17 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   Database,
   Layers3,
   LineChart,
   ArrowRight,
-  CheckCircle2,
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
 import Section from '@/components/ui/Section'
-import Image from 'next/image'
+import SdgContribution from '@/components/sections/SdgContribution'
 
 const steps = [
   {
@@ -41,28 +39,6 @@ const steps = [
     accent: 'rgb(59 130 246)', // blue-500
   },
 ]
-
-/**
- * Objectifs de Developpement Durable, en barre.
- *
- * Les six pastilles officielles alignees, avec un flottement leger. Chacune
- * porte son intitule en texte alternatif : ici l'icone n'est plus decorative,
- * elle est la seule porteuse de l'information, donc elle a besoin d'un nom
- * accessible. Un `alt` vide rendrait la barre muette pour un lecteur d'ecran.
- *
- * `delay` et `tilt` ne servent qu'a desynchroniser les six : sans decalage de
- * phase elles montent et descendent ensemble, ce qui se voit comme un defaut.
- * Ce sont des offsets, pas des durees — la duree reste celle de
- * `animate-float-soft` (8 s, definie une fois dans tailwind.config).
- */
-const SDG_GOALS = [
-  { num: 7, title: 'Énergie propre et d’un coût abordable', delay: 0, tilt: 3 },
-  { num: 8, title: 'Travail décent et croissance économique', delay: 1.1, tilt: -2 },
-  { num: 9, title: 'Industrie, innovation et infrastructure', delay: 2.2, tilt: 2 },
-  { num: 12, title: 'Consommation et production responsables', delay: 0.6, tilt: -3 },
-  { num: 13, title: 'Mesures relatives à la lutte contre les changements climatiques', delay: 1.7, tilt: 2 },
-  { num: 17, title: 'Partenariats pour la réalisation des objectifs', delay: 2.8, tilt: -2 },
-] as const
 
 export default function IndustriesSection() {
   const m = useMotion()
@@ -168,7 +144,7 @@ export default function IndustriesSection() {
                   </div>
 
                   {/* FOOTER */}
-                  <div className="relative z-10 mt-8 flex items-center gap-2 text-sm font-medium text-dark/35 transition-all duration-300 group-hover:text-dark/70">
+                  <div className="relative z-10 mt-8 flex items-center gap-2 text-sm font-medium text-subtle transition-all duration-300 group-hover:text-dark/70">
                     <span>Flux opérationnel</span>
 
                     <ArrowRight
@@ -181,63 +157,13 @@ export default function IndustriesSection() {
             ))}
           </div>
         </div>
-
-
-
         {/* ================= OBJECTIFS DE DEVELOPPEMENT DURABLE =================
 
-            Une barre des six pastilles officielles, en flottement leger.
-
-            Le flottement est une boucle autonome : il reste en CSS
-            (animate-float-soft), ou il ne coute rien au fil principal et se
-            neutralise sous prefers-reduced-motion via la regle globale de
-            globals.css. L'entree au scroll, elle, depend de l'etat du
-            viewport : elle reste chez Framer. Les deux vivent sur deux
-            elements distincts — poses sur le meme, la keyframe CSS ecraserait
-            le transform inline de Framer et l'entree serait invisible.
-
-            TODO(licence) — verifier avant la soutenance les conditions
-            d'utilisation des logos ODD de l'ONU. Les Guidelines on the Use of
-            the SDG Logo and the 17 SDG Icons distinguent l'usage informatif
-            de l'usage commercial : le second exige une autorisation ecrite,
-            et interdit de laisser entendre que l'ONU soutient le produit. Un
-            site vitrine d'editeur logiciel releve du second cas.
-            Reference : un.org/sustainabledevelopment/news/communications-material/
+            Bloc isole dans son propre composant : il a son etat (pastille
+            survolee, decalage de l'infobulle) et ses donnees, qui n'ont rien
+            a voir avec les trois etapes du flux ci-dessus.
             ================================================================= */}
-        <motion.div
-          variants={m.stagger(0.08)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={m.viewport}
-          className="relative z-10 mx-auto mt-20 max-w-6xl px-4 sm:mt-28 sm:px-10"
-        >
-          <motion.div variants={m.fadeUp} className="mb-8 text-center">
-            <h4 className="mb-2 text-[15px] font-bold text-dark">
-              Contribution aux Objectifs de Développement Durable
-            </h4>
-            <p className="mx-auto max-w-xl text-sm text-stone-600">
-              Six objectifs sur lesquels la plateforme a un effet mesurable.
-            </p>
-          </motion.div>
-
-          <ul className="grid grid-cols-3 items-center justify-items-center gap-6 py-4 sm:grid-cols-6 sm:gap-8">
-            {SDG_GOALS.map((goal) => (
-              <motion.li key={goal.num} variants={m.fadeUp}>
-                <Image
-                  src={`/ODD/ODD${goal.num}.png`}
-                  alt={`Objectif ${goal.num} — ${goal.title}`}
-                  width={512}
-                  height={512}
-                  style={{
-                    animationDelay: `${goal.delay}s`,
-                    ['--tilt' as string]: `${goal.tilt}deg`,
-                  }}
-                  className="h-16 w-16 animate-float-soft rounded-lg object-contain sm:h-[72px] sm:w-[72px]"
-                />
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
+        <SdgContribution className="mt-20 px-4 sm:mt-28 sm:px-10" />
     </Section>
   )
 }
