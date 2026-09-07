@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Car,
   ChevronDown,
-  ChevronRight,
   ClipboardCheck,
   Factory,
   Quote,
@@ -21,6 +20,7 @@ import {
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import ClientsConstellation from '@/components/sections/ClientsConstellation'
+import SectorsShowcase from '@/components/sections/SectorsShowcase'
 import {
   findClientLogo,
   logoFrameWidth,
@@ -98,7 +98,7 @@ function TestimonialLogo({ testimonial }: { testimonial: Testimonial }) {
 
   if (!logo) {
     return (
-      <span className="font-display text-[13px] font-black text-[#B6842B]">
+      <span className="font-display text-[13px] font-black text-gold-ink">
         {testimonial.company
           .split(' ')
           .map((word) => word[0])
@@ -161,7 +161,7 @@ function TestimonialCard({
           <p className="text-[13.5px] font-bold text-[#111827]">
             {testimonial.company}
           </p>
-          <p className="mt-0.5 text-[12px] text-[#78716C]">
+          <p className="mt-0.5 text-[12px] text-subtle">
             {testimonial.author} — {testimonial.sector}
           </p>
         </div>
@@ -242,7 +242,7 @@ export default function CustomersPage() {
                 <p className="font-display text-[30px] font-black leading-none tracking-[-0.04em] text-gold sm:text-[38px]">
                   {figure.value}
                 </p>
-                <p className="mt-2.5 text-[12.5px] text-[#78716C] sm:text-[13px]">
+                <p className="mt-2.5 text-[12.5px] text-subtle sm:text-[13px]">
                   {figure.label}
                 </p>
               </div>
@@ -271,45 +271,19 @@ export default function CustomersPage() {
       {/* ==================== PAR SECTEUR ==================== */}
       <section className="bg-[#F2F1EC] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <SectionHeading
-            badge={null}
+          <SectorsShowcase
+            badge="Industries"
             title="Explorer par"
             accent="secteur"
             subtitle="Chaque industrie a ses référentiels, ses contrôles et ses contraintes. Voyez comment CIPA s’y adapte."
+            sectors={SECTORS}
+            ctaLabel="Découvrir"
+            footnote={{
+              icon: ShieldCheck,
+              text: 'Une plateforme unique. Des exigences multiples. Un',
+              accent: 'pilotage unifié',
+            }}
           />
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
-            {SECTORS.map((sector) => {
-              const Icon = sector.icon
-              return (
-                <Link
-                  key={sector.href}
-                  href={sector.href}
-                  className="group flex flex-col rounded-[22px] border border-[#E7E5E4] bg-white p-6 transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/30 hover:shadow-[0_20px_50px_rgba(15,23,42,0.08)]"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#F5F5F4] text-[#44403C] transition-colors duration-300 group-hover:bg-gold/10 group-hover:text-[#B6842B]">
-                    <Icon size={19} strokeWidth={1.9} />
-                  </div>
-
-                  <h3 className="mt-5 text-[15.5px] font-bold tracking-[-0.02em] text-[#111827]">
-                    {sector.title}
-                  </h3>
-
-                  <p className="mt-2 flex-1 text-[13px] leading-[1.65] text-[#78716C]">
-                    {sector.desc}
-                  </p>
-
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#B6842B]">
-                    Découvrir
-                    <ChevronRight
-                      size={14}
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    />
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
         </div>
       </section>
 

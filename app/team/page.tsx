@@ -20,7 +20,8 @@ import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import Footer from '@/components/layout/Footer'
-import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal'
+import Reveal from '@/components/ui/Reveal'
+import FeatureShowcase, { type Feature } from '@/components/sections/FeatureShowcase'
 
 /* ============================================================
    DONNÉES
@@ -80,7 +81,7 @@ const TEAM_PHOTOS: TeamPhoto[] = [
   },
 ]
 
-const EXPERTISES = [
+const EXPERTISES: Feature[] = [
   {
     icon: Factory,
     title: 'Terrain & opérations',
@@ -215,33 +216,13 @@ export default function TeamPage() {
       {/* ==================== EXPERTISES ==================== */}
       <section className="bg-[#F7F7F6] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <SectionHeading
-            badge={null}
+          <FeatureShowcase
             title="Nos"
             accent="expertises"
             subtitle="Quatre compétences complémentaires, réunies dans une même équipe pour couvrir toute la chaîne — du poste de travail à la décision."
+            features={EXPERTISES}
+            columns={2}
           />
-
-          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:gap-5">
-            {EXPERTISES.map((expertise, index) => {
-              const Icon = expertise.icon
-              return (
-                <RevealItem key={expertise.title} className="rounded-[24px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/25 sm:p-7">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#111827] text-gold">
-                    <Icon size={20} strokeWidth={1.9} />
-                  </div>
-
-                  <h3 className="mt-5 text-[16.5px] font-bold tracking-[-0.02em] text-[#111827] sm:text-[17.5px]">
-                    {expertise.title}
-                  </h3>
-
-                  <p className="mt-2.5 text-[13.5px] leading-[1.7] text-[#78716C]">
-                    {expertise.desc}
-                  </p>
-                </RevealItem>
-              )
-            })}
-          </RevealGroup>
         </div>
       </section>
 
@@ -268,10 +249,10 @@ export default function TeamPage() {
                   <h3 className="mt-4 text-[16px] font-bold text-[#111827]">
                     {member.name}
                   </h3>
-                  <p className="mt-1 text-[12.5px] font-semibold text-[#B6842B]">
+                  <p className="mt-1 text-[12.5px] font-semibold text-gold-ink">
                     {member.role}
                   </p>
-                  <p className="mt-2.5 text-[13px] leading-[1.65] text-[#78716C]">
+                  <p className="mt-2.5 text-[13px] leading-[1.65] text-subtle">
                     {member.focus}
                   </p>
 
@@ -281,7 +262,7 @@ export default function TeamPage() {
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`LinkedIn de ${member.name}`}
-                      className="mt-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#E7E5E4] text-[#78716C] transition-all duration-300 hover:border-gold/40 hover:text-[#111827]"
+                      className="mt-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#E7E5E4] text-subtle transition-all duration-300 hover:border-gold/40 hover:text-[#111827]"
                     >
                       <Linkedin size={15} />
                     </a>

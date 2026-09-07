@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Smile,
   Target,
+  Users,
 } from 'lucide-react'
 
 import PageHero from '@/components/ui/PageHero'
@@ -24,48 +25,49 @@ import { PARTNERS } from '@/lib/data/partnerLogos'
 import { logoFrameWidth } from '@/lib/data/logoSizing'
 import LogoMarquee from '@/components/ui/LogoMarquee'
 import Footer from '@/components/layout/Footer'
-import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal'
+import Reveal from '@/components/ui/Reveal'
+import ValuesShowcase, { type Value } from '@/components/sections/ValuesShowcase'
 
 /* ============================================================
    DONNÉES
    ============================================================ */
 
-const VALUES = [
+const VALUES: Value[] = [
   {
     icon: Heart,
     title: 'L’obsession du client',
     desc: 'Chaque décision produit part des besoins réels du terrain.',
-    tile: 'bg-rose-50 text-rose-500',
+    tone: 'rose',
   },
   {
     icon: HeartHandshake,
     title: 'Chaleur humaine',
     desc: 'Des relations sincères avec nos clients et entre nous.',
-    tile: 'bg-pink-50 text-pink-500',
+    tone: 'pink',
   },
   {
     icon: ShieldCheck,
     title: 'Intégrité',
     desc: 'Transparence et honnêteté dans chaque engagement.',
-    tile: 'bg-blue-50 text-blue-500',
+    tone: 'blue',
   },
   {
     icon: Smile,
     title: 'Sérieux & bonne humeur',
     desc: 'Exigence professionnelle, sans jamais perdre le sourire.',
-    tile: 'bg-emerald-50 text-emerald-500',
+    tone: 'emerald',
   },
   {
     icon: Target,
     title: 'Le goût du défi',
     desc: 'Nous recherchons les problèmes complexes à résoudre.',
-    tile: 'bg-violet-50 text-violet-500',
+    tone: 'violet',
   },
   {
     icon: RefreshCw,
     title: 'Durabilité',
     desc: 'Construire des solutions qui créent un impact durable.',
-    tile: 'bg-amber-50 text-amber-500',
+    tone: 'amber',
   },
 ]
 
@@ -122,35 +124,18 @@ export default function AboutPage() {
       {/* ==================== NOS VALEURS ==================== */}
       <section className="relative overflow-hidden bg-[#F7F7F6] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <SectionHeading
-            badge={null}
+          <ValuesShowcase
+            badge="Nos valeurs"
             title="Nos"
             accent="valeurs"
             subtitle="Ce qui guide chacune de nos décisions, au quotidien."
+            values={VALUES}
+            footnote={{
+              icon: Users,
+              text: 'Des valeurs partagées, une ambition commune :',
+              accent: 'faire mieux, ensemble.',
+            }}
           />
-
-          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-5">
-            {VALUES.map((value, index) => {
-              const Icon = value.icon
-              return (
-                <RevealItem key={value.title} className="rounded-[22px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/25 hover:shadow-[0_22px_55px_rgba(15,23,42,0.08)]">
-                  <div
-                    className={`flex h-11 w-11 items-center justify-center rounded-xl ${value.tile}`}
-                  >
-                    <Icon size={19} strokeWidth={1.9} />
-                  </div>
-
-                  <h3 className="mt-5 text-[15.5px] font-bold tracking-[-0.02em] text-[#111827]">
-                    {value.title}
-                  </h3>
-
-                  <p className="mt-2 text-[13px] leading-[1.65] text-[#78716C]">
-                    {value.desc}
-                  </p>
-                </RevealItem>
-              )
-            })}
-          </RevealGroup>
         </div>
       </section>
 
@@ -252,7 +237,7 @@ export default function AboutPage() {
                   <p className="text-[14px] font-bold text-[#111827]">
                     {certification.name}
                   </p>
-                  <p className="mt-0.5 text-[12px] leading-snug text-[#78716C]">
+                  <p className="mt-0.5 text-[12px] leading-snug text-subtle">
                     {certification.desc}
                   </p>
                 </div>
@@ -264,7 +249,7 @@ export default function AboutPage() {
 
       {/* ==================== ÉCOSYSTÈME ==================== */}
       <section className="overflow-hidden bg-[#F7F7F6] py-14 sm:py-16">
-        <p className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-[#78716C] sm:text-[11px]">
+        <p className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[11px]">
           Notre écosystème de partenaires
         </p>
 
@@ -315,7 +300,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[900px] px-5 text-center sm:px-7 lg:px-8">
           <h2 className="font-display text-[24px] font-black leading-tight tracking-[-0.035em] text-[#111827] sm:text-[32px]">
             Prêt à transformer vos opérations avec{' '}
-            <span className="text-gold">CIPA</span> ?
+            <span className="text-gold-deep">CIPA</span> ?
           </h2>
 
           <p className="mx-auto mt-4 max-w-lg text-[14px] leading-[1.7] text-[#57534E] sm:text-[15px]">

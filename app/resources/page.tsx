@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BookOpen,
   Car,
-  ChevronRight,
   ClipboardCheck,
   Factory,
   FileText,
@@ -18,7 +17,9 @@ import {
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import Footer from '@/components/layout/Footer'
-import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal'
+import Reveal from '@/components/ui/Reveal'
+import SectorsShowcase from '@/components/sections/SectorsShowcase'
+import FeatureShowcase, { type Feature } from '@/components/sections/FeatureShowcase'
 
 /* ============================================================
    DONNÉES
@@ -78,7 +79,7 @@ const SECTOR_BRIEFS = [
   },
 ]
 
-const NEXT_STEPS = [
+const NEXT_STEPS: Feature[] = [
   {
     icon: HelpCircle,
     title: 'Questions fréquentes',
@@ -122,46 +123,13 @@ export default function ResourcesPage() {
       {/* ==================== ANALYSES SECTORIELLES ==================== */}
       <section className="bg-[#F7F7F6] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <SectionHeading
-            badge={null}
+          <SectorsShowcase
             title="Analyses"
             accent="sectorielles"
             subtitle="Les enjeux, les référentiels et les cas d’usage CIPA, détaillés pour chacun des six secteurs que nous couvrons."
+            sectors={SECTOR_BRIEFS}
+            ctaLabel="Lire la fiche"
           />
-
-          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
-            {SECTOR_BRIEFS.map((brief, index) => {
-              const Icon = brief.icon
-              return (
-                <RevealItem key={brief.href}>
-                  <Link
-                    href={brief.href}
-                    className="group flex h-full flex-col rounded-[22px] border border-[#EFEDE8] bg-white p-6 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/30 hover:shadow-[0_22px_55px_rgba(15,23,42,0.08)]"
-                  >
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#F5F5F4] text-[#44403C] transition-colors duration-300 group-hover:bg-gold/10 group-hover:text-[#B6842B]">
-                      <Icon size={19} strokeWidth={1.9} />
-                    </div>
-
-                    <h3 className="mt-5 text-[15.5px] font-bold tracking-[-0.02em] text-[#111827]">
-                      {brief.title}
-                    </h3>
-
-                    <p className="mt-2 flex-1 text-[13px] leading-[1.65] text-[#78716C]">
-                      {brief.desc}
-                    </p>
-
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#B6842B]">
-                      Lire la fiche
-                      <ChevronRight
-                        size={14}
-                        className="transition-transform duration-300 group-hover:translate-x-1"
-                      />
-                    </span>
-                  </Link>
-                </RevealItem>
-              )
-            })}
-          </RevealGroup>
         </div>
       </section>
 
@@ -183,7 +151,7 @@ export default function ResourcesPage() {
                   href={article.href}
                   className="group flex h-full flex-col rounded-[22px] border border-[#E7E5E4] bg-white p-6 transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/30"
                 >
-                  <span className="inline-flex w-fit items-center rounded-full bg-gold/10 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.1em] text-[#B6842B]">
+                  <span className="inline-flex w-fit items-center rounded-full bg-gold/10 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.1em] text-gold-ink">
                     {article.category}
                   </span>
 
@@ -191,11 +159,11 @@ export default function ResourcesPage() {
                     {article.title}
                   </h3>
 
-                  <p className="mt-2.5 flex-1 text-[13px] leading-[1.65] text-[#78716C]">
+                  <p className="mt-2.5 flex-1 text-[13px] leading-[1.65] text-subtle">
                     {article.excerpt}
                   </p>
 
-                  <span className="mt-5 text-[12px] text-[#A8A29E]">
+                  <span className="mt-5 text-[12px] text-subtle">
                     {article.readingTime}
                   </span>
                 </Link>
@@ -237,40 +205,11 @@ export default function ResourcesPage() {
       {/* ==================== ALLER PLUS LOIN ==================== */}
       <section className="bg-[#F7F7F6] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-          <SectionHeading badge={null} title="Aller plus" accent="loin" />
-
-          <div className="mt-12 grid gap-4 lg:grid-cols-3 lg:gap-5">
-            {NEXT_STEPS.map((step) => {
-              const Icon = step.icon
-              return (
-                <Link
-                  key={step.href}
-                  href={step.href}
-                  className="group flex h-full flex-col rounded-[26px] border border-[#EFEDE8] bg-white p-7 shadow-[0_14px_38px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-[2px] hover:border-gold/30 hover:shadow-[0_22px_55px_rgba(15,23,42,0.08)]"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#111827] text-gold">
-                    <Icon size={20} strokeWidth={1.9} />
-                  </div>
-
-                  <h3 className="mt-5 text-[17px] font-bold tracking-[-0.02em] text-[#111827]">
-                    {step.title}
-                  </h3>
-
-                  <p className="mt-2.5 flex-1 text-[13.5px] leading-[1.7] text-[#78716C]">
-                    {step.desc}
-                  </p>
-
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#B6842B]">
-                    {step.cta}
-                    <ChevronRight
-                      size={15}
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    />
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
+          <FeatureShowcase
+            title="Aller plus"
+            accent="loin"
+            features={NEXT_STEPS}
+          />
         </div>
       </section>
 
