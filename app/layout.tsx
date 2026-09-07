@@ -53,13 +53,13 @@ export default function RootLayout({
           page d'accueil. Sans JavaScript pour les animer, ils resteraient
           invisibles pour toujours.
 
-          Meme chose pour l'ecran d'introduction : il se retire via un
-          setTimeout, donc sans script il recouvrirait la page indefiniment.
+          L'ecran d'introduction, lui, n'a plus besoin de regle : sa sortie
+          est une animation CSS, qui tourne sans JavaScript.
 
-          Ces regles ne s'appliquent que si le navigateur n'execute pas de
-          script : le contenu reste alors lisible, sans animation. Elles
-          n'introduisent aucun clignotement puisqu'elles n'existent pas quand
-          le JavaScript fonctionne.
+          La regle ci-dessous ne s'applique que si le navigateur n'execute
+          pas de script : le contenu reste alors lisible, sans animation. Elle
+          n'introduit aucun clignotement puisqu'elle n'existe pas quand le
+          JavaScript fonctionne.
         */}
         <noscript>
           {/*
@@ -70,8 +70,7 @@ export default function RootLayout({
           <style
             dangerouslySetInnerHTML={{
               __html:
-                '[style*="opacity:0"]{opacity:1!important;transform:none!important}' +
-                '[data-welcome-intro]{display:none!important}',
+                '[style*="opacity:0"]{opacity:1!important;transform:none!important}',
             }}
           />
         </noscript>
