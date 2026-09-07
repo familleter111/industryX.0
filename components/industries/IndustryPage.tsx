@@ -52,7 +52,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
         <div className={`${heroStyles.content} relative lg:min-h-[calc(min(40.5vw,570px,100svh_-_150px)_-_2.5rem)]`}>
           <div className={`${heroStyles.grid} mx-auto grid w-full max-w-[1400px] grid-cols-1 items-start gap-8 px-5 sm:px-7 lg:grid-cols-12 lg:gap-6 lg:px-10`}>
             {/* ---------- Colonne texte ---------- */}
-            <div className={`${heroStyles.copy} relative z-10 pt-10 lg:col-span-6 lg:pt-[clamp(2rem,3vw,3rem)] lg:pb-4`}>
+            <div className={`${heroStyles.copy} ${slug === 'automotive' ? heroStyles.automotiveCopy : ''} relative z-10 pt-10 lg:col-span-6 lg:pt-[clamp(2rem,3vw,3rem)] lg:pb-4`}>
               <div className={heroStyles.intro}>
                 <motion.div
                   initial={{ opacity: 0, y: 14 }}

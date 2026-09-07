@@ -50,6 +50,10 @@
     grid-template-rows: minmax(24px, 1fr) auto minmax(80px, 1fr);
   }
 
+  .automotiveCopy {
+    grid-template-rows: clamp(32px, 5svh, 64px) auto minmax(80px, 1fr);
+  }
+
   .title {
     font-size: clamp(30px, min(2.55vw, 5svh), 43px);
   }
