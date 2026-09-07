@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import {
   ArrowRight,
   BadgeCheck,
-  ChevronRight,
+  CheckCircle2,
   Database,
   Eye,
   FlaskConical,
@@ -24,6 +24,7 @@ import SmartCarousel from '@/components/industries/SmartCarousel'
 import { viewport } from '@/lib/motion'
 import { INDUSTRIES } from '@/lib/data/industries'
 import Footer from '@/components/layout/Footer'
+import heroStyles from '@/components/industries/hero.module.css'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 24 },
@@ -46,126 +47,123 @@ export default function IndustryPage({ slug }: { slug: string }) {
   return (
     <main className="min-h-screen bg-[#F7F7F6] text-dark overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold-900">
 
-      {/* 1. HERO + 3 BÉNÉFICES CLÉS */}
-      <section className="relative lg:min-h-screen lg:max-h-[1000px] flex flex-col justify-center pt-24 pb-10 lg:pt-28 lg:pb-8 overflow-hidden bg-mesh-light">
-        <div className="absolute top-1/4 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="max-w-7xl w-full mx-auto px-5 sm:px-7 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            <div className="lg:col-span-7 flex flex-col items-start text-left">
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-bold uppercase tracking-widest text-gold-ink mb-4"
-              >
-                <Zap size={11} className="text-gold-deep" />
-                {"Secteur d'activité"}
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-[26px] sm:text-[32px] lg:text-[38px] xl:text-[42px] font-black font-display text-dark tracking-tight leading-[1.12] mb-4"
-              >
-                {"Comment CIPA transforme l'industrie"}{' '}
-                <span className="text-gold-deep">
-                  {data.headline}
-                </span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-[13px] sm:text-[14px] leading-relaxed text-slate-600 mb-6 max-w-xl"
-              >
-                {data.intro}
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="flex flex-wrap gap-3"
-              >
-                <a
-                  href="/contact"
-                  className="group inline-flex items-center gap-2 rounded-full bg-[#111827] px-5 py-2.5 text-[13px] font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
+      {/* 1. HERO — CIPA & le secteur */}
+      <section className={`${heroStyles.hero} relative overflow-hidden bg-white pt-[82px] pb-6`}>
+        <div className={`${heroStyles.content} relative lg:min-h-[calc(min(40.5vw,570px,100svh_-_150px)_-_2.5rem)]`}>
+          <div className={`${heroStyles.grid} mx-auto grid w-full max-w-[1400px] grid-cols-1 items-start gap-8 px-5 sm:px-7 lg:grid-cols-12 lg:gap-6 lg:px-10`}>
+            {/* ---------- Colonne texte ---------- */}
+            <div className={`${heroStyles.copy} relative z-10 pt-10 lg:col-span-6 lg:pt-[clamp(2rem,3vw,3rem)] lg:pb-4`}>
+              <div className={heroStyles.intro}>
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="inline-flex items-center gap-2.5 rounded-full border border-[#EFDFC4] bg-[#FDF7EC] py-2 pl-3.5 pr-5"
                 >
-                  Demander une démo
-                  <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-                <a
-                  href="#core-ops"
-                  className="group inline-flex items-center gap-2 rounded-full border border-slate-350 bg-white/60 px-5 py-2.5 text-[13px] font-semibold text-[#44403C] backdrop-blur transition-all duration-300 hover:border-gold hover:bg-white"
+                  <Zap size={14} aria-hidden="true" className="text-[#DAA250]" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B6842B] sm:text-[11px]">
+                    {"Secteur d'activité"}
+                  </span>
+                </motion.div>
+
+                <motion.h1
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className={`${heroStyles.title} mt-6 font-display text-[32px] font-black leading-[1.08] tracking-[-0.02em] text-dark sm:text-[40px] lg:text-[clamp(32px,3.5vw_-_4px,46px)]`}
                 >
-                  Découvrir les solutions
-                  <ChevronRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-                </a>
-              </motion.div>
+                  {"Comment CIPA transforme l'industrie "}
+                  <span className="text-[#DAA250]">{data.headline}</span>
+                </motion.h1>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="mt-6 max-w-[34rem] text-[14px] leading-[1.75] text-[#57534E] sm:text-[15.5px]"
+                >
+                  {data.intro}
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="mt-8 flex flex-wrap items-center gap-3.5"
+                >
+                  <a
+                    href="/contact"
+                    className="group inline-flex items-center gap-3 rounded-full bg-[#111827] px-7 py-4 text-[14px] font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
+                  >
+                    Demander une démo
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </a>
+                  <a
+                    href="#core-ops"
+                    className="group inline-flex items-center gap-3 rounded-full border border-[#E4DED2] bg-white px-7 py-4 text-[14px] font-semibold text-[#292524] shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_10px_26px_rgba(218,162,80,0.18)]"
+                  >
+                    Découvrir les solutions
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </a>
+                </motion.div>
+              </div>
+
+              {/* Les trois indicateurs reprennent les libelles des resultats mesures. */}
+              <ul className={`${heroStyles.indicators} mt-10 grid grid-cols-3 gap-x-3 sm:gap-x-6`}>
+                {data.results.slice(0, 3).map((stat) => (
+                  <li key={stat.label} className="flex items-start gap-2 sm:items-center">
+                    <CheckCircle2 size={15} aria-hidden="true" className="shrink-0 text-[#22C55E]" />
+                    <span className="text-[13px] font-medium text-[#57534E]">{stat.label}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
+            {/* ---------- Colonne visuel ---------- */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 flex justify-center lg:justify-end relative"
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              className={`${heroStyles.visual} relative -mx-5 sm:-mx-7 lg:absolute lg:right-0 lg:top-0 lg:m-0 lg:w-[54%] lg:max-w-[min(760px,calc((100svh_-_150px)*4/3))]`}
             >
-              <div className="absolute -inset-3 border border-dashed border-gold/20 rounded-full animate-[spin_100s_linear_infinite]" />
-              <div className="absolute -inset-7 border border-gold/10 rounded-full pointer-events-none" />
-
-              <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] xl:w-[400px] xl:h-[400px] rounded-full overflow-hidden border-[6px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
+              <div className={`${heroStyles.imageFrame} relative w-full`}>
                 <Image
                   src={data.hero.src}
                   alt={data.hero.alt}
-                  fill
+                  width={1448}
+                  height={1086}
                   priority
-                  className="object-cover"
+                  sizes="(max-width: 1023px) 100vw, (max-width: 1439px) 54vw, 57vw"
+                  className={`${heroStyles.image} block h-auto w-full select-none object-contain`}
                 />
-              </div>
-
-              <div className="absolute -bottom-1 -left-1 sm:left-2 bg-white/90 backdrop-blur border border-gold/30 rounded-xl p-2.5 shadow-xl flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold-deep flex items-center justify-center shrink-0">
-                  <HeroIcon size={16} />
-                </div>
-                <div>
-                  <div className="text-[9px] font-bold text-subtle uppercase tracking-wider">{data.heroBadge.label}</div>
-                  <div className="text-[12px] font-extrabold text-dark">{data.heroBadge.value}</div>
-                </div>
+                <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-[6%] bg-gradient-to-r from-white to-transparent" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[6%] bg-gradient-to-t from-white to-transparent" />
               </div>
             </motion.div>
           </div>
+        </div>
 
-          <div className="mt-8 lg:mt-10">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
-                {data.results
-              .map((stat, i) => {
-                const Icon = stat.icon
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                    whileHover={{ y: -3 }}
-                    className="bg-white rounded-xl px-4 py-4 border border-[#ECE7DD] shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center transition-shadow hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)]"
-                  >
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <Icon size={19} className="text-gold-deep" strokeWidth={1.75} />
-                      <span className="text-[24px] font-black font-display text-gold-deep leading-none">
-                        {stat.value}
-                      </span>
-                    </div>
-                    <div className="text-[10px] font-black text-dark uppercase tracking-wider mb-1.5 leading-tight">
-                      {stat.label}
-                    </div>
-                    <p className="text-[11px] leading-snug text-subtle">{stat.desc}</p>
-                  </motion.div>
-                )
-              })}
+        <div className={`${heroStyles.footer} relative z-10 mx-auto w-full max-w-[1400px] px-5 sm:px-7 lg:px-10`}>
+          {/* ---------- Barre de bas de héros ---------- */}
+          <div className="mt-4 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1">
+                <span className="h-1.5 w-9 rounded-full bg-[#DAA250]" />
+                <span className="h-1.5 w-5 rounded-full bg-[#EBD3AC]" />
+                <span className="h-1.5 w-5 rounded-full bg-[#E7E2D8]" />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+                {"De la conformité à l'excellence opérationnelle"}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+              {['Qualité', 'Production', 'Maintenance', 'R&D', 'Impact'].map((item, i) => (
+                <span key={item} className="flex items-center gap-2.5">
+                  {i > 0 && <span className="text-[#DAA250]">•</span>}
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </div>

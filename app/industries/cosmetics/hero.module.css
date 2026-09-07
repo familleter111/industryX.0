@@ -1,0 +1,95 @@
+@media (min-width: 1024px) {
+  .hero {
+    display: flex;
+    height: 100svh;
+    flex-direction: column;
+  }
+
+  .content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .grid,
+  .footer {
+    max-width: 1800px;
+    padding-inline: clamp(40px, 3.5vw, 80px);
+  }
+
+  .copy {
+    align-self: center;
+    padding-block: 16px;
+  }
+
+  .title {
+    font-size: clamp(28px, min(2.65vw, 5.2svh), 50px);
+  }
+
+  .copy > p {
+    max-width: 39rem;
+    font-size: clamp(14px, min(1.05vw, 2.1svh), 18px);
+  }
+
+  .visual {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    margin: 0;
+  }
+
+  .imageFrame,
+  .image {
+    height: 100%;
+  }
+
+  .image {
+    object-position: right top;
+  }
+
+  .footer {
+    flex-shrink: 0;
+  }
+
+  .stats {
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 12px;
+  }
+
+  .footerBar {
+    margin-top: 20px;
+    padding-top: 12px;
+    padding-right: 48px;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 740px) {
+  .hero {
+    padding-bottom: 16px;
+  }
+
+  .copy {
+    padding-block: 8px;
+  }
+
+  .copy > :not(:first-child) {
+    margin-top: 16px;
+  }
+
+  .title {
+    font-size: clamp(26px, min(2.5vw, 4.8svh), 38px);
+  }
+
+  .copy > p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .footerBar {
+    margin-top: 12px;
+    padding-top: 8px;
+  }
+}
