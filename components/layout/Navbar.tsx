@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import {
@@ -273,6 +273,128 @@ export default function Navbar() {
 
   const activeGroup = navGroups.find((group) => group.label === activeMenu)
 
+  /*
+   * ─────────────────────────────────────────────────────────────────────
+   *  NAVIGATION AU CLAVIER DU MEGA MENU
+   * ─────────────────────────────────────────────────────────────────────
+   *
+   * Le menu n'existait qu'a la souris : `onMouseEnter` l'ouvrait,
+   * `onMouseLeave` sur l'en-tete le fermait. Au clavier, la tabulation
+   * traversait cinq boutons qui, une fois actionnes, deroulaient un panneau
+   * dont le contenu n'etait joignable qu'en continuant a tabuler dans le
+   * vide — et rien ne le refermait.
+   *
+   * On suit le motif « disclosure navigation » du WAI-ARIA, le plus sobre
+   * des trois : le declencheur reste un <button> ordinaire, donc Entree et
+   * Espace l'activent nativement — inutile d'ecrire quoi que ce soit pour
+   * eux. On n'ajoute que ce que le navigateur ne sait pas deviner :
+   *
+   *   `aria-expanded`  l'etat ouvert / ferme, seul moyen pour la synthese
+   *                    vocale de dire qu'il se passe quelque chose.
+   *   Fleche bas       ouvre et entre dans le panneau.
+   *   Fleches          parcourent les liens en boucle ; Origine / Fin vont
+   *                    aux extremites.
+   *   Echap            referme et rend le focus au declencheur, sans quoi
+   *                    on repart de la premiere tabulation de la page.
+   *   Focus sortant    referme, pour ne pas laisser un panneau ouvert
+   *                    derriere soi.
+   *
+   * L'anneau de focus, lui, est deja global (:focus-visible, globals.css).
+   */
+  const triggerRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+  const panelRef = useRef<HTMLDivElement | null>(null)
+  const enterPanelOnOpen = useRef(false)
+
+  const panelLinks = useCallback(
+    () =>
+      Array.from(
+        panelRef.current?.querySelectorAll<HTMLAnchorElement>('a[href]') ?? []
+      ),
+    []
+  )
+
+  const focusPanelLink = useCallback(
+    (index: number) => {
+      const links = panelLinks()
+      if (links.length === 0) return
+      links[(index + links.length) % links.length].focus()
+    },
+    [panelLinks]
+  )
+
+  const closeMenu = useCallback((restoreFocusTo?: string | null) => {
+    if (restoreFocusTo) triggerRefs.current[restoreFocusTo]?.focus()
+    setActiveMenu(null)
+  }, [])
+
+  // Le panneau n'est monte qu'au rendu suivant : on ne peut pas lui donner le
+  // focus dans le gestionnaire de touche, seulement une fois `activeMenu` pose.
+  useEffect(() => {
+    if (activeMenu && enterPanelOnOpen.current) {
+      enterPanelOnOpen.current = false
+      focusPanelLink(0)
+    }
+  }, [activeMenu, focusPanelLink])
+
+  // Echap ferme, d'ou qu'on vienne — y compris depuis un lien du panneau, que
+  // le gestionnaire pose sur le declencheur ne verrait jamais.
+  useEffect(() => {
+    if (!activeMenu && !languageOpen && !mobileOpen) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      if (languageOpen) setLanguageOpen(false)
+      if (mobileOpen) setMobileOpen(false)
+      if (activeMenu) closeMenu(activeMenu)
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [activeMenu, languageOpen, mobileOpen, closeMenu])
+
+  const onTriggerKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    label: string
+  ) => {
+    if (event.key !== 'ArrowDown') return
+    event.preventDefault()
+    if (activeMenu === label) {
+      focusPanelLink(0)
+      return
+    }
+    enterPanelOnOpen.current = true
+    setActiveMenu(label)
+  }
+
+  const onPanelKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const links = panelLinks()
+    if (links.length === 0) return
+    const current = links.indexOf(document.activeElement as HTMLAnchorElement)
+
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowRight':
+        event.preventDefault()
+        focusPanelLink(current + 1)
+        break
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        event.preventDefault()
+        focusPanelLink(current - 1)
+        break
+      case 'Home':
+        event.preventDefault()
+        focusPanelLink(0)
+        break
+      case 'End':
+        event.preventDefault()
+        focusPanelLink(links.length - 1)
+        break
+      default:
+        break
+    }
+  }
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 12)
@@ -305,6 +427,15 @@ export default function Navbar() {
           ease: [0.22, 1, 0.36, 1],
         }}
         onMouseLeave={() => setActiveMenu(null)}
+        /* Pendant du onMouseLeave, pour le clavier : on referme des que le
+           focus sort de l'en-tete, sans quoi un panneau reste deroule
+           derriere l'element qu'on vient d'atteindre. */
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+            setActiveMenu(null)
+            setLanguageOpen(false)
+          }
+        }}
         className="fixed inset-x-0 top-0 z-50"
       >
         {/* FULL WIDTH NAVBAR */}
@@ -321,25 +452,10 @@ export default function Navbar() {
             }
           `}
           style={{
-            background: 'rgba(255,255,255,0.78)',
-            backdropFilter: 'blur(22px)',
-            WebkitBackdropFilter: 'blur(22px)',
-            borderColor: 'rgba(255,255,255,0.55)',
+            background: '#ffffff',
+            borderColor: 'rgba(15,23,42,0.06)',
           }}
         >
-          {/* LIGHT OVERLAY */}
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: `
-                linear-gradient(
-                  180deg,
-                  rgba(255,255,255,0.68),
-                  rgba(255,255,255,0.32)
-                )
-              `,
-            }}
-          />
 
           {/* NAVBAR */}
           <nav className="relative z-10 mx-auto flex h-[82px] max-w-[1380px] items-center px-5 sm:px-7 lg:px-8">
@@ -358,11 +474,24 @@ export default function Navbar() {
             {/* CENTER MENU */}
             <div className="hidden flex-1 items-center justify-center lg:flex">
               <div className="flex items-center gap-7">
-                {navGroups.map((group) => (
+                {navGroups.map((group, index) => (
                   <button
                     key={group.label}
                     type="button"
+                    id={`nav-trigger-${index}`}
+                    ref={(node) => {
+                      triggerRefs.current[group.label] = node
+                    }}
+                    aria-haspopup="true"
+                    aria-expanded={activeMenu === group.label}
+                    /* Conditionnel : `aria-controls` doit designer un element
+                       present dans le document, et le panneau n'existe pas
+                       tant qu'il est ferme. */
+                    aria-controls={
+                      activeMenu === group.label ? 'nav-mega-menu' : undefined
+                    }
                     onMouseEnter={() => setActiveMenu(group.label)}
+                    onKeyDown={(event) => onTriggerKeyDown(event, group.label)}
                     onClick={() =>
                       setActiveMenu(
                         activeMenu === group.label ? null : group.label
@@ -413,8 +542,12 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     type="button"
+                    aria-haspopup="true"
+                    aria-expanded={languageOpen}
+                    aria-controls={languageOpen ? 'nav-language-menu' : undefined}
+                    aria-label={`Langue : ${language}`}
                     onClick={() => setLanguageOpen(!languageOpen)}
-                    className="group flex items-center gap-2.5 rounded-full border border-stone-200 bg-white/80 px-3.5 py-2 shadow-[0_4px_20px_rgba(15,23,42,0.04)] backdrop-blur-xl transition-all duration-300 hover:border-gold/35 hover:bg-white"
+                    className="group flex items-center gap-2.5 rounded-full border border-stone-200 bg-white px-3.5 py-2 shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-300 hover:border-gold/35 hover:bg-white"
                   >
                     <div className="relative h-4 w-4 overflow-hidden rounded-full">
                       <Image
@@ -434,7 +567,7 @@ export default function Navbar() {
                     <ChevronDown
                       size={14}
                       strokeWidth={2.3}
-                      className={`text-stone-400 transition-all duration-300 ${
+                      className={`text-subtle transition-all duration-300 ${
                         languageOpen ? 'rotate-180 text-gold' : ''
                       }`}
                     />
@@ -448,7 +581,8 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-[-62px] top-[120%] z-50 w-[160px] overflow-hidden rounded-2xl border border-cream-border bg-white/95 shadow-[0_20px_45px_rgba(15,23,42,0.10)] backdrop-blur-2xl"
+                        id="nav-language-menu"
+                        className="absolute right-[-62px] top-[120%] z-50 w-[160px] overflow-hidden rounded-2xl border border-cream-border bg-white shadow-[0_20px_45px_rgba(15,23,42,0.10)]"
                       >
                         <button
                           type="button"
@@ -520,6 +654,9 @@ export default function Navbar() {
             {/* MOBILE BUTTON */}
             <button
               type="button"
+              aria-expanded={mobileOpen}
+              aria-controls={mobileOpen ? 'nav-mobile-menu' : undefined}
+              aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               onClick={() => setMobileOpen((v) => !v)}
               className="ml-auto flex h-11 w-11 items-center justify-center rounded-full bg-black/[0.04] text-black transition hover:bg-black/[0.07] lg:hidden"
             >
@@ -535,7 +672,11 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.22 }}
-                className="relative border-t border-cream-border/80 bg-white/92 backdrop-blur-2xl"
+                id="nav-mega-menu"
+                ref={panelRef}
+                aria-labelledby={`nav-trigger-${navGroups.indexOf(activeGroup)}`}
+                onKeyDown={onPanelKeyDown}
+                className="relative border-t border-cream-border/80 bg-white"
               >
                 <div className="mx-auto max-w-[1380px] px-8 py-7">
                   <div
@@ -564,7 +705,7 @@ export default function Navbar() {
                                   {item.title}
                                 </p>
                                 {item.badge && (
-                                  <span className="rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-700">
+                                  <span className="rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-800">
                                     {item.badge}
                                   </span>
                                 )}
@@ -626,7 +767,8 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             /* Ajout de bottom-0 et overflow-y-auto pour rendre le menu scrollable */
-            className="fixed inset-x-0 bottom-0 top-[82px] z-40 flex flex-col overflow-y-auto border-t border-white/50 bg-white/95 pb-24 backdrop-blur-2xl lg:hidden"
+            id="nav-mobile-menu"
+            className="fixed inset-x-0 bottom-0 top-[82px] z-40 flex flex-col overflow-y-auto border-t border-white/50 bg-white pb-24 lg:hidden"
           >
             <div className="flex flex-col gap-8 px-6 py-7">
               
@@ -634,7 +776,7 @@ export default function Navbar() {
               <div className="flex flex-col gap-8">
                 {navGroups.map((group) => (
                   <div key={group.label} className="flex flex-col gap-3">
-                    <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-stone-500">
+                    <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-subtle">
                       {group.label}
                     </h4>
                     <div className="flex flex-col gap-1">
@@ -654,7 +796,7 @@ export default function Navbar() {
                               {item.title}
                             </span>
                             {item.badge && (
-                              <span className="ml-auto rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-700">
+                              <span className="ml-auto rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-800">
                                 {item.badge}
                               </span>
                             )}
@@ -702,7 +844,7 @@ export default function Navbar() {
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full appearance-none rounded-xl border border-cream-border bg-stone-50 py-3 pl-12 pr-10 text-sm font-medium text-stone-700 outline-none"
+                      className="w-full appearance-none rounded-xl border border-cream-border bg-stone-50 py-3 pl-12 pr-10 text-sm font-medium text-stone-700 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
                     >
                       <option value="FR">Français</option>
                       <option value="EN">English</option>
@@ -710,7 +852,7 @@ export default function Navbar() {
 
                     <ChevronDown
                       size={15}
-                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-stone-400"
+                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-subtle"
                     />
                   </div>
                 </div>
