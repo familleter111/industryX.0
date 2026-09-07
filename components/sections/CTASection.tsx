@@ -173,7 +173,7 @@ export default function CTASection() {
                 {/* TRUST */}
                 <div className="mt-8 pt-8 border-t border-white/10">
 
-                  <div className="flex items-center gap-6 text-sm text-white/45">
+                  <div className="flex items-center gap-6 text-sm text-white/50">
 
                     <span>✓ Déploiement rapide</span>
 

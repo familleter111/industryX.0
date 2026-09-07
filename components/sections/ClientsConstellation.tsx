@@ -336,7 +336,7 @@ function ConstellationCanvas() {
         <span
           key={axis.label}
           style={{ left: pctX(axis.x), top: pctY(axis.y) }}
-          className="absolute -translate-y-1/2 whitespace-nowrap text-[clamp(9px,1.05vw,13px)] font-semibold text-gold-deep"
+          className="absolute -translate-y-1/2 whitespace-nowrap text-[clamp(9px,1.05vw,13px)] font-semibold text-gold-ink"
         >
           {axis.label}
         </span>
@@ -441,7 +441,7 @@ export default function ClientsConstellation() {
           >
             <span className="block h-[4px] w-24 rounded-full bg-gold" />
 
-            <p className="mt-6 text-[11.5px] font-bold uppercase tracking-[0.22em] text-gold-deep sm:text-[14px]">
+            <p className="mt-6 text-[11.5px] font-bold uppercase tracking-[0.22em] text-gold-ink sm:text-[14px]">
               Ils nous font confiance
             </p>
 

@@ -6,6 +6,21 @@
   :root {
     --font-syne: 'Syne', sans-serif;
     --font-outfit: 'Outfit', sans-serif;
+
+    /*
+     * Gris de TEXTE sur fond clair — trois roles, trois valeurs.
+     *
+     * La source de verite reste lib/tokens.ts (`color.text`), qui porte les
+     * ratios mesures ; ces variables ne servent qu'au CSS ecrit a la main,
+     * qui ne peut pas importer le module TypeScript. Meme arrangement que le
+     * `#F4F3EE` du body et le `#B97E27` de l'anneau de focus, plus bas.
+     *
+     * Dans le JSX, on passe par les classes Tailwind : `text-muted`,
+     * `text-subtle`, `text-placeholder`.
+     */
+    --text-muted: #57534e; /* 6,87:1 sur creme — texte secondaire */
+    --text-subtle: #6b6560; /* 5,17:1 sur creme — libelles, sur-titres */
+    --text-placeholder: #6f6b68; /* 5,28:1 sur blanc — invites de champ */
   }
 
   html {
@@ -54,6 +69,28 @@
 
   * {
     box-sizing: border-box;
+  }
+
+  /*
+   * Anneau de focus unique du site.
+   *
+   * Il n'y en avait aucun : on heritait de l'anneau par defaut du navigateur,
+   * qui varie d'un moteur a l'autre et disparaissait completement partout ou
+   * une classe `outline-none` avait ete posee pour faire propre — trois
+   * champs de saisie et deux liens de section, injoignables au clavier.
+   *
+   * `:focus-visible` et non `:focus` : le navigateur decide lui-meme quand
+   * l'anneau merite d'apparaitre. Un clic a la souris n'en declenche pas, une
+   * tabulation si.
+   *
+   * `outline-offset` degage l'anneau du bord de l'element, sinon il se
+   * confond avec les bordures dorees deja presentes. `outline` et non
+   * `box-shadow` : l'outline suit la forme arrondie et survit a
+   * `overflow: hidden`.
+   */
+  :focus-visible {
+    outline: 2px solid #B97E27;
+    outline-offset: 3px;
   }
 
   @media (prefers-reduced-motion: reduce) {

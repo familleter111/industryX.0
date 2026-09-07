@@ -21,6 +21,14 @@ const config: Config = {
         dark: color.dark,
         cream: color.cream,
         brand: color.brand,
+
+        // Gris de TEXTE sur fond clair. Exposes a plat, et non sous un
+        // prefixe `text`, pour que la classe se lise `text-muted` et non
+        // `text-text-muted`. Les valeurs et les ratios mesures sont dans
+        // lib/tokens.ts, sous `color.text`.
+        muted: color.text.muted,
+        subtle: color.text.subtle,
+        placeholder: color.text.placeholder,
       },
       fontFamily: {
         display: ['var(--font-syne)', 'serif'],
@@ -71,6 +79,12 @@ const config: Config = {
         'float-soft': 'floatSoft 8s ease-in-out infinite',
         orbit: 'orbit 90s linear infinite',
         'orbit-reverse': 'orbitReverse 90s linear infinite',
+        // Sortie de l'ecran d'introduction. Exception assumee a la regle
+        // "une boucle autonome par animation" : ce n'est pas une boucle, mais
+        // c'est bien une animation qui n'a besoin de savoir rien de rien.
+        // La confier a Framer Motion la rendrait dependante de l'hydratation,
+        // c'est-a-dire du poids du bundle — exactement ce qu'on veut eviter.
+        'welcome-out': 'welcomeOut 460ms cubic-bezier(0.76, 0, 0.24, 1) forwards',
       },
       keyframes: {
         shimmer: {
@@ -109,6 +123,16 @@ const config: Config = {
         orbitReverse: {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(-360deg)' },
+        },
+        // 0 -> 40 % : le temps de marque, l'ecran est plein.
+        // 40 -> 100 % : il s'efface en montant.
+        // `visibility` n'est pas interpolable, elle bascule d'un coup a la
+        // derniere image ; combinee a `forwards` elle sort definitivement
+        // l'element du hit-testing et de l'arbre d'accessibilite, ce que
+        // `opacity: 0` seul ne fait pas.
+        welcomeOut: {
+          '0%, 40%': { opacity: '1', transform: 'translateY(0)' },
+          '100%': { opacity: '0', transform: 'translateY(-40px)', visibility: 'hidden' },
         },
       },
       backgroundImage: {

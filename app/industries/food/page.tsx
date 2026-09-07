@@ -247,17 +247,17 @@ function VisualPanel({ slide }: { slide: CarouselSlide }) {
       <div className="flex-1 bg-white rounded-2xl border border-black/[0.06] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-subtle">
             {slide.tag}
           </span>
-          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-slate-500 font-bold px-2 py-0.5 rounded-full">
+          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-subtle font-bold px-2 py-0.5 rounded-full">
             Données live
           </span>
         </div>
         <div className="flex-1 flex items-center">
           <SlideVisualRenderer visual={slide.visual} />
         </div>
-        <div className="mt-3 text-[10px] text-slate-400 text-center italic leading-snug">
+        <div className="mt-3 text-[10px] text-subtle text-center italic leading-snug">
           {slide.visualCaption}
         </div>
       </div>
@@ -305,18 +305,18 @@ function HaccpFlowVisual() {
           >
             <div
               className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
-                s.state === 'todo' ? 'bg-slate-100 text-slate-400' : 'bg-gold/10 text-gold'
+                s.state === 'todo' ? 'bg-slate-100 text-subtle' : 'bg-gold/10 text-gold'
               }`}
             >
               {s.n}
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-slate-400' : 'text-dark'}`}>{s.title}</h4>
-              <p className="text-[10px] text-slate-500 truncate">{s.sub}</p>
+              <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-subtle' : 'text-dark'}`}>{s.title}</h4>
+              <p className="text-[10px] text-subtle truncate">{s.sub}</p>
             </div>
             {s.state === 'done' && <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />}
             {s.state === 'active' && (
-              <span className="text-[9px] font-bold text-gold px-2 py-0.5 bg-gold/10 rounded-full shrink-0">En cours</span>
+              <span className="text-[9px] font-bold text-gold-ink px-2 py-0.5 bg-gold/10 rounded-full shrink-0">En cours</span>
             )}
             {s.state === 'todo' && <ClipboardCheck size={16} className="text-slate-300 shrink-0" />}
           </motion.div>
@@ -464,7 +464,7 @@ function SupplyChainVisual() {
               </motion.div>
               <div className="text-center">
                 <div className="text-[10px] font-bold text-dark">{step.title}</div>
-                <div className="text-[8px] text-slate-400 bg-slate-100 px-1 py-0.5 rounded font-mono mt-0.5">{step.id}</div>
+                <div className="text-[8px] text-subtle bg-slate-100 px-1 py-0.5 rounded font-mono mt-0.5">{step.id}</div>
               </div>
             </div>
           )
@@ -474,7 +474,7 @@ function SupplyChainVisual() {
         <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold flex items-center justify-center shrink-0">
           <Eye size={15} />
         </div>
-        <p className="text-[10px] text-slate-500 leading-snug">
+        <p className="text-[10px] text-subtle leading-snug">
           <span className="font-bold text-dark">Rappel simulé :</span>{' '}
           {"le lot ING-2214 (allergène arachide) est isolé — CIPA identifie en 3 minutes les 2 lots finis et 14 points de vente impactés."}
         </p>
@@ -494,10 +494,10 @@ function LaunchTimelineVisual() {
   return (
     <div className="w-full py-2 flex flex-col gap-3">
       <div className="flex items-center gap-4 text-[9px] font-bold">
-        <span className="flex items-center gap-1.5 text-slate-400">
+        <span className="flex items-center gap-1.5 text-subtle">
           <span className="w-3 h-2 rounded-sm bg-slate-200 inline-block" /> Avant CIPA
         </span>
-        <span className="flex items-center gap-1.5 text-gold">
+        <span className="flex items-center gap-1.5 text-gold-ink">
           <span className="w-3 h-2 rounded-sm bg-gold inline-block" /> Avec CIPA
         </span>
       </div>
@@ -520,7 +520,7 @@ function LaunchTimelineVisual() {
           </div>
         </div>
       ))}
-      <div className="text-[9px] text-slate-400 text-right font-bold">Durée relative des phases (%)</div>
+      <div className="text-[9px] text-subtle text-right font-bold">Durée relative des phases (%)</div>
     </div>
   )
 }
@@ -539,17 +539,17 @@ function DashboardVisual() {
       <div className="grid grid-cols-2 gap-2">
         {tiles.map((t, i) => (
           <div key={i} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
-            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wide truncate">{t.label}</div>
+            <div className="text-[9px] text-subtle font-bold uppercase tracking-wide truncate">{t.label}</div>
             <div className="flex items-baseline gap-1.5 mt-0.5">
               <span className="text-base font-black font-display text-dark">{t.value}</span>
-              <span className={`text-[9px] font-bold ${t.good ? 'text-emerald-600' : 'text-red-500'}`}>{t.trend}</span>
+              <span className={`text-[9px] font-bold ${t.good ? 'text-emerald-700' : 'text-red-600'}`}>{t.trend}</span>
             </div>
           </div>
         ))}
       </div>
       <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wide">Contrôles réalisés / jour</span>
+          <span className="text-[9px] text-subtle font-bold uppercase tracking-wide">Contrôles réalisés / jour</span>
           <span className="text-[9px] font-bold text-gold">Rapport auto — chaque matin 06:00</span>
         </div>
         <div className="flex items-end gap-1.5 h-14">
@@ -564,7 +564,7 @@ function DashboardVisual() {
             />
           ))}
         </div>
-        <div className="flex justify-between text-[8px] font-bold text-slate-400 mt-1">
+        <div className="flex justify-between text-[8px] font-bold text-subtle mt-1">
           <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
         </div>
       </div>
@@ -647,10 +647,10 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
             className={`group flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold border transition-all duration-300 ${
               i === index
                 ? 'bg-[#111827] text-white border-[#111827] shadow-lg'
-                : 'bg-white/70 text-slate-500 border-slate-200 hover:border-gold hover:text-dark'
+                : 'bg-white/70 text-subtle border-slate-200 hover:border-gold hover:text-dark'
             }`}
           >
-            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold/70'}`}>{s.num}</span>
+            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold-ink'}`}>{s.num}</span>
             <span className="hidden sm:inline max-w-[180px] truncate">{s.tag}</span>
           </button>
         ))}
@@ -680,7 +680,7 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
               <div className="lg:col-span-6 flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-3xl font-black font-display text-gold/30">{slide.num}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B6842B]">{slide.tag}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold-ink">{slide.tag}</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black font-display text-[#111827] tracking-tight mb-4 leading-snug">
                   {slide.title}
@@ -692,13 +692,13 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
                   <div className="relative rounded-2xl sm:rounded-r-none border border-red-100 sm:border-r-0 bg-gradient-to-br from-red-50/70 to-white p-4 sm:p-5">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100">
-                        <XCircle size={13} className="text-red-500" />
+                        <XCircle size={13} className="text-red-600" />
                       </span>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-500">Avant CIPA</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">Avant CIPA</span>
                     </div>
                     <ul className="space-y-2.5">
                       {slide.before.map((b, i) => (
-                        <li key={i} className="flex items-start gap-2 text-[11px] text-slate-500 leading-snug">
+                        <li key={i} className="flex items-start gap-2 text-[11px] text-subtle leading-snug">
                           <XCircle size={13} className="text-red-300 shrink-0 mt-[1px]" />
                           {b}
                         </li>
@@ -713,9 +713,9 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
                   <div className="relative rounded-2xl sm:rounded-l-none border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/70 to-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(16,185,129,0.08)]">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                        <CheckCircle2 size={13} className="text-emerald-600" />
+                        <CheckCircle2 size={13} className="text-emerald-700" />
                       </span>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Avec CIPA</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Avec CIPA</span>
                     </div>
                     <ul className="space-y-2.5">
                       {slide.after.map((a, i) => (
@@ -730,12 +730,12 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
 
                 {/* KPIs */}
                 <div className="mt-auto">
-                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">Résultats mesurés</p>
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-subtle">Résultats mesurés</p>
                   <div className="grid grid-cols-2 divide-x divide-black/[0.06] overflow-hidden rounded-2xl border border-black/[0.05] bg-gradient-to-br from-gold/[0.06] to-white shadow-sm">
                     {slide.kpis.map((k, i) => (
                       <div key={i} className="p-4">
-                        <div className="text-xl sm:text-2xl font-black font-display text-gold">{k.value}</div>
-                        <div className="text-[10px] text-slate-500 mt-0.5 leading-snug">{k.label}</div>
+                        <div className="text-xl sm:text-2xl font-black font-display text-gold-deep">{k.value}</div>
+                        <div className="text-[10px] text-subtle mt-0.5 leading-snug">{k.label}</div>
                       </div>
                     ))}
                   </div>
@@ -772,7 +772,7 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
         <button
           onClick={() => setPlaying(!playing)}
           aria-label={playing ? 'Mettre en pause' : 'Lancer le défilement'}
-          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:border-gold hover:text-gold transition-all"
+          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-subtle hover:border-gold hover:text-gold transition-all"
         >
           {playing ? <Pause size={12} /> : <Play size={12} />}
         </button>
@@ -788,7 +788,7 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
             />
           ))}
         </div>
-        <span className="text-[10px] font-bold text-slate-400 tabular-nums">
+        <span className="text-[10px] font-bold text-subtle tabular-nums">
           {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
         </span>
         <span className="sr-only">{accentLabel}</span>
@@ -819,9 +819,9 @@ export default function FoodPage() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-bold uppercase tracking-widest text-[#B6842B] mb-4"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-bold uppercase tracking-widest text-gold-ink mb-4"
               >
-                <Zap size={11} className="text-[#DAA250]" />
+                <Zap size={11} className="text-gold-deep" />
                 {"Secteur d'activité"}
               </motion.div>
 
@@ -832,7 +832,7 @@ export default function FoodPage() {
                 className="text-[26px] sm:text-[32px] lg:text-[38px] xl:text-[42px] font-black font-display text-dark tracking-tight leading-[1.12] mb-4"
               >
                 {"Comment CIPA transforme l'industrie"}{' '}
-                <span className="text-[#DAA250]">
+                <span className="text-gold-deep">
                   {"agroalimentaire & des boissons"}
                 </span>
               </motion.h1>
@@ -890,11 +890,11 @@ export default function FoodPage() {
               </div>
 
               <div className="absolute -bottom-1 -left-1 sm:left-2 bg-white/90 backdrop-blur border border-gold/30 rounded-xl p-2.5 shadow-xl flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gold/10 text-[#DAA250] flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold-deep flex items-center justify-center shrink-0">
                   <ShieldCheck size={16} />
                 </div>
                 <div>
-                  <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Normes HACCP & FSMA</div>
+                  <div className="text-[9px] font-bold text-subtle uppercase tracking-wider">Normes HACCP & FSMA</div>
                   <div className="text-[12px] font-extrabold text-dark">ISO 22000 Validé</div>
                 </div>
               </div>
@@ -935,15 +935,15 @@ export default function FoodPage() {
                     className="bg-white rounded-xl px-4 py-4 border border-[#ECE7DD] shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center transition-shadow hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)]"
                   >
                     <div className="flex items-center justify-center gap-2 mb-2">
-                      <Icon size={19} className="text-[#DAA250]" strokeWidth={1.75} />
-                      <span className="text-[24px] font-black font-display text-[#DAA250] leading-none">
+                      <Icon size={19} className="text-gold-deep" strokeWidth={1.75} />
+                      <span className="text-[24px] font-black font-display text-gold-deep leading-none">
                         {stat.value}
                       </span>
                     </div>
                     <div className="text-[10px] font-black text-dark uppercase tracking-wider mb-1.5 leading-tight">
                       {stat.label}
                     </div>
-                    <p className="text-[11px] leading-snug text-slate-500">{stat.desc}</p>
+                    <p className="text-[11px] leading-snug text-subtle">{stat.desc}</p>
                   </motion.div>
                 )
               })}
@@ -960,7 +960,7 @@ export default function FoodPage() {
             className="bg-dark rounded-2xl px-6 py-5 md:px-10 flex flex-col md:flex-row items-center gap-5 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-mesh-dark opacity-30" />
-            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-[#DAA250] flex items-center justify-center shrink-0 relative z-10">
+            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-gold-deep flex items-center justify-center shrink-0 relative z-10">
               <Wheat size={19} />
             </div>
             <p className="text-[13px] sm:text-sm text-white/85 leading-relaxed relative z-10 text-center md:text-left">
@@ -976,11 +976,11 @@ export default function FoodPage() {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"4 façons dont CIPA renforce les "}</span>
-              <span className="text-[#DAA250] md:block">
+              <span className="text-gold-deep md:block">
                 opérations agroalimentaires essentielles
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
               {"Naviguez entre les cartes pour explorer chaque levier : les données, les visuels et les comparaisons avant/après CIPA."}
             </p>
           </div>
@@ -995,11 +995,11 @@ export default function FoodPage() {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"3 façons dont CIPA accélère la "}</span>
-              <span className="text-[#DAA250] md:block">
+              <span className="text-gold-deep md:block">
                 qualité, l’innovation et la performance durable
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
               {"Trois leviers de croissance, illustrés par des données concrètes et des résultats mesurés chez nos clients."}
             </p>
           </div>
@@ -1059,9 +1059,9 @@ export default function FoodPage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="text-3xl sm:text-4xl font-black font-display text-dark tracking-tight mb-3">
-              Comment <span className="text-gold">CIPA</span> fonctionne
+              Comment <span className="text-gold-deep">CIPA</span> fonctionne
             </h2>
-            <p className="text-sm sm:text-[15px] text-slate-500">
+            <p className="text-sm sm:text-[15px] text-subtle">
               {"Cinq étapes, un cycle d'amélioration continue mesurable."}
             </p>
           </div>
@@ -1089,7 +1089,7 @@ export default function FoodPage() {
                     <Icon size={22} />
                   </div>
                   <h4 className="text-sm font-black text-dark mb-1.5">{step.title}</h4>
-                  <p className="text-[11px] text-slate-500 leading-relaxed max-w-[190px]">{step.desc}</p>
+                  <p className="text-[11px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
                 </motion.div>
               )
             })}

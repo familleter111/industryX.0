@@ -93,6 +93,8 @@ export default function CasesSection() {
           viewport={m.viewport}
           className="mt-4 flex w-full justify-between gap-2 overflow-x-auto pb-1 lg:mt-5"
           style={{ scrollbarWidth: 'none' }}
+          role="group"
+          aria-label="Usages de la plateforme"
         >
           {FEATURE_TABS.map((item, index) => {
             const TabIcon = item.icon
@@ -100,7 +102,18 @@ export default function CasesSection() {
             return (
               <motion.button
                 key={index}
+                type="button"
                 onClick={() => setActiveTab(index)}
+                /*
+                 * Sous 768 px le libelle passe en `hidden` : il ne reste que
+                 * l'icone, et six pastilles identiques sans nom. `title` ne
+                 * remplace pas un nom accessible — il n'apparait pas au toucher
+                 * et les lecteurs d'ecran ne le lisent pas tous. `aria-label`
+                 * porte le nom a toutes les tailles, `aria-pressed` dit lequel
+                 * des six est actif, ce que la seule couleur disait jusqu'ici.
+                 */
+                aria-label={item.label}
+                aria-pressed={isActive}
                 title={item.label}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
@@ -136,7 +149,6 @@ export default function CasesSection() {
               style={{
                 background: colors.surface,
                 border: `1px solid ${colors.border}`,
-                boxShadow: '0 30px 80px rgba(15,23,42,0.08)',
               }}
             >
               <div className="grid lg:grid-cols-2">

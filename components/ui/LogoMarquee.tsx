@@ -89,7 +89,13 @@ export default function LogoMarquee({
                   width={512}
                   height={512}
                   style={{ width: logoFrameWidth(logo, box.w, box.h) }}
-                  className="h-auto max-w-full shrink-0 object-contain opacity-60 grayscale
+                  // `opacity-60 grayscale` effacait les logos au point de les
+                  // rendre indechiffrables : un logo qu'on ne reconnait pas ne
+                  // fait pas la preuve qu'on cherchait a faire. On garde le
+                  // retrait — la bande ne doit pas concurrencer le titre — mais
+                  // du bon cote de la lisibilite : desaturation partielle
+                  // plutot que totale, et deux crans d'opacite en plus.
+                  className="h-auto max-w-full shrink-0 object-contain opacity-80 grayscale-[0.55]
                              transition-[opacity,filter] duration-200 ease-smooth
                              group-hover/logo:opacity-100 group-hover/logo:grayscale-0"
                 />

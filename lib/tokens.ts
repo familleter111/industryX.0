@@ -35,6 +35,44 @@
  *  se propagent pas au reste de l'interface.
  */
 
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ *  CONTRASTE — le contrat, mesure, pour les fonds clairs du site
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ *  Seuils WCAG 2.1 AA : 4,5:1 pour le texte courant, 3:1 pour le texte large
+ *  (>= 24 px, ou >= 18,66 px en gras) et pour les elements d'interface.
+ *
+ *  Les fonds clairs du site, du plus sombre au plus clair — c'est le plus
+ *  SOMBRE qui commande, puisque le texte est sombre :
+ *
+ *    creme      #F4F3EE   `bg-cream`, fond de section
+ *    mesh       #F3F4F6   creux de `gradient.section`
+ *    blanc      #FFFFFF   `bg-white`
+ *
+ *  Ratios mesures sur creme, le cas le plus defavorable :
+ *
+ *    gray-900   #111827   16,26:1   titres
+ *    stone-800  #292524   11,10:1
+ *    stone-700  #44403C    9,50:1   navigation
+ *    stone-600  #57534E    6,87:1   TEXTE SECONDAIRE PAR DEFAUT
+ *    stone-500  #78716C    4,32:1   -- echoue sur creme et sur le mesh.
+ *                                      Ne passe (4,80:1) que sur blanc pur.
+ *                                      A reserver aux icones decoratives.
+ *    stone-400  #A8A29E    2,27:1   -- jamais de texte.
+ *
+ *  Autrement dit : sur fond clair, le gris de texte le plus pale autorise est
+ *  `stone-600`. Les trois gris de texte du site portent donc un nom — voir
+ *  `color.text` plus bas : ce sont les seuls gris autorises sur fond clair, et
+ *  ils sont les seuls a deroger a la regle « une couleur, un nom » enoncee en
+ *  tete de fichier. La derogation est assumee : un gris de texte n'est pas une
+ *  nuance de palette, c'est un role, et c'est le role qui doit etre verifiable.
+ *
+ *  L'or, lui, a bien besoin de noms : la meme couleur de marque ne peut pas
+ *  servir a la fois de fond, de texte large et de petit libelle. D'ou
+ *  `gold.DEFAULT` / `gold.deep` / `gold.ink`, documentes ci-dessous.
+ */
+
 export const tokens = {
   color: {
     /** Or de marque. `DEFAULT` est l'unique or d'accent du site. */
@@ -50,10 +88,92 @@ export const tokens = {
       800: '#7E4A1A',
       900: '#673D1A',
       DEFAULT: '#DAA250',
-      /** Or assombri, lisible sur fond clair — réservé au texte. */
-      deep: '#B6842B',
+
+      /**
+       * Or de TEXTE LARGE sur fond clair — titres, mots d'accroche, tout ce
+       * qui fait 24 px, ou 18,66 px en gras.
+       *
+       * 3,11:1 sur creme, 3,14:1 sur le creux du mesh, 3,46:1 sur blanc.
+       * Seuil WCAG AA du texte large : 3:1.
+       *
+       * Corrige depuis #B6842B, qui se donnait deja ce role mais plafonnait
+       * a 2,99:1 sur creme — sous le seuil, d'un cheveu. Meme teinte (36 deg)
+       * et meme saturation (65 %) que `DEFAULT` : seule la luminosite baisse,
+       * de 58 % a 44 %. L'or reste l'or.
+       *
+       * `DEFAULT` ne descend a 2,04:1 sur creme : il ne doit jamais porter du
+       * texte sur fond clair. Sur fond sombre il est a 8,56:1 et reste le bon
+       * choix.
+       */
+      deep: '#B97E27',
+
+      /**
+       * Or de TEXTE COURANT sur fond clair — libelles, sur-titres, tout ce
+       * qui passe sous 18,66 px.
+       *
+       * 4,63:1 sur creme, 5,14:1 sur blanc. Seuil WCAG AA : 4,5:1.
+       *
+       * Meme teinte et meme saturation que les deux autres. On ne descend a
+       * cette luminosite que quand la taille l'impose : sur un grand titre,
+       * `deep` suffit et conserve plus d'eclat.
+       */
+      ink: '#93641F',
+
       /** Teinte claire pour les fonds et halos dorés. */
       tint: '#F4E7BC',
+    },
+
+    /**
+     * ─────────────────────────────────────────────────────────────────
+     *  GRIS DE TEXTE SUR FOND CLAIR — trois roles, trois valeurs
+     * ─────────────────────────────────────────────────────────────────
+     *
+     * Avant, ces gris etaient disperses : `text-stone-500`, `text-slate-400`,
+     * `text-[#78716C]`, `text-[#A8A29E]`, `text-dark/35`… La meme intention
+     * — « ce texte est secondaire » — s'ecrivait de cinq facons, dont trois
+     * echouaient au seuil AA. Un role, une valeur, un endroit.
+     *
+     * Chaque valeur est verifiee sur le fond CLAIR LE PLUS SOMBRE du site,
+     * la creme #F4F3EE ; elle passe donc a fortiori sur le mesh (#F3F4F6),
+     * sur le gris de page de Contact (#F7F7F6) et sur le blanc.
+     *
+     * Exposees en classes Tailwind (`text-muted`, `text-subtle`,
+     * `text-placeholder`, `placeholder:text-placeholder`) par
+     * tailwind.config.ts, et en variables CSS (`--text-muted`…) par
+     * app/globals.css pour le peu de CSS ecrit a la main.
+     */
+    text: {
+      /**
+       * Texte secondaire courant : paragraphes d'accompagnement, descriptions,
+       * legendes. C'est `stone-600` inchange — il tenait deja largement le
+       * seuil, le renommer suffisait.
+       *
+       * 6,87:1 sur creme · 6,93:1 sur mesh · 7,63:1 sur blanc.
+       */
+      muted: '#57534E',
+
+      /**
+       * Libelles, sur-titres en capitales, mentions legales, micro-labels des
+       * maquettes sectorielles. Remplace `stone-500` (#78716C, 4,32:1 sur
+       * creme) et `slate-400` (#94A3B8, 2,85:1 sur blanc), tous deux sous le
+       * seuil. Meme famille chaude que `muted`, une marche plus claire.
+       *
+       * 5,17:1 sur creme · 5,22:1 sur mesh · 5,74:1 sur blanc.
+       */
+      subtle: '#6B6560',
+
+      /**
+       * Texte d'invite des champs de saisie, et lui seul. Remplace `stone-400`
+       * (#A8A29E), qui tombait a 2,52:1 sur le blanc des champs — de loin la
+       * violation la plus severe du site.
+       *
+       * Le placeholder reste la valeur la plus claire des trois : il doit se
+       * distinguer au premier coup d'oeil du texte saisi (#1C1917), sans quoi
+       * on ne sait plus si un champ est rempli.
+       *
+       * 4,75:1 sur creme · 5,28:1 sur blanc.
+       */
+      placeholder: '#6F6B68',
     },
 
     /** Noirs de marque. Distincts de gray-900, volontairement plus profonds. */
@@ -88,6 +208,21 @@ export const tokens = {
     /** Couleurs imposées par des marques tierces. */
     brand: {
       linkedin: '#0A66C2',
+
+      /**
+       * Couleurs officielles des Objectifs de Développement Durable de l'ONU,
+       * indexées par numéro d'objectif. Imposées par la charte onusienne :
+       * elles ne teintent que l'ombre de la pastille survolée et ne se
+       * propagent pas au reste de l'interface, comme le vert du logo CIPA.
+       */
+      sdg: {
+        7: '#FCC30B',
+        8: '#A21942',
+        9: '#FD6925',
+        12: '#BF8B2E',
+        13: '#3F7E44',
+        17: '#19486A',
+      },
     },
   },
 

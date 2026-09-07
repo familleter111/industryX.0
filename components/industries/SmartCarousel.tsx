@@ -26,17 +26,17 @@ function VisualPanel({ slide, visuals }: { slide: CarouselSlide; visuals: Indust
       <div className="flex-1 bg-white rounded-2xl border border-black/[0.06] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-subtle">
             {slide.tag}
           </span>
-          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-slate-500 font-bold px-2 py-0.5 rounded-full">
+          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-subtle font-bold px-2 py-0.5 rounded-full">
             Données live
           </span>
         </div>
         <div className="flex-1 flex items-center">
           <SlideVisualRenderer visual={slide.visual} visuals={visuals} />
         </div>
-        <div className="mt-3 text-[10px] text-slate-400 text-center italic leading-snug">
+        <div className="mt-3 text-[10px] text-subtle text-center italic leading-snug">
           {slide.visualCaption}
         </div>
       </div>
@@ -92,10 +92,10 @@ export default function SmartCarousel({
             className={`group flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold border transition-all duration-300 ${
               i === index
                 ? 'bg-[#111827] text-white border-[#111827] shadow-lg'
-                : 'bg-white/70 text-slate-500 border-slate-200 hover:border-gold hover:text-dark'
+                : 'bg-white/70 text-subtle border-slate-200 hover:border-gold hover:text-dark'
             }`}
           >
-            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold/70'}`}>{s.num}</span>
+            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold-ink'}`}>{s.num}</span>
             <span className="hidden sm:inline max-w-[180px] truncate">{s.tag}</span>
           </button>
         ))}
@@ -123,7 +123,7 @@ export default function SmartCarousel({
               <div className="lg:col-span-6 flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-3xl font-black font-display text-gold/30">{slide.num}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B6842B]">{slide.tag}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold-ink">{slide.tag}</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black font-display text-[#111827] tracking-tight mb-4 leading-snug">
                   {slide.title}
@@ -134,13 +134,13 @@ export default function SmartCarousel({
                   <div className="relative rounded-2xl sm:rounded-r-none border border-red-100 sm:border-r-0 bg-gradient-to-br from-red-50/70 to-white p-4 sm:p-5">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100">
-                        <XCircle size={13} className="text-red-500" />
+                        <XCircle size={13} className="text-red-600" />
                       </span>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-500">Avant CIPA</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">Avant CIPA</span>
                     </div>
                     <ul className="space-y-2.5">
                       {slide.before.map((b, i) => (
-                        <li key={i} className="flex items-start gap-2 text-[11px] text-slate-500 leading-snug">
+                        <li key={i} className="flex items-start gap-2 text-[11px] text-subtle leading-snug">
                           <XCircle size={13} className="text-red-300 shrink-0 mt-[1px]" />
                           {b}
                         </li>
@@ -155,9 +155,9 @@ export default function SmartCarousel({
                   <div className="relative rounded-2xl sm:rounded-l-none border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/70 to-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(16,185,129,0.08)]">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                        <CheckCircle2 size={13} className="text-emerald-600" />
+                        <CheckCircle2 size={13} className="text-emerald-700" />
                       </span>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Avec CIPA</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Avec CIPA</span>
                     </div>
                     <ul className="space-y-2.5">
                       {slide.after.map((a, i) => (
@@ -171,12 +171,12 @@ export default function SmartCarousel({
                 </div>
 
                 <div className="mt-auto">
-                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">Résultats mesurés</p>
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-subtle">Résultats mesurés</p>
                   <div className="grid grid-cols-2 divide-x divide-black/[0.06] overflow-hidden rounded-2xl border border-black/[0.05] bg-gradient-to-br from-gold/[0.06] to-white shadow-sm">
                     {slide.kpis.map((k, i) => (
                       <div key={i} className="p-4">
-                        <div className="text-xl sm:text-2xl font-black font-display text-gold">{k.value}</div>
-                        <div className="text-[10px] text-slate-500 mt-0.5 leading-snug">{k.label}</div>
+                        <div className="text-xl sm:text-2xl font-black font-display text-gold-deep">{k.value}</div>
+                        <div className="text-[10px] text-subtle mt-0.5 leading-snug">{k.label}</div>
                       </div>
                     ))}
                   </div>
@@ -210,7 +210,7 @@ export default function SmartCarousel({
         <button
           onClick={() => setPlaying(!playing)}
           aria-label={playing ? 'Mettre en pause' : 'Lancer le défilement'}
-          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:border-gold hover:text-gold transition-all"
+          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-subtle hover:border-gold hover:text-gold transition-all"
         >
           {playing ? <Pause size={12} /> : <Play size={12} />}
         </button>
@@ -226,7 +226,7 @@ export default function SmartCarousel({
             />
           ))}
         </div>
-        <span className="text-[10px] font-bold text-slate-400 tabular-nums">
+        <span className="text-[10px] font-bold text-subtle tabular-nums">
           {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
         </span>
         <span className="sr-only">{accentLabel}</span>

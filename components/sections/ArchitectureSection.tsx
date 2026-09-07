@@ -129,7 +129,7 @@ export default function ArchitectureSection() {
         >
           {ARCHITECTURE_NODES.map((node, i) => (
             <motion.li key={node.id} variants={m.fadeUp}>
-              <p className="text-[12px] font-bold text-stone-400">
+              <p className="text-[12px] font-bold text-subtle">
                 {String(i + 1).padStart(2, '0')}
               </p>
               <p className="mt-1 text-[14px] font-semibold text-dark">
@@ -155,7 +155,7 @@ export default function ArchitectureSection() {
                   <dd className="text-[13px] leading-relaxed text-stone-600">
                     {layer.role}
                     {layer.tech && (
-                      <span className="mt-1 block text-stone-400">{layer.tech}</span>
+                      <span className="mt-1 block text-subtle">{layer.tech}</span>
                     )}
                   </dd>
                 </div>
@@ -174,7 +174,7 @@ export default function ArchitectureSection() {
                 return (
                   <li key={point.title} className="flex gap-3">
                     <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-cream-border/60">
-                      <Icon size={15} className="text-stone-500" />
+                      <Icon size={15} className="text-subtle" />
                     </span>
                     <div>
                       <p className="text-[13px] font-semibold text-dark">

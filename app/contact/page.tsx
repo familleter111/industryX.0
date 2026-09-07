@@ -145,8 +145,17 @@ const EMPTY_FORM: FormState = {
 }
 
 const inputBase =
-  'w-full rounded-xl border bg-white px-4 text-[14px] text-[#1C1917] outline-none transition-all duration-200 placeholder:text-[#A8A29E] focus:border-gold focus:ring-4 focus:ring-gold/10'
+  'w-full rounded-xl border bg-white px-4 text-[14px] text-[#1C1917] outline-none transition-all duration-200 placeholder:text-placeholder focus:border-gold-deep focus:ring-4 focus:ring-gold-deep/15'
 
+/**
+ * Libelle de champ.
+ *
+ * L'asterisque rouge est desormais decoratif (`aria-hidden`) et double d'un
+ * mot lu par la synthese vocale. WCAG 1.4.1 interdit de faire porter une
+ * information par la seule couleur : la forme de l'asterisque y repond pour
+ * l'oeil — a condition d'etre expliquee, d'ou la legende en tete de
+ * formulaire — et le mot « obligatoire » y repond pour l'oreille.
+ */
 function FieldLabel({
   htmlFor,
   children,
@@ -162,16 +171,53 @@ function FieldLabel({
       className="mb-1.5 block text-[12.5px] font-semibold tracking-[-0.01em] text-[#292524] sm:text-[13px]"
     >
       {children}
-      {required && <span className="ml-0.5 text-[#DC2626]">*</span>}
+      {required && (
+        <>
+          <span aria-hidden="true" className="ml-0.5 text-[#DC2626]">
+            *
+          </span>
+          <span className="sr-only"> (obligatoire)</span>
+        </>
+      )}
     </label>
   )
 }
 
-function FieldError({ message }: { message?: string }) {
+/**
+ * Message d'erreur d'un champ.
+ *
+ * `id` le relie au champ via `aria-describedby` : l'erreur est alors lue
+ * quand le champ prend le focus, et non perdue quelque part sous lui.
+ * `role="alert"` la fait annoncer des son apparition, apres une soumission
+ * refusee — sans quoi rien ne signalerait l'echec a qui ne voit pas l'ecran.
+ */
+function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null
   return (
-    <p className="mt-1.5 text-[12px] font-medium text-[#DC2626]">{message}</p>
+    <p
+      id={id}
+      role="alert"
+      className="mt-1.5 text-[12px] font-medium text-[#DC2626]"
+    >
+      {message}
+    </p>
   )
+}
+
+/**
+ * Attributs d'accessibilite communs a tous les champs obligatoires.
+ *
+ * `aria-required` et non l'attribut `required` : le formulaire est en
+ * `noValidate` — la validation est faite en JS pour rester en francais et
+ * dans le style du site — et poser `required` ferait remonter en plus la
+ * bulle native du navigateur.
+ */
+function fieldA11y(name: string, error?: string) {
+  return {
+    'aria-required': true,
+    'aria-invalid': Boolean(error),
+    'aria-describedby': error ? `${name}-error` : undefined,
+  } as const
 }
 
 function ContactForm() {
@@ -249,6 +295,12 @@ function ContactForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="mt-5 lg:mt-6">
+      {/* Sans cette ligne, l'asterisque rouge est un signe que rien
+          n'explique : il faut savoir d'avance ce qu'il veut dire. */}
+      <p className="mb-3 text-[11.5px] leading-snug text-subtle">
+        Les champs suivis d&rsquo;un astérisque (*) sont obligatoires.
+      </p>
+
       {/* PRÉNOM / NOM */}
       <div className="grid gap-3.5 sm:grid-cols-2">
         <div>
@@ -261,11 +313,12 @@ function ContactForm() {
             placeholder="Votre prénom"
             value={form.firstName}
             onChange={(e) => update('firstName', e.target.value)}
+            {...fieldA11y('firstName', errors.firstName)}
             className={`${inputBase} h-11 ${
               errors.firstName ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
             }`}
           />
-          <FieldError message={errors.firstName} />
+          <FieldError id="firstName-error" message={errors.firstName} />
         </div>
 
         <div>
@@ -278,11 +331,12 @@ function ContactForm() {
             placeholder="Votre nom"
             value={form.lastName}
             onChange={(e) => update('lastName', e.target.value)}
+            {...fieldA11y('lastName', errors.lastName)}
             className={`${inputBase} h-11 ${
               errors.lastName ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
             }`}
           />
-          <FieldError message={errors.lastName} />
+          <FieldError id="lastName-error" message={errors.lastName} />
         </div>
       </div>
 
@@ -298,11 +352,12 @@ function ContactForm() {
             placeholder="exemple@entreprise.com"
             value={form.email}
             onChange={(e) => update('email', e.target.value)}
+            {...fieldA11y('email', errors.email)}
             className={`${inputBase} h-11 ${
               errors.email ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
             }`}
           />
-          <FieldError message={errors.email} />
+          <FieldError id="email-error" message={errors.email} />
         </div>
 
         <div>
@@ -333,11 +388,12 @@ function ContactForm() {
           placeholder="Nom de votre entreprise"
           value={form.company}
           onChange={(e) => update('company', e.target.value)}
+          {...fieldA11y('company', errors.company)}
           className={`${inputBase} h-11 ${
             errors.company ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
           }`}
         />
-        <FieldError message={errors.company} />
+        <FieldError id="company-error" message={errors.company} />
       </div>
 
       {/* INDUSTRIE */}
@@ -349,8 +405,9 @@ function ContactForm() {
             name="industry"
             value={form.industry}
             onChange={(e) => update('industry', e.target.value)}
+            {...fieldA11y('industry', errors.industry)}
             className={`${inputBase} h-11 appearance-none pr-11 ${
-              form.industry ? 'text-[#1C1917]' : 'text-[#A8A29E]'
+              form.industry ? 'text-[#1C1917]' : 'text-placeholder'
             } ${errors.industry ? 'border-[#DC2626]' : 'border-[#E7E5E4]'}`}
           >
             <option value="">Sélectionnez votre industrie</option>
@@ -363,10 +420,10 @@ function ContactForm() {
 
           <ChevronDown
             size={16}
-            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#A8A29E]"
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-subtle"
           />
         </div>
-        <FieldError message={errors.industry} />
+        <FieldError id="industry-error" message={errors.industry} />
       </div>
 
       {/* MESSAGE */}
@@ -381,28 +438,46 @@ function ContactForm() {
             placeholder="Parlez-nous de vos enjeux, projets ou objectifs."
             value={form.message}
             onChange={(e) => update('message', e.target.value)}
+            {...fieldA11y('message', errors.message)}
             className={`${inputBase} min-h-[88px] resize-y py-3 pb-8 leading-relaxed lg:min-h-[96px] ${
               errors.message ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
             }`}
           />
 
-          <span className="pointer-events-none absolute bottom-2.5 right-4 text-[11px] font-medium text-[#A8A29E]">
+          <span className="pointer-events-none absolute bottom-2.5 right-4 text-[11px] font-medium text-subtle">
             {form.message.length} / {MESSAGE_MAX}
           </span>
         </div>
-        <FieldError message={errors.message} />
+        <FieldError id="message-error" message={errors.message} />
       </div>
 
-      {/* CONSENTEMENT */}
+      {/* CONSENTEMENT
+
+          C'etait un <button role="checkbox"> nomme par aria-labelledby : la
+          case s'annoncait correctement, mais son libelle n'etait pas
+          cliquable — 18 px de cible pour cocher, quand la phrase juste a cote
+          ne faisait rien. C'est maintenant une vraie case, masquee
+          visuellement (`sr-only`) et pilotee par un <label for> qui enveloppe
+          a la fois le carre dessine et le texte : toute la ligne est cliquable
+          et la semantique native revient gratuitement (etat, role, clavier).
+
+          `peer` porte l'anneau de focus sur le carre visible : la case reelle
+          etant hors ecran, `:focus-visible` n'aurait rien eu a souligner. */}
       <div className="mt-4">
-        <div className="flex gap-3">
-          <button
-            type="button"
-            role="checkbox"
-            aria-checked={form.consent}
-            aria-labelledby="consent-label"
-            onClick={() => update('consent', !form.consent)}
-            className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border transition-all duration-200 ${
+        <label htmlFor="consent" className="flex cursor-pointer gap-3">
+          <input
+            id="consent"
+            name="consent"
+            type="checkbox"
+            checked={form.consent}
+            onChange={(e) => update('consent', e.target.checked)}
+            {...fieldA11y('consent', errors.consent)}
+            className="peer sr-only"
+          />
+
+          <span
+            aria-hidden="true"
+            className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border transition-all duration-200 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[3px] peer-focus-visible:outline-gold-deep ${
               form.consent
                 ? 'border-[#111827] bg-[#111827] text-white'
                 : errors.consent
@@ -411,24 +486,24 @@ function ContactForm() {
             }`}
           >
             {form.consent && <Check size={12} strokeWidth={3.2} />}
-          </button>
+          </span>
 
-          <p
-            id="consent-label"
-            className="text-[12.5px] leading-relaxed text-[#57534E] sm:text-[13px]"
-          >
+          <span className="text-[12.5px] leading-relaxed text-[#57534E] sm:text-[13px]">
             J’accepte que Industry X.0 collecte et traite mes données pour
             répondre à ma demande. Voir notre{' '}
+            {/* Le lien vit a l'interieur du <label> : sans stopPropagation, le
+                clic remonterait jusqu'a lui et cocherait la case au passage. */}
             <Link
               href="/privacy"
-              className="font-medium text-[#B6842B] underline-offset-2 hover:underline"
+              onClick={(event) => event.stopPropagation()}
+              className="font-medium text-gold-ink underline-offset-2 hover:underline"
             >
               politique de confidentialité
             </Link>
             .
-          </p>
-        </div>
-        <FieldError message={errors.consent} />
+          </span>
+        </label>
+        <FieldError id="consent-error" message={errors.consent} />
       </div>
 
       {/* SUBMIT */}
@@ -453,8 +528,8 @@ function ContactForm() {
         )}
       </button>
 
-      <div className="mt-3.5 flex items-center justify-center gap-2 text-center text-[12px] text-[#78716C] sm:text-[12.5px]">
-        <ShieldCheck size={15} className="shrink-0 text-[#A8A29E]" />
+      <div className="mt-3.5 flex items-center justify-center gap-2 text-center text-[12px] text-subtle sm:text-[12.5px]">
+        <ShieldCheck size={15} className="shrink-0 text-subtle" />
         Vos données sont sécurisées et 100% confidentielles.
       </div>
     </form>
@@ -486,7 +561,7 @@ function ImpactChart() {
   return (
     <div className="flex min-w-0 flex-1 gap-2">
       {/* axe Y */}
-      <div className="flex flex-col justify-between py-[2px] text-[9px] font-medium text-white/35">
+      <div className="flex flex-col justify-between py-[2px] text-[9px] font-medium text-white/50">
         {['100%', '75%', '50%', '25%', '0%'].map((tick) => (
           <span key={tick}>{tick}</span>
         ))}
@@ -540,7 +615,7 @@ function ImpactChart() {
           />
         </svg>
 
-        <div className="mt-2 flex justify-between text-[9px] font-medium text-white/35">
+        <div className="mt-2 flex justify-between text-[9px] font-medium text-white/50">
           {['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'].map((month) => (
             <span key={month}>{month}</span>
           ))}
@@ -702,7 +777,7 @@ function AfterContactSection() {
                       <p className="text-[13.5px] font-bold text-white">
                         {item.title}
                       </p>
-                      <p className="mt-0.5 text-[11.5px] text-white/45">
+                      <p className="mt-0.5 text-[11.5px] text-white/50">
                         {item.desc}
                       </p>
                     </div>
@@ -726,7 +801,7 @@ function AfterContactSection() {
                 />
               </a>
 
-              <div className="mt-4 flex items-center justify-center gap-2 text-[12px] text-white/45">
+              <div className="mt-4 flex items-center justify-center gap-2 text-[12px] text-white/50">
                 <Lock size={14} className="shrink-0" />
                 Vos données sont sécurisées et 100% confidentielles.
               </div>
@@ -856,7 +931,7 @@ export default function ContactPage() {
               <h1 className="mt-4 font-display text-[32px] font-black leading-[1.03] tracking-[-0.04em] text-[#111827] sm:text-[44px] lg:mt-4 lg:text-[40px] xl:text-[48px]">
                 Parlons de vos
                 <br />
-                <span className="text-gold">opérations</span>
+                <span className="text-gold-deep">opérations</span>
               </h1>
 
               <p className="mt-3.5 max-w-[540px] text-pretty text-[14.5px] leading-[1.65] text-[#57534E] sm:text-[15.5px] lg:text-[15px]">
@@ -867,7 +942,7 @@ export default function ContactPage() {
               </p>
 
               {/* LOGOS CLIENTS */}
-              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#78716C] sm:text-[11px] lg:mt-4">
+              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[11px] lg:mt-4">
                 Ils nous font confiance
               </p>
 
@@ -894,7 +969,7 @@ export default function ContactPage() {
                         <p className="text-[12.5px] font-bold leading-[1.25] tracking-[-0.015em] text-[#111827] sm:text-[13px]">
                           {promise.title}
                         </p>
-                        <p className="mt-1 text-[11.5px] leading-[1.25] text-[#78716C]">
+                        <p className="mt-1 text-[11.5px] leading-[1.25] text-subtle">
                           {promise.desc}
                         </p>
                       </div>

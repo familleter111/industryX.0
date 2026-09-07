@@ -58,9 +58,9 @@ export default function IndustryPage({ slug }: { slug: string }) {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-bold uppercase tracking-widest text-[#B6842B] mb-4"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-bold uppercase tracking-widest text-gold-ink mb-4"
               >
-                <Zap size={11} className="text-[#DAA250]" />
+                <Zap size={11} className="text-gold-deep" />
                 {"Secteur d'activité"}
               </motion.div>
 
@@ -71,7 +71,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
                 className="text-[26px] sm:text-[32px] lg:text-[38px] xl:text-[42px] font-black font-display text-dark tracking-tight leading-[1.12] mb-4"
               >
                 {"Comment CIPA transforme l'industrie"}{' '}
-                <span className="text-[#DAA250]">
+                <span className="text-gold-deep">
                   {data.headline}
                 </span>
               </motion.h1>
@@ -128,11 +128,11 @@ export default function IndustryPage({ slug }: { slug: string }) {
               </div>
 
               <div className="absolute -bottom-1 -left-1 sm:left-2 bg-white/90 backdrop-blur border border-gold/30 rounded-xl p-2.5 shadow-xl flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gold/10 text-[#DAA250] flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold-deep flex items-center justify-center shrink-0">
                   <HeroIcon size={16} />
                 </div>
                 <div>
-                  <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{data.heroBadge.label}</div>
+                  <div className="text-[9px] font-bold text-subtle uppercase tracking-wider">{data.heroBadge.label}</div>
                   <div className="text-[12px] font-extrabold text-dark">{data.heroBadge.value}</div>
                 </div>
               </div>
@@ -154,15 +154,15 @@ export default function IndustryPage({ slug }: { slug: string }) {
                     className="bg-white rounded-xl px-4 py-4 border border-[#ECE7DD] shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center transition-shadow hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)]"
                   >
                     <div className="flex items-center justify-center gap-2 mb-2">
-                      <Icon size={19} className="text-[#DAA250]" strokeWidth={1.75} />
-                      <span className="text-[24px] font-black font-display text-[#DAA250] leading-none">
+                      <Icon size={19} className="text-gold-deep" strokeWidth={1.75} />
+                      <span className="text-[24px] font-black font-display text-gold-deep leading-none">
                         {stat.value}
                       </span>
                     </div>
                     <div className="text-[10px] font-black text-dark uppercase tracking-wider mb-1.5 leading-tight">
                       {stat.label}
                     </div>
-                    <p className="text-[11px] leading-snug text-slate-500">{stat.desc}</p>
+                    <p className="text-[11px] leading-snug text-subtle">{stat.desc}</p>
                   </motion.div>
                 )
               })}
@@ -179,7 +179,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
             className="bg-dark rounded-2xl px-6 py-5 md:px-10 flex flex-col md:flex-row items-center gap-5 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-mesh-dark opacity-30" />
-            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-[#DAA250] flex items-center justify-center shrink-0 relative z-10">
+            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-gold-deep flex items-center justify-center shrink-0 relative z-10">
               <HeroIcon size={19} />
             </div>
             <p className="text-[13px] sm:text-sm text-white/85 leading-relaxed relative z-10 text-center md:text-left">
@@ -195,11 +195,11 @@ export default function IndustryPage({ slug }: { slug: string }) {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"4 façons dont CIPA renforce les "}</span>
-              <span className="text-[#DAA250] md:block">
+              <span className="text-gold-deep md:block">
                 {data.useCasesTitle}
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
               {"Naviguez entre les cartes pour explorer chaque levier : les données, les visuels et les comparaisons avant/après CIPA."}
             </p>
           </div>
@@ -214,11 +214,11 @@ export default function IndustryPage({ slug }: { slug: string }) {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"3 façons dont CIPA accélère la "}</span>
-              <span className="text-[#DAA250] md:block">
+              <span className="text-gold-deep md:block">
                 sécurité produit, l’innovation et la performance durable
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
               {"Trois leviers de croissance, illustrés par des données concrètes et des résultats mesurés chez nos clients."}
             </p>
           </div>
@@ -274,9 +274,9 @@ export default function IndustryPage({ slug }: { slug: string }) {
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="text-3xl sm:text-4xl font-black font-display text-dark tracking-tight mb-3">
-              Comment <span className="text-gold">CIPA</span> fonctionne
+              Comment <span className="text-gold-deep">CIPA</span> fonctionne
             </h2>
-            <p className="text-sm sm:text-[15px] text-slate-500">
+            <p className="text-sm sm:text-[15px] text-subtle">
               {"Cinq étapes, un cycle d'amélioration continue mesurable."}
             </p>
           </div>
@@ -299,7 +299,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
                     <Icon size={22} />
                   </div>
                   <h4 className="text-sm font-black text-dark mb-1.5">{step.title}</h4>
-                  <p className="text-[11px] text-slate-500 leading-relaxed max-w-[190px]">{step.desc}</p>
+                  <p className="text-[11px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
                 </motion.div>
               )
             })}

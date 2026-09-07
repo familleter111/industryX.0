@@ -43,7 +43,7 @@ function Stats() {
           <p className="font-display text-[26px] font-black leading-none tracking-[-0.03em] text-gray-900 sm:text-[30px]">
             {stat.value}
           </p>
-          <p className="mt-2 text-[12px] font-medium text-stone-500 sm:text-[12.5px]">
+          <p className="mt-2 text-[12px] font-medium text-stone-600 sm:text-[12.5px]">
             {stat.label}
           </p>
         </div>
@@ -63,11 +63,11 @@ function BranchLegend() {
     <div className="mt-14 grid gap-9 border-t border-dark/[0.07] pt-10 sm:mt-16 sm:grid-cols-3 sm:gap-10">
       {PARTNER_BRANCHES.map((branch) => (
         <div key={branch.key}>
-          <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-gold-deep">
+          <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-gold-ink">
             {branch.label}
           </p>
 
-          <p className="mt-2.5 text-[13px] leading-[1.65] text-stone-500">
+          <p className="mt-2.5 text-[13px] leading-[1.65] text-stone-600">
             {branch.desc}
           </p>
 
@@ -79,7 +79,7 @@ function BranchLegend() {
                   <span className="text-[13.5px] font-semibold text-stone-800">
                     {partner.alt}
                   </span>
-                  <span className="ml-2 text-[12.5px] text-stone-400">
+                  <span className="ml-2 text-[12.5px] text-stone-600">
                     {partner.tagline}
                   </span>
                 </span>
@@ -179,7 +179,7 @@ export default function PartnersOrbit({
             >
               <div className="flex items-center gap-4">
                 <span className="h-px w-10 bg-gold/55 sm:w-16" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-deep sm:text-[11.5px]">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[11.5px]">
                   L’écosystème
                 </span>
                 <span className="h-px w-10 bg-gold/55 sm:w-16" />

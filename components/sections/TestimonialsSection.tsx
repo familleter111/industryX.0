@@ -151,7 +151,7 @@ export default function TestimonialsSection() {
                     <h3 className="text-base font-bold text-dark">
                       {t.author}
                     </h3>
-                    <p className="text-sm text-stone-500">{t.company}</p>
+                    <p className="text-sm text-subtle">{t.company}</p>
                   </div>
                 </div>
 

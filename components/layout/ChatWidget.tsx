@@ -168,7 +168,21 @@ export default function ChatWidget({ isOpen, onClose, language = 'FR' }: ChatWid
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 40, scale: 0.92 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed bottom-24 right-6 z-50 w-[360px] sm:w-[380px] h-[500px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden border border-cream-border"
+          /*
+           * Largeur et hauteur bornees par la fenetre.
+           *
+           * `w-[360px]` fixe depassait par la gauche des 360 px : avec
+           * `right-6`, le bord gauche du panneau tombait a -24 px sur un
+           * telephone de 360 px de large, et `overflow-x: hidden` sur le body
+           * coupait l'avatar et le debut des messages au lieu d'offrir un
+           * defilement. Idem en hauteur : 500 px plus les 96 px de `bottom-24`
+           * font 596 px, si bien que sur une fenetre de 640 px l'en-tete du
+           * panneau passait sous la navbar fixe de 82 px.
+           *
+           * `dvh` et non `vh` : sur mobile, la barre d'adresse qui se retracte
+           * fait varier la hauteur utile, et `vh` fige la plus grande.
+           */
+          className="fixed bottom-24 right-6 z-50 w-[min(360px,calc(100vw-3rem))] sm:w-[380px] h-[min(500px,calc(100dvh-12rem))] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden border border-cream-border"
         >
           {/* HEADER */}
           <div className="bg-dark text-white border-t-[4px] border-gold px-5 py-4 flex items-center justify-between shadow-md">
@@ -202,7 +216,7 @@ export default function ChatWidget({ isOpen, onClose, language = 'FR' }: ChatWid
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-stone-100">
             {/* Today separator */}
             <div className="text-center my-2 select-none">
-              <span className="text-[10px] text-stone-500 bg-cream-border px-2.5 py-0.5 rounded-full uppercase tracking-wider font-bold">
+              <span className="text-[10px] text-stone-600 bg-cream-border px-2.5 py-0.5 rounded-full uppercase tracking-wider font-bold">
                 {language === 'FR' ? "Aujourd'hui" : "Today"}
               </span>
             </div>
@@ -258,7 +272,7 @@ export default function ChatWidget({ isOpen, onClose, language = 'FR' }: ChatWid
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={language === 'FR' ? "Saisir un message..." : "Enter a message..."}
-                className="flex-1 bg-transparent text-sm text-stone-800 outline-none py-0.5"
+                className="flex-1 bg-transparent text-sm text-stone-800 outline-none py-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
                 disabled={isTyping}
               />
               <button

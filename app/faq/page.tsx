@@ -142,7 +142,7 @@ function HighlightsPanel() {
       {/* CONFIDENTIALITÉ — l'ancien bandeau isolé, rapatrié là où il a du sens */}
       <div className="flex items-center gap-3 border-t border-white/[0.07] px-6 py-4 sm:px-7">
         <ShieldCheck size={16} className="shrink-0 text-gold" />
-        <p className="text-[11.5px] leading-[1.6] text-white/45">
+        <p className="text-[11.5px] leading-[1.6] text-white/50">
           Échanges confidentiels — aucune information n’est partagée sans votre
           accord.
         </p>
@@ -218,8 +218,8 @@ function FaqAccordion() {
                   <span
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
                       isOpen
-                        ? 'rotate-180 bg-gold/15 text-[#B6842B]'
-                        : 'bg-[#F5F4F1] text-[#A8A29E]'
+                        ? 'rotate-180 bg-gold/15 text-gold-ink'
+                        : 'bg-[#F5F4F1] text-subtle'
                     }`}
                   >
                     <ChevronDown size={16} />

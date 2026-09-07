@@ -295,7 +295,7 @@ export default function ProblemsSection() {
                     {...stat.count}
                     className="text-2xl font-black leading-none text-red-600"
                   />
-                  <span className="text-[10px] font-extrabold tracking-wider text-stone-500 mt-1.5 block uppercase">{stat.label}</span>
+                  <span className="text-[10px] font-extrabold tracking-wider text-stone-600 mt-1.5 block uppercase">{stat.label}</span>
                 </div>
                 <p className="text-[11.5px] leading-relaxed text-stone-600 mt-3">{stat.desc}</p>
               </div>
@@ -310,7 +310,7 @@ export default function ProblemsSection() {
           un client, auquel cas il faut son accord pour la citer.
           Format attendu : « Source — Etude, organisme, annee. »
         */}
-        <p className="mt-6 text-center text-[11px] leading-relaxed text-stone-500">
+        <p className="mt-6 text-center text-[11px] leading-relaxed text-stone-600">
           <span className="font-semibold">Sources</span> — chiffres issus des
           retours d&apos;expérience Industry X.0 sur des déploiements
           industriels. Références détaillées sur demande.

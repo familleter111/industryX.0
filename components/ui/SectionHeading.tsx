@@ -80,7 +80,14 @@ export default function SectionHeading({
         }`}
       >
         {title}
-        {accent && <span className="text-gold"> {accent}</span>}
+        {/* Sur fond sombre l'or de marque est a 8,56:1 ; sur fond clair il
+            tombe a 2,04:1. Le role est le meme, la couleur ne peut pas l'etre. */}
+        {accent && (
+          <span className={tone === 'dark' ? 'text-gold' : 'text-gold-deep'}>
+            {' '}
+            {accent}
+          </span>
+        )}
       </h2>
 
       {subtitle && (

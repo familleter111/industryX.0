@@ -7,6 +7,7 @@ import {
   ArrowRight,
   PlayCircle,
   CheckCircle2,
+  ChevronDown,
 } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { CLIENT_LOGOS } from '@/lib/data/clientLogos'
@@ -31,11 +32,16 @@ const PILLS = [
 export default function Hero() {
   const m = useMotion()
   return (
-    <section className="relative overflow-hidden bg-cream pt-16 sm:pt-20 lg:pt-28 pb-6 lg:pb-8">
+    <section className="relative overflow-hidden bg-cream pt-[106px] sm:pt-[114px] lg:pt-28 pb-6 lg:pb-8">
       {/* Le Hero n'utilise pas <Section> : son padding haut degage la navbar
           fixe et son padding bas est volontairement asymetrique, deux
           contraintes que l'echelle de rythme ne doit pas connaitre. Le fond,
-          lui, suit l'alternance. */}
+          lui, suit l'alternance.
+
+          Le padding haut est superieur aux 82 px de la navbar fixe : en
+          dessous, le badge passait sous la barre au chargement, sans scroll
+          pour l'en sortir. Valeur arbitraire assumee — elle suit la hauteur
+          de la navbar, pas l'echelle d'espacement. */}
       {/* BACKGROUND — mesh animé avec parallax léger au scroll */}
       <AnimatedMeshBackground
         gradient={tokens.gradient.section}
@@ -61,9 +67,9 @@ export default function Hero() {
 
           <div
             className="
-              mb-6 inline-flex items-center gap-2
+              mb-6 inline-flex max-w-full items-center gap-2
               rounded-full border
-              px-4 py-2 sm:px-5 sm:py-2.5
+              px-3.5 py-2 sm:px-5 sm:py-2.5
             "
             style={{
               background: 'rgba(255,255,255,0.74)',
@@ -77,7 +83,7 @@ export default function Hero() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
             </span>
 
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] text-stone-500">
+            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-subtle">
               Plateforme d&apos;intelligence opérationnelle
             </span>
           </div>
@@ -87,7 +93,7 @@ export default function Hero() {
           <h1 className="font-black leading-[1.04] tracking-[-0.06em] text-gray-900">
             {/* LIGNE 1 */}
             <span
-              className="block whitespace-nowrap"
+              className="block sm:whitespace-nowrap"
               style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               Vos opérations
@@ -95,7 +101,7 @@ export default function Hero() {
 
             {/* LIGNE 2 */}
             <span
-              className="block whitespace-nowrap"
+              className="block sm:whitespace-nowrap"
               style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               sont complexes.
@@ -103,7 +109,7 @@ export default function Hero() {
 
             {/* LIGNE 3 */}
             <span
-              className="mt-3 block whitespace-nowrap"
+              className="mt-3 block sm:whitespace-nowrap"
               style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               Nous les transformons
@@ -111,13 +117,18 @@ export default function Hero() {
 
             {/* LIGNE 4 */}
             <span
-              className="block whitespace-nowrap font-black"
+              className="block font-black sm:whitespace-nowrap"
               style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               en{' '}
+              {/* `gold.deep`, pas `gold.DEFAULT` : l'or de marque tombe a
+                  2,04:1 sur le creme, quand le seuil du texte large est a 3:1.
+                  Meme teinte, meme saturation, luminosite plus basse — voir le
+                  contrat de contraste dans lib/tokens.ts. Le halo, lui, garde
+                  l'or de marque : c'est une lueur, pas du texte. */}
               <span
                 style={{
-                  color: tokens.color.gold.DEFAULT,
+                  color: tokens.color.gold.deep,
                   textShadow: '0 10px 30px rgba(218,162,80,0.16)',
                 }}
               >
@@ -291,12 +302,41 @@ export default function Hero() {
         viewport={m.viewport}
         className="relative z-10 mt-8 w-full sm:mt-12"
       >
-        <p className="mb-4 text-center text-[13px] text-stone-500">
+        <p className="mb-4 text-center text-[13px] text-stone-600">
           Ils nous font confiance
         </p>
 
         <LogoMarquee logos={CLIENT_LOGOS} />
       </motion.div>
+
+      {/*
+        AFFORDANCE DE SCROLL.
+
+        Le Hero n'est pas contraint a 100vh — il n'a ni `min-h-screen` ni
+        `100dvh` — et sous 1024 px il depasse deja la fenetre : la coupure du
+        contenu suffit alors a dire qu'il y a une suite. C'est au-dessus, sur
+        les grands ecrans, que la bande de logos peut tomber pile en bas de
+        fenetre et donner une fin nette. D'ou `hidden lg:flex`.
+
+        `aria-hidden` et `pointer-events-none` : purement decoratif, aucune
+        cible de plus au clavier, aucun mot de plus a la synthese vocale. En
+        `absolute`, il ne prend pas de place dans le flux — la mise en page
+        est inchangee.
+
+        `animate-bounce` est une animation Tailwind native : sous
+        `prefers-reduced-motion` la regle globale de globals.css la ramene a
+        0,01 ms et le chevron reste immobile.
+      */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-4 z-10 hidden justify-center lg:flex"
+      >
+        <ChevronDown
+          size={22}
+          strokeWidth={2.5}
+          className="animate-bounce text-subtle"
+        />
+      </div>
     </section>
   )
 }

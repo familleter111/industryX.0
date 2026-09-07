@@ -327,11 +327,11 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           md:flex-row
           "
         >
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-white/50">
             © 2026 Industry X.0 — Tous droits réservés
           </p>
 
-          <div className="flex items-center gap-3 text-xs text-white/40">
+          <div className="flex items-center gap-3 text-xs text-white/50">
             <span>Startup Act 🇹🇳</span>
 
             <div className="h-1 w-1 rounded-full bg-white/20" />
