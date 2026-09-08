@@ -12,6 +12,8 @@
  * passer `status` à 'published'.
  */
 
+import type { LogoAsset } from '@/lib/data/logoSizing'
+
 export type Testimonial = {
   quote: string
   /** Fonction de la personne citée. */
@@ -20,8 +22,12 @@ export type Testimonial = {
   sector: string
   /** `alt` d'une entrée CLIENT_LOGOS, ou null si aucun logo n'est disponible. */
   logoAlt: string | null
-  /** Logo hors dossier /public/logos, en dépannage. */
-  fallbackLogo?: string
+  /**
+   * Logo hors dossier /public/logos : le client témoigne sans figurer au
+   * bandeau « ils nous font confiance », son fichier n'a donc pas sa place
+   * dans CLIENT_LOGOS. Même dimensionnement optique que les autres.
+   */
+  fallbackLogo?: LogoAsset
   color: string
   rating: number
   status: 'published' | 'draft'
@@ -55,10 +61,18 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'CIPA nous a permis d’obtenir une meilleure visibilité sur nos opérations techniques et nos performances industrielles. Les outils d’analyse et le suivi intelligent des interventions ont réduit les temps d’arrêt et amélioré l’efficacité globale de nos équipes.',
     author: 'Directeur Technique',
-    company: 'Bakou Motors',
+    company: 'Bako Motors',
     sector: 'Industrie automobile',
-    // Aucun logo Bakou Motors dans /public/logos.
+    // Bako ne figure pas au bandeau clients : son logo vit à la racine de
+    // /public, hors de CLIENT_LOGOS. Marge du fichier relevée sur les pixels
+    // non transparents : le mark occupe 58 % du cadre.
     logoAlt: null,
+    fallbackLogo: {
+      src: '/bako.png',
+      alt: 'Bako Motors',
+      contentWidth: 0.58,
+      contentHeight: 0.59,
+    },
     color: '#3B82F6',
     rating: 5,
     status: 'published',

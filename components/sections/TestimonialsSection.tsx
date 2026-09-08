@@ -17,11 +17,15 @@ import Section from '@/components/ui/Section'
  */
 const testimonials = getTestimonials(false)
 
-/* Vignette du client : logo si /public/logos en contient un, initiales sinon.
+/* Vignette du client : son entrée CLIENT_LOGOS, à défaut le `fallbackLogo` du
+   témoignage (client qui ne figure pas au bandeau clients), et les initiales
+   seulement s'il n'existe aucun fichier.
    `logoFrameWidth` inscrit le contenu réel dans une boîte commune pour que
    tous les logos paraissent de la même taille. */
 function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
-  const logo = testimonial.logoAlt ? findClientLogo(testimonial.logoAlt) : undefined
+  const logo = testimonial.logoAlt
+    ? findClientLogo(testimonial.logoAlt)
+    : testimonial.fallbackLogo
 
   return (
     <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-2 ring-white shadow-md">
