@@ -91,20 +91,31 @@ export function RevealGroup({
   )
 }
 
-/** Enfant d'un `RevealGroup`. Ne se declenche pas seul. */
+/**
+ * Enfant d'un `RevealGroup`. Ne se declenche pas seul.
+ *
+ * `as` choisit la balise rendue. Sans lui, animer les elements d'une liste
+ * imposait d'intercaler un <div> entre le <ul> et ses <li> : la liste cesse
+ * alors d'en etre une pour le navigateur comme pour la synthese vocale, qui
+ * n'annonce plus « liste de 3 elements ». `display: contents` corrige la mise
+ * en page, pas la structure du document.
+ */
 export function RevealItem({
   variant = 'up',
+  as = 'div',
   className,
   children,
 }: {
   variant?: RevealVariant
+  as?: 'div' | 'li'
   className?: string
   children: ReactNode
 }) {
   const { v } = useVariant(variant)
+  const Tag = as === 'li' ? motion.li : motion.div
   return (
-    <motion.div variants={v} className={className}>
+    <Tag variants={v} className={className}>
       {children}
-    </motion.div>
+    </Tag>
   )
 }

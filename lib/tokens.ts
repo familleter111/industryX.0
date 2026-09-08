@@ -116,6 +116,13 @@ export const tokens = {
        * Meme teinte et meme saturation que les deux autres. On ne descend a
        * cette luminosite que quand la taille l'impose : sur un grand titre,
        * `deep` suffit et conserve plus d'eclat.
+       *
+       * ATTENTION — ces ratios valent sur les fonds NEUTRES du site, creme et
+       * blanc. Sur une surface deja teintee d'or, ils ne tiennent plus : un
+       * `bg-gold/[0.08]` pose sur creme donne #F2EDE1, ou `ink` tombe a
+       * 4,40:1 et echoue. Sur ces fonds-la, c'est `gold-800` (6,24:1) qu'il
+       * faut — c'est deja ce qu'emploie la pastille du mega menu sur
+       * `gold-tint`. Constate par l'audit axe-core des pages CIPA.
        */
       ink: '#93641F',
 

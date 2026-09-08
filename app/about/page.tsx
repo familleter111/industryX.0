@@ -118,7 +118,7 @@ export default function AboutPage() {
         accent="Industry X.0"
         description="Nous accélérons la transformation digitale des usines et des entreprises industrielles en démultipliant le potentiel et l’efficacité de leurs équipes grâce à la technologie."
         primaryCta={{ label: 'Demander une démo', href: '/contact' }}
-        secondaryCta={{ label: 'Découvrir CIPA', href: '/platform' }}
+        secondaryCta={{ label: 'Découvrir CIPA', href: '/plateforme' }}
       />
 
       {/* ==================== NOS VALEURS ==================== */}

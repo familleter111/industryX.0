@@ -9,36 +9,13 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { LINKEDIN_URL } from '@/lib/data/socials'
+import {
+  COMPANY,
+  FOOTER_COLUMNS,
+  FOOTER_LEGAL,
+  FOOTER_TAGLINE,
+} from '@/content/shared'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
-
-const footerLinks = [
-  {
-    title: 'Produit',
-    items: [
-      'Fonctionnalités',
-      'Solutions',
-      'Sécurité',
-      'Mises à jour',
-    ],
-  },
-  {
-    title: 'Entreprise',
-    items: [
-      'À propos',
-      'Notre équipe',
-      'Blog',
-      'Contact',
-    ],
-  },
-  {
-    title: 'Légal',
-    items: [
-      'Confidentialité',
-      'Conditions',
-      'Cookies',
-    ],
-  },
-]
 
 // 'full' = footer complet (page d'accueil) — 'compact' = logos + informations + copyright (pages secteurs)
 type FooterProps = {
@@ -105,11 +82,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
             {!isCompact && (
               <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
-                Plateforme de transformation digitale dédiée à
-                l’industrie africaine et méditerranéenne,
-                conçue pour accélérer l’adoption des
-                technologies Industrie 4.0 et optimiser les
-                performances industrielles.
+                {FOOTER_TAGLINE}
               </p>
             )}
 
@@ -119,7 +92,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
           {!isCompact && (
           <div className="grid grid-cols-3 gap-8">
-            {footerLinks.map((section) => (
+            {FOOTER_COLUMNS.map((section) => (
               <div key={section.title}>
                 <div className="mb-5">
                   <h3 className="text-sm font-bold uppercase tracking-wide">
@@ -131,9 +104,9 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
                 <ul className="space-y-4">
                   {section.items.map((item) => (
-                    <li key={item}>
+                    <li key={item.label}>
                       <Link
-                        href="/"
+                        href={item.href}
                         className="
                         group flex items-center gap-2
                         text-sm
@@ -152,7 +125,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                           "
                         />
 
-                        <span>{item}</span>
+                        <span>{item.label}</span>
                       </Link>
 
                       <div className="mt-3 h-px w-full bg-white/10" />
@@ -202,9 +175,9 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <p className="text-sm leading-6 text-white/75">
-                Cité les pins,
+                {COMPANY.address.lines[0]},
                 <br />
-                Tunis 1053
+                {COMPANY.address.lines[1]}
               </p>
             </div>
           </div>
@@ -232,7 +205,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <p className="text-sm text-white/75">
-                +216 90 199 823
+                {COMPANY.phone}
               </p>
             </div>
           </div>
@@ -260,7 +233,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <p className="text-sm text-white/75">
-                contact@industryx0.pro
+                {COMPANY.email}
               </p>
             </div>
           </div>
@@ -274,8 +247,14 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <div className="flex gap-3">
+                {/* TODO — remplacer par l'URL reelle de la page Facebook.
+                    Le lien pointe sur l'accueil faute de mieux ; il porte au
+                    moins un nom accessible, sans quoi une synthese vocale
+                    n'annoncait qu'un « lien » anonyme dans l'ordre de
+                    tabulation. Le voisin LinkedIn en avait un, pas celui-ci. */}
                 <a
                   href="/"
+                  aria-label="Industry X.0 sur Facebook"
                   className="
                   flex h-12 w-12 items-center justify-center
                   rounded-2xl
@@ -288,7 +267,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                   hover:text-yellow-400
                   "
                 >
-                  <Facebook size={18} />
+                  <Facebook size={18} aria-hidden />
                 </a>
 
                 <a
@@ -328,15 +307,18 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           "
         >
           <p className="text-xs text-white/50">
-            © 2026 Industry X.0 — Tous droits réservés
+            {FOOTER_LEGAL.copyright}
           </p>
 
           <div className="flex items-center gap-3 text-xs text-white/50">
-            <span>Startup Act 🇹🇳</span>
-
-            <div className="h-1 w-1 rounded-full bg-white/20" />
-
-            <span>Designed in Tunis</span>
+            {FOOTER_LEGAL.mentions.map((mention, index) => (
+              <span key={mention} className="flex items-center gap-3">
+                {index > 0 && (
+                  <span aria-hidden className="h-1 w-1 rounded-full bg-white/20" />
+                )}
+                {mention}
+              </span>
+            ))}
           </div>
         </div>
       </div>

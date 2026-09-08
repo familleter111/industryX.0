@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "check:hex": "node scripts/check-hex.mjs"
+    "check:hex": "node scripts/check-hex.mjs",
+    "check:todos": "node scripts/collect-todos.mjs --check",
+    "todos": "node scripts/collect-todos.mjs",
+    "a11y": "node scripts/a11y-audit.mjs"
   },
   "dependencies": {
     "next": "14.2.35",

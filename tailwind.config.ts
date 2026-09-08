@@ -8,6 +8,11 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './lib/**/*.{js,ts,jsx,tsx,mdx}',
+    // Contenu editorial des pages marketing. Il ne porte aujourd'hui aucune
+    // classe — que du texte et des references d'icones —, mais le jour ou une
+    // entree en portera une, elle sera generee au lieu de disparaitre
+    // silencieusement de la feuille de style.
+    './content/**/*.{ts,tsx}',
     // Sections désactivées : conservées pour référence, exclues du CSS généré.
     '!./components/_archive/**',
   ],
