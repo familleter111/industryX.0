@@ -7,6 +7,9 @@ import {
   ChevronRight,
   ChevronLeft,
   ShieldCheck,
+  Zap,
+  Gauge,
+  BadgeCheck,
   CheckCircle2,
   XCircle,
   Leaf,
@@ -25,8 +28,8 @@ import {
   Workflow
 } from 'lucide-react'
 import Image from 'next/image'
+import { viewport } from '@/lib/motion'
 import Footer from '@/components/layout/Footer'
-import heroStyles from './hero.module.css'
 
 // Animation réutilisable
 const fadeInUp = {
@@ -245,17 +248,17 @@ function VisualPanel({ slide }: { slide: CarouselSlide }) {
       <div className="flex-1 bg-white rounded-2xl border border-black/[0.06] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-subtle">
             {slide.tag}
           </span>
-          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-slate-500 font-bold px-2 py-0.5 rounded-full">
+          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-subtle font-bold px-2 py-0.5 rounded-full">
             Données live
           </span>
         </div>
         <div className="flex-1 flex items-center">
           <SlideVisualRenderer visual={slide.visual} />
         </div>
-        <div className="mt-3 text-[10px] text-slate-400 text-center italic leading-snug">
+        <div className="mt-3 text-[10px] text-subtle text-center italic leading-snug">
           {slide.visualCaption}
         </div>
       </div>
@@ -303,18 +306,18 @@ function FdaFlowVisual() {
           >
             <div
               className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
-                s.state === 'todo' ? 'bg-slate-100 text-slate-400' : 'bg-gold/10 text-gold'
+                s.state === 'todo' ? 'bg-slate-100 text-subtle' : 'bg-gold/10 text-gold'
               }`}
             >
               {s.n}
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-slate-400' : 'text-dark'}`}>{s.title}</h4>
-              <p className="text-[10px] text-slate-500 truncate">{s.sub}</p>
+              <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-subtle' : 'text-dark'}`}>{s.title}</h4>
+              <p className="text-[10px] text-subtle truncate">{s.sub}</p>
             </div>
             {s.state === 'done' && <ShieldCheck size={16} className="text-emerald-500 shrink-0" />}
             {s.state === 'active' && (
-              <span className="text-[9px] font-bold text-gold px-2 py-0.5 bg-gold/10 rounded-full shrink-0">En cours</span>
+              <span className="text-[9px] font-bold text-gold-ink px-2 py-0.5 bg-gold/10 rounded-full shrink-0">En cours</span>
             )}
             {s.state === 'todo' && <Workflow size={16} className="text-slate-300 shrink-0" />}
           </motion.div>
@@ -457,7 +460,7 @@ function SupplyChainVisual() {
               </motion.div>
               <div className="text-center">
                 <div className="text-[10px] font-bold text-dark">{step.title}</div>
-                <div className="text-[8px] text-slate-400 bg-slate-100 px-1 py-0.5 rounded font-mono mt-0.5">{step.id}</div>
+                <div className="text-[8px] text-subtle bg-slate-100 px-1 py-0.5 rounded font-mono mt-0.5">{step.id}</div>
               </div>
             </div>
           )
@@ -467,7 +470,7 @@ function SupplyChainVisual() {
         <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold flex items-center justify-center shrink-0">
           <Eye size={15} />
         </div>
-        <p className="text-[10px] text-slate-500 leading-snug">
+        <p className="text-[10px] text-subtle leading-snug">
           <span className="font-bold text-dark">Traçabilité complète :</span>{' '}
           {"Généalogie lot à lot ascendante et descendante instantanée pour répondre aux exigences réglementaires de rappel."}
         </p>
@@ -487,10 +490,10 @@ function LaunchTimelineVisual() {
   return (
     <div className="w-full py-2 flex flex-col gap-3">
       <div className="flex items-center gap-4 text-[9px] font-bold">
-        <span className="flex items-center gap-1.5 text-slate-400">
+        <span className="flex items-center gap-1.5 text-subtle">
           <span className="w-3 h-2 rounded-sm bg-slate-200 inline-block" /> Avant CIPA
         </span>
-        <span className="flex items-center gap-1.5 text-gold">
+        <span className="flex items-center gap-1.5 text-gold-ink">
           <span className="w-3 h-2 rounded-sm bg-gold inline-block" /> Avec CIPA
         </span>
       </div>
@@ -505,7 +508,7 @@ function LaunchTimelineVisual() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: `${p.after}%` }}
-                viewport={{ once: true }}
+                viewport={viewport}
                 transition={{ duration: 0.9, delay: i * 0.12 }}
                 className="bg-gold h-full rounded-full"
               />
@@ -530,15 +533,15 @@ function DashboardVisual() {
       <div className="grid grid-cols-2 gap-2">
         {tiles.map((t, i) => (
           <div key={i} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
-            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wide truncate">{t.label}</div>
+            <div className="text-[9px] text-subtle font-bold uppercase tracking-wide truncate">{t.label}</div>
             <div className="flex items-baseline gap-1.5 mt-0.5">
               <span className="text-base font-black font-display text-dark">{t.value}</span>
-              <span className={`text-[9px] font-bold ${t.good ? 'text-emerald-600' : 'text-red-500'}`}>{t.trend}</span>
+              <span className={`text-[9px] font-bold ${t.good ? 'text-emerald-700' : 'text-red-600'}`}>{t.trend}</span>
             </div>
           </div>
         ))}
       </div>
-      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-[9px] text-slate-500">
+      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-[9px] text-subtle">
         <span className="font-bold text-dark block mb-1">Rapport de Piste d’Audit (Audit Trail) :</span>
         {"Système verrouillé, double signature électronique validée et horodatée sur la blockchain industrielle."}
       </div>
@@ -619,10 +622,10 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
             className={`group flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold border transition-all duration-300 ${
               i === index
                 ? 'bg-[#111827] text-white border-[#111827] shadow-lg'
-                : 'bg-white/70 text-slate-500 border-slate-200 hover:border-gold hover:text-dark'
+                : 'bg-white/70 text-subtle border-slate-200 hover:border-gold hover:text-dark'
             }`}
           >
-            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold/70'}`}>{s.num}</span>
+            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold-ink'}`}>{s.num}</span>
             <span className="hidden sm:inline max-w-[180px] truncate">{s.tag}</span>
           </button>
         ))}
@@ -650,28 +653,43 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
               <div className="lg:col-span-6 flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-3xl font-black font-display text-gold/30">{slide.num}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B6842B]">{slide.tag}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold-ink">{slide.tag}</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black font-display text-[#111827] tracking-tight mb-4 leading-snug">
                   {slide.title}
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-6">{slide.desc}</p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                  <div className="p-4 rounded-xl bg-white border border-red-100">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-red-400 mb-2.5">Avant CIPA</div>
-                    <ul className="space-y-2">
+                <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-0 mb-6">
+                  <div className="relative rounded-2xl sm:rounded-r-none border border-red-100 sm:border-r-0 bg-gradient-to-br from-red-50/70 to-white p-4 sm:p-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100">
+                        <XCircle size={13} className="text-red-600" />
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">Avant CIPA</span>
+                    </div>
+                    <ul className="space-y-2.5">
                       {slide.before.map((b, i) => (
-                        <li key={i} className="flex items-start gap-2 text-[11px] text-slate-500 leading-snug">
+                        <li key={i} className="flex items-start gap-2 text-[11px] text-subtle leading-snug">
                           <XCircle size={13} className="text-red-300 shrink-0 mt-[1px]" />
                           {b}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className="p-4 rounded-xl bg-white border border-emerald-100">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-500 mb-2.5">Avec CIPA</div>
-                    <ul className="space-y-2">
+
+                  <div className="hidden sm:flex absolute left-1/2 top-1/2 z-10 h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200 bg-white shadow-[0_6px_16px_rgba(0,0,0,0.08)]">
+                    <ArrowRight size={15} className="text-emerald-500" />
+                  </div>
+
+                  <div className="relative rounded-2xl sm:rounded-l-none border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/70 to-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(16,185,129,0.08)]">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                        <CheckCircle2 size={13} className="text-emerald-700" />
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Avec CIPA</span>
+                    </div>
+                    <ul className="space-y-2.5">
                       {slide.after.map((a, i) => (
                         <li key={i} className="flex items-start gap-2 text-[11px] text-slate-600 leading-snug">
                           <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-[1px]" />
@@ -682,13 +700,16 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
                   </div>
                 </div>
 
-                <div className="mt-auto grid grid-cols-2 gap-3">
-                  {slide.kpis.map((k, i) => (
-                    <div key={i} className="p-3.5 rounded-xl bg-white border border-black/[0.05] shadow-sm">
-                      <div className="text-xl sm:text-2xl font-black font-display text-gold">{k.value}</div>
-                      <div className="text-[10px] text-slate-500 mt-0.5 leading-snug">{k.label}</div>
-                    </div>
-                  ))}
+                <div className="mt-auto">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-subtle">Résultats mesurés</p>
+                  <div className="grid grid-cols-2 divide-x divide-black/[0.06] overflow-hidden rounded-2xl border border-black/[0.05] bg-gradient-to-br from-gold/[0.06] to-white shadow-sm">
+                    {slide.kpis.map((k, i) => (
+                      <div key={i} className="p-4">
+                        <div className="text-xl sm:text-2xl font-black font-display text-gold-deep">{k.value}</div>
+                        <div className="text-[10px] text-subtle mt-0.5 leading-snug">{k.label}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -719,7 +740,7 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
         <button
           onClick={() => setPlaying(!playing)}
           aria-label={playing ? 'Mettre en pause' : 'Lancer le défilement'}
-          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:border-gold hover:text-gold transition-all"
+          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-subtle hover:border-gold hover:text-gold transition-all"
         >
           {playing ? <Pause size={12} /> : <Play size={12} />}
         </button>
@@ -735,7 +756,7 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
             />
           ))}
         </div>
-        <span className="text-[10px] font-bold text-slate-400 tabular-nums">
+        <span className="text-[10px] font-bold text-subtle tabular-nums">
           {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
         </span>
         <span className="sr-only">{accentLabel}</span>
@@ -752,129 +773,144 @@ export default function PharmaPage() {
   return (
     <main className="min-h-screen bg-[#F7F7F6] text-dark overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold-900">
 
-      {/* 1. HERO — CIPA transforme la donnée terrain en performance durable */}
-      <section className={`${heroStyles.hero} relative overflow-hidden bg-white pt-[82px] pb-6`}>
-        <div className={`${heroStyles.content} relative lg:min-h-[calc(min(40.5vw,570px,100svh_-_150px)_-_2.5rem)]`}>
-          <div className={`${heroStyles.grid} mx-auto grid w-full max-w-[1400px] grid-cols-1 items-start gap-8 px-5 sm:px-7 lg:grid-cols-12 lg:gap-6 lg:px-10`}>
-            {/* ---------- Colonne texte ---------- */}
-            <div className={`${heroStyles.copy} relative z-10 pt-10 lg:col-span-6 lg:pt-[clamp(2rem,3vw,3rem)] lg:pb-4`}>
-              <div className={heroStyles.intro}>
-                <motion.div
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-flex items-center gap-3 rounded-full border border-[#EDE3D2] bg-white/80 py-1.5 pl-1.5 pr-5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] backdrop-blur"
-                >
-                  <span className="h-5 w-1.5 rounded-full bg-[#DAA250]" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#57534E] sm:text-[11px]">
-                    Pharma / Biotech / Life Sciences
-                  </span>
-                </motion.div>
+      {/* 1. HERO + 3 BÉNÉFICES CLÉS */}
+      <section className="relative lg:min-h-screen lg:max-h-[1000px] flex flex-col justify-center pt-24 pb-10 lg:pt-28 lg:pb-8 overflow-hidden bg-mesh-light">
+        <div className="absolute top-1/4 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className={`${heroStyles.title} mt-6 font-display text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-dark sm:text-[44px] lg:text-[clamp(34px,3.85vw_-_4px,50px)]`}
-                >
-                  CIPA transforme
-                  <br />
-                  la <span className="text-[#DAA250]">donnée terrain</span>
-                  <br />
-                  en performance durable
-                </motion.h1>
+        <div className="max-w-7xl w-full mx-auto px-5 sm:px-7 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            <div className="lg:col-span-7 flex flex-col items-start text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-bold uppercase tracking-widest text-gold-ink mb-4"
+              >
+                <Zap size={11} className="text-gold-deep" />
+                {"Secteur d'activité"}
+              </motion.div>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="mt-6 max-w-[34rem] text-[14px] leading-[1.75] text-[#57534E] sm:text-[15.5px]"
-                >
-                  {"Une plateforme intégrée pour orchestrer la qualité, la production, la maintenance et la R&D dans les environnements réglementés, et accélérer l'amélioration continue grâce à l'IA."}
-                </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-[26px] sm:text-[32px] lg:text-[38px] xl:text-[42px] font-black font-display text-dark tracking-tight leading-[1.12] mb-4"
+              >
+                {"Comment CIPA transforme l'industrie"}{' '}
+                <span className="text-gold-deep">
+                  {"pharmaceutique & des sciences de la vie"}
+                </span>
+              </motion.h1>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                  className="mt-8 flex flex-wrap items-center gap-3.5"
-                >
-                  <a
-                    href="/contact"
-                    className="group inline-flex items-center gap-3 rounded-full bg-[#111827] px-7 py-4 text-[14px] font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
-                  >
-                    Demander une démonstration
-                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                  </a>
-                  <a
-                    href="#core-ops"
-                    className="group inline-flex items-center gap-2.5 rounded-full border border-[#E4DED2] bg-white px-7 py-4 text-[14px] font-semibold text-[#292524] shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_10px_26px_rgba(218,162,80,0.18)]"
-                  >
-                    {"Voir les cas d'usage"}
-                    <ChevronRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </a>
-                </motion.div>
-              </div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-[13px] sm:text-[14px] leading-relaxed text-slate-600 mb-6 max-w-xl"
+              >
+                {"Les industries des sciences de la vie opèrent dans des environnements rigoureusement réglementés. CIPA fournit une plateforme digitale complète spécialement conçue pour les secteurs de la pharmacie et des biotechnologies afin de digitaliser les processus et garantir la conformité."}
+              </motion.p>
 
-              <ul className={`${heroStyles.indicators} mt-10 grid grid-cols-3 gap-x-3 sm:gap-x-6`}>
-                {[
-                  'Données unifiées',
-                  'Processus maîtrisés',
-                  'Conformité renforcée'
-                ].map((title) => (
-                  <li key={title} className="flex items-start gap-2 sm:items-center">
-                    <CheckCircle2 size={15} aria-hidden="true" className="shrink-0 text-[#22C55E]" />
-                    <span className="text-[13px] font-medium text-[#57534E]">{title}</span>
-                  </li>
-                ))}
-              </ul>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="flex flex-wrap gap-3"
+              >
+                <a
+                  href="/contact"
+                  className="group inline-flex items-center gap-2 rounded-full bg-[#111827] px-5 py-2.5 text-[13px] font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
+                >
+                  Demander une démo
+                  <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+                <a
+                  href="#core-ops"
+                  className="group inline-flex items-center gap-2 rounded-full border border-slate-350 bg-white/60 px-5 py-2.5 text-[13px] font-semibold text-[#44403C] backdrop-blur transition-all duration-300 hover:border-gold hover:bg-white"
+                >
+                  Découvrir les solutions
+                  <ChevronRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                </a>
+              </motion.div>
             </div>
 
-            {/* ---------- Colonne visuel ---------- */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className={`${heroStyles.visual} relative -mx-5 sm:-mx-7 lg:absolute lg:right-0 lg:top-0 lg:m-0 lg:w-[54%] lg:max-w-[min(760px,calc((100svh_-_150px)*4/3))]`}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-5 flex justify-center lg:justify-end relative"
             >
-              <div className={`${heroStyles.imageFrame} relative w-full`}>
+              <div className="absolute -inset-3 border border-dashed border-gold/20 rounded-full animate-[spin_100s_linear_infinite]" />
+              <div className="absolute -inset-7 border border-gold/10 rounded-full pointer-events-none" />
+
+              <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] xl:w-[400px] xl:h-[400px] rounded-full overflow-hidden border-[6px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
                 <Image
-                  src="/Secteur/pharma22.png"
-                  alt="Plateforme CIPA en salle blanche pharmaceutique : tableau de bord qualité, conformité et assistance IA"
-                  width={1448}
-                  height={1086}
+                  src="/Secteur/pharma_hero.png"
+                  alt="Laboratoire et production pharmaceutique Industry X.0"
+                  fill
                   priority
-                  sizes="(max-width: 1023px) 100vw, (max-width: 1439px) 54vw, 57vw"
-                  className={`${heroStyles.image} block h-auto w-full select-none object-contain`}
+                  className="object-cover"
                 />
-                <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-[6%] bg-gradient-to-r from-white to-transparent" />
-                <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[6%] bg-gradient-to-t from-white to-transparent" />
+              </div>
+
+              <div className="absolute -bottom-1 -left-1 sm:left-2 bg-white/90 backdrop-blur border border-gold/30 rounded-xl p-2.5 shadow-xl flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold-deep flex items-center justify-center shrink-0">
+                  <ShieldCheck size={16} />
+                </div>
+                <div>
+                  <div className="text-[9px] font-bold text-subtle uppercase tracking-wider">Normes GMP & FDA</div>
+                  <div className="text-[12px] font-extrabold text-dark">21 CFR Part 11 Validé</div>
+                </div>
               </div>
             </motion.div>
           </div>
-        </div>
 
-        <div className={`${heroStyles.footer} relative z-10 mx-auto w-full max-w-[1400px] px-5 sm:px-7 lg:px-10`}>
-          {/* ---------- Barre de bas de héros ---------- */}
-          <div className="mt-4 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1">
-                <span className="h-1.5 w-9 rounded-full bg-[#DAA250]" />
-                <span className="h-1.5 w-5 rounded-full bg-[#EBD3AC]" />
-                <span className="h-1.5 w-5 rounded-full bg-[#E7E2D8]" />
-              </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
-                {"De la conformité à l'excellence opérationnelle"}
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
-              {['Qualité', 'Production', 'Maintenance', 'R&D', 'Impact'].map((item, i) => (
-                <span key={item} className="flex items-center gap-2.5">
-                  {i > 0 && <span className="text-[#DAA250]">•</span>}
-                  {item}
-                </span>
-              ))}
+          <div className="mt-8 lg:mt-10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              {[
+                {
+                  icon: Gauge,
+                  value: '25%',
+                  label: "Temps de libération des lots",
+                  desc: "Grâce aux dossiers de lot électroniques (eBR) et à la validation des signatures en direct."
+                },
+                {
+                  icon: ShieldCheck,
+                  value: '90%',
+                  label: 'Réduction temps préparation audit',
+                  desc: "Rapports automatisés et accès instantané à la documentation qualité."
+                },
+                {
+                  icon: BadgeCheck,
+                  value: '50%',
+                  label: 'Diminution des coûts de conformité',
+                  desc: "Standardisation et simplification de l'assurance qualité et des SOP."
+                }
+              ].map((stat, i) => {
+                const Icon = stat.icon
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                    whileHover={{ y: -3 }}
+                    className="bg-white rounded-xl px-4 py-4 border border-[#ECE7DD] shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center transition-shadow hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)]"
+                  >
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Icon size={19} className="text-gold-deep" strokeWidth={1.75} />
+                      <span className="text-[24px] font-black font-display text-gold-deep leading-none">
+                        {stat.value}
+                      </span>
+                    </div>
+                    <div className="text-[10px] font-black text-dark uppercase tracking-wider mb-1.5 leading-tight">
+                      {stat.label}
+                    </div>
+                    <p className="text-[11px] leading-snug text-subtle">{stat.desc}</p>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -888,7 +924,7 @@ export default function PharmaPage() {
             className="bg-dark rounded-2xl px-6 py-5 md:px-10 flex flex-col md:flex-row items-center gap-5 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-mesh-dark opacity-30" />
-            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-[#DAA250] flex items-center justify-center shrink-0 relative z-10">
+            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-gold-deep flex items-center justify-center shrink-0 relative z-10">
               <ShieldCheck size={19} />
             </div>
             <p className="text-[13px] sm:text-sm text-white/85 leading-relaxed relative z-10 text-center md:text-left">
@@ -904,11 +940,11 @@ export default function PharmaPage() {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"4 façons dont CIPA renforce les "}</span>
-              <span className="text-[#DAA250] md:block">
+              <span className="text-gold-deep md:block">
                 opérations pharmaceutiques essentielles
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
               {"Naviguez entre les cartes pour explorer chaque levier : les données, les visuels et les comparaisons avant/après CIPA."}
             </p>
           </div>
@@ -923,11 +959,11 @@ export default function PharmaPage() {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"3 façons dont CIPA accélère la "}</span>
-              <span className="text-[#DAA250] md:block">
+              <span className="text-gold-deep md:block">
                 sécurité produit, l’innovation et la performance durable
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
               {"Trois leviers de croissance, illustrés par des données concrètes et des résultats mesurés chez nos clients."}
             </p>
           </div>
@@ -987,9 +1023,9 @@ export default function PharmaPage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="text-3xl sm:text-4xl font-black font-display text-dark tracking-tight mb-3">
-              Comment <span className="text-gold">CIPA</span> fonctionne
+              Comment <span className="text-gold-deep">CIPA</span> fonctionne
             </h2>
-            <p className="text-sm sm:text-[15px] text-slate-500">
+            <p className="text-sm sm:text-[15px] text-subtle">
               {"Cinq étapes, un cycle d'amélioration continue mesurable."}
             </p>
           </div>
@@ -1009,7 +1045,7 @@ export default function PharmaPage() {
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={viewport}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   className="relative z-10 flex flex-col items-center text-center"
                 >
@@ -1017,7 +1053,7 @@ export default function PharmaPage() {
                     <Icon size={22} />
                   </div>
                   <h4 className="text-sm font-black text-dark mb-1.5">{step.title}</h4>
-                  <p className="text-[11px] text-slate-500 leading-relaxed max-w-[190px]">{step.desc}</p>
+                  <p className="text-[11px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
                 </motion.div>
               )
             })}
