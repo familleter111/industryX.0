@@ -413,6 +413,54 @@ export type PdcaContent = {
  * envoie vers un interlocuteur different d'un commercial — une equipe
  * technique, ou la direction.
  */
+/**
+ * Un etat du circuit CAPA, rendu par `CapaPipeline`.
+ *
+ * Pas de compteur : le bloc montre la structure du circuit, pas son remplissage
+ * a un instant donne. Un compteur invente serait le genre de chiffre qu'on
+ * retrouve ensuite recopie dans une presentation client.
+ */
+export type PipelineStage = {
+  name: string
+  /** Ce que l'etat veut dire, en une ligne. Optionnel. */
+  hint?: string
+  /**
+   * Etat terminal du circuit. Rendu en creux plutot qu'en plein : ce qui est
+   * sorti du flux ne se lit pas comme ce qui y avance encore.
+   */
+  terminal?: boolean
+}
+
+export type PipelineContent = {
+  eyebrow?: string
+  title: string
+  accent?: string
+  subtitle?: string
+  stages: PipelineStage[]
+  /**
+   * Ce que la maquette montre, en toutes lettres. Obligatoire : le bloc est
+   * `aria-hidden`, cette phrase est le seul acces a son contenu pour qui ne le
+   * voit pas.
+   */
+  caption: string
+}
+
+/**
+ * Une affirmation posee seule sur un aplat sombre.
+ *
+ * Pour l'argument qu'une page veut rendre impossible a survoler. Sans carte,
+ * sans grille, sans chiffre : c'est la surface et le corps du texte qui
+ * portent l'emphase, pas un encadre de plus.
+ */
+export type StatementContent = {
+  eyebrow?: string
+  title: string
+  accent?: string
+  /** Un paragraphe par entree. Trois au plus, sinon ce n'est plus une affirmation. */
+  body: string[]
+  cta?: Cta
+}
+
 export type CalloutContent = {
   icon?: LucideIcon
   title: string

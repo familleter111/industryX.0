@@ -1,8 +1,10 @@
-import CapabilityShowcase from '@/components/sections/CapabilityShowcase'
+import CapaPipeline from '@/components/sections/CapaPipeline'
+import CapabilityList from '@/components/sections/CapabilityList'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import MarketingHero from '@/components/sections/MarketingHero'
-import MetricsShowcase from '@/components/sections/MetricsShowcase'
 import ProblemShowcase from '@/components/sections/ProblemShowcase'
+import RelatedPages from '@/components/sections/RelatedPages'
+import StatementBand from '@/components/sections/StatementBand'
 import JsonLd from '@/components/ui/JsonLd'
 import { NAVBAR_CLEARANCE } from '@/components/ui/Section'
 import SectionStack from '@/components/ui/SectionStack'
@@ -10,36 +12,34 @@ import { buildMetadata, softwareApplicationLd } from '@/lib/seo'
 import { nonConformitesCapa as capa } from '@/content/non-conformites-capa'
 
 /**
- * Non-conformites & CAPA — quatrieme page de la rubrique Solutions.
+ * Non-conformites & CAPA — la page centrale de la rubrique Solutions.
+ *
+ * C'est le circuit que tout le reste du produit alimente : un audit, une
+ * tournee qualite, un evenement ou un change control finissent tous en
+ * deviation, et une deviation finit en action assignee.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  QUATRE BLOCS, ET RIEN D'AUTRE
+ *  AUCUNE CARTE
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Ouverture, capacites, chiffres, FAQ. Les blocs que la page rendait en plus
- * — preuve ou conformite, maillage interne, encart de relance, et le bloc
- * propre a son sujet — ne sont plus rendus.
+ * Comme /solutions/amelioration-continue. Les blocs de cette page decrivent un
+ * circuit, c'est-a-dire un raisonnement : rendus en cartes, ils se balaient.
+ * A filets, ils se lisent. Les composants partages gardent leur forme en
+ * cartes pour les autres pages, sous `variant="cards"`.
  *
- * Leur contenu n'a pas ete supprime : il vit toujours dans le fichier de
- * contenu de la page, et le composant qui le rendait existe toujours. En
- * remettre un tient a une ligne de JSX. C'est le seul point a retenir avant
- * de croire ces pages amputees.
+ * ─────────────────────────────────────────────────────────────────────────
+ *  L'AFFIRMATION EST AU MILIEU, ET C'EST TOUT LE POINT
+ * ─────────────────────────────────────────────────────────────────────────
  *
- * Ce qui se perd tant qu'ils ne sont pas remis, et qui ne se voit pas a
- * l'ecran : le maillage interne entre Plateforme et Solutions, que les
- * moteurs suivaient pour relier les douze pages entre elles.
+ * `StatementBand` occupe la troisieme section a lui seul. Le lecteur vient de
+ * voir comment une deviation devient une action verifiee ; il n'a pas encore
+ * vu le circuit ni les reclamations. C'est le moment ou l'argument porte le
+ * plus : assez tard pour etre credible, assez tot pour eclairer ce qui suit.
  *
- * Quatre sections majeures : ouverture · reponse · chiffres · questions. Voir
- * `SectionStack` pour le regroupement.
- *
- * Le tableau des CAPA passe en enfant de `ProductShot`, comme le tableau de
- * bord de /plateforme/tableaux-de-bord : il a besoin du cadre, du chrome de
- * fenetre et de la legende que ce composant fournit deja.
- *
- * Le circuit des reclamations reste apres le contenu d'un dossier CAPA, et pas
- * avant : il ne se comprend que si l'on a d'abord vu le circuit interne dont il
- * est l'application a un cas particulier. Remonte dans la section « reponse »,
- * il se lirait comme un second sujet.
+ * Le bandeau ouvre sa propre section — imbrique dans un `SectionStack` clair,
+ * il perdrait son fond et son texte blanc — et il porte l'appel a l'action.
+ * C'est le seul de la page en dehors du hero, et il est place juste apres la
+ * phrase qui doit convaincre.
  */
 export const metadata = buildMetadata(capa.seo)
 
@@ -48,7 +48,7 @@ export default function NonConformitesCapaPage() {
     <>
       <JsonLd data={softwareApplicationLd(capa.seo)} />
 
-      {/* 1 — Ouverture : l'accroche et les constats, d'un seul tenant. */}
+      {/* 1 — Ouverture : la promesse, puis la situation actuelle. */}
       <SectionStack
         background="cream"
         labelledBy="hero-title"
@@ -57,28 +57,46 @@ export default function NonConformitesCapaPage() {
         <MarketingHero {...capa.hero} nested />
         <ProblemShowcase
           {...capa.problem}
+          variant="list"
           background="cream"
           nested
         />
       </SectionStack>
 
-      {/* 2 — Ce que fait CIPA. */}
+      {/* 2 — Les deux cycles : la deviation, puis l'action corrective. Dans
+          cet ordre, parce que l'action n'existe pas sans la deviation qui
+          l'ouvre. */}
       <SectionStack background="white" labelledBy="solution-title">
-        <CapabilityShowcase
-          {...capa.solution}
+        <CapabilityList {...capa.solution} background="white" nested />
+        <CapabilityList
+          {...capa.capa}
           background="white"
           nested
+          id="capa-title"
         />
       </SectionStack>
 
-      {/* 3 — Le bandeau sombre des chiffres. Il ouvre sa propre section :
-          imbrique dans un `SectionStack` clair, il perdrait son fond et son
-          texte blanc. C'est aussi le dernier appel a l'action de la page. */}
-      <MetricsShowcase {...capa.outcomes} />
+      {/* 3 — L'affirmation centrale, seule sur son aplat sombre. */}
+      <StatementBand {...capa.statement} />
 
-      {/* 4 — Les questions qui restent. */}
-      <SectionStack background="cream" labelledBy="faq-title">
+      {/* 4 — Ce que l'affirmation eclaire : le circuit, les reclamations,
+          puis les questions et les renvois. */}
+      <SectionStack background="cream" labelledBy="pipeline-title">
+        <CapaPipeline {...capa.pipeline} background="cream" nested />
+        <CapabilityList
+          {...capa.claims}
+          background="cream"
+          nested
+          id="claims-title"
+        />
         <FaqAccordion {...capa.faq} background="cream" nested />
+        <RelatedPages
+          {...capa.related}
+          variant="list"
+          background="cream"
+          nested
+          headingId="related-title"
+        />
       </SectionStack>
     </>
   )

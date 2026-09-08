@@ -5,17 +5,17 @@
 
 Les douze pages CIPA décrivent des comportements produit, des engagements contractuels et des chiffres. Tout ce qui n’a pas pu être vérifié au moment de l’écriture porte un commentaire `TODO` à l’endroit exact où il est affirmé. Ce document les rassemble, page par page.
 
-**81 points ouverts.**
+**83 points ouverts.**
 
 | Catégorie | Points | Qui tranche |
 |---|---:|---|
 | Juridique | 8 | Direction juridique |
-| Produit | 49 | Équipe produit |
+| Produit | 51 | Équipe produit |
 | Qualité | 1 | Équipe qualité |
 | Société | 2 | Direction |
-| Chiffre à valider | 10 | Équipe produit + direction |
+| Chiffre à valider | 9 | Équipe produit + direction |
 | Navigation | 3 | Équipe web |
-| Autre | 8 | — |
+| Autre | 9 | — |
 
 > Une page dont il reste un `TODO juridique`, `TODO produit` ou `TODO qualite` non tranché ne doit pas être publiée. Les chiffres marqués « à valider » s’affichent en ligne comme des objectifs de déploiement, jamais comme des résultats constatés.
 
@@ -189,19 +189,21 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 ## Non-conformités & CAPA
 
-`content/non-conformites-capa.ts` — /solutions/non-conformites-capa · 6 points
+`content/non-conformites-capa.ts` — /solutions/non-conformites-capa · 8 points
+
+**Autre**
+
+- [ ] `L19` — COMMERCIAL — fournir un chiffre client valide et anonymise pour renforcer ce passage : le rapport entre actions correctives ouvertes et actions reellement terminees et validees, sur un perimetre et une periode nommes, avec l'accord du client sur la formulation anonymisee. Sans ces quatre elements — valeur, perimetre, periode, accord — le bloc reste tel qu'il est. Il fonctionne sans chiffre ; il ne survivrait pas a un chiffre conteste.
 
 **Produit**
 
-- [ ] `L88` — accuse de reception date et calcul du delai.
-- [ ] `L109` — rapprochement automatique avec les ecarts internes.
-- [ ] `L210` — cadre d'analyse propose : cinq pourquoi, arbre des causes, Ishikawa, ou champ structure ? Voir la FAQ 2.
-- [ ] `L222` — correctif et preventif : deux objets ou un champ ?
-- [ ] `L335` — cadre d'analyse reellement propose. Cette reponse engage la credibilite de la capacite « analyse de cause outillee ».
-
-**Chiffre à valider**
-
-- [ ] `L277` — chiffre non source, et identique a celui de content/orchestration.ts. Une seule validation pour les deux pages.
+- [ ] `L111` — liste exacte des sources, voir l'en-tete de fichier.
+- [ ] `L139` — trois niveaux, ou echelle plus fine reduite a trois ?
+- [ ] `L170` — avancement : saisi par le pilote, ou deduit ?
+- [ ] `L180` — difference exacte entre « annule » et « refuse ».
+- [ ] `L190` — format et perimetre du rapport genere.
+- [ ] `L274` — chaine reclamation vers lot vers controles : verifiable en demonstration ?
+- [ ] `L385` — difference exacte entre « annule » et « refuse ».
 
 ---
 
