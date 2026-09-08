@@ -23,6 +23,12 @@ import {
   FileDown,
   Gauge,
   Layers,
+  MessagesSquare,
+  Network,
+  RefreshCw,
+  Ruler,
+  Table2,
+  Timer,
 } from 'lucide-react'
 
 import type {
@@ -75,14 +81,17 @@ export const tableauxDeBord: TableauxContent = {
     accent: 'trop tard.',
     items: [
       {
+        icon: Table2,
         title: 'Le mensuel se construit à la main',
         body: 'Trois jours par mois à extraire, recoller et mettre en forme. Le tableau est juste le jour où il est terminé, et périmé la semaine suivante.',
       },
       {
+        icon: MessagesSquare,
         title: 'Les chiffres se contestent en réunion',
         body: 'Deux services arrivent avec deux totaux. La demi-heure qui suit passe à comparer des méthodes de calcul, au lieu de décider quoi faire.',
       },
       {
+        icon: Network,
         title: 'Aucune vue consolidée entre les lignes et les sites',
         body: 'Chaque ligne tient son suivi, chaque site le sien. Comparer deux ateliers demande de retraiter deux fichiers qui ne comptent pas la même chose.',
       },
@@ -158,18 +167,21 @@ export const tableauxDeBord: TableauxContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: RefreshCw,
         value: 'Continu',
         label: 'Mise à jour des indicateurs',
         detail: 'Chaque relevé validé met le tableau de bord à jour.',
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: Ruler,
         value: '1',
         label: 'Définition par indicateur, pour tous les services',
         detail: 'Il n’y a plus deux totaux à réconcilier en réunion.',
         source: 'Propriété du modèle de données',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source. Affiche comme objectif de
         // deploiement tant qu'aucune mesure client ne l'etaye.
         value: '-3 j',

@@ -3,10 +3,10 @@ import FaqAccordion from '@/components/sections/FaqAccordion'
 import LifecycleTimeline from '@/components/sections/LifecycleTimeline'
 import LimitsBlock from '@/components/sections/LimitsBlock'
 import MarketingHero from '@/components/sections/MarketingHero'
-import RelatedPages from '@/components/sections/RelatedPages'
-import OutcomeMetrics from '@/components/sections/OutcomeMetrics'
-import PainPoints from '@/components/sections/PainPoints'
+import MetricsShowcase from '@/components/sections/MetricsShowcase'
+import ProblemShowcase from '@/components/sections/ProblemShowcase'
 import ProofBlock from '@/components/sections/ProofBlock'
+import RelatedPages from '@/components/sections/RelatedPages'
 import JsonLd from '@/components/ui/JsonLd'
 import { NAVBAR_CLEARANCE } from '@/components/ui/Section'
 import SectionStack from '@/components/ui/SectionStack'
@@ -16,15 +16,15 @@ import { maintenanceSecurite as maintenance } from '@/content/maintenance-securi
 /**
  * Maintenance & securite — troisieme page de la rubrique Solutions.
  *
- * Quatre sections majeures : ouverture · reponse · visuel · questions. Voir
+ * Quatre sections majeures : ouverture · reponse · chiffres · questions. Voir
  * `SectionStack` pour le regroupement.
  *
- * Le bloc de cadrage — ce que CIPA ne fait pas — reste pose entre le parcours
- * d'une alerte et les benefices, dans la meme section qu'eux, et c'est un choix
- * de fond plutot que de mise en page. Le lecteur vient de voir une chaine qui
- * se deroule toute seule, du constat a la verification ; c'est exactement le
- * moment ou une page de securite peut laisser croire que l'outil traite le
- * risque. Le cadrage arrive la, avant qu'on parle de ce qu'on gagne.
+ * Le bloc de cadrage — ce que CIPA ne fait pas — ferme la section « reponse »,
+ * juste apres le parcours d'une alerte et juste avant le bandeau des chiffres.
+ * C'est un choix de fond plutot que de mise en page : le lecteur vient de voir
+ * une chaine qui se deroule toute seule, du constat a la verification, et c'est
+ * exactement le moment ou une page de securite peut laisser croire que l'outil
+ * traite le risque. Le cadrage arrive la, avant qu'on parle de ce qu'on gagne.
  *
  * Ce bloc « ce que vous gagnez » ne porte d'ailleurs aucun chiffre invente,
  * contrairement a toutes les autres pages du site : voir l'en-tete de
@@ -37,42 +37,41 @@ export default function MaintenanceSecuritePage() {
     <>
       <JsonLd data={softwareApplicationLd(maintenance.seo)} />
 
-      {/* 1 — Ouverture. */}
+      {/* 1 — Ouverture : le probleme est pose sans defilement. */}
       <SectionStack
         background="cream"
         labelledBy="hero-title"
         className={NAVBAR_CLEARANCE}
       >
         <MarketingHero {...maintenance.hero} nested />
-        <PainPoints {...maintenance.problem} background="cream" nested />
+        <ProblemShowcase {...maintenance.problem} background="cream" nested />
       </SectionStack>
 
-      {/* 2 — Reponse. */}
+      {/* 2 — Reponse : ce que fait la plateforme, et comment ca se deroule. */}
       <SectionStack background="white" labelledBy="solution-title">
         <CapabilityList {...maintenance.solution} background="white" nested />
-      </SectionStack>
-
-      {/* 3 — Visuel : l'escalade en temps reel, le cadrage, puis les
-          benefices. */}
-      <SectionStack background="cream" labelledBy="lifecycle-title" gap="tight">
         <LifecycleTimeline
-          {...maintenance.escalation}
-          background="cream"
-          nested
-        />
-        <LimitsBlock {...maintenance.limits} background="cream" nested />
-        <OutcomeMetrics {...maintenance.outcomes} background="cream" nested />
+                  {...maintenance.escalation}
+                  background="white"
+                  nested
+                />
+        <LimitsBlock {...maintenance.limits} background="white" nested />
       </SectionStack>
 
-      {/* 4 — Questions. */}
+      {/* 3 — Le bandeau sombre des chiffres. Il ouvre sa propre section :
+          imbrique dans un `SectionStack` clair, il perdrait son fond et son
+          texte blanc. */}
+      <MetricsShowcase {...maintenance.outcomes} />
+
+      {/* 4 — Questions : le cadre, les renvois, la FAQ. */}
       <SectionStack background="white" labelledBy="proof-title">
         <ProofBlock {...maintenance.proof} background="white" nested />
         <RelatedPages
-          {...maintenance.related}
-          background="white"
-          nested
-          headingId="related-title"
-        />
+                  {...maintenance.related}
+                  background="white"
+                  nested
+                  headingId="related-title"
+                />
         <FaqAccordion {...maintenance.faq} background="white" nested />
       </SectionStack>
     </>

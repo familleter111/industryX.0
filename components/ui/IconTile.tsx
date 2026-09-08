@@ -18,11 +18,18 @@ import type { LucideIcon } from 'lucide-react'
 export default function IconTile({
   icon: Icon,
   size = 'md',
+  tone = 'light',
   className,
 }: {
   icon: LucideIcon
   /** `md` 44 px pour une carte, `sm` 36 px pour une ligne de liste. */
   size?: 'sm' | 'md'
+  /**
+   * `dark` pour un fond sombre. Le gris clair du carre y disparaitrait, et
+   * l'or est reserve aux actions — une icone n'en est pas une. On prend donc
+   * un blanc a 6 %, qui se lit sans rien promettre.
+   */
+  tone?: 'light' | 'dark'
   className?: string
 }) {
   const box = size === 'sm' ? 'h-9 w-9 rounded-xl' : 'h-11 w-11 rounded-2xl'
@@ -31,7 +38,10 @@ export default function IconTile({
     <span
       aria-hidden="true"
       className={clsx(
-        'inline-flex shrink-0 items-center justify-center bg-stone-100 text-stone-700',
+        'inline-flex shrink-0 items-center justify-center',
+        tone === 'dark'
+          ? 'bg-white/[0.06] text-white/80'
+          : 'bg-stone-100 text-stone-700',
         box,
         className,
       )}

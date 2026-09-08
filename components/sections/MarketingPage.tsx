@@ -1,8 +1,8 @@
 import CapabilityList from '@/components/sections/CapabilityList'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import MarketingHero from '@/components/sections/MarketingHero'
-import OutcomeMetrics from '@/components/sections/OutcomeMetrics'
-import PainPoints from '@/components/sections/PainPoints'
+import MetricsShowcase from '@/components/sections/MetricsShowcase'
+import ProblemShowcase from '@/components/sections/ProblemShowcase'
 import ProductShot from '@/components/sections/ProductShot'
 import ProofBlock from '@/components/sections/ProofBlock'
 import JsonLd from '@/components/ui/JsonLd'
@@ -18,8 +18,8 @@ import type { MarketingPageContent } from '@/content/types'
  * page :
  *
  *   1. Ouverture — le hero et les constats terrain, d'un seul tenant.
- *   2. Reponse — ce que fait la plateforme.
- *   3. Visuel — l'ecran, puis ce qu'il fait gagner.
+ *   2. Reponse — ce que fait la plateforme, et l'ecran ou ca se passe.
+ *   3. Chiffres — le bandeau sombre de ce qu'on y gagne.
  *   4. Questions — le cadre, puis la FAQ.
  *
  * La sequence est l'argument, elle ne se parametre pas. Une rubrique qui
@@ -34,10 +34,11 @@ import type { MarketingPageContent } from '@/content/types'
  * bloc propre a intercaler — ce gabarit reste le point de depart et la
  * reference de structure.
  *
- * L'alternance des fonds est portee par les quatre `SectionStack` : creme,
- * blanc, creme, blanc. Les blocs qu'ils contiennent recoivent ce fond en
- * `background` sans le peindre eux-memes — c'est de la qu'ils tirent leur
- * remplissage de carte.
+ * L'alternance des fonds : creme, blanc, noir, blanc. Les blocs recoivent ce
+ * fond en `background` sans le peindre eux-memes — c'est de la qu'ils tirent
+ * leur remplissage de carte. La troisieme section n'a pas de `SectionStack` :
+ * `MetricsShowcase` ouvre son propre aplat sombre, qu'un hote clair
+ * effacerait.
  */
 export default function MarketingPage({ content }: { content: MarketingPageContent }) {
   return (
@@ -53,19 +54,15 @@ export default function MarketingPage({ content }: { content: MarketingPageConte
         className={NAVBAR_CLEARANCE}
       >
         <MarketingHero {...content.hero} nested />
-        <PainPoints {...content.problem} background="cream" nested />
+        <ProblemShowcase {...content.problem} background="cream" nested />
       </SectionStack>
 
       <SectionStack background="white" labelledBy="solution-title">
         <CapabilityList {...content.solution} background="white" nested />
+        <ProductShot {...content.shot} background="white" nested />
       </SectionStack>
 
-      {/* Nommee par le titre des resultats : un `ProductShot` est une figure,
-          il n'a pas de <h2> a designer. */}
-      <SectionStack background="cream" labelledBy="outcomes-title" gap="tight">
-        <ProductShot {...content.shot} background="cream" nested />
-        <OutcomeMetrics {...content.outcomes} background="cream" nested />
-      </SectionStack>
+      <MetricsShowcase {...content.outcomes} />
 
       <SectionStack background="white" labelledBy="proof-title">
         <ProofBlock {...content.proof} background="white" nested />

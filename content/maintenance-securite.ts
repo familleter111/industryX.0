@@ -36,9 +36,15 @@
 
 import {
   AlertTriangle,
+  BellRing,
+  ClipboardCheck,
+  ClipboardX,
+  FileText,
   History,
   ListChecks,
   ShieldCheck,
+  Siren,
+  Wrench,
 } from 'lucide-react'
 
 import type {
@@ -153,6 +159,12 @@ export const maintenanceSecurite: MaintenanceContent = {
       'Situation dangereuse signalée avec photo, à la saisie',
       'Actions de mise en conformité suivies jusqu’à clôture',
     ],
+    image: {
+      src: '/plateforme/09-abstrait-site-industriel.png',
+      alt: 'Une unité de production recomposée en aplats géométriques, traversée par des fragments de photographie.',
+      width: 380,
+      height: 302,
+    },
   },
 
   problem: {
@@ -161,18 +173,22 @@ export const maintenanceSecurite: MaintenanceContent = {
     accent: 'être établi.',
     items: [
       {
+        icon: ClipboardX,
         title: 'Les rondes sont faites mais pas prouvées',
         body: 'La tournée a eu lieu et le registre est signé en fin de poste. Rien n’indique à quelle heure chaque point a été vérifié, ni par qui.',
       },
       {
+        icon: Siren,
         title: 'La remontée d’un presque-accident se perd',
         body: 'Elle est faite à l’oral au chef d’équipe, qui l’évoque en réunion la semaine suivante. Entre les deux, la situation n’a pas changé.',
       },
       {
+        icon: Wrench,
         title: 'Les interventions de maintenance sont mal documentées',
         body: 'L’intervention est faite, la pièce changée. Six mois plus tard, ce qui a été remplacé et pourquoi n’est plus établi, et le diagnostic reprend de zéro.',
       },
       {
+        icon: FileText,
         title: 'Le permis de travail circule sur papier',
         body: 'Rempli au bureau, signé en plusieurs exemplaires, il finit dans une poche. Vérifier qu’un permis valide couvre une intervention en cours suppose de retrouver la feuille.',
       },
@@ -243,6 +259,7 @@ export const maintenanceSecurite: MaintenanceContent = {
       'Trois propriétés du système, vérifiables en démonstration. Aucun chiffre d’amélioration n’est avancé ici : ce serait affirmer un effet que le logiciel seul ne produit pas.',
     items: [
       {
+        icon: ClipboardCheck,
         value: 'Horodatée',
         label: 'Chaque vérification d’une ronde',
         detail:
@@ -250,6 +267,7 @@ export const maintenanceSecurite: MaintenanceContent = {
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: BellRing,
         value: 'À la saisie',
         label: 'Notification sur situation dangereuse',
         detail:
@@ -257,6 +275,7 @@ export const maintenanceSecurite: MaintenanceContent = {
         source: 'Règles d’escalade paramétrées',
       },
       {
+        icon: History,
         value: 'Par équipement',
         label: 'Historique des constats et des interventions',
         detail:

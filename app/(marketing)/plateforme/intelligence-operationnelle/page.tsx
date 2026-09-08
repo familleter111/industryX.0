@@ -2,11 +2,11 @@ import CapabilityList from '@/components/sections/CapabilityList'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import LimitsBlock from '@/components/sections/LimitsBlock'
 import MarketingHero from '@/components/sections/MarketingHero'
-import RelatedPages from '@/components/sections/RelatedPages'
-import OutcomeMetrics from '@/components/sections/OutcomeMetrics'
-import PainPoints from '@/components/sections/PainPoints'
+import MetricsShowcase from '@/components/sections/MetricsShowcase'
+import ProblemShowcase from '@/components/sections/ProblemShowcase'
 import ProductShot from '@/components/sections/ProductShot'
 import ProofBlock from '@/components/sections/ProofBlock'
+import RelatedPages from '@/components/sections/RelatedPages'
 import JsonLd from '@/components/ui/JsonLd'
 import { NAVBAR_CLEARANCE } from '@/components/ui/Section'
 import SectionStack from '@/components/ui/SectionStack'
@@ -16,7 +16,7 @@ import { intelligenceOperationnelle as ia } from '@/content/intelligence-operati
 /**
  * Intelligence operationnelle — troisieme sous-page de la rubrique Plateforme.
  *
- * Quatre sections majeures : ouverture · reponse · visuel · questions. Voir
+ * Quatre sections majeures : ouverture · reponse · chiffres · questions. Voir
  * `SectionStack` pour le regroupement.
  *
  * Le bloc des limites — ce que l'IA ne fait pas — reste colle aux capacites,
@@ -32,39 +32,37 @@ export default function IntelligenceOperationnellePage() {
     <>
       <JsonLd data={softwareApplicationLd(ia.seo)} />
 
-      {/* 1 — Ouverture. */}
+      {/* 1 — Ouverture : le probleme est pose sans defilement. */}
       <SectionStack
         background="cream"
         labelledBy="hero-title"
         className={NAVBAR_CLEARANCE}
       >
         <MarketingHero {...ia.hero} nested />
-        <PainPoints {...ia.problem} background="cream" nested />
+        <ProblemShowcase {...ia.problem} background="cream" nested />
       </SectionStack>
 
-      {/* 2 — Reponse : ce que fait l'IA, puis ce qu'elle ne fait pas. */}
+      {/* 2 — Reponse : ce que fait la plateforme, et comment ca se deroule. */}
       <SectionStack background="white" labelledBy="solution-title">
         <CapabilityList {...ia.solution} background="white" nested />
         <LimitsBlock {...ia.limits} background="white" nested />
+        <ProductShot {...ia.shot} background="white" nested />
       </SectionStack>
 
-      {/* 3 — Visuel : l'ecran, puis ce qu'il fait gagner. La section est
-          nommee par le seul titre qu'elle porte, celui des resultats : un
-          `ProductShot` est une figure, il n'a pas de <h2>. */}
-      <SectionStack background="cream" labelledBy="outcomes-title" gap="tight">
-        <ProductShot {...ia.shot} background="cream" nested />
-        <OutcomeMetrics {...ia.outcomes} background="cream" nested />
-      </SectionStack>
+      {/* 3 — Le bandeau sombre des chiffres. Il ouvre sa propre section :
+          imbrique dans un `SectionStack` clair, il perdrait son fond et son
+          texte blanc. */}
+      <MetricsShowcase {...ia.outcomes} />
 
-      {/* 4 — Questions. */}
+      {/* 4 — Questions : le cadre, les renvois, la FAQ. */}
       <SectionStack background="white" labelledBy="proof-title">
         <ProofBlock {...ia.proof} background="white" nested />
         <RelatedPages
-          {...ia.related}
-          background="white"
-          nested
-          headingId="solutions-title"
-        />
+                  {...ia.related}
+                  background="white"
+                  nested
+                  headingId="solutions-title"
+                />
         <FaqAccordion {...ia.faq} background="white" nested />
       </SectionStack>
     </>

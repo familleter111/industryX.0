@@ -24,13 +24,20 @@
 
 import {
   BadgeCheck,
+  CheckCheck,
   CirclePlus,
+  ClipboardX,
+  Eye,
+  EyeOff,
   FileText,
   Gauge,
   Inbox,
   ListChecks,
+  Microscope,
   Radar,
+  RotateCcw,
   Search,
+  Timer,
 } from 'lucide-react'
 
 import type {
@@ -146,18 +153,22 @@ export const nonConformitesCapa: CapaContent = {
     accent: 'traiter.',
     items: [
       {
+        icon: ClipboardX,
         title: 'Les actions sont lancées, jamais vérifiées',
         body: 'Le plan d’action est écrit, l’écart passe en « traité ». Que la mesure ait produit l’effet attendu, personne ne l’a établi — et rien ne l’a demandé.',
       },
       {
+        icon: Microscope,
         title: 'La cause racine n’est pas analysée',
         body: 'On corrige ce qu’on voit : la pièce, le réglage, le lot. La raison pour laquelle c’est arrivé reste hors du dossier, donc hors de portée.',
       },
       {
+        icon: RotateCcw,
         title: 'Les mêmes défauts reviennent',
         body: 'Trois occurrences en huit mois, sur deux lignes différentes. Chacune a été traitée séparément, et personne n’a fait le lien entre elles.',
       },
       {
+        icon: EyeOff,
         title: 'Le stock d’actions en retard est invisible',
         body: 'On connaît le nombre d’écarts ouverts. Leur ancienneté, leur criticité et leur détenteur, non — jusqu’à la revue annuelle, ou l’audit.',
       },
@@ -247,12 +258,14 @@ export const nonConformitesCapa: CapaContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: CheckCheck,
         value: 'Vérifiée',
         label: 'Efficacité de chaque action avant clôture',
         detail: 'Un dossier ne se referme pas sur une action non contrôlée.',
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: Eye,
         value: 'Par état',
         label: 'Stock d’actions visible en permanence',
         detail:
@@ -260,6 +273,7 @@ export const nonConformitesCapa: CapaContent = {
         source: 'Modèle de données de la plateforme',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source, et identique a celui de
         // content/orchestration.ts. Une seule validation pour les deux pages.
         value: '-50 %',

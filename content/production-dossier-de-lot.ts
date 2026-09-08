@@ -34,12 +34,18 @@
 import {
   BadgeCheck,
   ClipboardCheck,
-  FileStack,
   Factory,
+  FileStack,
+  FileWarning,
+  FolderCheck,
   HeartPulse,
   History,
+  Hourglass,
   Link2,
   Package,
+  PenLine,
+  Split,
+  Timer,
   Utensils,
 } from 'lucide-react'
 
@@ -165,6 +171,12 @@ export const productionDossierDeLot: ProductionContent = {
       'Écarts rattachés au lot qui les a produits',
       'Revue de libération outillée et tracée',
     ],
+    image: {
+      src: '/CIPA_images_page/03_factory_production_visual.png',
+      alt: 'Une ligne d’embouteillage en fonctionnement, cadrée dans un motif géométrique.',
+      width: 245,
+      height: 200,
+    },
   },
 
   problem: {
@@ -173,14 +185,17 @@ export const productionDossierDeLot: ProductionContent = {
     accent: 'lui, est incomplet.',
     items: [
       {
+        icon: FileWarning,
         title: 'Le dossier de lot papier arrive incomplet',
         body: 'Une case non remplie, une signature manquante, un relevé illisible. On s’en aperçoit à la revue, quand le lot attend et que l’opérateur a fini son poste depuis trois jours.',
       },
       {
+        icon: Split,
         title: 'Les contrôles en cours de process ne se consolident pas',
         body: 'Chaque prélèvement existe sur sa feuille. Suivre la dérive d’un paramètre sur la durée du lot demande de les aligner à la main — ce que personne ne fait en routine.',
       },
       {
+        icon: Hourglass,
         title: 'La libération attend qu’on retrouve les documents',
         body: 'Le lot est fabriqué, contrôlé, conforme. Il reste bloqué parce que trois enregistrements sont dans trois classeurs et qu’il faut d’abord les réunir.',
       },
@@ -257,18 +272,21 @@ export const productionDossierDeLot: ProductionContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: FolderCheck,
         value: 'Au fil de l’eau',
         label: 'Constitution du dossier de lot',
         detail: 'Il est complet quand le lot est fini, pas trois jours après.',
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: PenLine,
         value: '0',
         label: 'Numéro de lot ressaisi à la main',
         detail: 'Chaque relevé se rattache au lot en cours tout seul.',
         source: 'Propriété du modèle de données',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source. Affiche comme objectif de
         // deploiement tant qu'aucune mesure client ne l'etaye.
         value: '-2 j',

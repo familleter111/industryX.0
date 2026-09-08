@@ -17,7 +17,7 @@ import { integrations } from '@/content/integrations'
  * Integrations industrielles — derniere sous-page de la rubrique Plateforme.
  *
  * Quatre sections majeures, comme les onze autres pages : ouverture · reponse
- * · visuel · questions. Voir `SectionStack` pour le regroupement.
+ * · chiffres · questions. Voir `SectionStack` pour le regroupement.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  LA SEULE PAGE ILLUSTREE

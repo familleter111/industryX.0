@@ -27,7 +27,7 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Chiffre à valider**
 
-- [ ] `L289` — chiffre non source. Tant qu'aucune mesure client ne l'etaye, il s'affiche comme objectif de deploiement et ne doit pas etre repris comme un resultat constate.
+- [ ] `L309` — chiffre non source. Tant qu'aucune mesure client ne l'etaye, il s'affiche comme objectif de deploiement et ne doit pas etre repris comme un resultat constate.
 
 ---
 
@@ -38,16 +38,16 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 **Produit**
 
 - [ ] `L11` — qu'etre vrais. Chacun porte un `TODO produit` a l'endroit ou il est ecrit. Les points a trancher :
-- [ ] `L153` — champs conditionnels : comportement a confirmer.
-- [ ] `L165` — annotation sur l'image : a confirmer.
-- [ ] `L176` — accuse de prise en charge et relance : a confirmer.
-- [ ] `L257` — conservation de la valeur precedente : a confirmer.
-- [ ] `L274` — comportement hors connexion a confirmer avant mise en ligne. C'est la premiere question que pose un directeur d'usine, et une reponse fausse se retourne des la premiere demonstration.
-- [ ] `L287` — liste des appareils supportes a confirmer, en particulier l'absence d'iOS et la version Android minimale.
+- [ ] `L169` — champs conditionnels : comportement a confirmer.
+- [ ] `L181` — annotation sur l'image : a confirmer.
+- [ ] `L192` — accuse de prise en charge et relance : a confirmer.
+- [ ] `L276` — conservation de la valeur precedente : a confirmer.
+- [ ] `L293` — comportement hors connexion a confirmer avant mise en ligne. C'est la premiere question que pose un directeur d'usine, et une reponse fausse se retourne des la premiere demonstration.
+- [ ] `L306` — liste des appareils supportes a confirmer, en particulier l'absence d'iOS et la version Android minimale.
 
 **Chiffre à valider**
 
-- [ ] `L223` — chiffre non source. Il s'affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye, et ne doit pas etre repris comme un resultat constate.
+- [ ] `L242` — chiffre non source. Il s'affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye, et ne doit pas etre repris comme un resultat constate.
 
 ---
 
@@ -58,16 +58,16 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 **Produit**
 
 - [ ] `L10` — etayes par une source interne. Chacun porte un `TODO produit`. A trancher :
-- [ ] `L154` — reprise des dossiers en cours a confirmer.
-- [ ] `L175` — transfert en cas d'absence : a confirmer.
-- [ ] `L186` — immuabilite d'une etape validee : a confirmer.
-- [ ] `L260` — cette note depend de la nature exacte de la signature electronique implementee. Ne pas la publier avant confirmation.
-- [ ] `L270` — etendue reelle du parametrage sans code a confirmer, et surtout ou passe la frontiere avec une intervention technique.
-- [ ] `L277` — modele de roles, perimetres et delegation a confirmer avant mise en ligne.
+- [ ] `L169` — reprise des dossiers en cours a confirmer.
+- [ ] `L190` — transfert en cas d'absence : a confirmer.
+- [ ] `L201` — immuabilite d'une etape validee : a confirmer.
+- [ ] `L278` — cette note depend de la nature exacte de la signature electronique implementee. Ne pas la publier avant confirmation.
+- [ ] `L288` — etendue reelle du parametrage sans code a confirmer, et surtout ou passe la frontiere avec une intervention technique.
+- [ ] `L295` — modele de roles, perimetres et delegation a confirmer avant mise en ligne.
 
 **Chiffre à valider**
 
-- [ ] `L222` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye ; ne pas le reprendre comme un resultat constate.
+- [ ] `L240` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye ; ne pas le reprendre comme un resultat constate.
 
 ---
 
@@ -77,20 +77,20 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Produit**
 
-- [ ] `L159` — ponderation ajustable des criteres : a confirmer.
-- [ ] `L180` — comportement quand la donnee manque : a confirmer.
-- [ ] `L275` — volume d'historique necessaire a confirmer.
+- [ ] `L167` — ponderation ajustable des criteres : a confirmer.
+- [ ] `L188` — comportement quand la donnee manque : a confirmer.
+- [ ] `L286` — volume d'historique necessaire a confirmer.
 
 **Chiffre à valider**
 
-- [ ] `L212` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye.
+- [ ] `L223` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye.
 
 **Juridique**
 
-- [ ] `L229` — region d'hebergement, duree de conservation et sous-traitants a confirmer avant mise en ligne.
-- [ ] `L235` — engagement de non-reutilisation. Point le plus sensible de la page : ne rien publier ici sans validation ecrite.
-- [ ] `L261` — nature du modele employe. Si un fournisseur tiers intervient, cette reponse doit le dire : elle conditionne la credibilite de tout le bloc gouvernance.
-- [ ] `L269` — a aligner mot pour mot sur le contrat de service.
+- [ ] `L240` — region d'hebergement, duree de conservation et sous-traitants a confirmer avant mise en ligne.
+- [ ] `L246` — engagement de non-reutilisation. Point le plus sensible de la page : ne rien publier ici sans validation ecrite.
+- [ ] `L272` — nature du modele employe. Si un fournisseur tiers intervient, cette reponse doit le dire : elle conditionne la credibilite de tout le bloc gouvernance.
+- [ ] `L280` — a aligner mot pour mot sur le contrat de service.
 
 ---
 
@@ -100,14 +100,14 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Chiffre à valider**
 
-- [ ] `L173` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye.
+- [ ] `L185` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye.
 
 **Produit**
 
-- [ ] `L193` — confirmer, famille par famille, ce qui est livre.
-- [ ] `L209` — etendue de la personnalisation a confirmer, et ou passe exactement la frontiere avec un developpement.
-- [ ] `L216` — frequence reelle de mise a jour a confirmer.
-- [ ] `L222` — connecteurs BI reellement disponibles a confirmer.
+- [ ] `L205` — confirmer, famille par famille, ce qui est livre.
+- [ ] `L221` — etendue de la personnalisation a confirmer, et ou passe exactement la frontiere avec un developpement.
+- [ ] `L228` — frequence reelle de mise a jour a confirmer.
+- [ ] `L234` — connecteurs BI reellement disponibles a confirmer.
 
 ---
 
@@ -139,17 +139,17 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Produit**
 
-- [ ] `L161` — blocage d'une version perimee : a confirmer.
-- [ ] `L167` — le brief disait « infalsifiables ». Voir l'en-tete de fichier : ce titre et ces points decrivent le mecanisme constatable, a durcir seulement si l'implementation porte un vrai scellement.
-- [ ] `L184` — rattachement d'une reclamation aux lots : a confirmer.
+- [ ] `L177` — blocage d'une version perimee : a confirmer.
+- [ ] `L183` — le brief disait « infalsifiables ». Voir l'en-tete de fichier : ce titre et ces points decrivent le mecanisme constatable, a durcir seulement si l'implementation porte un vrai scellement.
+- [ ] `L200` — rattachement d'une reclamation aux lots : a confirmer.
 
 **Chiffre à valider**
 
-- [ ] `L222` — chiffre non source, et identique a celui de content/plateforme.ts. Une seule validation pour les deux pages.
+- [ ] `L241` — chiffre non source, et identique a celui de content/plateforme.ts. Une seule validation pour les deux pages.
 
 **Qualité**
 
-- [ ] `L264` — voir l'en-tete de fichier. Ne nommer aucune norme avant que la liste exacte des referentiels couverts soit etablie.
+- [ ] `L283` — voir l'en-tete de fichier. Ne nommer aucune norme avant que la liste exacte des referentiels couverts soit etablie.
 
 ---
 
@@ -163,14 +163,14 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Produit**
 
-- [ ] `L213` — controle de completude : promesse centrale de la page, a confirmer avant publication.
-- [ ] `L324` — valeur reglementaire du dossier electronique. Cette reponse est lue en premier par le secteur pharmaceutique.
-- [ ] `L336` — blocage de la liberation sur ecart ouvert.
-- [ ] `L342` — duree de conservation et relecture d'un lot ancien.
+- [ ] `L228` — controle de completude : promesse centrale de la page, a confirmer avant publication.
+- [ ] `L342` — valeur reglementaire du dossier electronique. Cette reponse est lue en premier par le secteur pharmaceutique.
+- [ ] `L354` — blocage de la liberation sur ecart ouvert.
+- [ ] `L360` — duree de conservation et relecture d'un lot ancien.
 
 **Chiffre à valider**
 
-- [ ] `L272` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye.
+- [ ] `L290` — chiffre non source. Affiche comme objectif de deploiement tant qu'aucune mesure client ne l'etaye.
 
 ---
 
@@ -180,10 +180,10 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Produit**
 
-- [ ] `L196` — permis de travail : formulaire dedie ou formulaire generique avec circuit de validation ? Voir la FAQ 2.
-- [ ] `L226` — rattachement au referentiel equipements et profondeur d'historique consultable.
-- [ ] `L317` — permis de travail : formulaire dedie ou generique ? Cette reponse doit etre exacte avant publication.
-- [ ] `L324` — relance automatique et niveau de remontee.
+- [ ] `L212` — permis de travail : formulaire dedie ou formulaire generique avec circuit de validation ? Voir la FAQ 2.
+- [ ] `L242` — rattachement au referentiel equipements et profondeur d'historique consultable.
+- [ ] `L336` — permis de travail : formulaire dedie ou generique ? Cette reponse doit etre exacte avant publication.
+- [ ] `L343` — relance automatique et niveau de remontee.
 
 ---
 
@@ -193,15 +193,15 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Produit**
 
-- [ ] `L81` — accuse de reception date et calcul du delai.
-- [ ] `L102` — rapprochement automatique avec les ecarts internes.
-- [ ] `L199` — cadre d'analyse propose : cinq pourquoi, arbre des causes, Ishikawa, ou champ structure ? Voir la FAQ 2.
-- [ ] `L211` — correctif et preventif : deux objets ou un champ ?
-- [ ] `L321` — cadre d'analyse reellement propose. Cette reponse engage la credibilite de la capacite « analyse de cause outillee ».
+- [ ] `L88` — accuse de reception date et calcul du delai.
+- [ ] `L109` — rapprochement automatique avec les ecarts internes.
+- [ ] `L210` — cadre d'analyse propose : cinq pourquoi, arbre des causes, Ishikawa, ou champ structure ? Voir la FAQ 2.
+- [ ] `L222` — correctif et preventif : deux objets ou un champ ?
+- [ ] `L335` — cadre d'analyse reellement propose. Cette reponse engage la credibilite de la capacite « analyse de cause outillee ».
 
 **Chiffre à valider**
 
-- [ ] `L263` — chiffre non source, et identique a celui de content/orchestration.ts. Une seule validation pour les deux pages.
+- [ ] `L277` — chiffre non source, et identique a celui de content/orchestration.ts. Une seule validation pour les deux pages.
 
 ---
 
@@ -211,10 +211,10 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Produit**
 
-- [ ] `L176` — recurrence, rappels et suivi de l'ecart prevu/realise.
-- [ ] `L187` — bareme, ponderation, calcul du score global.
-- [ ] `L272` — reprise des grilles existantes.
-- [ ] `L288` — comparaison entre perimetres differents.
+- [ ] `L193` — recurrence, rappels et suivi de l'ecart prevu/realise.
+- [ ] `L204` — bareme, ponderation, calcul du score global.
+- [ ] `L292` — reprise des grilles existantes.
+- [ ] `L308` — comparaison entre perimetres differents.
 
 ---
 
@@ -224,16 +224,16 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Produit**
 
-- [ ] `L111` — rapprochement indicateur / action sur un meme perimetre : promesse centrale de la page, a confirmer.
-- [ ] `L123` — diffusion d'un standard vers d'autres perimetres.
-- [ ] `L211` — canal dedie ou type particulier de declaration ?
-- [ ] `L303` — rapprochement indicateur / action. Cette reponse porte la promesse centrale de la page.
+- [ ] `L116` — rapprochement indicateur / action sur un meme perimetre : promesse centrale de la page, a confirmer.
+- [ ] `L128` — diffusion d'un standard vers d'autres perimetres.
+- [ ] `L225` — canal dedie ou type particulier de declaration ?
+- [ ] `L320` — rapprochement indicateur / action. Cette reponse porte la promesse centrale de la page.
 
 **Société**
 
-- [ ] `L139` — voir l'en-tete de fichier : l'accompagnement lean est annonce ici comme faisant partie du deploiement. Engagement commercial a confirmer avec la direction.
-- [ ] `L239` — engagement commercial, voir l'en-tete de fichier.
-- [ ] `L315` — perimetre exact de l'accompagnement.
+- [ ] `L144` — voir l'en-tete de fichier : l'accompagnement lean est annonce ici comme faisant partie du deploiement. Engagement commercial a confirmer avec la direction.
+- [ ] `L253` — engagement commercial, voir l'en-tete de fichier.
+- [ ] `L332` — perimetre exact de l'accompagnement.
 
 ---
 

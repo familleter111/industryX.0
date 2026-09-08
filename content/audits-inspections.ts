@@ -39,12 +39,19 @@ import {
   BarChart3,
   CalendarCheck,
   ClipboardList,
+  ClipboardX,
+  FileCheck,
+  GitCompare,
   HardHat,
   LayoutGrid,
   Link2,
+  PenLine,
   ShieldCheck,
   Sparkles,
+  Table2,
+  TrendingUp,
   Truck,
+  UserCheck,
   Workflow,
 } from 'lucide-react'
 
@@ -135,6 +142,12 @@ export const auditsInspections: AuditsContent = {
       'Grilles digitales avec cotation, sur tablette',
       'Rapport composé des constats, dès la clôture',
     ],
+    image: {
+      src: '/plateforme/02-inspection-terrain-tablette.png',
+      alt: 'Un opérateur en casque et gilet haute visibilité remplit une inspection sur tablette, devant une installation industrielle.',
+      width: 449,
+      height: 450,
+    },
   },
 
   problem: {
@@ -143,18 +156,22 @@ export const auditsInspections: AuditsContent = {
     accent: 'après.',
     items: [
       {
+        icon: Table2,
         title: 'Le programme d’audit vit dans un tableur',
         body: 'Dates prévues, dates réalisées, reports et responsables tiennent dans un fichier que deux personnes savent lire. L’écart au programme se découvre en fin d’année.',
       },
       {
+        icon: PenLine,
         title: 'Les rapports sont rédigés a posteriori',
         body: 'L’audit finit à seize heures, le rapport s’écrit le soir ou la semaine suivante, à partir de notes manuscrites. Ce qui a été dit se reconstitue de mémoire.',
       },
       {
+        icon: ClipboardX,
         title: 'Les constats restent sans suite',
         body: 'Ils sont listés dans le rapport, transmis par courriel, puis vivent leur vie. Six mois plus tard, personne ne peut dire lesquels ont été traités.',
       },
       {
+        icon: GitCompare,
         title: 'Deux audits ne se comparent pas',
         body: 'Chaque auditeur a sa grille et sa façon de coter. Savoir si une ligne progresse d’un audit à l’autre suppose de relire les deux rapports en entier.',
       },
@@ -232,6 +249,7 @@ export const auditsInspections: AuditsContent = {
       'Trois propriétés du système, vérifiables en démonstration. Le gain de temps sur la rédaction est réel et c’est l’argument principal de cette page — il sera chiffré ici quand la mesure sera faite, pas avant.',
     items: [
       {
+        icon: FileCheck,
         // ─────────────────────────────────────────────────────────────
         //  TODO — EMPLACEMENT DU CHIFFRE VALIDE
         //
@@ -247,12 +265,14 @@ export const auditsInspections: AuditsContent = {
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: UserCheck,
         value: 'Rattaché',
         label: 'Chaque constat à une action et à un responsable',
         detail: 'Un constat sans suite ne peut pas être clôturé avec l’audit.',
         source: 'Modèle de données de la plateforme',
       },
       {
+        icon: TrendingUp,
         value: 'Comparable',
         label: 'Un audit par rapport au précédent',
         detail:

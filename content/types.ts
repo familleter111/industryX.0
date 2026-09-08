@@ -175,6 +175,11 @@ export type ShotContent = {
  * ecrite, et reste formulee comme un objectif, jamais comme un constat.
  */
 export type Outcome = {
+  /**
+   * Utilisee par la variante compacte de `MetricsShowcase`, ignoree par
+   * `OutcomeMetrics`. Optionnelle : un chiffre se lit sans pictogramme.
+   */
+  icon?: LucideIcon
   /** Deja formate pour l'affichage : `-30 %`, `4 h`, `x2`. */
   value: string
   label: string

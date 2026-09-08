@@ -1,11 +1,11 @@
 import CapabilityList from '@/components/sections/CapabilityList'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import MarketingHero from '@/components/sections/MarketingHero'
-import RelatedPages from '@/components/sections/RelatedPages'
-import OutcomeMetrics from '@/components/sections/OutcomeMetrics'
-import PainPoints from '@/components/sections/PainPoints'
+import MetricsShowcase from '@/components/sections/MetricsShowcase'
+import ProblemShowcase from '@/components/sections/ProblemShowcase'
 import ProductShot from '@/components/sections/ProductShot'
 import ProofBlock from '@/components/sections/ProofBlock'
+import RelatedPages from '@/components/sections/RelatedPages'
 import DashboardScreen from '@/components/ui/DashboardScreen'
 import JsonLd from '@/components/ui/JsonLd'
 import { NAVBAR_CLEARANCE } from '@/components/ui/Section'
@@ -16,7 +16,7 @@ import { tableauxDeBord } from '@/content/tableaux-de-bord'
 /**
  * Tableaux de bord — quatrieme sous-page de la rubrique Plateforme.
  *
- * Quatre sections majeures : ouverture · reponse · visuel · questions. Voir
+ * Quatre sections majeures : ouverture · reponse · chiffres · questions. Voir
  * `SectionStack` pour le regroupement.
  *
  * La maquette du tableau de bord est passee en enfant de `ProductShot` plutot
@@ -32,39 +32,38 @@ export default function TableauxDeBordPage() {
     <>
       <JsonLd data={softwareApplicationLd(tableauxDeBord.seo)} />
 
-      {/* 1 — Ouverture. */}
+      {/* 1 — Ouverture : le probleme est pose sans defilement. */}
       <SectionStack
         background="cream"
         labelledBy="hero-title"
         className={NAVBAR_CLEARANCE}
       >
         <MarketingHero {...tableauxDeBord.hero} nested />
-        <PainPoints {...tableauxDeBord.problem} background="cream" nested />
+        <ProblemShowcase {...tableauxDeBord.problem} background="cream" nested />
       </SectionStack>
 
-      {/* 2 — Reponse. */}
+      {/* 2 — Reponse : ce que fait la plateforme, et comment ca se deroule. */}
       <SectionStack background="white" labelledBy="solution-title">
         <CapabilityList {...tableauxDeBord.solution} background="white" nested />
+        <ProductShot {...tableauxDeBord.shot} background="white" nested>
+                  <DashboardScreen />
+                </ProductShot>
       </SectionStack>
 
-      {/* 3 — Visuel : l'ecran, puis ce qu'il fait gagner. Nommee par le titre
-          des resultats, seul <h2> de la section : une figure n'en a pas. */}
-      <SectionStack background="cream" labelledBy="outcomes-title" gap="tight">
-        <ProductShot {...tableauxDeBord.shot} background="cream" nested>
-          <DashboardScreen />
-        </ProductShot>
-        <OutcomeMetrics {...tableauxDeBord.outcomes} background="cream" nested />
-      </SectionStack>
+      {/* 3 — Le bandeau sombre des chiffres. Il ouvre sa propre section :
+          imbrique dans un `SectionStack` clair, il perdrait son fond et son
+          texte blanc. */}
+      <MetricsShowcase {...tableauxDeBord.outcomes} />
 
-      {/* 4 — Questions. */}
+      {/* 4 — Questions : le cadre, les renvois, la FAQ. */}
       <SectionStack background="white" labelledBy="proof-title">
         <ProofBlock {...tableauxDeBord.proof} background="white" nested />
         <RelatedPages
-          {...tableauxDeBord.related}
-          background="white"
-          nested
-          headingId="solutions-title"
-        />
+                  {...tableauxDeBord.related}
+                  background="white"
+                  nested
+                  headingId="solutions-title"
+                />
         <FaqAccordion {...tableauxDeBord.faq} background="white" nested />
       </SectionStack>
     </>

@@ -39,10 +39,15 @@
 
 import {
   Compass,
+  Database,
   LineChart,
+  MessageSquareOff,
   MessageSquarePlus,
+  MessagesSquare,
   RotateCw,
+  Ruler,
   Share2,
+  TrendingUp,
 } from 'lucide-react'
 
 import type {
@@ -164,6 +169,12 @@ export const ameliorationContinue: AmeliorationContent = {
       'Remontées terrain suivies jusqu’à leur réponse',
       'Effet des actions mesuré sur les indicateurs',
     ],
+    image: {
+      src: '/plateforme/11-bandeau-marque-cipa.png',
+      alt: 'Le logotype CIPA sur fond sombre, accompagné de la signature « Des opérations plus sûres, plus efficaces, plus durables ».',
+      width: 588,
+      height: 302,
+    },
   },
 
   problem: {
@@ -172,14 +183,17 @@ export const ameliorationContinue: AmeliorationContent = {
     accent: 's’essouffle.',
     items: [
       {
+        icon: Database,
         title: 'La démarche s’arrête faute de données',
         body: 'Les chantiers démarrent bien, les premiers résultats se voient, puis l’animation retombe. Sans mesure, il ne reste que la conviction de ceux qui y étaient.',
       },
       {
+        icon: Ruler,
         title: 'Les chantiers ne sont pas mesurés',
         body: 'On sait ce qui a été mis en place. On ne sait pas ce que ça a changé, parce que l’indicateur d’avant n’a pas été relevé de la même façon que celui d’après.',
       },
       {
+        icon: MessageSquareOff,
         title: 'Les remontées des opérateurs n’aboutissent pas',
         body: 'Une idée est proposée en réunion d’équipe, notée sur un tableau, effacée au tableau suivant. Au bout de trois fois, plus personne ne propose.',
       },
@@ -257,6 +271,7 @@ export const ameliorationContinue: AmeliorationContent = {
       'Trois propriétés du système, vérifiables en démonstration. Aucune amélioration chiffrée n’est avancée ici : sur une page qui promet du progrès mesurable, un chiffre non mesuré se contredirait lui-même.',
     items: [
       {
+        icon: TrendingUp,
         value: 'Avant / après',
         label: 'Effet d’une action sur son indicateur',
         detail:
@@ -264,6 +279,7 @@ export const ameliorationContinue: AmeliorationContent = {
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: MessagesSquare,
         value: 'Tracée',
         label: 'Chaque remontée terrain, jusqu’à sa réponse',
         detail:
@@ -271,6 +287,7 @@ export const ameliorationContinue: AmeliorationContent = {
         source: 'Modèle de données de la plateforme',
       },
       {
+        icon: Share2,
         // ─────────────────────────────────────────────────────────────
         //  TODO — EMPLACEMENT DU CHIFFRE VALIDE
         //

@@ -2,9 +2,9 @@ import CapabilityList from '@/components/sections/CapabilityList'
 import CardGrid from '@/components/sections/CardGrid'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import MarketingHero from '@/components/sections/MarketingHero'
+import MetricsShowcase from '@/components/sections/MetricsShowcase'
+import ProblemShowcase from '@/components/sections/ProblemShowcase'
 import RelatedPages from '@/components/sections/RelatedPages'
-import OutcomeMetrics from '@/components/sections/OutcomeMetrics'
-import PainPoints from '@/components/sections/PainPoints'
 import JsonLd from '@/components/ui/JsonLd'
 import { NAVBAR_CLEARANCE } from '@/components/ui/Section'
 import SectionStack from '@/components/ui/SectionStack'
@@ -14,7 +14,7 @@ import { auditsInspections as audits } from '@/content/audits-inspections'
 /**
  * Audits & inspections — cinquieme page de la rubrique Solutions.
  *
- * Quatre sections majeures : ouverture · reponse · visuel · questions. Voir
+ * Quatre sections majeures : ouverture · reponse · chiffres · questions. Voir
  * `SectionStack` pour le regroupement.
  *
  * Deux choses manquent ici par rapport aux autres pages, et c'est assume :
@@ -36,40 +36,40 @@ export default function AuditsInspectionsPage() {
     <>
       <JsonLd data={softwareApplicationLd(audits.seo)} />
 
-      {/* 1 — Ouverture. */}
+      {/* 1 — Ouverture : le probleme est pose sans defilement. */}
       <SectionStack
         background="cream"
         labelledBy="hero-title"
         className={NAVBAR_CLEARANCE}
       >
         <MarketingHero {...audits.hero} nested />
-        <PainPoints {...audits.problem} background="cream" nested />
+        <ProblemShowcase {...audits.problem} background="cream" nested />
       </SectionStack>
 
-      {/* 2 — Reponse. */}
+      {/* 2 — Reponse : ce que fait la plateforme, et comment ca se deroule. */}
       <SectionStack background="white" labelledBy="solution-title">
         <CapabilityList {...audits.solution} background="white" nested />
-      </SectionStack>
-
-      {/* 3 — Visuel : les types d'audits couverts, puis les benefices. */}
-      <SectionStack background="cream" labelledBy="types-title" gap="tight">
         <CardGrid
-          {...audits.types}
-          background="cream"
-          nested
-          id="types-title"
-        />
-        <OutcomeMetrics {...audits.outcomes} background="cream" nested />
+                  {...audits.types}
+                  background="white"
+                  nested
+                  id="types-title"
+                />
       </SectionStack>
 
-      {/* 4 — Questions. */}
+      {/* 3 — Le bandeau sombre des chiffres. Il ouvre sa propre section :
+          imbrique dans un `SectionStack` clair, il perdrait son fond et son
+          texte blanc. */}
+      <MetricsShowcase {...audits.outcomes} />
+
+      {/* 4 — Questions : le cadre, les renvois, la FAQ. */}
       <SectionStack background="white" labelledBy="related-title">
         <RelatedPages
-          {...audits.related}
-          background="white"
-          nested
-          headingId="related-title"
-        />
+                  {...audits.related}
+                  background="white"
+                  nested
+                  headingId="related-title"
+                />
         <FaqAccordion {...audits.faq} background="white" nested />
       </SectionStack>
     </>

@@ -29,11 +29,16 @@
  */
 
 import {
+  FileStack,
   FileText,
   Lightbulb,
+  Link2,
   ListOrdered,
   MessagesSquare,
   Radar,
+  RotateCcw,
+  Shuffle,
+  Timer,
 } from 'lucide-react'
 
 import type {
@@ -109,14 +114,17 @@ export const intelligenceOperationnelle: IntelligenceContent = {
     accent: 'Le temps de la lire, si.',
     items: [
       {
+        icon: FileStack,
         title: 'Personne n’a le temps de tout relire',
         body: 'Plusieurs milliers de relevés par mois. Il faudrait un analyste à plein temps pour en tirer autre chose qu’un décompte d’écarts.',
       },
       {
+        icon: RotateCcw,
         title: 'Le même problème revient sans qu’on le voie',
         body: 'Trois non-conformités séparées par six semaines, sur deux lignes différentes, c’est une cause commune. Dans un tableur, ce sont trois lignes parmi quatre cents.',
       },
       {
+        icon: Shuffle,
         title: 'La priorisation se fait à l’intuition',
         body: 'Ce qu’on traite en premier se décide en réunion, sur la mémoire des présents. Le choix est souvent juste ; rien ne permet de le vérifier.',
       },
@@ -196,12 +204,14 @@ export const intelligenceOperationnelle: IntelligenceContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: FileText,
         value: 'Brouillon',
         label: 'État par défaut d’un rapport généré',
         detail: 'Rien ne sort de la plateforme sans qu’une personne l’ait relu.',
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: Link2,
         value: '100 %',
         label: 'Des sorties IA rattachées à leurs relevés d’origine',
         detail:
@@ -209,6 +219,7 @@ export const intelligenceOperationnelle: IntelligenceContent = {
         source: 'Propriété du modèle de données',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source. Affiche comme objectif de
         // deploiement tant qu'aucune mesure client ne l'etaye.
         value: '-70 %',

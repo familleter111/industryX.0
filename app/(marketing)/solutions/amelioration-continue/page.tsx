@@ -2,10 +2,10 @@ import CapabilityList from '@/components/sections/CapabilityList'
 import ContactCallout from '@/components/sections/ContactCallout'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import MarketingHero from '@/components/sections/MarketingHero'
-import RelatedPages from '@/components/sections/RelatedPages'
-import OutcomeMetrics from '@/components/sections/OutcomeMetrics'
-import PainPoints from '@/components/sections/PainPoints'
+import MetricsShowcase from '@/components/sections/MetricsShowcase'
 import PdcaLoop from '@/components/sections/PdcaLoop'
+import ProblemShowcase from '@/components/sections/ProblemShowcase'
+import RelatedPages from '@/components/sections/RelatedPages'
 import JsonLd from '@/components/ui/JsonLd'
 import { NAVBAR_CLEARANCE } from '@/components/ui/Section'
 import SectionStack from '@/components/ui/SectionStack'
@@ -15,7 +15,7 @@ import { ameliorationContinue as amelioration } from '@/content/amelioration-con
 /**
  * Amelioration continue — sixieme et derniere page de la rubrique Solutions.
  *
- * Quatre sections majeures : ouverture · reponse · visuel · questions. Voir
+ * Quatre sections majeures : ouverture · reponse · chiffres · questions. Voir
  * `SectionStack` pour le regroupement.
  *
  * C'est la page qui porte le nom du produit : CIPA signifie Continuous
@@ -36,35 +36,35 @@ export default function AmeliorationContinuePage() {
     <>
       <JsonLd data={softwareApplicationLd(amelioration.seo)} />
 
-      {/* 1 — Ouverture. */}
+      {/* 1 — Ouverture : le probleme est pose sans defilement. */}
       <SectionStack
         background="cream"
         labelledBy="hero-title"
         className={NAVBAR_CLEARANCE}
       >
         <MarketingHero {...amelioration.hero} nested />
-        <PainPoints {...amelioration.problem} background="cream" nested />
+        <ProblemShowcase {...amelioration.problem} background="cream" nested />
       </SectionStack>
 
-      {/* 2 — Reponse. */}
+      {/* 2 — Reponse : ce que fait la plateforme, et comment ca se deroule. */}
       <SectionStack background="white" labelledBy="solution-title">
         <CapabilityList {...amelioration.solution} background="white" nested />
+        <PdcaLoop {...amelioration.pdca} background="white" nested />
       </SectionStack>
 
-      {/* 3 — Visuel : la boucle PDCA, puis ce qu'elle fait gagner. */}
-      <SectionStack background="cream" labelledBy="pdca-title" gap="tight">
-        <PdcaLoop {...amelioration.pdca} background="cream" nested />
-        <OutcomeMetrics {...amelioration.outcomes} background="cream" nested />
-      </SectionStack>
+      {/* 3 — Le bandeau sombre des chiffres. Il ouvre sa propre section :
+          imbrique dans un `SectionStack` clair, il perdrait son fond et son
+          texte blanc. */}
+      <MetricsShowcase {...amelioration.outcomes} />
 
-      {/* 4 — Questions, puis l'encart societe qui ferme la page. */}
+      {/* 4 — Questions : le cadre, les renvois, la FAQ. */}
       <SectionStack background="white" labelledBy="related-title">
         <RelatedPages
-          {...amelioration.related}
-          background="white"
-          nested
-          headingId="related-title"
-        />
+                  {...amelioration.related}
+                  background="white"
+                  nested
+                  headingId="related-title"
+                />
         <FaqAccordion {...amelioration.faq} background="white" nested />
         <ContactCallout {...amelioration.company} background="white" nested />
       </SectionStack>

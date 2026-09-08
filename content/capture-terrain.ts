@@ -26,10 +26,16 @@ import {
   Camera,
   ClipboardList,
   Clock,
+  EyeOff,
+  FileSearch,
   Fingerprint,
+  Hourglass,
   ImageIcon,
   MapPin,
+  PenLine,
+  Repeat,
   Sparkles,
+  Timer,
   UserRound,
 } from 'lucide-react'
 
@@ -114,6 +120,12 @@ export const captureTerrain: CaptureContent = {
       'Photo ou vidéo attachée au constat',
       'Opérateur, poste et horodatage automatiques',
     ],
+    image: {
+      src: '/CIPA_images_page/02_mobile_app_phone_factory.png',
+      alt: 'L’application mobile CIPA affichant la liste des tâches d’un opérateur, devant une unité de production.',
+      width: 330,
+      height: 255,
+    },
   },
 
   problem: {
@@ -121,18 +133,22 @@ export const captureTerrain: CaptureContent = {
     accent: 'checklist papier.',
     items: [
       {
+        icon: Repeat,
         title: 'Le contrôle est saisi deux fois',
         body: 'Une première fois sur papier au poste, une seconde le soir dans un tableur. La deuxième saisie prend du temps et introduit ses propres erreurs — celles que personne ne relira.',
       },
       {
+        icon: EyeOff,
         title: 'L’écart est vu, mais pas tracé',
         body: 'Un opérateur repère une dérive et la signale à l’oral. L’équipe suivante n’en sait rien, et rien n’atteste que le constat a existé.',
       },
       {
+        icon: FileSearch,
         title: 'Au moment du litige, la preuve manque',
         body: 'Un client conteste un lot. Le contrôle a bien eu lieu, mais il n’en reste qu’une case cochée : ni photo, ni heure, ni auteur.',
       },
       {
+        icon: Hourglass,
         title: 'La donnée arrive trop tard pour agir',
         body: 'Le tableur consolidé est prêt le lundi matin. La dérive, elle, a duré tout le week-end.',
       },
@@ -207,12 +223,14 @@ export const captureTerrain: CaptureContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: PenLine,
         value: '0',
         label: 'Ressaisie après le contrôle',
         detail: 'La donnée entre une seule fois, au poste de travail.',
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: Clock,
         value: '100 %',
         label: 'Des relevés horodatés et attribués',
         detail:
@@ -220,6 +238,7 @@ export const captureTerrain: CaptureContent = {
         source: 'Propriété du modèle de données',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source. Il s'affiche comme objectif de
         // deploiement tant qu'aucune mesure client ne l'etaye, et ne doit pas
         // etre repris comme un resultat constate.

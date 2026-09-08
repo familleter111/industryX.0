@@ -37,10 +37,15 @@
  */
 
 import {
+  CalendarClock,
   ClipboardList,
+  Clock,
+  EyeOff,
   FileLock2,
+  FileSearch,
   FolderCheck,
   Route,
+  Timer,
 } from 'lucide-react'
 
 import type {
@@ -122,6 +127,14 @@ export const qualiteConformite: QualiteContent = {
       'Enregistrement horodaté, attribué, avec sa preuve',
       'Écart, action corrective et clôture dans une seule chaîne',
     ],
+    image: {
+      src: '/plateforme/03-indicateurs-conformite.png',
+      alt: 'Des cartes d’indicateurs qualité : courbe de tendance, histogramme et anneau de taux de conformité.',
+      width: 364,
+      height: 450,
+      caption:
+        'Illustration des indicateurs. Les valeurs affichées sont des données d’exemple.',
+    },
   },
 
   problem: {
@@ -130,14 +143,17 @@ export const qualiteConformite: QualiteContent = {
     accent: 'après coup.',
     items: [
       {
+        icon: FileSearch,
         title: 'La preuve se reconstitue au lieu de s’extraire',
         body: 'Le contrôle a eu lieu, tout le monde en est sûr. Mais entre un classeur, un tableur et la mémoire d’un chef d’équipe, il faut une matinée pour l’établir — et parfois on n’y arrive pas.',
       },
       {
+        icon: CalendarClock,
         title: 'L’audit client se prépare dans l’urgence',
         body: 'Trois semaines de mobilisation avant chaque visite, sur un travail qui ne produit rien de nouveau : il remet en forme ce qui existait déjà, quelque part.',
       },
       {
+        icon: EyeOff,
         title: 'Des contrôles sont faits mais ne laissent pas de trace',
         body: 'Un opérateur vérifie, constate que tout est bon, passe à la suite. Rien ne l’atteste. Pour un auditeur, un contrôle non tracé est un contrôle qui n’a pas eu lieu.',
       },
@@ -206,12 +222,14 @@ export const qualiteConformite: QualiteContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: FolderCheck,
         value: 'En continu',
         label: 'Constitution du dossier de preuve',
         detail: 'Il se remplit à chaque contrôle, pas la semaine d’avant.',
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: Clock,
         value: '100 %',
         label: 'Des contrôles horodatés et attribués',
         detail:
@@ -219,6 +237,7 @@ export const qualiteConformite: QualiteContent = {
         source: 'Propriété du modèle de données',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source, et identique a celui de
         // content/plateforme.ts. Une seule validation pour les deux pages.
         value: '-30 %',

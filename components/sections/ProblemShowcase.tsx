@@ -38,7 +38,8 @@ export default function ProblemShowcase({
   background = 'white',
   nested = false,
 }: ProblemContent & {
-  image: BlockImage
+  /** Illustration sous le titre. Sans elle, la colonne s'arrete au texte. */
+  image?: BlockImage
   background?: 'cream' | 'white'
   nested?: boolean
 }) {
@@ -61,16 +62,18 @@ export default function ProblemShowcase({
             subtitle={subtitle}
           />
 
-          <RevealItem variant="in" className="mt-10">
-            <Image
-              src={image.src}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              sizes="(min-width: 1024px) 460px, 100vw"
-              className="h-auto w-full rounded-2xl"
-            />
-          </RevealItem>
+          {image && (
+            <RevealItem variant="in" className="mt-10">
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                sizes="(min-width: 1024px) 460px, 100vw"
+                className="h-auto w-full rounded-2xl"
+              />
+            </RevealItem>
+          )}
         </div>
 
         <ol

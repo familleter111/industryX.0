@@ -17,10 +17,11 @@ import Section from '@/components/ui/Section'
  * traverser onze regions pour une page qui en raconte quatre.
  *
  * Les blocs sont donc regroupes en quatre sections majeures — ouverture,
- * reponse, visuel, questions — et c'est ce composant qui ouvre la section :
+ * reponse, chiffres, questions — et c'est ce composant qui ouvre la section :
  * il pose le fond, le rythme et le repere une seule fois. Les blocs qu'il
- * contient sont rendus en `background="inherit"`, c'est-a-dire sans <section>
- * ni gouttiere a eux.
+ * contient sont rendus en `nested`, c'est-a-dire sans <section> ni gouttiere
+ * a eux. La troisieme section fait exception : `MetricsShowcase` y ouvre son
+ * propre aplat sombre, qu'un hote clair effacerait.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  LES TITRES RESTENT EN <h2>

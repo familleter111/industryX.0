@@ -23,9 +23,14 @@
 
 import {
   BellRing,
+  CalendarClock,
   FileSignature,
+  Mail,
+  Send,
   Sparkles,
+  Timer,
   UserCheck,
+  UserX,
   Workflow,
 } from 'lucide-react'
 
@@ -113,6 +118,12 @@ export const orchestration: OrchestrationContent = {
       'Escalade et relance automatiques selon la gravité',
       'Validation et signature des étapes critiques',
     ],
+    image: {
+      src: '/plateforme/10-application-mobile-operation.png',
+      alt: 'Un écran mobile de checklist entouré de fiches d’enregistrement et d’une confirmation d’opération réussie.',
+      width: 508,
+      height: 302,
+    },
   },
 
   problem: {
@@ -120,18 +131,22 @@ export const orchestration: OrchestrationContent = {
     accent: 'qu’une note.',
     items: [
       {
+        icon: Mail,
         title: 'Les actions correctives vivent dans les mails',
         body: 'Une décision prise en réunion, confirmée par un message, rappelée dans un fil de discussion. Six semaines plus tard, personne ne sait dire si elle a été appliquée.',
       },
       {
+        icon: UserX,
         title: 'Personne n’en répond nommément',
         body: 'L’action est confiée « à la qualité » ou « à la maintenance ». Un service ne rate pas une échéance et ne rend pas de comptes : seule une personne le fait.',
       },
       {
+        icon: BellRing,
         title: 'Les relances sont manuelles',
         body: 'Quelqu’un tient une liste et fait le tour des services le vendredi. Le jour où cette personne est en congé, le suivi s’arrête avec elle.',
       },
       {
+        icon: CalendarClock,
         title: 'Rien ne dit ce qui est en retard',
         body: 'On connaît le nombre d’actions ouvertes. Leur âge, leur criticité et leur détenteur, non. Le retard se découvre à l’audit.',
       },
@@ -207,18 +222,21 @@ export const orchestration: OrchestrationContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: UserCheck,
         value: '0',
         label: 'Action ouverte sans titulaire ni échéance',
         detail: 'Le circuit ne permet pas d’en créer une anonyme.',
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: Send,
         value: 'Automatique',
         label: 'Relance d’une action en retard',
         detail: 'Plus personne n’a à faire le tour des services le vendredi.',
         source: 'Règles d’escalade paramétrées',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source. Affiche comme objectif de
         // deploiement tant qu'aucune mesure client ne l'etaye ; ne pas le
         // reprendre comme un resultat constate.

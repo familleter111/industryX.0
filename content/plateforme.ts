@@ -8,14 +8,20 @@
 
 import {
   BarChart3,
+  Bell,
   BrainCircuit,
+  Clock,
   Factory,
+  FileStack,
   Gauge,
   HardHat,
+  LayoutGrid,
   MonitorSmartphone,
   ScanSearch,
+  ShieldAlert,
   ShieldCheck,
   Smartphone,
+  Timer,
   Workflow,
   Wrench,
 } from 'lucide-react'
@@ -237,6 +243,14 @@ export const plateforme: PlateformeContent = {
       'Anomalie escaladée en temps réel, preuve à l’appui',
       'Traçabilité complète des actions correctives',
     ],
+    image: {
+      src: '/CIPA_images_page/01_hero_dashboard_laptop_phone.png',
+      alt: 'Le tableau de bord CIPA sur un ordinateur portable et l’application mobile à côté, listant des audits et des inspections.',
+      width: 565,
+      height: 305,
+      caption:
+        'Illustration de la plateforme. Les valeurs affichées sur les écrans sont des données d’exemple.',
+    },
     // Sur la page pilier, « Voir la plateforme » renverrait ici meme. Le CTA
     // secondaire descend donc a la grille des modules, qui est ce que le
     // visiteur cherche quand il clique.
@@ -248,14 +262,17 @@ export const plateforme: PlateformeContent = {
     accent: 'reconnaîtrez.',
     items: [
       {
+        icon: FileStack,
         title: 'La donnée terrain existe, mais nulle part au même endroit',
         body: 'Un audit sur papier, un écart dans un tableur, une photo dans une messagerie. Reconstituer ce qui s’est passé sur une ligne demande d’ouvrir trois systèmes et deux classeurs.',
       },
       {
+        icon: Clock,
         title: 'Un écart se sait trop tard',
         body: 'Entre le constat au poste et l’alerte au responsable, il se passe une relève d’équipe. Le temps que l’information remonte, le lot est déjà parti.',
       },
       {
+        icon: ShieldAlert,
         title: 'La conformité se prépare au lieu de se prouver',
         body: 'À l’approche d’un audit client ou d’une certification, les équipes reconstituent après coup des preuves qui auraient dû être produites au moment du contrôle.',
       },
@@ -272,6 +289,7 @@ export const plateforme: PlateformeContent = {
     accent: 'gagnez.',
     items: [
       {
+        icon: Bell,
         value: 'Temps réel',
         label: 'Escalade d’une anomalie vers le responsable',
         detail:
@@ -279,6 +297,7 @@ export const plateforme: PlateformeContent = {
         source: 'Fonctionnement de la plateforme',
       },
       {
+        icon: LayoutGrid,
         value: '1',
         label: 'Système pour la qualité, la production et la maintenance',
         detail:
@@ -286,6 +305,7 @@ export const plateforme: PlateformeContent = {
         source: 'Périmètre couvert par CIPA',
       },
       {
+        icon: Timer,
         // TODO valider — chiffre non source. Tant qu'aucune mesure client ne
         // l'etaye, il s'affiche comme objectif de deploiement et ne doit pas
         // etre repris comme un resultat constate.
