@@ -17,7 +17,7 @@ import {
 } from '@/content/shared'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 
-// 'full' = footer complet (page d'accueil) — 'compact' = logos + informations + copyright (pages secteurs)
+// 'full' = footer complet (page d'accueil) — 'compact' = logo + informations + copyright (pages secteurs)
 type FooterProps = {
   variant?: 'full' | 'compact'
 }
@@ -56,27 +56,15 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           {/* LEFT SIDE */}
 
           <div>
-            {/* logos */}
+            {/* logo */}
 
-            <div className="flex flex-wrap items-center gap-4">
-              <Image
-                src="/logo.png"
-                alt="Industry X.0"
-                width={150}
-                height={40}
-                className="h-auto w-auto"
-              />
-
-              <div className="hidden h-6 w-px bg-white/10 md:block" />
-
-              <Image
-                src="/logoCIPA.png"
-                alt="CIPA"
-                width={80}
-                height={35}
-                className="h-auto w-auto"
-              />
-            </div>
+            <Image
+              src="/logo.png"
+              alt="Industry X.0"
+              width={150}
+              height={40}
+              className="h-auto w-auto"
+            />
 
             {/* description */}
 
