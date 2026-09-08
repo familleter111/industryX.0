@@ -180,14 +180,14 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Autre**
 
-- [ ] `L30` — le module maintenance est vide sur l'instance de demonstration. Le bloc visuel rend donc la silhouette de `ProductShot` et non une capture. Avant mise en ligne, fournir une capture prise sur des donnees reelles ou realistes, anonymisees, montrant le tableau des controles de maintenance avec ses statistiques. Renseigner alors `src` et `alt` dans `shot` ci-dessous ; la legende est deja ecrite.
+- [ ] `L40` — deux points sur ce fichier :
 
 **Produit**
 
-- [ ] `L123` — confirmer ces cinq libelles et leur maille de calcul.
-- [ ] `L142` — perimetre exact de ce rattachement.
-- [ ] `L292` — capture a fournir, voir l'en-tete de fichier. Tant que `src` est absent, `ProductShot` rend sa silhouette schematique, ce qui est preferable a une capture d'un autre module.
-- [ ] `L312` — echelle de criticite propre a la securite, ou la meme que pour une non-conformite ?
+- [ ] `L137` — confirmer ces cinq libelles et leur maille de calcul.
+- [ ] `L156` — perimetre exact de ce rattachement.
+- [ ] `L306` — capture du module maintenance a fournir, et fichier plus grand. Voir l'en-tete de fichier pour les deux points.
+- [ ] `L334` — echelle de criticite propre a la securite, ou la meme que pour une non-conformite ?
 
 ---
 
@@ -315,7 +315,7 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Chiffre à valider**
 
-- [ ] `L180` — est vide, la valeur porte un `// TODO valider` a l'endroit ou elle est ecrite, et reste formulee comme un objectif, jamais comme un constat. /
+- [ ] `L186` — est vide, la valeur porte un `// TODO valider` a l'endroit ou elle est ecrite, et reste formulee comme un objectif, jamais comme un constat. /
 
 ---
 

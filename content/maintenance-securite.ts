@@ -24,19 +24,33 @@
  * pas : il se retourne.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  PAS DE CAPTURE D'ECRAN DU MODULE
+ *  LA CAPTURE N'EST PAS CELLE DU MODULE MAINTENANCE
  * ─────────────────────────────────────────────────────────────────────────
  *
- * TODO PRODUIT — le module maintenance est vide sur l'instance de
- * demonstration. Le bloc visuel rend donc la silhouette de `ProductShot` et
- * non une capture. Avant mise en ligne, fournir une capture prise sur des
- * donnees reelles ou realistes, anonymisees, montrant le tableau des controles
- * de maintenance avec ses statistiques. Renseigner alors `src` et `alt` dans
- * `shot` ci-dessous ; la legende est deja ecrite.
+ * Le module maintenance est vide sur l'instance de demonstration. Le bloc
+ * visuel montre donc le tableau de bord operationnel, et la legende le dit :
+ * elle decrit ce que l'ecran montre reellement — taux de conformite, tendance,
+ * non-conformites par criticite — et non des controles de maintenance.
  *
- * Ne pas remplacer par une capture d'un autre module en attendant : sur une
- * page securite, un ecran qui ne montre pas ce que la legende annonce est le
- * genre de detail qu'un auditeur releve.
+ * C'est la seule maniere acceptable d'afficher cette capture ici. Une legende
+ * qui annoncerait des controles de maintenance sur un ecran qui n'en montre
+ * pas est exactement le genre de detail qu'un auditeur releve, et sur une page
+ * securite il ne s'agit pas d'un detail.
+ *
+ * TODO PRODUIT — deux points sur ce fichier :
+ *
+ *   - remplacer par une capture du module maintenance des qu'il porte des
+ *     donnees, reelles ou realistes et anonymisees, et reecrire la legende en
+ *     consequence ;
+ *   - le fichier fait 410 px de large pour un affichage jusqu'a 1024 : il est
+ *     agrandi deux fois et demie et se voit flou, texte incruste compris.
+ *     Fournir un export plus grand du meme ecran. Seuls `width` et `height`
+ *     changent ici.
+ *
+ * A savoir : cet ecran existe deja en HTML dans le site, rendu par le
+ * composant `DashboardScreen` sur /plateforme/tableaux-de-bord. Le passer en
+ * enfant de `ProductShot` donnerait le meme visuel, net a toute taille et
+ * lisible a la synthese vocale. C'est l'alternative si le flou gene.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  TODO PRODUIT — A VALIDER AVANT PUBLICATION
@@ -289,11 +303,19 @@ export const maintenanceSecurite: MaintenanceContent = {
   limits,
 
   shot: {
-    // TODO produit — capture a fournir, voir l'en-tete de fichier. Tant que
-    // `src` est absent, `ProductShot` rend sa silhouette schematique, ce qui
-    // est preferable a une capture d'un autre module.
+    // TODO produit — capture du module maintenance a fournir, et fichier plus
+    // grand. Voir l'en-tete de fichier pour les deux points.
+    image: {
+      src: '/CIPA_images_page/section_dashboard_complete.png',
+      alt: 'Le tableau de bord opérationnel : quatre indicateurs, une courbe d’évolution du taux de conformité et un anneau de répartition des non-conformités par criticité.',
+      width: 410,
+      height: 225,
+    },
+    // La legende dit ce que l'ecran montre, pas ce que la page aimerait qu'il
+    // montre. Voir l'en-tete : c'est le tableau de bord, pas le module
+    // maintenance.
     caption:
-      'Le tableau des contrôles de maintenance : contrôles réalisés, écarts ouverts et statistiques du module. Capture à venir — le module est vide sur l’instance de démonstration.',
+      'Le tableau de bord opérationnel, où les écarts de maintenance remontent avec les autres : taux de conformité et sa tendance, non-conformités ouvertes par criticité. Les valeurs affichées sont des données d’exemple.',
   },
 
   statement,

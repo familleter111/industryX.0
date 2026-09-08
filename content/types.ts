@@ -165,10 +165,16 @@ export type SolutionContent = {
 export type ShotContent = {
   /** Legende sous la capture. Dit ce que l'ecran montre, pas qu'il est beau. */
   caption: string
-  /** Chemin dans `public/`. Absent : le composant rend sa maquette schematique. */
-  src?: string
-  /** Alternative textuelle. Obligatoire des que `src` est fourni. */
-  alt?: string
+  /**
+   * La capture. Absente, le composant rend sa maquette schematique.
+   *
+   * Un `BlockImage` et non un simple chemin : le composant a besoin des
+   * dimensions reelles du fichier. Il les a longtemps codees en dur a
+   * 1600 x 1000, ce qui deformait toute capture d'un autre rapport — une image
+   * de 410 x 225 s'y retrouvait ecrasee de douze pour cent en hauteur, sans
+   * que rien ne le signale.
+   */
+  image?: BlockImage
 }
 
 /* ── 5. Benefices ────────────────────────────────────────────────────── */

@@ -28,8 +28,7 @@ import type { ShotContent } from '@/content/types'
  */
 export default function ProductShot({
   caption,
-  src,
-  alt,
+  image,
   background = 'white',
   nested = false,
   children,
@@ -57,12 +56,12 @@ export default function ProductShot({
               <span className="ml-3 h-4 w-40 rounded-full bg-stone-200 sm:w-64" />
             </div>
 
-            {children ?? (src ? (
+            {children ?? (image ? (
               <Image
-                src={src}
-                alt={alt ?? caption}
-                width={1600}
-                height={1000}
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
                 className="h-auto w-full"
                 sizes="(min-width: 1024px) 1024px, 100vw"
               />
