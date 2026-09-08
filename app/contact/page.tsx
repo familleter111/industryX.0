@@ -627,7 +627,7 @@ function ImpactChart() {
 
 function AfterContactSection() {
   return (
-    <section className="relative overflow-hidden bg-[#0A0A0C] py-16 sm:py-20 lg:py-24">
+    <section className="relative overflow-hidden bg-[#0A0A0C] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-[128px]">
       {/* photo de fond */}
       <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 md:block">
         <Image
@@ -910,8 +910,10 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
 
+      <AfterContactSection />
+
       {/* ==================== HERO — PLEIN ÉCRAN ==================== */}
-      <section className="relative flex items-center overflow-hidden bg-mesh-light pb-14 pt-24 sm:pt-28 lg:min-h-[100svh] lg:py-10 lg:pt-[104px]">
+      <section className="relative flex items-center overflow-hidden bg-mesh-light pb-14 pt-16 sm:pt-20 lg:min-h-[100svh] lg:py-10">
         {/* halos décoratifs */}
         <div className="pointer-events-none absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-gold/10 blur-[110px]" />
         <div className="pointer-events-none absolute -right-20 top-10 h-72 w-72 rounded-full bg-gold/[0.07] blur-[110px]" />
@@ -1106,8 +1108,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      <AfterContactSection />
 
       <Footer />
 
