@@ -97,6 +97,12 @@ export type PainPoint = {
 }
 
 export type ProblemContent = {
+  /**
+   * Illustration posee sous le titre par `ProblemShowcase`, ignoree par
+   * `PainPoints`. Ici et non en prop du composant : son `alt` est du texte
+   * visible, et le JSX ne porte aucun texte sur ce site.
+   */
+  image?: BlockImage
   title: string
   /**
    * Sur-titre du bloc. Optionnel : la valeur par defaut convient a la plupart

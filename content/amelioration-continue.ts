@@ -257,14 +257,26 @@ export const ameliorationContinue: AmeliorationContent = {
       'Pareto par catégorie, sous-catégorie et problème',
     ],
     image: {
-      src: '/plateforme/11-bandeau-marque-cipa.png',
-      alt: 'Le logotype CIPA sur fond sombre, accompagné de la signature « Des opérations plus sûres, plus efficaces, plus durables ».',
-      width: 588,
-      height: 302,
+      src: '/CIPA_images_page/01_hero_dashboard_laptop_phone.png',
+      alt: 'Le tableau de bord CIPA sur un ordinateur portable, listant des audits et des inspections avec leur statut, et l’application mobile à côté.',
+      width: 565,
+      height: 305,
+      caption:
+        'Illustration de la plateforme. Les valeurs affichées sur les écrans sont des données d’exemple.',
     },
   },
 
   problem: {
+    // TODO produit — fichier source en 245 px de large, affiche autour de
+    // 460 px : l'image est agrandie et se voit legerement floue sur un ecran
+    // dense. Remplacer par une version plus grande si elle existe ; seuls
+    // `width` et `height` changent ici.
+    image: {
+      src: '/CIPA_images_page/03_factory_production_visual.png',
+      alt: 'Une ligne d’embouteillage en fonctionnement, cadrée dans un motif géométrique.',
+      width: 245,
+      height: 200,
+    },
     eyebrow: 'La situation aujourd’hui',
     title: 'La démarche s’essouffle parce qu’elle n’est',
     accent: 'pas mesurée.',

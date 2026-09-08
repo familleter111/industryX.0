@@ -1,14 +1,22 @@
-import clsx from 'clsx'
 import { RotateCw } from 'lucide-react'
 
 import BlockHeading from '@/components/ui/BlockHeading'
 import Section from '@/components/ui/Section'
 import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import type { PdcaContent } from '@/content/types'
-import { cardSurface } from '@/lib/surface'
 
 /**
  * La boucle PDCA, en quatre quadrants.
+ *
+ * ─────────────────────────────────────────────────────────────────────────
+ *  DES FILETS, PAS DES CARTES
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Les quatre phases etaient rendues en cartes encadrees. Sur une page qui en
+ * porte deja trois blocs a la suite, quatre encadres de plus transforment la
+ * lecture en balayage de vignettes : l'oeil compte les boites au lieu de lire
+ * ce qu'elles contiennent. Les quadrants sont donc separes par des filets d'un
+ * pixel, comme les listes annotees du reste du site.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  POURQUOI PAS DE FLECHES ENTRE LES QUADRANTS
@@ -25,9 +33,9 @@ import { cardSurface } from '@/lib/surface'
  * puis Act. C'est exactement ce que WCAG 1.3.2 interdit, et cela desservirait
  * la lecture au clavier comme a la synthese vocale — pour une decoration.
  *
- * Les quadrants restent donc dans l'ordre de lecture, et c'est le bandeau du
- * bas qui referme la boucle, en toutes lettres. Quatre cases cote a cote sont
- * un tableau ; cette phrase est ce qui en fait un cycle.
+ * Les quadrants restent donc dans l'ordre de lecture, et c'est la ligne du bas
+ * qui referme la boucle, en toutes lettres. Quatre cases cote a cote sont un
+ * tableau ; cette phrase est ce qui en fait un cycle.
  */
 export default function PdcaLoop({
   eyebrow,
@@ -50,20 +58,17 @@ export default function PdcaLoop({
           subtitle={subtitle}
         />
 
-        <ol className="mt-12 grid gap-4 lg:grid-cols-2">
+        <ol className="mt-12 grid gap-x-12 border-t border-cream-border lg:grid-cols-2">
           {phases.map((phase) => (
             <RevealItem
               key={phase.letter}
               as="li"
-              className={clsx(
-                'rounded-2xl border border-cream-border p-6 sm:p-7',
-                cardSurface(background),
-              )}
+              className="border-b border-cream-border py-8"
             >
               <div className="flex items-center gap-3">
                 <span
                   aria-hidden
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cream-deep font-display text-[16px] font-semibold text-gray-900"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream-deep font-display text-[15px] font-semibold text-gray-900"
                 >
                   {phase.letter}
                 </span>
@@ -72,11 +77,11 @@ export default function PdcaLoop({
                 </h3>
               </div>
 
-              <p className="mt-4 text-[16px] leading-[1.7] text-muted">
+              <p className="mt-4 max-w-xl text-[16px] leading-[1.7] text-muted">
                 {phase.body}
               </p>
 
-              <ul className="mt-5 space-y-2 border-t border-cream-border pt-5">
+              <ul className="mt-5 space-y-2">
                 {phase.points.map((point) => (
                   <li key={point} className="flex items-start gap-2.5">
                     {/* Puce neutre : ces lignes disent ce que la plateforme
@@ -95,16 +100,16 @@ export default function PdcaLoop({
           ))}
         </ol>
 
-        {/* Ce bandeau n'est pas un ornement : c'est lui qui dit que la
-            quatrieme phase ramene a la premiere. Sans lui, le bloc decrit
+        {/* Cette ligne n'est pas un ornement : c'est elle qui dit que la
+            quatrieme phase ramene a la premiere. Sans elle, le bloc decrit
             quatre etapes et non un cycle. */}
         <RevealItem>
-          <p className="mt-4 flex items-start gap-3 rounded-2xl border border-cream-deep px-6 py-5 text-[15px] leading-[1.65] text-muted sm:items-center">
+          <p className="mt-8 flex items-start gap-3 text-[15px] leading-[1.65] text-muted">
             <RotateCw
               size={18}
               strokeWidth={1.75}
               aria-hidden
-              className="mt-0.5 shrink-0 text-subtle sm:mt-0"
+              className="mt-[3px] shrink-0 text-subtle"
             />
             {loopNote}
           </p>

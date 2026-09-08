@@ -1,5 +1,4 @@
-import CapabilityShowcase from '@/components/sections/CapabilityShowcase'
-import CardGrid from '@/components/sections/CardGrid'
+import CapabilityList from '@/components/sections/CapabilityList'
 import ContactCallout from '@/components/sections/ContactCallout'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import MarketingHero from '@/components/sections/MarketingHero'
@@ -21,14 +20,21 @@ import { ameliorationContinue as amelioration } from '@/content/amelioration-con
  * pas le retirer en reformulant le titre.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  PLUS DE BLOCS QUE LES ONZE AUTRES PAGES, ET C'EST VOULU
+ *  AUCUNE CARTE SUR CETTE PAGE
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Les autres pages tiennent en quatre blocs. Celle-ci en porte sept : la
- * boucle, le change control et le PDCA decrivent trois mecanismes distincts
- * qu'on ne peut pas fondre l'un dans l'autre sans perdre ce qui les separe.
- * Le decoupage en quatre sections tient quand meme — c'est la deuxieme qui les
- * reunit tous les trois.
+ * Tous les blocs sont rendus a filets : listes annotees, quadrants separes par
+ * un pixel, renvois en lignes, encart de fin sans encadre. C'est ce qui
+ * distingue cette page des onze autres, et c'est un choix de fond.
+ *
+ * Elle enchaine trois mecanismes — la boucle, le change control, le PDCA — qui
+ * sont des raisonnements, pas des destinations. Rendus en cartes, ils se
+ * balaient : l'oeil compte les boites et saute le texte. A filets, ils se
+ * lisent. Les composants concernes gardent leur forme en cartes pour les
+ * autres pages, sous `variant="cards"`, qui reste leur valeur par defaut.
+ *
+ * Consequence a tenir : si un bloc a cartes est ajoute ici plus tard, il sera
+ * le seul, et il se lira comme une piece rapportee.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  L'ORDRE DE LA FIN N'EST PAS INTERCHANGEABLE
@@ -54,7 +60,12 @@ export default function AmeliorationContinuePage() {
         className={NAVBAR_CLEARANCE}
       >
         <MarketingHero {...amelioration.hero} nested />
-        <ProblemShowcase {...amelioration.problem} background="cream" nested />
+        <ProblemShowcase
+          {...amelioration.problem}
+          variant="list"
+          background="cream"
+          nested
+        />
       </SectionStack>
 
       {/* 2 — Les trois mecanismes : la boucle, le change control, le PDCA.
@@ -62,12 +73,8 @@ export default function AmeliorationContinuePage() {
           la methode — l'inverse demanderait au lecteur de reconnaitre un cadre
           avant d'avoir vu ce qu'on y met. */}
       <SectionStack background="white" labelledBy="solution-title">
-        <CapabilityShowcase
-          {...amelioration.solution}
-          background="white"
-          nested
-        />
-        <CardGrid
+        <CapabilityList {...amelioration.solution} background="white" nested />
+        <CapabilityList
           {...amelioration.changeControl}
           background="white"
           nested
@@ -81,6 +88,7 @@ export default function AmeliorationContinuePage() {
         <FaqAccordion {...amelioration.faq} background="cream" nested />
         <RelatedPages
           {...amelioration.related}
+          variant="list"
           background="cream"
           nested
           headingId="related-title"

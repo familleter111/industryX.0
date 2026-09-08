@@ -5,12 +5,12 @@
 
 Les douze pages CIPA décrivent des comportements produit, des engagements contractuels et des chiffres. Tout ce qui n’a pas pu être vérifié au moment de l’écriture porte un commentaire `TODO` à l’endroit exact où il est affirmé. Ce document les rassemble, page par page.
 
-**80 points ouverts.**
+**81 points ouverts.**
 
 | Catégorie | Points | Qui tranche |
 |---|---:|---|
 | Juridique | 8 | Direction juridique |
-| Produit | 48 | Équipe produit |
+| Produit | 49 | Équipe produit |
 | Qualité | 1 | Équipe qualité |
 | Société | 2 | Direction |
 | Chiffre à valider | 10 | Équipe produit + direction |
@@ -220,19 +220,20 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 ## Amélioration continue
 
-`content/amelioration-continue.ts` — /solutions/amelioration-continue · 6 points
+`content/amelioration-continue.ts` — /solutions/amelioration-continue · 7 points
 
 **Produit**
 
 - [ ] `L113` — pourcentage d'avancement : saisi ou deduit ?
 - [ ] `L124` — maille du Pareto : trois niveaux hierarchiques ?
 - [ ] `L142` — circuit d'approbation : qui valide, selon quelle criticite ? Non decrit ici faute d'element valide.
-- [ ] `L348` — maille du Pareto, voir l'en-tete de fichier.
+- [ ] `L270` — fichier source en 245 px de large, affiche autour de 460 px : l'image est agrandie et se voit legerement floue sur un ecran dense. Remplacer par une version plus grande si elle existe ; seuls `width` et `height` changent ici.
+- [ ] `L360` — maille du Pareto, voir l'en-tete de fichier.
 
 **Société**
 
 - [ ] `L230` — voir l'en-tete : « l'Ariana » contredit l'adresse du pied de page et la page /about, qui disent Tunis. Et l'accompagnement annonce comme venant avec l'outil est un engagement commercial a confirmer.
-- [ ] `L359` — perimetre exact de l'accompagnement.
+- [ ] `L371` — perimetre exact de l'accompagnement.
 
 ---
 
@@ -298,7 +299,7 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 **Chiffre à valider**
 
-- [ ] `L174` — est vide, la valeur porte un `// TODO valider` a l'endroit ou elle est ecrite, et reste formulee comme un objectif, jamais comme un constat. /
+- [ ] `L180` — est vide, la valeur porte un `// TODO valider` a l'endroit ou elle est ecrite, et reste formulee comme un objectif, jamais comme un constat. /
 
 ---
 

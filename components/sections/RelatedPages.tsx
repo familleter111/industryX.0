@@ -11,14 +11,14 @@ import type { RelatedContent } from '@/content/types'
 import { cardSurface } from '@/lib/surface'
 
 /**
- * Maillage interne : une grille de cartes vers d'autres pages du site.
+ * Maillage interne : des liens vers d'autres pages du site.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  POURQUOI DES CHEMINS, ET NON DES ENTREES RECOPIEES
  * ─────────────────────────────────────────────────────────────────────────
  *
  * Le bloc ne recoit que des URL. Le titre, la description et l'icone de
- * chaque carte sont lus dans `NAV_GROUPS` au moment du rendu, donc identiques
+ * chaque entree sont lus dans `NAV_GROUPS` au moment du rendu, donc identiques
  * a ce que le mega menu annonce pour la meme page.
  *
  * Avant ce composant, chaque page qui renvoyait vers deux autres embarquait
@@ -28,16 +28,20 @@ import { cardSurface } from '@/lib/surface'
  * le build avec le nom du fichier fautif.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  POURQUOI DES CARTES ICI
+ *  DEUX RENDUS
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Meme raison que pour la grille des modules de la page pilier, qu'il
- * remplace : ces entrees ne sont pas des arguments mais des destinations, et
- * un sommaire se balaie en cases plutot qu'en paragraphes. Filet d'un pixel,
- * pas d'ombre, l'or reserve a l'etat survole — c'est-a-dire a l'action.
+ *   - `cards` : une grille de cartes. Ces entrees ne sont pas des arguments
+ *     mais des destinations, et un sommaire se balaie en cases plutot qu'en
+ *     paragraphes. Filet d'un pixel, pas d'ombre, l'or reserve a l'etat
+ *     survole — c'est-a-dire a l'action. Forme par defaut.
+ *   - `list` : des lignes separees par des filets, sur une page qui ne veut
+ *     aucun encadre. Deux ou trois destinations se lisent aussi bien en
+ *     lignes, et le bloc cesse alors de peser autant que les sections qui
+ *     portent l'argument.
  *
- * La carte entiere est cliquable : un lien pose sur le seul titre laisserait
- * l'essentiel de la surface inerte, ce qui se paie surtout au doigt.
+ * La surface entiere est cliquable dans les deux cas : un lien pose sur le
+ * seul titre laisserait l'essentiel inerte, ce qui se paie surtout au doigt.
  */
 export default function RelatedPages({
   eyebrow = 'À lire aussi',
@@ -45,13 +49,15 @@ export default function RelatedPages({
   accent,
   subtitle,
   hrefs,
+  variant = 'cards',
   background = 'white',
   nested = false,
   id,
   headingId = 'related-title',
 }: RelatedContent & {
+  /** Voir le docblock. `cards` par defaut. */
+  variant?: 'cards' | 'list'
   background?: 'cream' | 'white'
-  /** Rendu dans une section deja ouverte par la page. Voir `SectionStack`. */
   nested?: boolean
   /** Ancre de section, pour un lien interne qui viserait ce bloc. */
   id?: string
@@ -59,6 +65,7 @@ export default function RelatedPages({
   headingId?: string
 }) {
   const items = hrefs.map(navItemByHref)
+  const list = variant === 'list'
 
   return (
     <Section background={background} nested={nested} labelledBy={headingId} id={id}>
@@ -71,41 +78,77 @@ export default function RelatedPages({
           subtitle={subtitle}
         />
 
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul
+          className={clsx(
+            'mt-12',
+            list
+              ? 'border-t border-cream-border'
+              : 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3',
+          )}
+        >
           {items.map((item) => (
             <RevealItem key={item.href} as="li">
               <Link
                 href={item.href}
                 className={clsx(
-                  'group flex h-full flex-col rounded-2xl border border-cream-border p-6 transition-colors duration-base ease-smooth hover:border-gold',
-                  cardSurface(background),
+                  'group transition-colors duration-base ease-smooth',
+                  list
+                    ? 'flex items-center gap-4 border-b border-cream-border py-6 hover:text-gold-ink sm:gap-6'
+                    : clsx(
+                        'flex h-full flex-col rounded-2xl border border-cream-border p-6 hover:border-gold',
+                        cardSurface(background),
+                      ),
                 )}
               >
-                <div className="flex items-center justify-between gap-3">
-                  <IconTile icon={item.icon} />
+                <div
+                  className={clsx(
+                    'flex items-center gap-3',
+                    list ? 'shrink-0' : 'justify-between',
+                  )}
+                >
+                  <IconTile icon={item.icon} size={list ? 'sm' : 'md'} />
 
-                  {item.badge && (
+                  {item.badge && !list && (
                     <span className="rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-800">
                       {item.badge}
                     </span>
                   )}
                 </div>
 
-                <h3 className="mt-5 text-[17px] font-semibold leading-[1.35] text-gray-900">
-                  {item.title}
-                </h3>
+                <div className={list ? 'min-w-0 flex-1' : 'contents'}>
+                  <h3
+                    className={clsx(
+                      'text-[17px] font-semibold leading-[1.35] text-gray-900',
+                      !list && 'mt-5',
+                    )}
+                  >
+                    {item.title}
+                    {item.badge && list && (
+                      <span className="ml-2 rounded-full bg-gold-tint px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-[0.08em] text-gold-800">
+                        {item.badge}
+                      </span>
+                    )}
+                  </h3>
 
-                <p className="mt-2 text-[15px] leading-[1.65] text-muted">
-                  {item.description}
-                </p>
+                  <p className="mt-2 text-[15px] leading-[1.65] text-muted">
+                    {item.description}
+                  </p>
+                </div>
 
-                {/* `mt-auto` cale ce libelle en bas quelle que soit la longueur
-                    de la description : sans lui, les cartes d'une meme ligne
-                    alignent leur bordure mais pas leur fleche. */}
-                <span className="mt-auto flex items-center gap-1.5 pt-5 text-[13px] font-semibold text-gold-ink">
-                  Découvrir
+                {/* En cartes, `mt-auto` cale ce libelle en bas quelle que soit
+                    la longueur de la description : sans lui, les cartes d'une
+                    meme ligne alignent leur bordure mais pas leur fleche. En
+                    liste, la fleche seule suffit — le libelle repeterait sur
+                    chaque ligne un mot que le titre porte deja. */}
+                <span
+                  className={clsx(
+                    'flex items-center gap-1.5 text-[13px] font-semibold text-gold-ink',
+                    list ? 'shrink-0' : 'mt-auto pt-5',
+                  )}
+                >
+                  {!list && 'Découvrir'}
                   <ArrowRight
-                    size={14}
+                    size={list ? 16 : 14}
                     strokeWidth={2}
                     aria-hidden
                     className="transition-transform duration-base ease-smooth group-hover:translate-x-1"

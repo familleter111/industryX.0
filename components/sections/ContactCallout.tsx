@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
@@ -6,23 +5,23 @@ import IconTile from '@/components/ui/IconTile'
 import Section from '@/components/ui/Section'
 import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import type { CalloutContent } from '@/content/types'
-import { cardSurface } from '@/lib/surface'
 
 /**
- * Encart de relance, au milieu de la page.
+ * Encart de relance : une objection, une reponse courte, un interlocuteur.
  *
- * Il repond a l'objection qu'une grille de categories laisse forcement
- * ouverte — « et si mon systeme n'y est pas ? » — au moment ou elle se pose,
- * plutot que de la laisser courir jusqu'au pied de page.
+ * Clair et non sombre : le seul aplat noir d'une page de rubrique est le
+ * bandeau des chiffres, et une relance n'a pas a lui disputer l'attention.
+ * D'ou aussi le bouton noir des sections claires plutot que l'or, et
+ * `variant="dense"` : c'est une relance, pas une conclusion.
  *
- * Clair et non sombre : le seul aplat noir d'une page de rubrique est son
- * pied de page, et une relance en milieu de parcours n'a pas a lui disputer
- * l'attention. D'ou aussi le bouton noir des sections claires plutot que l'or,
- * et `variant="dense"` : c'est une relance, pas une conclusion.
+ * ─────────────────────────────────────────────────────────────────────────
+ *  DES FILETS, PAS UN ENCADRE
+ * ─────────────────────────────────────────────────────────────────────────
  *
- * La destination est volontairement une equipe technique et non le formulaire
- * commercial : quelqu'un qui cherche son ERP dans une liste ne veut pas qu'on
- * le rappelle pour lui presenter la plateforme.
+ * Le bloc etait une carte encadree posee au milieu de la colonne. Sur une page
+ * qui enchaine plusieurs blocs, un encadre de plus se lit comme une publicite
+ * inseree dans le texte — l'oeil le saute. Deux filets d'un pixel suffisent a
+ * l'isoler tout en le gardant dans le fil de la lecture.
  */
 export default function ContactCallout({
   icon,
@@ -33,15 +32,17 @@ export default function ContactCallout({
   nested = false,
 }: CalloutContent & { background?: 'cream' | 'white'; nested?: boolean }) {
   return (
-    <Section background={background} nested={nested} variant="dense" labelledBy="callout-title">
+    <Section
+      background={background}
+      nested={nested}
+      variant="dense"
+      labelledBy="callout-title"
+    >
       <RevealGroup className="mx-auto max-w-3xl">
         <RevealItem>
-          <div className={clsx(
-            'flex flex-col gap-6 rounded-2xl border border-cream-deep px-6 py-7 sm:px-9 sm:py-9 lg:flex-row lg:items-center lg:gap-10',
-            cardSurface(background),
-          )}>
+          <div className="flex flex-col gap-6 border-y border-cream-border py-9 lg:flex-row lg:items-center lg:gap-10">
             <div className="flex-1">
-              {icon && <IconTile icon={icon} className="mb-5" />}
+              {icon && <IconTile icon={icon} size="sm" className="mb-5" />}
 
               <h2
                 id="callout-title"
