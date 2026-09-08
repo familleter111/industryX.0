@@ -26,7 +26,7 @@ export const automotive: IndustryPageData = {
   intro:
     "L'industrie automobile évolue dans un environnement où sécurité, émissions et qualité sont scrutées à chaque étape. CIPA fournit une plateforme digitale complète pour piloter la conformité, la performance de production et la traçabilité des composants, du fournisseur jusqu'au véhicule fini.",
   hero: {
-    src: '/Secteur/automotive_hero.png',
+    src: '/Secteur/automobile.png',
     alt: 'Production automobile Industry X.0',
   },
   heroIcon: Car,

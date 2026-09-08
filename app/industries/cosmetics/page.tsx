@@ -7,9 +7,6 @@ import {
   ChevronRight,
   ChevronLeft,
   ShieldCheck,
-  Zap,
-  Gauge,
-  BadgeCheck,
   CheckCircle2,
   XCircle,
   Leaf,
@@ -28,8 +25,8 @@ import {
   Workflow
 } from 'lucide-react'
 import Image from 'next/image'
-import { viewport } from '@/lib/motion'
 import Footer from '@/components/layout/Footer'
+import heroStyles from './hero.module.css'
 
 // Animation réutilisable
 const fadeInUp = {
@@ -248,17 +245,17 @@ function VisualPanel({ slide }: { slide: CarouselSlide }) {
       <div className="flex-1 bg-white rounded-2xl border border-black/[0.06] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-subtle">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
             {slide.tag}
           </span>
-          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-subtle font-bold px-2 py-0.5 rounded-full">
+          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-slate-500 font-bold px-2 py-0.5 rounded-full">
             Données live
           </span>
         </div>
         <div className="flex-1 flex items-center">
           <SlideVisualRenderer visual={slide.visual} />
         </div>
-        <div className="mt-3 text-[10px] text-subtle text-center italic leading-snug">
+        <div className="mt-3 text-[10px] text-slate-400 text-center italic leading-snug">
           {slide.visualCaption}
         </div>
       </div>
@@ -306,18 +303,18 @@ function CosmFlowVisual() {
           >
             <div
               className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
-                s.state === 'todo' ? 'bg-slate-100 text-subtle' : 'bg-gold/10 text-gold'
+                s.state === 'todo' ? 'bg-slate-100 text-slate-400' : 'bg-gold/10 text-gold'
               }`}
             >
               {s.n}
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-subtle' : 'text-dark'}`}>{s.title}</h4>
-              <p className="text-[10px] text-subtle truncate">{s.sub}</p>
+              <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-slate-400' : 'text-dark'}`}>{s.title}</h4>
+              <p className="text-[10px] text-slate-500 truncate">{s.sub}</p>
             </div>
             {s.state === 'done' && <ShieldCheck size={16} className="text-emerald-500 shrink-0" />}
             {s.state === 'active' && (
-              <span className="text-[9px] font-bold text-gold-ink px-2 py-0.5 bg-gold/10 rounded-full shrink-0">En cours</span>
+              <span className="text-[9px] font-bold text-gold px-2 py-0.5 bg-gold/10 rounded-full shrink-0">En cours</span>
             )}
             {s.state === 'todo' && <Workflow size={16} className="text-slate-300 shrink-0" />}
           </motion.div>
@@ -460,7 +457,7 @@ function SupplyChainVisual() {
               </motion.div>
               <div className="text-center">
                 <div className="text-[10px] font-bold text-dark">{step.title}</div>
-                <div className="text-[8px] text-subtle bg-slate-100 px-1 py-0.5 rounded font-mono mt-0.5">{step.id}</div>
+                <div className="text-[8px] text-slate-400 bg-slate-100 px-1 py-0.5 rounded font-mono mt-0.5">{step.id}</div>
               </div>
             </div>
           )
@@ -470,7 +467,7 @@ function SupplyChainVisual() {
         <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold flex items-center justify-center shrink-0">
           <Eye size={15} />
         </div>
-        <p className="text-[10px] text-subtle leading-snug">
+        <p className="text-[10px] text-slate-500 leading-snug">
           <span className="font-bold text-dark">Généalogie UDI :</span>{' '}
           {"Traçabilité complète à travers toutes les étapes de mélange et de découpe, simplifiant la réponse en cas de rappel produit."}
         </p>
@@ -490,10 +487,10 @@ function LaunchTimelineVisual() {
   return (
     <div className="w-full py-2 flex flex-col gap-3">
       <div className="flex items-center gap-4 text-[9px] font-bold">
-        <span className="flex items-center gap-1.5 text-subtle">
+        <span className="flex items-center gap-1.5 text-slate-400">
           <span className="w-3 h-2 rounded-sm bg-slate-200 inline-block" /> Avant CIPA
         </span>
-        <span className="flex items-center gap-1.5 text-gold-ink">
+        <span className="flex items-center gap-1.5 text-gold">
           <span className="w-3 h-2 rounded-sm bg-gold inline-block" /> Avec CIPA
         </span>
       </div>
@@ -508,7 +505,7 @@ function LaunchTimelineVisual() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: `${p.after}%` }}
-                viewport={viewport}
+                viewport={{ once: true }}
                 transition={{ duration: 0.9, delay: i * 0.12 }}
                 className="bg-gold h-full rounded-full"
               />
@@ -533,15 +530,15 @@ function DashboardVisual() {
       <div className="grid grid-cols-2 gap-2">
         {tiles.map((t, i) => (
           <div key={i} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
-            <div className="text-[9px] text-subtle font-bold uppercase tracking-wide truncate">{t.label}</div>
+            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wide truncate">{t.label}</div>
             <div className="flex items-baseline gap-1.5 mt-0.5">
               <span className="text-base font-black font-display text-dark">{t.value}</span>
-              <span className={`text-[9px] font-bold ${t.good ? 'text-emerald-700' : 'text-red-600'}`}>{t.trend}</span>
+              <span className={`text-[9px] font-bold ${t.good ? 'text-emerald-600' : 'text-red-500'}`}>{t.trend}</span>
             </div>
           </div>
         ))}
       </div>
-      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-[9px] text-subtle">
+      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-[9px] text-slate-500">
         <span className="font-bold text-dark block mb-1">Contrôles Vision AOI :</span>
         {"Inspections en ligne automatiques activées, détection instantanée des défauts d'étiquetage ou de scellage."}
       </div>
@@ -622,10 +619,10 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
             className={`group flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold border transition-all duration-300 ${
               i === index
                 ? 'bg-[#111827] text-white border-[#111827] shadow-lg'
-                : 'bg-white/70 text-subtle border-slate-200 hover:border-gold hover:text-dark'
+                : 'bg-white/70 text-slate-500 border-slate-200 hover:border-gold hover:text-dark'
             }`}
           >
-            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold-ink'}`}>{s.num}</span>
+            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold/70'}`}>{s.num}</span>
             <span className="hidden sm:inline max-w-[180px] truncate">{s.tag}</span>
           </button>
         ))}
@@ -653,43 +650,28 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
               <div className="lg:col-span-6 flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-3xl font-black font-display text-gold/30">{slide.num}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold-ink">{slide.tag}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#B6842B]">{slide.tag}</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black font-display text-[#111827] tracking-tight mb-4 leading-snug">
                   {slide.title}
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-6">{slide.desc}</p>
 
-                <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-0 mb-6">
-                  <div className="relative rounded-2xl sm:rounded-r-none border border-red-100 sm:border-r-0 bg-gradient-to-br from-red-50/70 to-white p-4 sm:p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100">
-                        <XCircle size={13} className="text-red-600" />
-                      </span>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">Avant CIPA</span>
-                    </div>
-                    <ul className="space-y-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                  <div className="p-4 rounded-xl bg-white border border-red-100">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-red-400 mb-2.5">Avant CIPA</div>
+                    <ul className="space-y-2">
                       {slide.before.map((b, i) => (
-                        <li key={i} className="flex items-start gap-2 text-[11px] text-subtle leading-snug">
+                        <li key={i} className="flex items-start gap-2 text-[11px] text-slate-500 leading-snug">
                           <XCircle size={13} className="text-red-300 shrink-0 mt-[1px]" />
                           {b}
                         </li>
                       ))}
                     </ul>
                   </div>
-
-                  <div className="hidden sm:flex absolute left-1/2 top-1/2 z-10 h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200 bg-white shadow-[0_6px_16px_rgba(0,0,0,0.08)]">
-                    <ArrowRight size={15} className="text-emerald-500" />
-                  </div>
-
-                  <div className="relative rounded-2xl sm:rounded-l-none border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/70 to-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(16,185,129,0.08)]">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                        <CheckCircle2 size={13} className="text-emerald-700" />
-                      </span>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Avec CIPA</span>
-                    </div>
-                    <ul className="space-y-2.5">
+                  <div className="p-4 rounded-xl bg-white border border-emerald-100">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-500 mb-2.5">Avec CIPA</div>
+                    <ul className="space-y-2">
                       {slide.after.map((a, i) => (
                         <li key={i} className="flex items-start gap-2 text-[11px] text-slate-600 leading-snug">
                           <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-[1px]" />
@@ -700,16 +682,13 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
                   </div>
                 </div>
 
-                <div className="mt-auto">
-                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-subtle">Résultats mesurés</p>
-                  <div className="grid grid-cols-2 divide-x divide-black/[0.06] overflow-hidden rounded-2xl border border-black/[0.05] bg-gradient-to-br from-gold/[0.06] to-white shadow-sm">
-                    {slide.kpis.map((k, i) => (
-                      <div key={i} className="p-4">
-                        <div className="text-xl sm:text-2xl font-black font-display text-gold-deep">{k.value}</div>
-                        <div className="text-[10px] text-subtle mt-0.5 leading-snug">{k.label}</div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="mt-auto grid grid-cols-2 gap-3">
+                  {slide.kpis.map((k, i) => (
+                    <div key={i} className="p-3.5 rounded-xl bg-white border border-black/[0.05] shadow-sm">
+                      <div className="text-xl sm:text-2xl font-black font-display text-gold">{k.value}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5 leading-snug">{k.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -740,7 +719,7 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
         <button
           onClick={() => (setPlaying(!playing))}
           aria-label={playing ? 'Mettre en pause' : 'Lancer le défilement'}
-          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-subtle hover:border-gold hover:text-gold transition-all"
+          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:border-gold hover:text-gold transition-all"
         >
           {playing ? <Pause size={12} /> : <Play size={12} />}
         </button>
@@ -756,7 +735,7 @@ function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accen
             />
           ))}
         </div>
-        <span className="text-[10px] font-bold text-subtle tabular-nums">
+        <span className="text-[10px] font-bold text-slate-400 tabular-nums">
           {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
         </span>
         <span className="sr-only">{accentLabel}</span>
@@ -773,144 +752,143 @@ export default function CosmeticsPage() {
   return (
     <main className="min-h-screen bg-[#F7F7F6] text-dark overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold-900">
 
-      {/* 1. HERO + 3 BÉNÉFICES CLÉS */}
-      <section className="relative lg:min-h-screen lg:max-h-[1000px] flex flex-col justify-center pt-24 pb-10 lg:pt-28 lg:pb-8 overflow-hidden bg-mesh-light">
-        <div className="absolute top-1/4 left-0 w-80 h-80 bg-green-500/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="max-w-7xl w-full mx-auto px-5 sm:px-7 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            <div className="lg:col-span-7 flex flex-col items-start text-left">
+      {/* 1. HERO — CIPA & l'industrie cosmétique / dispositifs médicaux */}
+      <section className={`${heroStyles.hero} relative overflow-hidden bg-white pt-[82px] pb-6`}>
+        <div className={`${heroStyles.content} relative`}>
+          <div className={`${heroStyles.grid} mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-8 px-5 sm:px-7 lg:grid-cols-12 lg:gap-6 lg:px-10`}>
+            {/* ---------- Colonne texte ---------- */}
+            <div className={`${heroStyles.copy} relative z-10 pt-10 lg:col-span-6`}>
               <motion.div
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-bold uppercase tracking-widest text-gold-ink mb-4"
+                className="inline-flex items-center gap-3 rounded-full border border-[#EDE3D2] bg-white/80 py-1.5 pl-1.5 pr-5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] backdrop-blur"
               >
-                <Zap size={11} className="text-gold-deep" />
-                {"Secteur d'activité"}
+                <span className="h-5 w-1.5 rounded-full bg-[#DAA250]" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#57534E] sm:text-[11px]">
+                  {"Secteur d'activité"}
+                </span>
               </motion.div>
 
               <motion.h1
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-[26px] sm:text-[32px] lg:text-[38px] xl:text-[42px] font-black font-display text-dark tracking-tight leading-[1.12] mb-4"
+                className={`${heroStyles.title} mt-6 font-display text-[30px] font-black leading-[1.08] tracking-[-0.02em] text-dark sm:text-[38px] lg:text-[clamp(30px,3.1vw_-_2px,43px)]`}
               >
-                {"Comment CIPA transforme l'industrie"}{' '}
-                <span className="text-gold-deep">
-                  {"cosmétique & des dispositifs médicaux"}
-                </span>
+                {"Comment CIPA transforme l'industrie "}
+                <span className="text-[#DAA250]">{"cosmétique & des dispositifs médicaux"}</span>
               </motion.h1>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-[13px] sm:text-[14px] leading-relaxed text-slate-600 mb-6 max-w-xl"
+                className="mt-6 max-w-[34rem] text-[14px] leading-[1.75] text-[#57534E] sm:text-[15.5px]"
               >
                 {"La fabrication de dispositifs médicaux et de cosmétiques exige une rigueur opérationnelle et une traçabilité totale. CIPA fournit une plateforme digitale complète pour standardiser vos opérations en salle blanche stérile."}
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="flex flex-wrap gap-3"
+                className="mt-8 flex flex-wrap items-center gap-3.5"
               >
                 <a
                   href="/contact"
-                  className="group inline-flex items-center gap-2 rounded-full bg-[#111827] px-5 py-2.5 text-[13px] font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
+                  className="group inline-flex items-center gap-3 rounded-full bg-[#111827] px-7 py-4 text-[14px] font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
                 >
                   Demander une démo
-                  <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
                 <a
                   href="#core-ops"
-                  className="group inline-flex items-center gap-2 rounded-full border border-slate-350 bg-white/60 px-5 py-2.5 text-[13px] font-semibold text-[#44403C] backdrop-blur transition-all duration-300 hover:border-gold hover:bg-white"
+                  className="group inline-flex items-center gap-2.5 rounded-full border border-[#E4DED2] bg-white px-7 py-4 text-[14px] font-semibold text-[#292524] shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_10px_26px_rgba(218,162,80,0.18)]"
                 >
                   Découvrir les solutions
-                  <ChevronRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                  <ChevronRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5" />
                 </a>
               </motion.div>
             </div>
 
+            {/* ---------- Colonne visuel ---------- */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 flex justify-center lg:justify-end relative"
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              className={`${heroStyles.visual} relative -mx-5 sm:-mx-7 lg:col-span-6`}
             >
-              <div className="absolute -inset-3 border border-dashed border-gold/20 rounded-full animate-[spin_100s_linear_infinite]" />
-              <div className="absolute -inset-7 border border-gold/10 rounded-full pointer-events-none" />
-
-              <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] xl:w-[400px] xl:h-[400px] rounded-full overflow-hidden border-[6px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
+              <div className={`${heroStyles.imageFrame} relative w-full`}>
                 <Image
-                  src="/Secteur/cosmetics_hero.png"
-                  alt="Production cosmétique et dispositif médical Industry X.0"
-                  fill
+                  src="/Secteur/cosmetique_hero_visual.png"
+                  alt="Plateforme CIPA en salle blanche cosmétique : tableau de bord qualité, conformité et assistance IA"
+                  width={1058}
+                  height={715}
                   priority
-                  className="object-cover"
+                  sizes="(max-width: 1023px) 100vw, 50vw"
+                  className={`${heroStyles.image} block h-auto w-full select-none object-contain`}
                 />
-              </div>
-
-              <div className="absolute -bottom-1 -left-1 sm:left-2 bg-white/90 backdrop-blur border border-gold/30 rounded-xl p-2.5 shadow-xl flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold-deep flex items-center justify-center shrink-0">
-                  <ShieldCheck size={16} />
-                </div>
-                <div>
-                  <div className="text-[9px] font-bold text-subtle uppercase tracking-wider">Normes ISO</div>
-                  <div className="text-[12px] font-extrabold text-dark">ISO 13485 & 22716 Validé</div>
-                </div>
+                <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-[2%] bg-gradient-to-r from-white to-transparent" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[3%] bg-gradient-to-t from-white to-transparent" />
               </div>
             </motion.div>
           </div>
+        </div>
 
-          <div className="mt-8 lg:mt-10">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+        <div className={`${heroStyles.footer} relative z-10 mx-auto w-full max-w-[1400px] px-5 sm:px-7 lg:px-10`}>
+          {/* ---------- 3 bénéfices clés ---------- */}
+          <div className={`${heroStyles.stats} mt-10 border-t border-[#EDE7DC] pt-8 lg:mt-4`}>
+            <div className="grid grid-cols-1 gap-y-7 sm:grid-cols-3">
               {[
-                {
-                  icon: Gauge,
-                  value: '40%',
-                  label: "Efficacité opérationnelle",
-                  desc: "Digitalisation complète du shop-floor et automatisation des checklists en salle blanche."
-                },
-                {
-                  icon: ShieldCheck,
-                  value: '90%',
-                  label: 'Préparation constante aux audits',
-                  desc: "Traçabilité documentaire instantanée pour ISO 13485 et ISO 22716 BPF."
-                },
-                {
-                  icon: BadgeCheck,
-                  value: '30%',
-                  label: 'Baisse du taux de rebuts en ligne',
-                  desc: "Grâce à la détection précoce d'écarts de qualité opérée par l'IA."
-                }
-              ].map((stat, i) => {
-                const Icon = stat.icon
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                    whileHover={{ y: -3 }}
-                    className="bg-white rounded-xl px-4 py-4 border border-[#ECE7DD] shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center transition-shadow hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)]"
-                  >
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <Icon size={19} className="text-gold-deep" strokeWidth={1.75} />
-                      <span className="text-[24px] font-black font-display text-gold-deep leading-none">
-                        {stat.value}
-                      </span>
+                { value: '40%', label: 'Efficacité opérationnelle' },
+                { value: '90%', label: 'Préparation constante aux audits' },
+                { value: '30%', label: 'Baisse du taux de rebuts en ligne' }
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.45 + i * 0.1 }}
+                  className={[
+                    'flex items-center gap-3.5 sm:px-6 lg:px-8',
+                    i > 0 ? 'sm:border-l sm:border-[#EDE7DC]' : ''
+                  ].join(' ')}
+                >
+                  <CheckCircle2 size={22} strokeWidth={2} className="shrink-0 text-[#22C55E]" />
+                  <div>
+                    <div className="font-display text-[22px] font-black leading-none text-[#DAA250] sm:text-[24px]">
+                      {stat.value}
                     </div>
-                    <div className="text-[10px] font-black text-dark uppercase tracking-wider mb-1.5 leading-tight">
+                    <div className="mt-1.5 text-[11px] font-bold uppercase leading-tight tracking-[0.1em] text-[#57534E]">
                       {stat.label}
                     </div>
-                    <p className="text-[11px] leading-snug text-subtle">{stat.desc}</p>
-                  </motion.div>
-                )
-              })}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* ---------- Barre de bas de héros ---------- */}
+          <div className={`${heroStyles.footerBar} mt-9 flex flex-col items-start gap-4 border-t border-[#EDE7DC] pt-5 md:flex-row md:items-center md:justify-between`}>
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1">
+                <span className="h-1.5 w-9 rounded-full bg-[#DAA250]" />
+                <span className="h-1.5 w-5 rounded-full bg-[#EBD3AC]" />
+                <span className="h-1.5 w-5 rounded-full bg-[#E7E2D8]" />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+                {"De la conformité à l'excellence opérationnelle"}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+              {['Qualité', 'Production', 'Maintenance', 'R&D', 'Conformité', 'Impact'].map((item, i) => (
+                <span key={item} className="flex items-center gap-2.5">
+                  {i > 0 && <span className="text-[#DAA250]">•</span>}
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </div>
@@ -924,7 +902,7 @@ export default function CosmeticsPage() {
             className="bg-dark rounded-2xl px-6 py-5 md:px-10 flex flex-col md:flex-row items-center gap-5 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-mesh-dark opacity-30" />
-            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-gold-deep flex items-center justify-center shrink-0 relative z-10">
+            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-[#DAA250] flex items-center justify-center shrink-0 relative z-10">
               <ShieldCheck size={19} />
             </div>
             <p className="text-[13px] sm:text-sm text-white/85 leading-relaxed relative z-10 text-center md:text-left">
@@ -940,11 +918,11 @@ export default function CosmeticsPage() {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"4 façons dont CIPA renforce les "}</span>
-              <span className="text-gold-deep md:block">
+              <span className="text-[#DAA250] md:block">
                 opérations de cosmétiques & dispositifs médicaux
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
               {"Naviguez entre les cartes pour explorer chaque levier : les données, les visuels et les comparaisons avant/après CIPA."}
             </p>
           </div>
@@ -959,11 +937,11 @@ export default function CosmeticsPage() {
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{"3 façons dont CIPA accélère la "}</span>
-              <span className="text-gold-deep md:block">
+              <span className="text-[#DAA250] md:block">
                 qualité produit, l’innovation et la performance durable
               </span>
             </h2>
-            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-slate-500 leading-relaxed">
               {"Trois leviers de croissance, illustrés par des données concrètes et des résultats mesurés chez nos clients."}
             </p>
           </div>
@@ -1023,9 +1001,9 @@ export default function CosmeticsPage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="text-3xl sm:text-4xl font-black font-display text-dark tracking-tight mb-3">
-              Comment <span className="text-gold-deep">CIPA</span> fonctionne
+              Comment <span className="text-gold">CIPA</span> fonctionne
             </h2>
-            <p className="text-sm sm:text-[15px] text-subtle">
+            <p className="text-sm sm:text-[15px] text-slate-500">
               {"Cinq étapes, un cycle d'amélioration continue mesurable."}
             </p>
           </div>
@@ -1045,7 +1023,7 @@ export default function CosmeticsPage() {
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewport}
+                  viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   className="relative z-10 flex flex-col items-center text-center"
                 >
@@ -1053,7 +1031,7 @@ export default function CosmeticsPage() {
                     <Icon size={22} />
                   </div>
                   <h4 className="text-sm font-black text-dark mb-1.5">{step.title}</h4>
-                  <p className="text-[11px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
+                  <p className="text-[11px] text-slate-500 leading-relaxed max-w-[190px]">{step.desc}</p>
                 </motion.div>
               )
             })}
