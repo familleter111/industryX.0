@@ -79,7 +79,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           {/* LEFT SIDE */}
 
           <div>
-            {/* logos */}
+            {/* logo */}
 
             <div className="flex flex-wrap items-center gap-4">
               <Image
@@ -87,16 +87,6 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                 alt="Industry X.0"
                 width={150}
                 height={40}
-                className="h-auto w-auto"
-              />
-
-              <div className="hidden h-6 w-px bg-white/10 md:block" />
-
-              <Image
-                src="/logoCIPA.png"
-                alt="CIPA"
-                width={80}
-                height={35}
                 className="h-auto w-auto"
               />
             </div>

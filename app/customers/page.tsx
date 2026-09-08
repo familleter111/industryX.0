@@ -94,7 +94,11 @@ const SECTORS = [
    ============================================================ */
 
 function TestimonialLogo({ testimonial }: { testimonial: Testimonial }) {
-  const logo = testimonial.logoAlt ? findClientLogo(testimonial.logoAlt) : undefined
+  /* /public/logos d'abord, `fallbackLogo` ensuite pour les clients qui n'y
+     figurent pas — les initiales ne restent qu'en dernier recours. */
+  const logo =
+    (testimonial.logoAlt ? findClientLogo(testimonial.logoAlt) : undefined) ??
+    testimonial.fallbackLogo
 
   if (!logo) {
     return (

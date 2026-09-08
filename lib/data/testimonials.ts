@@ -12,6 +12,8 @@
  * passer `status` à 'published'.
  */
 
+import type { LogoAsset } from '@/lib/data/logoSizing'
+
 export type Testimonial = {
   quote: string
   /** Fonction de la personne citée. */
@@ -20,8 +22,13 @@ export type Testimonial = {
   sector: string
   /** `alt` d'une entrée CLIENT_LOGOS, ou null si aucun logo n'est disponible. */
   logoAlt: string | null
-  /** Logo hors dossier /public/logos, en dépannage. */
-  fallbackLogo?: string
+  /**
+   * Logo hors dossier /public/logos, en dépannage. Même forme qu'une entrée
+   * CLIENT_LOGOS — `contentWidth` / `contentHeight` sont les proportions du
+   * logo dans son cadre — pour que `logoFrameWidth()` le dimensionne comme
+   * les autres.
+   */
+  fallbackLogo?: LogoAsset
   color: string
   rating: number
   status: 'published' | 'draft'
@@ -55,10 +62,16 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'CIPA nous a permis d’obtenir une meilleure visibilité sur nos opérations techniques et nos performances industrielles. Les outils d’analyse et le suivi intelligent des interventions ont réduit les temps d’arrêt et amélioré l’efficacité globale de nos équipes.',
     author: 'Directeur Technique',
-    company: 'Bakou Motors',
+    company: 'Bako Motors',
     sector: 'Industrie automobile',
-    // Aucun logo Bakou Motors dans /public/logos.
+    // Aucun logo Bako Motors dans /public/logos : on passe par le dépannage.
     logoAlt: null,
+    fallbackLogo: {
+      src: '/bako.png',
+      alt: 'Bako Motors',
+      contentWidth: 0.58,
+      contentHeight: 0.58,
+    },
     color: '#3B82F6',
     rating: 5,
     status: 'published',
