@@ -1,8 +1,11 @@
-import CapabilityShowcase from '@/components/sections/CapabilityShowcase'
+import CapabilityList from '@/components/sections/CapabilityList'
 import FaqAccordion from '@/components/sections/FaqAccordion'
+import LimitsBlock from '@/components/sections/LimitsBlock'
 import MarketingHero from '@/components/sections/MarketingHero'
-import MetricsShowcase from '@/components/sections/MetricsShowcase'
 import ProblemShowcase from '@/components/sections/ProblemShowcase'
+import ProductShot from '@/components/sections/ProductShot'
+import RelatedPages from '@/components/sections/RelatedPages'
+import StatementBand from '@/components/sections/StatementBand'
 import JsonLd from '@/components/ui/JsonLd'
 import { NAVBAR_CLEARANCE } from '@/components/ui/Section'
 import SectionStack from '@/components/ui/SectionStack'
@@ -10,38 +13,30 @@ import { buildMetadata, softwareApplicationLd } from '@/lib/seo'
 import { maintenanceSecurite as maintenance } from '@/content/maintenance-securite'
 
 /**
- * Maintenance & securite — troisieme page de la rubrique Solutions.
+ * Maintenance & securite.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  QUATRE BLOCS, ET RIEN D'AUTRE
+ *  LE TON EST LA CONTRAINTE PRINCIPALE
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Ouverture, capacites, chiffres, FAQ. Les blocs que la page rendait en plus
- * — preuve ou conformite, maillage interne, encart de relance, et le bloc
- * propre a son sujet — ne sont plus rendus.
+ * Aucun superlatif, aucune promesse de securite. Voir l'en-tete de
+ * content/maintenance-securite.ts : la regle de relecture y est ecrite, et le
+ * bloc « ce que CIPA ne fait pas » est ce qui la tient. Il est place juste
+ * avant le visuel, donc avant que la page montre quoi que ce soit — pas en fin
+ * de page, ou il passerait pour une precaution qu'on espere voir sautee.
  *
- * Leur contenu n'a pas ete supprime : il vit toujours dans le fichier de
- * contenu de la page, et le composant qui le rendait existe toujours. En
- * remettre un tient a une ligne de JSX. C'est le seul point a retenir avant
- * de croire ces pages amputees.
+ * ─────────────────────────────────────────────────────────────────────────
+ *  AUCUNE CARTE, SAUF LE CADRE DE LA CAPTURE
+ * ─────────────────────────────────────────────────────────────────────────
  *
- * Ce qui se perd tant qu'ils ne sont pas remis, et qui ne se voit pas a
- * l'ecran : le maillage interne entre Plateforme et Solutions, que les
- * moteurs suivaient pour relier les douze pages entre elles.
+ * Comme /solutions/non-conformites-capa et /solutions/amelioration-continue.
+ * Seule exception : `ProductShot`, qui encadre une capture d'ecran. Ce n'est
+ * pas une carte de contenu mais un chrome de fenetre — sans lui, une capture
+ * posee a plat sur la page se lit comme une illustration decorative.
  *
- * Quatre sections majeures : ouverture · reponse · chiffres · questions. Voir
- * `SectionStack` pour le regroupement.
- *
- * Le bloc de cadrage — ce que CIPA ne fait pas — ferme la section « reponse »,
- * juste apres le parcours d'une alerte et juste avant le bandeau des chiffres.
- * C'est un choix de fond plutot que de mise en page : le lecteur vient de voir
- * une chaine qui se deroule toute seule, du constat a la verification, et c'est
- * exactement le moment ou une page de securite peut laisser croire que l'outil
- * traite le risque. Le cadrage arrive la, avant qu'on parle de ce qu'on gagne.
- *
- * Ce bloc « ce que vous gagnez » ne porte d'ailleurs aucun chiffre invente,
- * contrairement a toutes les autres pages du site : voir l'en-tete de
- * content/maintenance-securite.ts.
+ * Il rend ici sa silhouette et non une capture : le module maintenance est
+ * vide sur l'instance de demonstration. Le TODO est dans le fichier de
+ * contenu, a l'endroit ou `src` devra etre renseigne.
  */
 export const metadata = buildMetadata(maintenance.seo)
 
@@ -50,7 +45,7 @@ export default function MaintenanceSecuritePage() {
     <>
       <JsonLd data={softwareApplicationLd(maintenance.seo)} />
 
-      {/* 1 — Ouverture : l'accroche et les constats, d'un seul tenant. */}
+      {/* 1 — Ouverture : la promesse, puis la situation actuelle. */}
       <SectionStack
         background="cream"
         labelledBy="hero-title"
@@ -59,28 +54,40 @@ export default function MaintenanceSecuritePage() {
         <MarketingHero {...maintenance.hero} nested />
         <ProblemShowcase
           {...maintenance.problem}
+          variant="list"
           background="cream"
           nested
         />
       </SectionStack>
 
-      {/* 2 — Ce que fait CIPA. */}
+      {/* 2 — Le module, les situations dangereuses, le cadrage, le visuel.
+          Le cadrage vient avant le visuel : le lecteur doit savoir ce que
+          l'outil ne fait pas avant qu'on lui montre un ecran. */}
       <SectionStack background="white" labelledBy="solution-title">
-        <CapabilityShowcase
-          {...maintenance.solution}
+        <CapabilityList {...maintenance.solution} background="white" nested />
+        <CapabilityList
+          {...maintenance.hazards}
           background="white"
           nested
+          id="hazards-title"
         />
+        <LimitsBlock {...maintenance.limits} background="white" nested />
+        <ProductShot {...maintenance.shot} background="white" nested />
       </SectionStack>
 
-      {/* 3 — Le bandeau sombre des chiffres. Il ouvre sa propre section :
-          imbrique dans un `SectionStack` clair, il perdrait son fond et son
-          texte blanc. C'est aussi le dernier appel a l'action de la page. */}
-      <MetricsShowcase {...maintenance.outcomes} />
+      {/* 3 — Ce que ca change, seul sur son aplat sombre. */}
+      <StatementBand {...maintenance.statement} />
 
-      {/* 4 — Les questions qui restent. */}
+      {/* 4 — Les questions, puis les renvois. */}
       <SectionStack background="cream" labelledBy="faq-title">
         <FaqAccordion {...maintenance.faq} background="cream" nested />
+        <RelatedPages
+          {...maintenance.related}
+          variant="list"
+          background="cream"
+          nested
+          headingId="related-title"
+        />
       </SectionStack>
     </>
   )

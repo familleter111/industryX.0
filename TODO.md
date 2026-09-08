@@ -5,7 +5,7 @@
 
 Les douze pages CIPA décrivent des comportements produit, des engagements contractuels et des chiffres. Tout ce qui n’a pas pu être vérifié au moment de l’écriture porte un commentaire `TODO` à l’endroit exact où il est affirmé. Ce document les rassemble, page par page.
 
-**83 points ouverts.**
+**85 points ouverts.**
 
 | Catégorie | Points | Qui tranche |
 |---|---:|---|
@@ -15,7 +15,7 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 | Société | 2 | Direction |
 | Chiffre à valider | 9 | Équipe produit + direction |
 | Navigation | 3 | Équipe web |
-| Autre | 9 | — |
+| Autre | 11 | — |
 
 > Une page dont il reste un `TODO juridique`, `TODO produit` ou `TODO qualite` non tranché ne doit pas être publiée. Les chiffres marqués « à valider » s’affichent en ligne comme des objectifs de déploiement, jamais comme des résultats constatés.
 
@@ -176,14 +176,18 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 ## Maintenance & sécurité
 
-`content/maintenance-securite.ts` — /solutions/maintenance-securite · 4 points
+`content/maintenance-securite.ts` — /solutions/maintenance-securite · 5 points
+
+**Autre**
+
+- [ ] `L30` — le module maintenance est vide sur l'instance de demonstration. Le bloc visuel rend donc la silhouette de `ProductShot` et non une capture. Avant mise en ligne, fournir une capture prise sur des donnees reelles ou realistes, anonymisees, montrant le tableau des controles de maintenance avec ses statistiques. Renseigner alors `src` et `alt` dans `shot` ci-dessous ; la legende est deja ecrite.
 
 **Produit**
 
-- [ ] `L212` — permis de travail : formulaire dedie ou formulaire generique avec circuit de validation ? Voir la FAQ 2.
-- [ ] `L242` — rattachement au referentiel equipements et profondeur d'historique consultable.
-- [ ] `L336` — permis de travail : formulaire dedie ou generique ? Cette reponse doit etre exacte avant publication.
-- [ ] `L343` — relance automatique et niveau de remontee.
+- [ ] `L123` — confirmer ces cinq libelles et leur maille de calcul.
+- [ ] `L142` — perimetre exact de ce rattachement.
+- [ ] `L292` — capture a fournir, voir l'en-tete de fichier. Tant que `src` est absent, `ProductShot` rend sa silhouette schematique, ce qui est preferable a une capture d'un autre module.
+- [ ] `L312` — echelle de criticite propre a la securite, ou la meme que pour une non-conformite ?
 
 ---
 
@@ -252,6 +256,16 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 - [ ] `L391` — a creer — renvoient sur l'accueil en attendant.
 - [ ] `L401` — a creer — renvoie sur l'accueil en attendant.
 - [ ] `L409` — a creer — renvoient sur l'accueil en attendant.
+
+---
+
+## app/(marketing)/solutions/maintenance-securite/page.tsx
+
+`app/(marketing)/solutions/maintenance-securite/page.tsx` · 1 point
+
+**Autre**
+
+- [ ] `L38` — vide sur l'instance de demonstration. Le TODO est dans le fichier de contenu, a l'endroit ou `src` devra etre renseigne. /
 
 ---
 

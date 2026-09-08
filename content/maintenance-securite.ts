@@ -2,121 +2,184 @@
  * Maintenance & sécurité — /solutions/maintenance-securite.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  REGLE EDITORIALE DE CETTE PAGE
+ *  LE TON DE CETTE PAGE N'EST PAS CELUI DES AUTRES
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Ton sobre et factuel, sans aucune formulation vendeuse. Concretement, deux
- * interdits tenus d'un bout a l'autre du fichier :
+ * Pas de superlatif, pas de formulation vendeuse, aucune promesse de securite.
+ * Un outil qui enregistre des rondes n'empeche pas un accident, et une page qui
+ * le laisserait croire serait relue par quelqu'un dont c'est le metier de
+ * relever exactement ce genre de phrase.
  *
- *  1. La page n'affirme nulle part que CIPA ameliore la securite, reduit les
- *     accidents ou previent un risque. Un logiciel enregistre, transmet et
- *     conserve ; ce sont des personnes et des mesures de prevention qui
- *     agissent sur le risque. Toute phrase qui laisse entendre le contraire
- *     est fausse, et sur ce sujet-la une phrase fausse coute autre chose
- *     qu'une deception commerciale.
- *
- *  2. Le bloc « ce que vous gagnez » ne porte AUCUN chiffre invente, alors
- *     que toutes les autres pages du site en portent un, signale comme
- *     objectif a valider. Un chiffre invente sur la securite au travail n'est
- *     pas rattrapable par une mention « a valider » : les trois valeurs sont
- *     donc des proprietes constatables du systeme, toutes sourcees.
+ * Regle pratique en relecture : si une phrase de cette page pourrait figurer
+ * dans une plaquette commerciale, elle est a reecrire. Le bloc « ce que CIPA ne
+ * fait pas » est la pour tenir cette ligne, il ne doit pas etre retire.
  *
  * ─────────────────────────────────────────────────────────────────────────
- *  TODO PRODUIT
+ *  AUCUN CHIFFRE INVENTE, ET AUCUN CHIFFRE TOUT COURT
  * ─────────────────────────────────────────────────────────────────────────
  *
- *   - les permis de travail : formulaire dedie, ou formulaire generique avec
- *     circuit de validation ? Le probleme est nomme dans le bloc constat, la
- *     reponse doit etre exacte (capacite 1 et FAQ 2) ;
- *   - la relance automatique d'une alerte non prise en charge, et le niveau
- *     vers lequel elle remonte (FAQ 3) ;
- *   - le rattachement d'un constat a une zone ou a un equipement du
- *     referentiel, et la profondeur d'historique consultable (capacite 4).
+ * La page nomme les statistiques que le module produit — nombre de controles,
+ * mois de pic, score moyen, meilleur et moins bon score — sans en afficher
+ * aucune valeur. Sur un sujet securite, un chiffre non source ne se discute
+ * pas : il se retourne.
+ *
+ * ─────────────────────────────────────────────────────────────────────────
+ *  PAS DE CAPTURE D'ECRAN DU MODULE
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * TODO PRODUIT — le module maintenance est vide sur l'instance de
+ * demonstration. Le bloc visuel rend donc la silhouette de `ProductShot` et
+ * non une capture. Avant mise en ligne, fournir une capture prise sur des
+ * donnees reelles ou realistes, anonymisees, montrant le tableau des controles
+ * de maintenance avec ses statistiques. Renseigner alors `src` et `alt` dans
+ * `shot` ci-dessous ; la legende est deja ecrite.
+ *
+ * Ne pas remplacer par une capture d'un autre module en attendant : sur une
+ * page securite, un ecran qui ne montre pas ce que la legende annonce est le
+ * genre de detail qu'un auditeur releve.
+ *
+ * ─────────────────────────────────────────────────────────────────────────
+ *  TODO PRODUIT — A VALIDER AVANT PUBLICATION
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ *   - la liste exacte des statistiques du module : nombre de controles, mois
+ *     de pic, score moyen, meilleur et moins bon score. Confirmer ces cinq
+ *     libelles, et sur quelle maille elles se calculent — site, zone, equipe ;
+ *   - le calcul du score d'un controle de maintenance : d'ou sort-il, et
+ *     est-il comparable d'une checklist a l'autre ? La page dit « score moyen »
+ *     sans dire de quoi ;
+ *   - le suivi des equipements « integre a la gestion de l'organisation » :
+ *     preciser ce que couvre ce rattachement — referentiel, hierarchie de
+ *     zones, affectation aux equipes ;
+ *   - la qualification par criticite d'une situation dangereuse : faible,
+ *     moyenne, elevee. Memes trois niveaux que pour une non-conformite, ou
+ *     echelle propre a la securite ?
+ *
+ *  TODO JURIDIQUE
+ *
+ *   - ce que la plateforme peut ou ne peut pas etre presentee comme apportant
+ *     au regard des obligations de l'employeur en matiere de sante et de
+ *     securite au travail. La page se garde de toute affirmation sur ce point ;
+ *     confirmer que la formulation actuelle convient.
  */
 
 import {
-  AlertTriangle,
-  BellRing,
-  ClipboardCheck,
+  BarChart3,
   ClipboardX,
-  FileText,
-  History,
-  ListChecks,
-  ShieldCheck,
+  FileClock,
+  Gauge,
+  LayoutGrid,
+  MapPin,
   Siren,
+  Split,
+  TriangleAlert,
+  Workflow,
   Wrench,
 } from 'lucide-react'
 
 import type {
-  LifecycleContent,
   LimitsContent,
   MarketingPageContent,
   RelatedContent,
+  SolutionContent,
+  StatementContent,
 } from './types'
 
 /**
- * La page remplace le visuel produit par le parcours d'une alerte, et ajoute
- * un bloc de cadrage : sur ce sujet, dire ce que l'outil ne fait pas fait
- * partie de la description honnete de ce qu'il fait.
+ * La page ajoute le bloc des situations dangereuses et le cadrage de ce que
+ * l'outil ne fait pas. Elle n'a ni bloc de conformite ni bloc de benefices
+ * chiffres — voir l'en-tete de fichier.
  */
-type MaintenanceContent = Omit<MarketingPageContent, 'shot'> & {
-  escalation: LifecycleContent
+type MaintenanceContent = Omit<MarketingPageContent, 'proof' | 'outcomes'> & {
+  hazards: SolutionContent
   limits: LimitsContent
+  statement: StatementContent
   related: RelatedContent
 }
 
-const related: RelatedContent = {
-  eyebrow: 'Sur la plateforme',
-  title: 'Ce sur quoi cela',
-  accent: 'repose.',
-  subtitle:
-    'La saisie au poste d’un côté, les circuits d’escalade de l’autre. Cette page décrit ce que les deux produisent une fois appliqués à la maintenance et à la sécurité.',
-  hrefs: ['/plateforme/capture-terrain', '/plateforme/orchestration'],
-}
+/* ── Les contrôles de maintenance ──────────────────────────────────────── */
 
-/* ── Le parcours d'une alerte ──────────────────────────────────────────── */
-
-const escalation: LifecycleContent = {
-  eyebrow: 'Escalade en temps réel',
-  title: 'Le parcours d’une situation',
-  accent: 'dangereuse.',
+const controls: SolutionContent = {
+  eyebrow: 'Ce que CIPA change',
+  title: 'Les contrôles de maintenance ont leur',
+  accent: 'module.',
   subtitle:
-    'Six étapes, de la constatation au terrain jusqu’à la levée vérifiée. Les délais et les destinataires de chacune se paramètrent par zone et par niveau de gravité.',
-  stages: [
+    'Pas un type de contrôle qualité auquel on aurait ajouté un champ. Un module distinct, avec ses statistiques propres, et le même moteur que le reste de la plateforme.',
+  items: [
     {
-      title: 'Constat',
-      body: 'Un opérateur ouvre un signalement depuis son poste, sans passer par un tiers.',
-      owner: 'Opérateur',
+      icon: LayoutGrid,
+      title: 'Un module à part entière',
+      body: 'Les contrôles de maintenance ont leur propre espace, leurs propres checklists et leur propre historique. Ils ne se mélangent pas aux contrôles produit.',
+      points: [
+        'Checklists de ronde et de contrôle périodique',
+        'Historique consultable par équipement et par zone',
+      ],
     },
     {
-      title: 'Photo',
-      body: 'La preuve est prise dans l’application et reste attachée au signalement.',
-      owner: 'Opérateur',
+      icon: BarChart3,
+      title: 'Ses propres statistiques',
+      body: 'Le module calcule ses indicateurs sur ses propres contrôles. Aucune valeur n’est affichée sur cette page : elles se lisent sur vos données, pas sur les nôtres.',
+      points: [
+        // TODO produit — confirmer ces cinq libelles et leur maille de calcul.
+        'Nombre de contrôles réalisés, et mois de pic',
+        'Score moyen, meilleur score et moins bon score',
+      ],
     },
     {
-      title: 'Criticité',
-      body: 'Le niveau de gravité renseigné détermine qui est prévenu, et sous quel délai.',
-      owner: 'Opérateur',
+      icon: Workflow,
+      title: 'Le même moteur que la qualité',
+      body: 'Checklists, déviations et actions correctives sont les mêmes objets que pour la qualité. Un écart relevé en ronde suit donc le circuit que vos équipes connaissent déjà.',
+      points: [
+        'Mêmes checklists, mêmes déviations, mêmes actions',
+        'Même exigence de validation avant clôture',
+      ],
     },
     {
-      title: 'Notification',
-      body: 'Le responsable désigné pour cette zone et ce niveau est prévenu à la saisie.',
-      owner: 'Plateforme',
-    },
-    {
-      title: 'Prise en charge',
-      body: 'Une action de mise en conformité est ouverte, nominative et datée.',
-      owner: 'Responsable',
-    },
-    {
-      title: 'Vérification',
-      body: 'La levée de la situation est constatée sur place avant la clôture.',
-      owner: 'HSE',
+      icon: Wrench,
+      title: 'Le suivi des équipements, intégré',
+      body: 'Les équipements ne vivent pas dans une liste à part : ils sont rattachés à l’organisation, donc aux zones et aux équipes qui les exploitent.',
+      points: [
+        // TODO produit — perimetre exact de ce rattachement.
+        'Équipements rattachés à l’organisation, pas à un fichier',
+        'Contrôles et écarts consultables depuis l’équipement',
+      ],
     },
   ],
 }
 
-/* ── Ce que l'outil ne fait pas ────────────────────────────────────────── */
+/* ── Les situations dangereuses ────────────────────────────────────────── */
+
+const hazards: SolutionContent = {
+  eyebrow: 'Situations dangereuses',
+  title: 'Un constat devient un dossier',
+  accent: 'suivi.',
+  subtitle:
+    'Une situation dangereuse constatée n’est pas signalée dans un canal à part. Elle entre dans le circuit des déviations, avec les mêmes champs et la même clôture.',
+  items: [
+    {
+      icon: TriangleAlert,
+      title: 'Le constat devient une déviation',
+      body: 'Ce qui est vu sur le terrain est déclaré comme une déviation, au même titre qu’un écart qualité. Le dossier existe à partir de ce moment-là.',
+    },
+    {
+      icon: Gauge,
+      title: 'Qualifiée par criticité',
+      body: 'Faible, moyenne ou élevée. La qualification est posée à la déclaration et reste révisable ensuite, avec son auteur.',
+    },
+    {
+      icon: MapPin,
+      title: 'Rattachée à une zone',
+      body: 'La zone concernée est portée par le dossier. C’est ce qui permet, plus tard, de dire où les situations dangereuses se concentrent.',
+    },
+    {
+      icon: FileClock,
+      title: 'Suivie jusqu’à sa clôture',
+      body: 'Le dossier reste ouvert tant que l’action qui en découle n’est pas validée. Une déclaration sans suite reste visible comme telle.',
+    },
+  ],
+}
+
+/* ── Ce que la plateforme ne fait pas ──────────────────────────────────── */
 
 const limits: LimitsContent = {
   eyebrow: 'Cadrage',
@@ -125,202 +188,115 @@ const limits: LimitsContent = {
   items: [
     {
       title: 'CIPA ne prévient pas un accident.',
-      body: 'Il enregistre un constat, le transmet et en conserve la trace. Ce sont vos équipes et vos mesures de prévention qui agissent sur le risque.',
+      body: 'La plateforme enregistre, transmet et suit. Elle ne détecte rien qu’un opérateur n’ait vu, et n’intervient sur aucun équipement.',
     },
     {
       title: 'CIPA ne remplace pas votre système de management de la sécurité.',
-      body: 'Il ne se substitue ni à votre document unique, ni à votre analyse de risques, ni aux responsabilités qui vous incombent.',
+      body: 'Les analyses de risques, les plans de prévention et les responsabilités restent les vôtres. La plateforme en enregistre l’exécution.',
     },
     {
       title: 'CIPA n’améliore rien à lui seul.',
-      body: 'Une remontée n’a d’effet que si quelqu’un la traite. La plateforme rend visible ce qui ne l’est pas, et rappelle ce qui reste ouvert.',
+      body: 'Un outil qui rend les écarts visibles ne les traite pas. Ce qui les traite, ce sont les actions décidées ensuite, et les personnes qui les portent.',
     },
   ],
 }
 
+/* ── Ce que ça change ──────────────────────────────────────────────────── */
+
+const statement: StatementContent = {
+  eyebrow: 'Ce que ça change',
+  title: 'La sécurité cesse d’être un',
+  accent: 'registre parallèle.',
+  body: [
+    'Les rondes, les situations dangereuses et les interventions ne vivent plus dans leurs propres classeurs, à côté du reste.',
+    'Elles sont pilotées avec les mêmes indicateurs et la même exigence de clôture que la qualité et la production. Un écart de sécurité se ferme selon la même règle qu’un écart produit : après validation, pas après déclaration.',
+  ],
+}
+
+/* ── Renvois de fin de page ────────────────────────────────────────────── */
+
+const related: RelatedContent = {
+  eyebrow: 'Sur la plateforme',
+  title: 'Ce sur quoi cela',
+  accent: 'repose.',
+  subtitle:
+    'La saisie sur le terrain et le circuit des écarts sont les deux modules que ce dossier utilise.',
+  hrefs: ['/plateforme/capture-terrain', '/plateforme/orchestration'],
+}
+
 export const maintenanceSecurite: MaintenanceContent = {
   seo: {
-    // 56 caracteres.
-    title: 'CIPA — Maintenance et sécurité : rondes et interventions',
-    // 139 caracteres.
+    // 49 caracteres.
+    title: 'CIPA — Maintenance et sécurité : rondes et écarts',
+    // 145 caracteres.
     description:
-      'Checklists de ronde sur mobile, signalement d’une situation dangereuse avec photo et alerte immédiate, suivi des actions jusqu’à clôture.',
+      'Les contrôles de maintenance ont leur module et leurs statistiques, avec le même moteur de checklists, de déviations et d’actions que la qualité.',
     path: '/solutions/maintenance-securite',
   },
 
   hero: {
     eyebrow: 'Maintenance & sécurité',
-    title: 'Digitalisez les interventions',
-    accent: 'terrain',
+    title: 'Les rondes et les interventions rentrent dans le même système de',
+    accent: 'preuve',
     description:
-      'Une ronde, un signalement, une intervention laissent chacun un enregistrement daté et attribué. Ce qui a été fait devient prouvable ; ce qui ne l’a pas été reste visible.',
+      'Ce qui est contrôlé, ce qui a été constaté et ce qui a été fait ensuite sont enregistrés au même endroit que les écarts qualité, et suivis selon la même règle de clôture.',
     proofs: [
-      'Rondes horodatées, point de contrôle par point de contrôle',
-      'Situation dangereuse signalée avec photo, à la saisie',
-      'Actions de mise en conformité suivies jusqu’à clôture',
+      'Module de contrôles de maintenance, avec ses statistiques',
+      'Situation dangereuse déclarée comme une déviation',
+      'Équipements rattachés aux zones et aux équipes',
     ],
+    image: {
+      src: '/plateforme/02-inspection-terrain-tablette.png',
+      alt: 'Un opérateur en casque et gilet haute visibilité remplit un contrôle sur tablette, devant une installation industrielle.',
+      width: 449,
+      height: 450,
+    },
+  },
+
+  problem: {
+    eyebrow: 'La situation aujourd’hui',
+    title: 'Les contrôles de maintenance vivent',
+    accent: 'à part.',
+    subtitle:
+      'Ils ont leur classeur, leur tableur et leurs habitudes. Ce qui s’y passe ne rejoint jamais le reste, et une partie ne s’écrit nulle part.',
     image: {
       src: '/plateforme/09-abstrait-site-industriel.png',
       alt: 'Une unité de production recomposée en aplats géométriques, traversée par des fragments de photographie.',
       width: 380,
       height: 302,
     },
-  },
-
-  problem: {
-    eyebrow: 'Sur le terrain',
-    title: 'Ce qui est fait, et ce qui peut',
-    accent: 'être établi.',
     items: [
       {
+        icon: Split,
+        title: 'Les contrôles de maintenance vivent à part',
+        body: 'Ils ont leur propre support et leur propre circuit. Rapprocher un écart de maintenance d’un écart qualité sur le même équipement demande de rouvrir deux dossiers séparés.',
+      },
+      {
         icon: ClipboardX,
-        title: 'Les rondes sont faites mais pas prouvées',
-        body: 'La tournée a eu lieu et le registre est signé en fin de poste. Rien n’indique à quelle heure chaque point a été vérifié, ni par qui.',
+        title: 'Une ronde déclarée oralement ne laisse aucune trace',
+        body: 'La ronde a été faite, l’équipe le dit, et c’est vrai. Mais rien ne l’atteste : ni l’heure, ni le parcours, ni ce qui a été regardé.',
       },
       {
         icon: Siren,
-        title: 'La remontée d’un presque-accident se perd',
-        body: 'Elle est faite à l’oral au chef d’équipe, qui l’évoque en réunion la semaine suivante. Entre les deux, la situation n’a pas changé.',
-      },
-      {
-        icon: Wrench,
-        title: 'Les interventions de maintenance sont mal documentées',
-        body: 'L’intervention est faite, la pièce changée. Six mois plus tard, ce qui a été remplacé et pourquoi n’est plus établi, et le diagnostic reprend de zéro.',
-      },
-      {
-        icon: FileText,
-        title: 'Le permis de travail circule sur papier',
-        body: 'Rempli au bureau, signé en plusieurs exemplaires, il finit dans une poche. Vérifier qu’un permis valide couvre une intervention en cours suppose de retrouver la feuille.',
+        title: 'Un presque-accident remonté un vendredi soir se perd',
+        body: 'Il est signalé à l’oral en fin de poste. Le lundi, l’équipe a changé, et l’information n’est plus portée par personne.',
       },
     ],
   },
 
-  solution: {
-    eyebrow: 'Ce que CIPA apporte',
-    title: 'Quatre enregistrements, et ce qu’ils',
-    accent: 'permettent.',
-    subtitle:
-      'La plateforme ne modifie pas vos procédures de sécurité. Elle enregistre leur exécution, transmet ce qui doit l’être et conserve la trace de ce qui a suivi.',
-    items: [
-      {
-        icon: ShieldCheck,
-        title: 'Checklists de ronde et de sécurité sur mobile',
-        body: 'La ronde se déroule point par point sur le téléphone, chaque vérification étant datée au moment où elle est faite plutôt qu’en fin de tournée.',
-        points: [
-          'Horodatage par point de contrôle, et non par tournée',
-          'Une checklist par zone, par équipement ou par type de ronde',
-          // TODO produit — permis de travail : formulaire dedie ou formulaire
-          // generique avec circuit de validation ? Voir la FAQ 2.
-          'Permis de travail saisi et validé comme un formulaire, avec ses signatures',
-        ],
-      },
-      {
-        icon: AlertTriangle,
-        title: 'Signalement d’une situation dangereuse',
-        body: 'Un opérateur ouvre un signalement depuis son poste, y joint une photo et renseigne un niveau de gravité. Le responsable désigné est prévenu à la saisie.',
-        points: [
-          'Photo prise dans l’application, attachée au signalement',
-          'Destinataire déterminé par la zone et le niveau de gravité',
-          'Presque-accident déclaré au même titre qu’un événement avéré',
-        ],
-      },
-      {
-        icon: ListChecks,
-        title: 'Suivi des actions de mise en conformité',
-        body: 'Chaque signalement retenu ouvre une action nominative avec son échéance. Son état est visible tant qu’elle n’est pas close.',
-        points: [
-          'Un titulaire nommé, jamais un service',
-          'Levée de la situation vérifiée avant la clôture',
-          'Actions ouvertes et en retard consultables par zone',
-        ],
-      },
-      {
-        icon: History,
-        title: 'Historique par équipement ou par zone',
-        body: 'Les interventions, les constats et les actions se consultent depuis l’équipement concerné, sur toute la période enregistrée.',
-        points: [
-          // TODO produit — rattachement au referentiel equipements et
-          // profondeur d'historique consultable.
-          'Constats et interventions rattachés au référentiel équipements',
-          'Historique d’une machine consultable depuis le terrain',
-          'Récurrences visibles sur une zone ou un équipement',
-        ],
-      },
-    ],
-  },
-
-  escalation,
+  solution: controls,
+  hazards,
   limits,
 
-  outcomes: {
-    title: 'Ce que la plateforme',
-    accent: 'établit.',
-    subtitle:
-      'Trois propriétés du système, vérifiables en démonstration. Aucun chiffre d’amélioration n’est avancé ici : ce serait affirmer un effet que le logiciel seul ne produit pas.',
-    items: [
-      {
-        icon: ClipboardCheck,
-        value: 'Horodatée',
-        label: 'Chaque vérification d’une ronde',
-        detail:
-          'Un point non enregistré reste visible comme non fait, plutôt que couvert par une signature de fin de poste.',
-        source: 'Fonctionnement de la plateforme',
-      },
-      {
-        icon: BellRing,
-        value: 'À la saisie',
-        label: 'Notification sur situation dangereuse',
-        detail:
-          'L’alerte part au moment du constat, sans attendre la fin de la ronde ni la relève.',
-        source: 'Règles d’escalade paramétrées',
-      },
-      {
-        icon: History,
-        value: 'Par équipement',
-        label: 'Historique des constats et des interventions',
-        detail:
-          'Consultable depuis la machine concernée, sur toute la période enregistrée.',
-        source: 'Modèle de données de la plateforme',
-      },
-    ],
+  shot: {
+    // TODO produit — capture a fournir, voir l'en-tete de fichier. Tant que
+    // `src` est absent, `ProductShot` rend sa silhouette schematique, ce qui
+    // est preferable a une capture d'un autre module.
+    caption:
+      'Le tableau des contrôles de maintenance : contrôles réalisés, écarts ouverts et statistiques du module. Capture à venir — le module est vide sur l’instance de démonstration.',
   },
 
-  proof: {
-    kind: 'compliance',
-    eyebrow: 'Contenu d’un enregistrement',
-    title: 'Ce que conserve une ronde ou une',
-    accent: 'intervention.',
-    subtitle:
-      'De quoi établir, plus tard, ce qui a été vérifié, par qui, et ce qui en a découlé.',
-    items: [
-      {
-        name: 'Le point de contrôle',
-        body: 'L’élément vérifié, rattaché à son équipement ou à sa zone dans le référentiel.',
-      },
-      {
-        name: 'L’heure et l’auteur',
-        body: 'Renseignés par la plateforme au moment de la saisie, non déclarés en fin de tournée.',
-      },
-      {
-        name: 'Le constat',
-        body: 'Conforme, non conforme ou non applicable, avec le commentaire de l’intervenant.',
-      },
-      {
-        name: 'La preuve',
-        body: 'Photo ou vidéo prise dans l’application, attachée au point de contrôle concerné.',
-      },
-      {
-        name: 'La suite donnée',
-        body: 'Le signalement ouvert le cas échéant, l’action de mise en conformité et son titulaire.',
-      },
-      {
-        name: 'La clôture',
-        body: 'La vérification de la levée, sa date et la personne qui l’a constatée.',
-      },
-    ],
-    note: 'Le contenu des checklists, les niveaux de gravité et les circuits d’alerte sont définis avec vos équipes HSE et maintenance pendant le cadrage, à partir de vos procédures existantes.',
-  },
-
+  statement,
   related,
 
   faq: {
@@ -328,27 +304,26 @@ export const maintenanceSecurite: MaintenanceContent = {
     accent: 'demandent.',
     items: [
       {
-        question: 'Comment établit-on qu’une ronde a bien été faite ?',
+        question: 'Comment atteste-t-on qu’une ronde a bien été faite ?',
         answer:
-          'Chaque point de contrôle porte l’heure de sa vérification et le compte de l’intervenant, posés par la plateforme au moment de la saisie. Une tournée signée en fin de poste atteste que quelqu’un a signé ; une tournée enregistrée point par point indique ce qui a été vérifié et quand. C’est cette différence qui est opposable.',
+          'Par les relevés eux-mêmes. Chaque point de la checklist est enregistré avec son horodatage et l’identifiant de la personne qui l’a saisi, sur place. Ce n’est pas une preuve au sens juridique du terme, et la page ne le prétend pas : c’est un enregistrement daté et attribué, qui vaut mieux qu’une déclaration a posteriori et qui se relit sans dépendre de la mémoire de quelqu’un.',
       },
       {
-        // TODO produit — permis de travail : formulaire dedie ou generique ?
-        // Cette reponse doit etre exacte avant publication.
-        question: 'Peut-on gérer les permis de travail dans CIPA ?',
+        // TODO produit — echelle de criticite propre a la securite, ou la meme
+        // que pour une non-conformite ?
+        question: 'Une situation dangereuse suit-elle le même circuit qu’un écart qualité ?',
         answer:
-          'Un permis de travail est un formulaire assorti d’un circuit de validation et d’une durée de validité : la plateforme sait porter les trois. Le permis se remplit sur mobile, passe par les validations que vous avez définies et reste consultable depuis l’intervention qu’il couvre. Les modalités exactes se cadrent avec vos équipes HSE, en partant de vos formulaires actuels.',
+          'Oui. Elle est déclarée comme une déviation, qualifiée par criticité, rattachée à une zone, et elle ouvre une action corrective qui ne se clôt qu’après validation. C’est précisément l’intérêt : le circuit est celui que vos équipes utilisent déjà, il n’y a pas de procédure séparée à faire vivre pour la sécurité.',
       },
       {
-        // TODO produit — relance automatique et niveau de remontee.
-        question: 'Que se passe-t-il si le responsable ne prend pas l’alerte en charge ?',
+        question: 'Que se passe-t-il si un écart de maintenance n’est pas traité ?',
         answer:
-          'Le délai de prise en charge attendu est défini par niveau de gravité. Passé ce délai sans réponse, l’alerte remonte au niveau supérieur selon la règle d’escalade paramétrée pour la zone. L’absence de prise en charge est elle-même enregistrée : elle ne disparaît pas au profit d’une relance informelle.',
+          'Le dossier reste ouvert, et il reste visible. La plateforme ne relance personne à votre place et ne décide pas de la priorité : elle rend l’état visible, avec le nom du pilote et l’échéance. Ce qui se passe ensuite dépend de votre organisation, pas de l’outil.',
       },
       {
-        question: 'Comment retrouve-t-on l’historique d’un équipement ?',
+        question: 'Retrouve-t-on l’historique d’un équipement ?',
         answer:
-          'Depuis l’équipement lui-même, dans le référentiel. Les rondes qui l’ont couvert, les constats qui le concernent, les interventions réalisées et les actions ouvertes s’affichent sur la même fiche, dans l’ordre chronologique. C’est ce qui évite de refaire un diagnostic déjà posé six mois plus tôt par quelqu’un d’autre.',
+          'Depuis l’équipement lui-même. Les contrôles qui l’ont couvert, les écarts qui le concernent et les actions ouvertes s’affichent sur la même fiche, dans l’ordre chronologique. C’est ce qui évite de refaire un diagnostic déjà posé six mois plus tôt par quelqu’un d’autre.',
       },
     ],
   },

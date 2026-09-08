@@ -41,7 +41,10 @@ export default function LimitsBlock({
     >
       <RevealGroup className="mx-auto max-w-3xl">
         <RevealItem>
-          <div className="rounded-2xl border border-cream-deep px-6 py-7 sm:px-9 sm:py-9">
+          {/* Pas d'encadre. Un bloc qui enonce ce que l'outil ne fait pas doit
+              se lire dans le fil du texte, pas a cote : encadre, il passe pour
+              une precaution qu'on a mise la et qu'on espere voir sautee. */}
+          <div>
             {eyebrow && (
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-subtle">
                 {eyebrow}
