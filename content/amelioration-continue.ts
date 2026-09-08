@@ -2,14 +2,25 @@
  * Amélioration continue — /solutions/amelioration-continue.
  *
  * C'est la page qui porte le nom du produit : CIPA signifie Continuous
- * Improvement Process Audit, et le hero le dit explicitement. Point de
- * coherence de marque a ne pas retirer en reformulant.
+ * Improvement Process Audit, et le H1 le dit en toutes lettres. C'est le seul
+ * endroit du site ou le sigle est developpe. Point de coherence de marque a ne
+ * pas retirer en reformulant.
+ *
+ * ─────────────────────────────────────────────────────────────────────────
+ *  L'ARGUMENT DE LA PAGE : UNE ACTION PEUT ETRE REFUSEE
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * C'est ce qui separe la plateforme d'un registre d'actions, et c'est repris a
+ * trois endroits : le sous-titre du bloc « la boucle », la troisieme capacite,
+ * et le premier chiffre du bandeau. Si l'un des trois est reformule, les deux
+ * autres doivent suivre — sinon la page affirme trois fois la meme chose de
+ * trois manieres qui ne se recoupent plus.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  PAS DE CHIFFRE INVENTE SUR CETTE PAGE, ET C'EST STRUCTUREL
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Le H1 promet un « progres mesurable ». Afficher a cote une amelioration
+ * La page promet un progres mesurable. Afficher a cote une amelioration
  * chiffree que personne n'a mesuree reviendrait a contredire l'argument dans
  * le meme ecran. Les trois resultats sont donc des proprietes constatables du
  * systeme, toutes sourcees.
@@ -22,50 +33,182 @@
  *  TODO PRODUIT
  * ─────────────────────────────────────────────────────────────────────────
  *
+ *   - le circuit d'approbation du change control : qui valide une montee de
+ *     version, et selon quel niveau de criticite ? Le bloc ci-dessous dit que
+ *     le module est distinct et relie aux actions, rien de plus ;
+ *   - le pourcentage d'avancement d'une action : saisi a la main par le
+ *     titulaire, ou deduit de sous-taches ? La page l'affiche comme un champ
+ *     de l'action sans dire lequel des deux ;
+ *   - la maille exacte du Pareto : categorie, sous-categorie et probleme sont
+ *     annonces comme trois niveaux ; confirmer qu'ils sont bien hierarchiques
+ *     et non trois axes independants ;
  *   - la mesure avant / apres : la plateforme rapproche-t-elle reellement un
- *     indicateur de l'action qui devait l'infléchir, sur un meme perimetre ?
- *     C'est la promesse centrale de la page (capacite 3 et FAQ 2) ;
- *   - le canal de remontee d'idees et d'irritants par les operateurs : objet
- *     dedie, ou declaration d'ecart d'un type particulier ? ;
- *   - la diffusion d'un standard valide vers d'autres lignes ou sites.
+ *     indicateur de l'action qui devait l'inflechir, sur un meme perimetre ?
  *
  *  TODO SOCIETE
  *
- *   - l'accompagnement lean d'Industry X.0 : prestation formalisee, incluse au
- *     deploiement ou facturee a part ? La capacite 5 et la FAQ 4 l'annoncent
- *     comme faisant partie du deploiement. A confirmer avec la direction avant
- *     publication — c'est un engagement commercial, pas une fonctionnalite.
+ *   - ADRESSE CONTRADICTOIRE. Le bloc « Industry X.0, au-dela du logiciel »
+ *     annonce la societe « basee a l'Ariana ». Le pied de page affiche « Cité
+ *     les pins, Tunis 1053 » (voir COMPANY dans content/shared.ts) et la page
+ *     /about ecrit « Fondee en 2019 a Tunis ». Les deux ne peuvent pas etre
+ *     vrais en meme temps : trancher, puis corriger les trois endroits ;
+ *   - l'accompagnement methodologique : inclus au deploiement ou facture a
+ *     part ? Le bloc societe et la FAQ 4 l'annoncent comme venant avec l'outil.
+ *     C'est un engagement commercial, pas une fonctionnalite.
  */
 
 import {
+  BarChart3,
+  CalendarClock,
   Compass,
   Database,
-  LineChart,
+  GitBranch,
+  History,
+  ListChecks,
   MessageSquareOff,
-  MessageSquarePlus,
   MessagesSquare,
-  RotateCw,
   Ruler,
+  ShieldCheck,
   Share2,
-  TrendingUp,
+  Tags,
 } from 'lucide-react'
 
 import type {
   CalloutContent,
   MarketingPageContent,
-  RelatedContent,
   PdcaContent,
+  RelatedContent,
+  SolutionContent,
 } from './types'
 
 /**
- * La page remplace le visuel produit par la boucle PDCA, et ajoute l'encart
- * qui replace le logiciel dans l'offre d'Industry X.0.
+ * La page ajoute a la structure commune : la boucle PDCA, le bloc change
+ * control, et l'encart qui replace le logiciel dans l'offre d'Industry X.0.
+ * Elle n'a ni visuel produit ni bloc de conformite.
  */
 type AmeliorationContent = Omit<MarketingPageContent, 'shot' | 'proof'> & {
+  changeControl: SolutionContent
   pdca: PdcaContent
   related: RelatedContent
   company: CalloutContent
 }
+
+/* ── La boucle, outillée de bout en bout ───────────────────────────────── */
+
+const loop: SolutionContent = {
+  eyebrow: 'La boucle',
+  title: 'Du constat terrain au standard',
+  accent: 'validé.',
+  // Les trois phrases qui portent l'argument de la page. Voir l'en-tete.
+  subtitle:
+    'Ce qui sépare CIPA d’un registre d’actions tient en un mot : une action peut être refusée. Elle ne se ferme pas parce que son titulaire la déclare faite, mais parce qu’un valideur a regardé ce qui a été produit et a tranché. Un refus est un état normal du circuit — il rouvre l’action avec son motif, et cette trace reste attachée au dossier.',
+  items: [
+    {
+      icon: Tags,
+      title: 'Le constat devient une déviation classée',
+      body: 'Un relevé terrain n’est pas un commentaire libre. Il est rangé en catégorie, sous-catégorie et problème — ce qui le rend comparable à tous les autres.',
+    },
+    {
+      icon: CalendarClock,
+      // TODO produit — pourcentage d'avancement : saisi ou deduit ?
+      title: 'La déviation devient une action assignée',
+      body: 'Un titulaire, une échéance, un pourcentage d’avancement. Un chantier sans ces trois-là n’existe pas dans le système.',
+    },
+    {
+      icon: ShieldCheck,
+      title: 'L’action est validée, ou refusée',
+      body: 'Avant clôture, un valideur tranche sur ce qui a réellement été produit. Le refus rouvre l’action avec son motif au lieu de la faire disparaître.',
+    },
+    {
+      icon: BarChart3,
+      // TODO produit — maille du Pareto : trois niveaux hierarchiques ?
+      title: 'Le Pareto dit si les causes reviennent',
+      body: 'L’analyse par catégorie, sous-catégorie et problème classe les récurrences par poids, au lieu de les laisser se diluer dans le volume.',
+    },
+  ],
+}
+
+/* ── Change control ────────────────────────────────────────────────────── */
+
+const changeControl: SolutionContent = {
+  eyebrow: 'Change control',
+  title: 'Une modification de processus est un',
+  accent: 'dossier à part.',
+  subtitle:
+    'Le change control n’est pas un statut de plus sur une action : c’est un module distinct, relié aux actions dans les deux sens.',
+  items: [
+    {
+      icon: GitBranch,
+      // TODO produit — circuit d'approbation : qui valide, selon quelle
+      // criticite ? Non decrit ici faute d'element valide.
+      title: 'Un module distinct',
+      body: 'La modification de processus a son propre dossier et son propre circuit, séparé de celui des actions correctives qu’elle peut entraîner.',
+    },
+    {
+      icon: ListChecks,
+      title: 'Qui génère ses propres actions',
+      body: 'Une modification validée peut ouvrir des actions correctives, assignées et suivies exactement comme celles nées d’une déviation terrain.',
+    },
+    {
+      icon: History,
+      title: 'Et fait monter la version',
+      body: 'Le processus change de version, et les actions produites par la modification lui restent rattachées. On sait ce qui a changé, et ce que ça a déclenché.',
+    },
+  ],
+}
+
+/* ── La boucle PDCA ────────────────────────────────────────────────────── */
+
+const pdca: PdcaContent = {
+  eyebrow: 'La méthode',
+  title: 'Plan, Do, Check, Act —',
+  accent: 'et ce que CIPA outille.',
+  subtitle:
+    'La méthode n’est pas de nous et n’a pas besoin de l’être. Ce qui manque le plus souvent n’est pas le cadre, c’est la donnée qui permet de le tenir jusqu’au bout. Sous chaque quadrant, ce que la plateforme y fait concrètement.',
+  phases: [
+    {
+      letter: 'P',
+      name: 'Plan',
+      body: 'Décider ce qu’on va regarder, à quelle fréquence, et selon quelle grille de lecture.',
+      points: [
+        'Planificateur d’audit : qui audite quoi, et quand',
+        'Classification en catégorie, sous-catégorie et problème',
+      ],
+    },
+    {
+      letter: 'D',
+      name: 'Do',
+      body: 'Aller voir, et enregistrer ce qu’on voit au moment où on le voit, pas le soir même de mémoire.',
+      points: [
+        'Capture terrain sur mobile ou tablette',
+        'Déclaration de déviation au moment du constat',
+      ],
+    },
+    {
+      letter: 'C',
+      name: 'Check',
+      body: 'Mesurer l’effet réel, et non l’effet attendu. C’est l’étape que les démarches essoufflées sautent en premier.',
+      points: [
+        'Scoring de l’audit',
+        'Analyse Pareto des récurrences',
+        'Taux d’accomplissement des actions',
+      ],
+    },
+    {
+      letter: 'A',
+      name: 'Act',
+      body: 'Acter ce qui a marché comme ce qui n’a pas marché, et faire passer le processus à la version suivante.',
+      points: [
+        'CAPA avec validation ou refus avant clôture',
+        'Montée de version du processus modifié',
+      ],
+    },
+  ],
+  loopNote:
+    'Act referme la boucle : la version du processus qui sort d’un cycle est celle que le planificateur d’audit ira contrôler au suivant.',
+}
+
+/* ── Renvois de fin de page ────────────────────────────────────────────── */
 
 const related: RelatedContent = {
   eyebrow: 'Sur la plateforme',
@@ -79,95 +222,39 @@ const related: RelatedContent = {
   ],
 }
 
-/* ── La boucle ─────────────────────────────────────────────────────────── */
-
-const pdca: PdcaContent = {
-  eyebrow: 'La boucle',
-  title: 'Plan, Do, Check, Act —',
-  accent: 'et ce que CIPA y fait.',
-  subtitle:
-    'La méthode n’est pas de nous et n’a pas besoin de l’être. Ce qui manque le plus souvent n’est pas le cadre, c’est la donnée qui permet de le tenir jusqu’au bout.',
-  phases: [
-    {
-      letter: 'P',
-      name: 'Plan',
-      body: 'Identifier le problème qui mérite un chantier, comprendre pourquoi il se produit, et décider ce qu’on va tenter.',
-      points: [
-        'Écarts et récurrences remontés depuis le terrain',
-        'Occurrences passées du même problème consultables',
-        'Objectif et indicateur de succès posés dès l’ouverture',
-      ],
-    },
-    {
-      letter: 'D',
-      name: 'Do',
-      body: 'Mettre en œuvre l’action sur un périmètre défini, sans attendre qu’elle soit parfaite pour la tester.',
-      points: [
-        'Action nominative et datée, avec son périmètre explicite',
-        'Nouveau standard poussé au poste concerné',
-        'Exécution tracée par les relevés de la ligne',
-      ],
-    },
-    {
-      letter: 'C',
-      name: 'Check',
-      body: 'Mesurer l’effet réel, et non l’effet attendu. C’est l’étape que les démarches essoufflées sautent en premier.',
-      points: [
-        // TODO produit — rapprochement indicateur / action sur un meme
-        // perimetre : promesse centrale de la page, a confirmer.
-        'Indicateur suivi avant et après sur le même périmètre',
-        'Vérification d’efficacité à une échéance fixée d’avance',
-        'Récurrence du défaut surveillée après l’action',
-      ],
-    },
-    {
-      letter: 'A',
-      name: 'Act',
-      body: 'Standardiser ce qui a marché, abandonner ce qui n’a pas marché — et acter les deux avec la même rigueur.',
-      points: [
-        // TODO produit — diffusion d'un standard vers d'autres perimetres.
-        'Standard retenu diffusé aux autres lignes et sites',
-        'Checklists et plans de contrôle mis à jour en conséquence',
-        'Décision d’abandon tracée au même titre qu’un succès',
-      ],
-    },
-  ],
-  loopNote:
-    'Act referme la boucle : le standard retenu devient le point de départ du cycle suivant, sur un autre périmètre ou sur le problème d’après.',
-}
-
 /* ── Industry X.0 au-delà du logiciel ──────────────────────────────────── */
 
 const company: CalloutContent = {
   icon: Compass,
   title: 'Industry X.0, au-delà du logiciel',
-  // TODO societe — voir l'en-tete de fichier : l'accompagnement lean est
-  // annonce ici comme faisant partie du deploiement. Engagement commercial a
-  // confirmer avec la direction.
-  body: 'Transformation digitale, IoT industriel, intelligence artificielle et lean management : CIPA est l’outil, nos équipes sont ce qui va avec. L’accompagnement lean fait partie du déploiement plutôt que d’une prestation vendue à côté.',
+  // TODO societe — voir l'en-tete : « l'Ariana » contredit l'adresse du pied
+  // de page et la page /about, qui disent Tunis. Et l'accompagnement annonce
+  // comme venant avec l'outil est un engagement commercial a confirmer.
+  body: 'Société technologique tunisienne fondée en 2019, basée à l’Ariana. Transformation digitale, IoT industriel, IA appliquée et lean management. CIPA est l’outil ; l’accompagnement méthodologique vient avec.',
   cta: { label: 'Découvrir Industry X.0', href: '/about' },
 }
 
 export const ameliorationContinue: AmeliorationContent = {
   seo: {
-    // 54 caracteres.
-    title: 'CIPA — Amélioration continue : la boucle PDCA outillée',
-    // 150 caracteres.
+    // 52 caracteres.
+    title: 'CIPA — Amélioration continue et boucle PDCA outillée',
+    // 146 caracteres.
     description:
-      'Boucle PDCA outillée, remontées terrain suivies jusqu’à leur réponse, effet des actions mesuré sur les indicateurs et standards diffusés entre sites.',
+      'Déviation classée, action assignée avec échéance et avancement, validation ou refus avant clôture, analyse Pareto des récurrences, change control.',
     path: '/solutions/amelioration-continue',
   },
 
   hero: {
     eyebrow: 'Amélioration continue',
-    title: 'Transformez les problèmes en',
-    accent: 'progrès mesurable',
+    // Le sigle developpe, seul endroit du site ou il l'est. Ne pas reformuler.
+    title: 'CIPA, c’est Continuous Improvement Process Audit.',
+    accent: 'Le nom dit la méthode.',
     description:
-      'CIPA signifie Continuous Improvement Process Audit : l’amélioration continue n’est pas un module de la plateforme, c’est ce pour quoi elle existe. Chaque écart saisi alimente la boucle censée le faire disparaître.',
+      'L’amélioration continue n’est pas un module de la plateforme, c’est ce pour quoi elle existe. Chaque écart saisi sur le terrain alimente la boucle censée le faire disparaître.',
     proofs: [
-      'Boucle PDCA outillée jusqu’à la vérification d’efficacité',
-      'Remontées terrain suivies jusqu’à leur réponse',
-      'Effet des actions mesuré sur les indicateurs',
+      'Déviation classée, action assignée, échéance et avancement',
+      'Validation ou refus avant clôture — jamais l’un sans l’autre',
+      'Pareto par catégorie, sous-catégorie et problème',
     ],
     image: {
       src: '/plateforme/11-bandeau-marque-cipa.png',
@@ -178,9 +265,11 @@ export const ameliorationContinue: AmeliorationContent = {
   },
 
   problem: {
-    eyebrow: 'Sur le terrain',
-    title: 'Pourquoi une démarche d’amélioration',
-    accent: 's’essouffle.',
+    eyebrow: 'La situation aujourd’hui',
+    title: 'La démarche s’essouffle parce qu’elle n’est',
+    accent: 'pas mesurée.',
+    subtitle:
+      'Les chantiers sont lancés, rarement vérifiés, jamais comparés. Ce qui manque n’est pas la volonté, c’est la donnée qui permettrait de dire lequel a servi.',
     items: [
       {
         icon: Database,
@@ -200,69 +289,11 @@ export const ameliorationContinue: AmeliorationContent = {
     ],
   },
 
-  solution: {
-    eyebrow: 'Ce que CIPA apporte',
-    title: 'De la remontée terrain au standard',
-    accent: 'diffusé.',
-    subtitle:
-      'Cinq mécanismes qui tiennent la boucle là où elle casse habituellement : à la mesure, et à la reprise de ce qui a marché ailleurs.',
-    items: [
-      {
-        icon: RotateCw,
-        title: 'Boucle PDCA outillée',
-        body: 'De la détection d’un écart à la vérification de l’efficacité de l’action, chaque étape est un état du dossier plutôt qu’une case d’un tableau de suivi.',
-        points: [
-          'Détection, analyse, action et vérification dans un seul objet',
-          'Échéance de vérification posée à l’ouverture de l’action',
-          'Chantier impossible à clôturer sans son contrôle d’effet',
-        ],
-      },
-      {
-        icon: MessageSquarePlus,
-        title: 'Remontée d’idées et d’irritants',
-        body: 'Un opérateur signale ce qui le gêne depuis son poste, au moment où cela le gêne, sans attendre la réunion d’équipe du vendredi.',
-        points: [
-          // TODO produit — canal dedie ou type particulier de declaration ?
-          'Signalement depuis le poste, en quelques appuis',
-          'Réponse due à chaque remontée, y compris un refus motivé',
-          'Auteur informé de la suite donnée à sa proposition',
-        ],
-      },
-      {
-        icon: LineChart,
-        title: 'Mesure de l’effet réel',
-        body: 'L’indicateur visé par un chantier est suivi avant et après, sur le même périmètre et avec la même définition. C’est ce qui distingue un progrès d’une impression.',
-        points: [
-          'Même définition d’indicateur des deux côtés de l’action',
-          'Comparaison sur le périmètre concerné, pas sur le site entier',
-          'Absence d’effet constatée aussi clairement qu’un gain',
-        ],
-      },
-      {
-        icon: Share2,
-        title: 'Capitalisation entre lignes et sites',
-        body: 'Un standard qui a fait ses preuves sur une ligne est proposé aux autres, avec les données qui montrent qu’il a fonctionné.',
-        points: [
-          'Standard diffusé avec ses preuves, pas comme une consigne',
-          'Checklists et plans de contrôle mis à jour ensemble',
-          'Reprise adaptable au contexte de chaque ligne',
-        ],
-      },
-      {
-        icon: Compass,
-        // TODO societe — engagement commercial, voir l'en-tete de fichier.
-        title: 'Accompagnement lean d’Industry X.0',
-        body: 'L’outil ne fait pas la démarche. Nos équipes interviennent sur l’animation, le choix des premiers chantiers et la montée en compétence de vos référents.',
-        points: [
-          'Choix des premiers chantiers avec vos équipes',
-          'Animation et rituels mis en place avec l’encadrement',
-          'Montée en compétence de vos référents amélioration continue',
-        ],
-      },
-    ],
-  },
-
+  solution: loop,
+  changeControl,
   pdca,
+  related,
+  company,
 
   outcomes: {
     title: 'Ce que vous',
@@ -271,11 +302,11 @@ export const ameliorationContinue: AmeliorationContent = {
       'Trois propriétés du système, vérifiables en démonstration. Aucune amélioration chiffrée n’est avancée ici : sur une page qui promet du progrès mesurable, un chiffre non mesuré se contredirait lui-même.',
     items: [
       {
-        icon: TrendingUp,
-        value: 'Avant / après',
-        label: 'Effet d’une action sur son indicateur',
+        icon: ShieldCheck,
+        value: 'Validée',
+        label: 'Chaque action, avant sa clôture',
         detail:
-          'Mesuré sur le même périmètre et avec la même définition des deux côtés.',
+          'Un titulaire ne ferme pas son action. Un valideur tranche, et peut refuser.',
         source: 'Fonctionnement de la plateforme',
       },
       {
@@ -304,29 +335,25 @@ export const ameliorationContinue: AmeliorationContent = {
     ],
   },
 
-  related,
-  company,
-
   faq: {
     title: 'Ce que les directions d’opérations nous',
     accent: 'demandent.',
     items: [
       {
-        question: 'Faut-il déjà avoir une démarche lean pour utiliser CIPA ?',
+        question: 'Qu’est-ce qu’une action refusée, concrètement ?',
         answer:
-          'Non, et c’est souvent l’inverse qui se produit : les sites qui n’ont pas de démarche formalisée commencent par traiter leurs écarts, et la démarche se construit sur ce qu’ils y découvrent. Si vous en avez déjà une, CIPA lui fournit la donnée qui lui manque plutôt que de lui substituer une méthode. Dans les deux cas, l’outil ne remplace pas l’animation — c’est un point sur lequel nous préférons être clairs avant qu’après.',
+          'Une action dont le valideur estime que ce qui a été produit ne répond pas à la déviation. Elle ne se referme pas : elle repart avec le motif du refus attaché au dossier, et l’écart reste ouvert. C’est le point qui différencie la plateforme d’un registre d’actions, où « fait » est déclaré par celui-là même qui devait faire. Un refus n’est pas un incident de parcours, c’est un état prévu du circuit.',
       },
       {
-        // TODO produit — rapprochement indicateur / action. Cette reponse
-        // porte la promesse centrale de la page.
-        question: 'Comment mesure-t-on l’effet réel d’une action ?',
+        // TODO produit — maille du Pareto, voir l'en-tete de fichier.
+        question: 'Sur quoi porte l’analyse Pareto ?',
         answer:
-          'En suivant l’indicateur visé avant et après, sur le même périmètre et avec la même définition. C’est cette dernière condition qui manque le plus souvent : quand l’indicateur d’avant vient d’un relevé manuel et celui d’après d’un export, la comparaison ne vaut rien. Ici les deux sont calculés sur les mêmes relevés. Et l’absence d’effet est affichée aussi nettement qu’un gain — un chantier sans résultat est une information utile.',
+          'Sur la classification des déviations : catégorie, sous-catégorie et problème. C’est cette classification, posée au moment du constat, qui rend l’analyse possible — un champ de commentaire libre ne se compte pas. Le Pareto range ensuite les récurrences par poids, ce qui permet de choisir le chantier suivant sur le volume réel plutôt que sur le dernier incident marquant.',
       },
       {
-        question: 'Comment les remontées des opérateurs sont-elles traitées ?',
+        question: 'À quoi sert le change control s’il y a déjà les actions ?',
         answer:
-          'Chaque remontée reçoit une réponse, y compris quand cette réponse est un refus. C’est la seule règle qui compte : une idée sans réponse coûte plus cher que pas d’idée du tout, parce qu’elle apprend à l’équipe que remonter ne sert à rien. L’auteur est informé de la suite donnée, et le motif d’un refus est écrit et conservé.',
+          'Les deux ne traitent pas le même objet. Une action corrective répond à un écart constaté ; une modification de processus change la règle elle-même, et engage tout le monde après elle. Elle a donc son propre dossier, sa propre validation et sa propre montée de version. Le lien entre les deux est conservé : une modification peut générer ses actions, et ces actions restent rattachées à la version du processus qui les a produites.',
       },
       {
         // TODO societe — perimetre exact de l'accompagnement.

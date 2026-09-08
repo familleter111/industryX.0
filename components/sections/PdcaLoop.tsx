@@ -1,9 +1,11 @@
+import clsx from 'clsx'
 import { RotateCw } from 'lucide-react'
 
 import BlockHeading from '@/components/ui/BlockHeading'
 import Section from '@/components/ui/Section'
 import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import type { PdcaContent } from '@/content/types'
+import { cardSurface } from '@/lib/surface'
 
 /**
  * La boucle PDCA, en quatre quadrants.
@@ -53,7 +55,10 @@ export default function PdcaLoop({
             <RevealItem
               key={phase.letter}
               as="li"
-              className="rounded-2xl border border-cream-border bg-white p-6 sm:p-7"
+              className={clsx(
+                'rounded-2xl border border-cream-border p-6 sm:p-7',
+                cardSurface(background),
+              )}
             >
               <div className="flex items-center gap-3">
                 <span

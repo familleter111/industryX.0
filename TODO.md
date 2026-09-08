@@ -5,14 +5,14 @@
 
 Les douze pages CIPA décrivent des comportements produit, des engagements contractuels et des chiffres. Tout ce qui n’a pas pu être vérifié au moment de l’écriture porte un commentaire `TODO` à l’endroit exact où il est affirmé. Ce document les rassemble, page par page.
 
-**81 points ouverts.**
+**80 points ouverts.**
 
 | Catégorie | Points | Qui tranche |
 |---|---:|---|
 | Juridique | 8 | Direction juridique |
 | Produit | 48 | Équipe produit |
 | Qualité | 1 | Équipe qualité |
-| Société | 3 | Direction |
+| Société | 2 | Direction |
 | Chiffre à valider | 10 | Équipe produit + direction |
 | Navigation | 3 | Équipe web |
 | Autre | 8 | — |
@@ -220,20 +220,19 @@ Les douze pages CIPA décrivent des comportements produit, des engagements contr
 
 ## Amélioration continue
 
-`content/amelioration-continue.ts` — /solutions/amelioration-continue · 7 points
+`content/amelioration-continue.ts` — /solutions/amelioration-continue · 6 points
 
 **Produit**
 
-- [ ] `L116` — rapprochement indicateur / action sur un meme perimetre : promesse centrale de la page, a confirmer.
-- [ ] `L128` — diffusion d'un standard vers d'autres perimetres.
-- [ ] `L225` — canal dedie ou type particulier de declaration ?
-- [ ] `L320` — rapprochement indicateur / action. Cette reponse porte la promesse centrale de la page.
+- [ ] `L113` — pourcentage d'avancement : saisi ou deduit ?
+- [ ] `L124` — maille du Pareto : trois niveaux hierarchiques ?
+- [ ] `L142` — circuit d'approbation : qui valide, selon quelle criticite ? Non decrit ici faute d'element valide.
+- [ ] `L348` — maille du Pareto, voir l'en-tete de fichier.
 
 **Société**
 
-- [ ] `L144` — voir l'en-tete de fichier : l'accompagnement lean est annonce ici comme faisant partie du deploiement. Engagement commercial a confirmer avec la direction.
-- [ ] `L253` — engagement commercial, voir l'en-tete de fichier.
-- [ ] `L332` — perimetre exact de l'accompagnement.
+- [ ] `L230` — voir l'en-tete : « l'Ariana » contredit l'adresse du pied de page et la page /about, qui disent Tunis. Et l'accompagnement annonce comme venant avec l'outil est un engagement commercial a confirmer.
+- [ ] `L359` — perimetre exact de l'accompagnement.
 
 ---
 
