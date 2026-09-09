@@ -222,7 +222,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <p className="text-sm text-white/75">
-                +216 90 199 823
+                +216 51 006 104
               </p>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <p className="text-sm text-white/75">
-                contact@industryx0.pro
+                hello@industryx0.pro
               </p>
             </div>
           </div>
