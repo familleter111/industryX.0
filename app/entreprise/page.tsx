@@ -70,10 +70,10 @@ function AboutScreen() {
             <motion.p
               {...rise}
               transition={{ duration: 0.5, ease }}
-              className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[11px]"
+              className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]"
             >
               À propos de nous
-              <span className="h-px w-14 bg-gold/45" />
+              <span className="h-px w-14 bg-gold/70" />
             </motion.p>
 
             {/* TITRE */}
@@ -83,7 +83,7 @@ function AboutScreen() {
               className="mt-[clamp(1rem,2.2vh,1.75rem)] font-display font-black leading-[1.06] tracking-[-0.04em] text-[#111827] text-[clamp(30px,7.4vw,42px)] lg:text-[clamp(30px,min(3.05vw,5.6vh),52px)]"
             >
               L’industrie avance quand le terrain et la technologie parlent{' '}
-              <span className="text-gold-deep">le même langage.</span>
+              <span className="text-gold">le même langage.</span>
             </motion.h1>
 
             {/* CHAPEAU */}
