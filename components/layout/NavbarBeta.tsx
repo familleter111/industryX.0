@@ -25,11 +25,11 @@ import ChatWidget from '@/components/layout/ChatWidget'
 /* ============================================================
    MODÈLE DE NAVIGATION
 
-   La barre ne compte plus que quatre entrées : trois liens directs et
-   une seule qui déroule un panneau, Industries. Les deux formes vivent
-   dans le même tableau ordonné, NAV_ENTRIES, pour que l'ordre affiché
-   se lise d'un coup d'œil ; le contenu du panneau, lui, est lu dans
-   NAV_GROUPS, retrouvé par le libellé de l'entrée.
+   La barre tient en cinq entrées : quatre liens directs et une seule qui
+   déroule un panneau, Industries. Les deux formes vivent dans le même
+   tableau ordonné, NAV_ENTRIES, pour que l'ordre affiché se lise d'un
+   coup d'œil ; le contenu du panneau, lui, est lu dans NAV_GROUPS,
+   retrouvé par le libellé de l'entrée.
    ============================================================ */
 
 type NavItem = {
@@ -119,6 +119,7 @@ const NAV_ENTRIES: NavEntry[] = [
   { label: 'Industries' },
   { label: 'Cas clients', href: '/customers' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Entreprise', href: '/entreprise' },
 ]
 
 export default function NavbarBeta() {
