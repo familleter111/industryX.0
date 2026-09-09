@@ -2,7 +2,9 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { BarChart3, Database, Users } from 'lucide-react'
 
+import { fadeUp, staggerContainer, viewport } from '@/lib/motion'
 import Footer from '@/components/layout/Footer'
 
 /* ============================================================
@@ -17,6 +19,32 @@ const IDENTITY_FACTS = [
 
 /** Colonne de gauche de la bande sombre : ce sur quoi la maison repose. */
 const PILLARS = ['Humain', 'Technologie', 'Impact durable']
+
+/**
+ * Les trois temps de la mission. Le titre est stocke en deux lignes plutot
+ * qu'en une chaine : la coupure fait partie du dessin des cartes, et la
+ * laisser au moteur de rendu donnerait trois cartes de hauteurs differentes.
+ */
+const MISSION_STEPS = [
+  {
+    num: '01',
+    icon: Users,
+    titleLines: ['Comprendre', 'le terrain'],
+    desc: 'Écouter, observer, co-construire avec les équipes.',
+  },
+  {
+    num: '02',
+    icon: Database,
+    titleLines: ['Connecter', 'les données'],
+    desc: 'Transformer les données en informations utiles.',
+  },
+  {
+    num: '03',
+    icon: BarChart3,
+    titleLines: ['Accélérer', 'l’amélioration'],
+    desc: 'Des solutions concrètes pour des impacts durables.',
+  },
+]
 
 /* ============================================================
    OUVERTURE — UN SEUL ÉCRAN
@@ -197,6 +225,167 @@ function AboutScreen() {
 }
 
 /* ============================================================
+   NOTRE MISSION
+
+   Même partition que l’ouverture — le discours à gauche, la photo à
+   droite jusqu’au bord de la fenêtre — mais la section respire sur sa
+   propre hauteur : trois cartes, un titre et une signature n’ont aucune
+   raison d’être comprimés dans un écran.
+
+   Le biseau blanc sur le bord gauche de la photo est un simple triangle
+   en `clip-path`, posé par-dessus : la photo reste rectangulaire, donc
+   `object-cover` continue de la recadrer proprement à toute hauteur.
+   ============================================================ */
+
+function MissionSection() {
+  return (
+    <section className="relative overflow-hidden bg-white">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+
+        {/* ---------- Panneau de gauche ---------- */}
+        <div className="relative px-5 py-16 sm:px-7 sm:py-20 lg:px-[clamp(2rem,3.4vw,4rem)] lg:py-24">
+          {/* Deux traits dorés en biais, seule ornementation du panneau.
+              Décoratifs : hors du flux et hors de l’arbre d’accessibilité. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-16 -top-20 hidden h-[150%] w-px rotate-[18deg] bg-gradient-to-b from-transparent via-gold/30 to-transparent lg:block"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-32 -top-20 hidden h-[150%] w-px rotate-[18deg] bg-gradient-to-b from-transparent via-gold/12 to-transparent lg:block"
+          />
+
+          <div className="relative z-10">
+            {/* ---------- Titre et devise ---------- */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewport}
+              className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start lg:gap-12"
+            >
+              <div>
+                <p className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]">
+                  Notre mission
+                  <span className="h-px w-14 bg-gold/70" />
+                </p>
+
+                <h2 className="mt-6 max-w-[19ch] font-display text-[30px] font-black leading-[1.06] tracking-[-0.04em] text-[#111827] sm:text-[38px] lg:text-[clamp(34px,3vw,48px)]">
+                  Rendre l’excellence opérationnelle accessible,{' '}
+                  <span className="text-gold">mesurable et continue.</span>
+                </h2>
+              </div>
+
+              {/* Devise en colonne étroite, à hauteur du titre. Absente sous
+                  `lg` : empilée, elle ne serait plus qu’une ligne de plus. */}
+              <p className="hidden max-w-[9rem] text-[10px] font-bold uppercase leading-[2] tracking-[0.18em] text-muted lg:block">
+                Des solutions concrètes pour un impact durable
+                <span className="mt-4 block h-px w-10 bg-gold" />
+              </p>
+            </motion.div>
+
+            {/* ---------- Les trois temps ---------- */}
+            <motion.ol
+              variants={staggerContainer()}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewport}
+              className="mt-12 grid gap-5 sm:grid-cols-3 lg:mt-14"
+            >
+              {MISSION_STEPS.map((step) => {
+                const Icon = step.icon
+                return (
+                  <motion.li
+                    key={step.num}
+                    variants={fadeUp}
+                    className="rounded-[20px] border border-cream-border bg-cream/40 p-6 shadow-[0_10px_30px_rgba(12,13,18,0.04)]"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <Icon
+                        size={34}
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                        className="text-gold"
+                      />
+                      <span className="font-display text-[13px] font-bold tracking-[0.02em] text-gold">
+                        {step.num}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-6 font-display text-[19px] font-black leading-[1.2] tracking-[-0.03em] text-[#111827] sm:text-[20px]">
+                      {step.titleLines[0]}
+                      <br />
+                      {step.titleLines[1]}
+                    </h3>
+
+                    <span className="mt-5 block h-[2px] w-9 rounded-full bg-gold" />
+
+                    <p className="mt-4 text-[13.5px] leading-[1.65] text-muted">
+                      {step.desc}
+                    </p>
+                  </motion.li>
+                )
+              })}
+            </motion.ol>
+
+            {/* ---------- Signature ----------
+
+                Un seul PNG : le filet doré, les trois piliers et la devise
+                manuscrite. Le manuscrit est ce qui justifie l’image — le
+                site ne charge que Syne, Outfit et Inter, aucune n’a de
+                cursive, et embarquer une quatrième fonte pour cinq mots
+                coûterait plus cher que ce fichier. */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewport}
+              className="mt-12 lg:mt-14"
+            >
+              <Image
+                src="/about3.png"
+                alt="L’humain, la technologie, un meilleur demain — le réel nous inspire."
+                width={2172}
+                height={724}
+                sizes="(min-width: 1024px) 620px, 100vw"
+                className="h-auto w-full max-w-[620px]"
+              />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* ---------- Photo ----------
+
+            Un seul PNG, composition comprise : la carte « des industries
+            plus humaines » et la signature « people / data / real impact »
+            sont aplaties dans le fichier.
+
+            La cellule a une hauteur définie sous `lg` seulement (la ligne
+            de grille s’étire) ; au-dessus il faut la lui donner, sans quoi
+            `fill` mesure zéro. */}
+        <div className="relative h-[52vh] min-h-[340px] lg:h-auto lg:min-h-0">
+          <Image
+            src="/about2.png"
+            alt="Trois collaborateurs Industry X.0 — une technicienne, un ingénieur en blouse et un opérateur — penchés sur une tablette au bord d’une ligne d’assemblage, devant un écran de performance. Une étiquette annonce « des industries plus humaines, plus performantes »."
+            fill
+            sizes="(min-width: 1024px) 44vw, 100vw"
+            className="object-cover object-center"
+          />
+
+          {/* Biseau blanc : c’est lui qui donne son oblique à la lisière
+              entre le panneau et la photo. Décoratif. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 -left-px hidden w-[110px] bg-white lg:block"
+            style={{ clipPath: 'polygon(0 0, 100% 0, 0 100%)' }}
+          />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ============================================================
    PAGE
    ============================================================ */
 
@@ -205,6 +394,8 @@ export default function EntreprisePage() {
     <main className="min-h-screen overflow-x-hidden bg-white font-body text-dark selection:bg-gold/30">
 
       <AboutScreen />
+
+      <MissionSection />
 
       <Footer />
 
