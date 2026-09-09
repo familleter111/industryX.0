@@ -19,6 +19,7 @@ import {
   Utensils,
   Zap,
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 import SectionHeading from '@/components/ui/SectionHeading'
 import ClientsConstellation from '@/components/sections/ClientsConstellation'
@@ -35,8 +36,17 @@ import Footer from '@/components/layout/Footer'
    DONNÉES
    ============================================================ */
 
-/** Les deux chiffres qui accompagnent le compteur de cas d'usage. */
-const REACH_FIGURES = [
+/**
+ * Les trois chiffres de la ligne « L'expertise en action ».
+ * Le compteur de cas d'usage ouvre la serie sans icone : c'est le chiffre
+ * qui porte le propos, une icone de plus le diluerait.
+ */
+const REACH_FIGURES: {
+  icon?: LucideIcon
+  value: string
+  label: string
+}[] = [
+  { value: '+80', label: 'cas d’usage industriels' },
   { icon: Globe, value: '5', label: 'pays couverts' },
   { icon: Factory, value: '6', label: 'secteurs industriels' },
 ]
@@ -236,96 +246,50 @@ function TestimonialsGrid() {
 }
 
 /* ============================================================
-   HERO — CAS D’USAGE INDUSTRIELS
+   OUVERTURE — UN SEUL ÉCRAN
+
+   Tout ce qui ouvrait la page tenait en deux sections que l’on faisait
+   défiler l’une après l’autre. C’est désormais un seul écran : le
+   discours et le visuel en haut, la plateforme en trois verbes en bas,
+   séparés d’un filet.
+
+   La hauteur est `min-h`, pas `h`. Les tailles de titre et les
+   respirations sont bornées en `vh` autant qu’en `vw`, si bien que le
+   bloc se pose exactement sur un écran des fenêtres de 700 px de haut
+   aux plus grandes. Sur une fenêtre plus courte encore, il s’allonge au
+   lieu de se faire couper : un texte tronqué est un defaut plus grave
+   qu’un demi-tour de molette.
+
+   Sous `lg`, les deux colonnes s’empilent et la page defile : trois
+   blocs de texte, un visuel et six chiffres ne tiennent pas sur un
+   ecran de telephone, et pretendre le contraire donnerait un corps de
+   texte illisible.
    ============================================================ */
 
-/**
- * Compteur de cas d’usage et portée, dans la carte sombre du hero.
- *
- * La carte est le seul aplat sombre de la moitié haute : c’est ce qui fait
- * que l’œil s’y arrête avant les deux boutons, et non l’inverse.
- */
-function ReachCard() {
-  return (
-    <div className="relative mt-8 overflow-hidden rounded-[22px] bg-dark px-6 py-7 sm:px-7">
-      {/* Halo décoratif, hors du flux et hors de l’arbre d’accessibilité. */}
-      <div className="pointer-events-none absolute -bottom-20 -right-12 h-56 w-56 rounded-full bg-gold/20 blur-[70px]" />
-
-      <div className="relative z-10 grid gap-6 sm:grid-cols-[auto_1px_1fr] sm:items-center sm:gap-7">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
-            L’expertise en action
-          </p>
-          <span className="mt-2.5 block h-[2px] w-8 rounded-full bg-gold" />
-
-          <p className="mt-5 flex items-end gap-3">
-            <span className="font-display text-[42px] font-black leading-[0.82] tracking-[-0.04em] text-gold sm:text-[50px]">
-              +80
-            </span>
-            <span className="text-[13px] font-semibold leading-[1.3] text-white sm:text-[14px]">
-              cas d’usage
-              <br />
-              industriels
-            </span>
-          </p>
-        </div>
-
-        {/* Filet de séparation : sa largeur vient de la colonne de grille. */}
-        <span className="hidden self-stretch bg-white/10 sm:block" />
-
-        <ul className="grid gap-4">
-          {REACH_FIGURES.map((figure) => {
-            const Icon = figure.icon
-            return (
-              <li key={figure.label} className="flex items-center gap-3.5">
-                <Icon
-                  size={20}
-                  strokeWidth={1.6}
-                  aria-hidden="true"
-                  className="shrink-0 text-gold"
-                />
-                <span className="font-display text-[26px] font-black leading-none tracking-[-0.04em] text-gold">
-                  {figure.value}
-                </span>
-                <span className="text-[13px] text-white/70">{figure.label}</span>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-/**
- * Ouverture de la page. Deux colonnes : le discours à gauche, le visuel à
- * droite.
- *
- * Le visuel est un seul PNG, composition comprise — la photo, l’étiquette et
- * les deux cartes qui la recouvrent sont aplaties dans le fichier. Son fond
- * est blanc pur, d’où le `bg-white` de la section : sur le gris de page, le
- * carré de l’image se verrait.
- *
- * Entrée au montage (`animate`) et non au scroll : le bloc est au-dessus de
- * la ligne de flottaison, un `whileInView` s’y déclencherait de toute façon
- * immédiatement, au prix d’un observateur.
- */
-function UseCasesHero() {
+function UseCasesScreen() {
   const rise = {
-    initial: { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 18 },
     animate: { opacity: 1, y: 0 },
   }
 
+  /* Entrée au montage plutôt qu’au scroll : le bloc occupe l’écran
+     entier, un `whileInView` se déclencherait de toute façon aussitôt,
+     au prix d’un observateur. */
+  const ease = [0.22, 1, 0.36, 1] as const
+
   return (
-    <section className="relative overflow-hidden bg-white pb-12 pt-[calc(82px+2.5rem)] sm:pb-14 sm:pt-[calc(82px+3rem)] lg:pb-16 lg:pt-[calc(82px+3.5rem)]">
-      <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_0.94fr] lg:gap-12">
+    <section className="relative overflow-hidden bg-white pt-[82px] lg:min-h-[100svh]">
+      <div className="mx-auto flex max-w-[1500px] flex-col px-5 sm:px-7 lg:min-h-[calc(100svh-82px)] lg:px-10">
+
+        {/* ==================== HAUT — DISCOURS ET VISUEL ==================== */}
+        <div className="grid flex-1 grid-cols-1 gap-9 py-9 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.04fr)] lg:items-stretch lg:gap-12 lg:py-[clamp(0.85rem,2.4vh,2.25rem)]">
+
           {/* ---------- Colonne discours ---------- */}
-          <div>
+          <div className="flex flex-col justify-center">
             <motion.span
               {...rise}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-flex items-center gap-2.5 rounded-full border border-gold/30 bg-gold/[0.06] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-gold-ink sm:text-[11px]"
+              transition={{ duration: 0.5, ease }}
+              className="inline-flex w-fit items-center gap-2.5 rounded-full border border-gold/30 bg-gold/[0.05] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-gold-ink sm:text-[11px]"
             >
               <span className="h-[7px] w-[7px] rounded-full bg-gold" />
               Cas d’usage industriels
@@ -333,18 +297,22 @@ function UseCasesHero() {
 
             <motion.h1
               {...rise}
-              transition={{ duration: 0.55, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 font-display text-[30px] font-black leading-[1.08] tracking-[-0.04em] text-[#111827] sm:text-[40px] lg:text-[46px]"
+              transition={{ duration: 0.55, delay: 0.06, ease }}
+              className="mt-[clamp(1rem,2vh,1.6rem)] font-display font-black leading-[1.05] tracking-[-0.04em] text-[#111827] text-[clamp(30px,7vw,40px)] lg:text-[clamp(30px,min(3vw,5.4vh),50px)]"
             >
               Du terrain à la décision,
               <br />
-              vos <span className="text-gold-deep">opérations connectées.</span>
+              vos{' '}
+              <span className="text-gold-deep">
+                opérations
+                <br className="hidden lg:inline" /> connectées.
+              </span>
             </motion.h1>
 
             <motion.p
               {...rise}
-              transition={{ duration: 0.55, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 max-w-[34rem] text-[14.5px] leading-[1.75] text-muted sm:text-[15.5px]"
+              transition={{ duration: 0.55, delay: 0.12, ease }}
+              className="mt-[clamp(0.9rem,1.9vh,1.4rem)] max-w-[36rem] text-[14.5px] leading-[1.7] text-muted sm:text-[15.5px]"
             >
               Avec CIPA, les équipes de l’agroalimentaire, de l’automobile, de
               la plasturgie et de la pharmaceutique pilotent leurs opérations au
@@ -353,15 +321,8 @@ function UseCasesHero() {
 
             <motion.div
               {...rise}
-              transition={{ duration: 0.55, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <ReachCard />
-            </motion.div>
-
-            <motion.div
-              {...rise}
-              transition={{ duration: 0.55, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-7 flex flex-wrap items-center gap-3.5"
+              transition={{ duration: 0.55, delay: 0.18, ease }}
+              className="mt-[clamp(1.1rem,2.4vh,1.9rem)] flex flex-wrap items-center gap-3.5"
             >
               <Link
                 href="/contact"
@@ -385,13 +346,63 @@ function UseCasesHero() {
                 />
               </Link>
             </motion.div>
+
+            {/* ---------- Chiffres ---------- */}
+            <motion.div
+              {...rise}
+              transition={{ duration: 0.55, delay: 0.24, ease }}
+              className="mt-[clamp(1.25rem,2.7vh,2.25rem)] border-t border-cream-border pt-[clamp(1rem,2.2vh,1.6rem)]"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[11px]">
+                L’expertise en action
+              </p>
+
+              <ul className="mt-[clamp(0.65rem,1.5vh,1.15rem)] grid grid-cols-3 divide-x divide-cream-border">
+                {REACH_FIGURES.map((figure, index) => {
+                  const Icon = figure.icon
+                  return (
+                    <li
+                      key={figure.label}
+                      className={index === 0 ? 'pr-5' : 'px-5'}
+                    >
+                      <p className="flex items-center gap-2.5">
+                        {Icon && (
+                          <Icon
+                            size={26}
+                            strokeWidth={1.6}
+                            aria-hidden="true"
+                            className="shrink-0 text-gold"
+                          />
+                        )}
+                        <span className="font-display font-black leading-none tracking-[-0.04em] text-gold-deep text-[clamp(28px,min(2.35vw,4.4vh),40px)]">
+                          {figure.value}
+                        </span>
+                      </p>
+                      <p className="mt-2 text-[13px] leading-[1.4] text-muted sm:text-[13.5px]">
+                        {figure.label}
+                      </p>
+                    </li>
+                  )
+                })}
+              </ul>
+            </motion.div>
           </div>
 
-          {/* ---------- Colonne visuel ---------- */}
+          {/* ---------- Colonne visuel ----------
+
+              Un seul PNG, composition comprise : la photo, l’étiquette
+              « des équipes plus efficaces » et les deux cartes qui la
+              recouvrent sont aplaties dans le fichier. Son fond est blanc
+              pur, d’où le `bg-white` de la section — sur le gris de page,
+              le carré de l’image se verrait.
+
+              La contrainte est la HAUTEUR, pas la largeur : c’est elle qui
+              decide si le bloc tient sur un ecran. */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, ease }}
+            className="flex min-h-0 items-center justify-center"
           >
             <Image
               src="/cas-usage.png"
@@ -399,93 +410,77 @@ function UseCasesHero() {
               width={1254}
               height={1254}
               priority
-              sizes="(min-width: 1024px) 540px, 100vw"
-              className="h-auto w-full"
+              sizes="(min-width: 1024px) 620px, 100vw"
+              className="h-auto max-h-full w-full max-w-[520px] object-contain lg:w-auto lg:max-w-full"
             />
           </motion.div>
         </div>
-      </div>
-    </section>
-  )
-}
 
-/* ============================================================
-   BANDE SOMBRE — UNE PLATEFORME, DES USAGES CONCRETS
-   ============================================================ */
-
-/**
- * Ce que la plateforme fait, en trois verbes. La bande est sombre pour
- * refermer le hero : c’est la même carte que dans le hero, élargie, et le
- * regard comprend qu’un même bloc parle.
- */
-function PlatformBand() {
-  return (
-    <section className="bg-white pb-14 sm:pb-16 lg:pb-20">
-      <div className="mx-auto max-w-[1180px] px-5 sm:px-7 lg:px-8">
+        {/* ==================== BAS — UNE PLATEFORME, DES USAGES CONCRETS ==================== */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewport}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="relative overflow-hidden rounded-[28px] bg-dark px-6 py-10 sm:px-9 sm:py-12 lg:px-12"
+          {...rise}
+          transition={{ duration: 0.55, delay: 0.3, ease }}
+          className="grid gap-8 border-t border-cream-border py-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,2fr)_auto] lg:items-center lg:gap-10 lg:py-[clamp(0.9rem,2.4vh,1.8rem)]"
         >
-          {/* Halo décoratif, coin bas droit. */}
-          <div className="pointer-events-none absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-gold/15 blur-[90px]" />
+          <div>
+            <h2 className="font-display font-black leading-[1.14] tracking-[-0.035em] text-[#111827] text-[clamp(22px,4.6vw,26px)] lg:text-[clamp(21px,min(1.8vw,3.1vh),29px)]">
+              Une plateforme,
+              <br />
+              <span className="text-gold-deep">des usages concrets.</span>
+            </h2>
 
-          {/* Étiquette d’angle. Absente sous `lg` : elle recouvrirait le
-              titre, et son propos est un commentaire, pas une information. */}
-          <p className="absolute right-10 top-11 hidden text-right text-[10px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-white/35 lg:block">
-            Des
-            <br />
-            opérations
+            <p className="mt-3.5 max-w-[26rem] text-[13px] leading-[1.65] text-muted sm:text-[13.5px]">
+              CIPA transforme les données terrain en actions pour des opérations
+              plus fiables, plus simples et plus performantes.
+            </p>
+          </div>
+
+          <ul className="grid gap-7 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-cream-border">
+            {PLATFORM_USES.map((use, index) => {
+              const Icon = use.icon
+              return (
+                <li
+                  key={use.title}
+                  className={index === 0 ? 'sm:pr-6' : 'sm:px-6'}
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gold/10">
+                    <Icon
+                      size={19}
+                      strokeWidth={1.8}
+                      aria-hidden="true"
+                      className="text-gold-deep"
+                    />
+                  </span>
+
+                  {/* La flèche est décorative : elle donne son rythme à la
+                      série, elle ne mène nulle part. `aria-hidden` pour que
+                      la synthèse vocale ne l’annonce pas comme un lien. */}
+                  <p className="mt-3.5 flex items-center gap-2.5 text-[14px] font-bold text-[#111827] sm:text-[14.5px]">
+                    {use.title}
+                    <ArrowRight
+                      size={15}
+                      aria-hidden="true"
+                      className="shrink-0 text-subtle"
+                    />
+                  </p>
+                  <p className="mt-1.5 text-[12.5px] leading-[1.5] text-subtle">
+                    {use.desc}
+                  </p>
+                </li>
+              )
+            })}
+          </ul>
+
+          {/* Étiquette de clôture. Absente sous `lg` : c’est un commentaire,
+              pas une information, et elle prendrait la place d’un contenu. */}
+          <p className="hidden text-[11px] font-bold uppercase leading-[1.9] tracking-[0.16em] text-subtle lg:block">
+            Des opérations
             <br />
             plus durables
             <br />
             demain
-            <span className="mt-2.5 ml-auto block h-[2px] w-7 rounded-full bg-gold/70" />
+            <span className="mt-3 block h-[2px] w-8 rounded-full bg-gold" />
           </p>
-
-          <div className="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_1px_minmax(0,1.5fr)] lg:items-center lg:gap-12 lg:pr-44">
-            <div>
-              <h2 className="font-display text-[26px] font-black leading-[1.12] tracking-[-0.035em] text-white sm:text-[32px]">
-                Une plateforme,
-                <br />
-                <span className="text-gold">des usages concrets.</span>
-              </h2>
-
-              <p className="mt-5 max-w-[24rem] text-[13.5px] leading-[1.75] text-white/60 sm:text-[14px]">
-                CIPA transforme les données terrain en actions pour des
-                opérations plus fiables, plus simples et plus performantes.
-              </p>
-            </div>
-
-            {/* Filet de séparation : sa largeur vient de la colonne de grille. */}
-            <span className="hidden self-stretch bg-white/10 lg:block" />
-
-            <ul className="grid gap-8 sm:grid-cols-3 sm:gap-6">
-              {PLATFORM_USES.map((use) => {
-                const Icon = use.icon
-                return (
-                  <li key={use.title} className="text-center">
-                    <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-gold/40">
-                      <Icon
-                        size={22}
-                        strokeWidth={1.7}
-                        aria-hidden="true"
-                        className="text-gold"
-                      />
-                    </span>
-                    <p className="mt-4 text-[14px] font-bold text-white sm:text-[15px]">
-                      {use.title}
-                    </p>
-                    <p className="mt-1.5 text-[12.5px] leading-[1.55] text-white/55">
-                      {use.desc}
-                    </p>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
         </motion.div>
       </div>
     </section>
@@ -500,9 +495,7 @@ export default function CustomersPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
 
-      <UseCasesHero />
-
-      <PlatformBand />
+      <UseCasesScreen />
 
       {/* ==================== CONSTELLATION CLIENTS ==================== */}
       <ClientsConstellation />
