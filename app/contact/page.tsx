@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
+  AlertCircle,
   ArrowRight,
   Check,
   CheckCircle2,
@@ -24,6 +25,9 @@ import {
   Zap,
 } from 'lucide-react'
 
+import PhoneField from '@/components/ui/PhoneField'
+import { phoneDigits } from '@/lib/phone'
+import { DEFAULT_PHONE_COUNTRY } from '@/lib/data/phoneCountries'
 import { SectionBadge } from '@/components/ui/SectionHeading'
 import { CLIENT_LOGOS, logoFrameWidth } from '@/lib/data/clientLogos'
 import { viewport } from '@/lib/motion'
@@ -126,6 +130,9 @@ type FormState = {
   firstName: string
   lastName: string
   email: string
+  /** Pays de l'indicatif (ISO) — commande la forme du numéro. */
+  phoneCountry: string
+  /** Numéro national mis en forme : « 20 123 456 », sans indicatif. */
   phone: string
   company: string
   industry: string
@@ -137,6 +144,7 @@ const EMPTY_FORM: FormState = {
   firstName: '',
   lastName: '',
   email: '',
+  phoneCountry: DEFAULT_PHONE_COUNTRY,
   phone: '',
   company: '',
   industry: '',
@@ -226,6 +234,10 @@ function ContactForm() {
     Partial<Record<keyof FormState, string>>
   >({})
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+  // Panne d'enregistrement, opposee a une erreur de saisie : elle ne vise
+  // aucun champ, elle vise l'envoi.
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const honeypot = useRef<HTMLInputElement>(null)
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -246,6 +258,13 @@ function ContactForm() {
     if (!form.consent)
       next.consent = 'Merci d’accepter le traitement de vos données'
 
+    // Le telephone reste facultatif — mais un numero commence n'est pas un
+    // numero. Aucune longueur imposee par pays : fixes et mobiles n'ont pas
+    // le meme nombre de chiffres presque partout.
+    const digits = phoneDigits(form.phone)
+    if (digits && (digits.length < 6 || digits.length > 15))
+      next.phone = 'Numéro incomplet'
+
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -253,14 +272,54 @@ function ContactForm() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (status === 'sending') return
+    setSubmitError(null)
     if (!validate()) return
 
     setStatus('sending')
 
-    // TODO — brancher ici l’endpoint réel (route API /api/contact ou CRM).
-    await new Promise((resolve) => setTimeout(resolve, 900))
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
+          email: form.email.trim(),
+          phoneCountry: form.phoneCountry,
+          // Chiffres bruts : le serveur recompose « +216… » depuis le pays.
+          phone: phoneDigits(form.phone),
+          company: form.company.trim(),
+          industry: form.industry,
+          message: form.message.trim(),
+          consent: form.consent,
+          source: window.location.pathname,
+          website: honeypot.current?.value ?? '',
+        }),
+      })
 
-    setStatus('sent')
+      const data = (await response.json().catch(() => ({}))) as {
+        ok?: boolean
+        error?: string
+        fields?: Partial<Record<keyof FormState, string>>
+      }
+
+      if (!response.ok || !data.ok) {
+        // Le serveur revalide tout : ses erreurs de champ font foi.
+        if (data.fields) setErrors(data.fields)
+        setSubmitError(
+          data.error ?? 'L’envoi a échoué. Merci de réessayer dans un instant.',
+        )
+        setStatus('idle')
+        return
+      }
+
+      setStatus('sent')
+    } catch {
+      setSubmitError(
+        'Connexion impossible. Vérifiez votre réseau, puis réessayez.',
+      )
+      setStatus('idle')
+    }
   }
 
   if (status === 'sent') {
@@ -283,6 +342,7 @@ function ContactForm() {
           type="button"
           onClick={() => {
             setForm(EMPTY_FORM)
+            setSubmitError(null)
             setStatus('idle')
           }}
           className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#E7E5E4] px-5 py-2.5 text-[13px] font-semibold text-[#44403C] transition-all duration-300 hover:border-gold/40 hover:text-[#111827]"
@@ -294,7 +354,7 @@ function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="mt-5 lg:mt-6">
+    <form onSubmit={onSubmit} noValidate className="relative mt-5 lg:mt-6">
       {/* Sans cette ligne, l'asterisque rouge est un signe que rien
           n'explique : il faut savoir d'avance ce qu'il veut dire. */}
       <p className="mb-3 text-[11.5px] leading-snug text-subtle">
@@ -364,16 +424,16 @@ function ContactForm() {
           <FieldLabel htmlFor="phone" required={false}>
             Téléphone
           </FieldLabel>
-          <input
+          <PhoneField
             id="phone"
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder="+33 6 12 34 56 78"
+            country={form.phoneCountry}
+            onCountryChange={(iso) => update('phoneCountry', iso)}
             value={form.phone}
-            onChange={(e) => update('phone', e.target.value)}
-            className={`${inputBase} h-11 border-[#E7E5E4]`}
+            onValueChange={(value) => update('phone', value)}
+            error={errors.phone}
+            describedBy={errors.phone ? 'phone-error' : undefined}
           />
+          <FieldError id="phone-error" message={errors.phone} />
         </div>
       </div>
 
@@ -505,6 +565,43 @@ function ContactForm() {
         </label>
         <FieldError id="consent-error" message={errors.consent} />
       </div>
+
+      {/* POT DE MIEL
+
+          Invisible pour l'oeil comme pour le lecteur d'ecran (aria-hidden +
+          tabIndex -1) : seul un robot qui remplit tous les champs le trouve.
+          `hidden` suffirait a le cacher, mais certains robots ignorent
+          justement les champs caches — celui-ci reste dans le flux, pousse
+          hors de l'ecran. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="website">Ne remplissez pas ce champ</label>
+        <input
+          ref={honeypot}
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+        />
+      </div>
+
+      {/* ÉCHEC D'ENVOI
+
+          `role="alert"` : l'erreur arrive apres une action, elle doit etre
+          annoncee sans avoir a repartir a la recherche du bouton. */}
+      {submitError && (
+        <div
+          role="alert"
+          className="mt-4 flex items-start gap-2.5 rounded-xl border border-red-300 bg-red-50 px-3.5 py-3 text-[12.5px] leading-relaxed text-red-700"
+        >
+          <AlertCircle size={16} className="mt-px shrink-0" />
+          <span>{submitError}</span>
+        </div>
+      )}
 
       {/* SUBMIT */}
       <button

@@ -66,8 +66,44 @@ Le site sera disponible sur [http://localhost:3000](http://localhost:3000)
 - Les animations Framer Motion sont dans chaque composant
 - Ajouter vos vraies images/logos dans `/public`
 
+## Formulaire de contact → Excel
+
+Chaque demande envoyée depuis `/contact` (« Planifier une démonstration »)
+devient une ligne de **`data/contacts.xlsx`**, feuille `Demandes` : date et
+heure, prénom, nom, email, téléphone au format international, pays, société,
+industrie, message, consentement, page d'origine. Le fichier est créé au
+premier envoi ; il suffit de l'ouvrir dans Excel pour voir les demandes.
+
+- Route : `app/api/contact/route.ts` — revalide tout, refuse les robots (champ
+  piège) et limite à 5 envois par IP par quart d'heure.
+- Écriture : `lib/server/leads.ts` — écritures sérialisées et atomiques.
+- Emplacement : `CONTACT_XLSX_PATH` dans `.env` pour écrire ailleurs
+  (`D:/partage/demandes.xlsx`, un dossier réseau monté…).
+- Si le classeur est ouvert dans Excel au moment d'un envoi, Windows le
+  verrouille : la demande part alors dans `data/contacts-secours.csv` plutôt
+  que d'être perdue. Recopier ces lignes dans le classeur, puis supprimer le
+  CSV.
+- `data/` est exclu de git : ces fichiers contiennent des données
+  personnelles.
+
+> Hébergement : cela suppose un serveur avec disque persistant (VPS, Docker
+> avec volume, `next start`). Sur Vercel ou Netlify, le disque est en lecture
+> seule — il faut alors viser un stockage externe (base, Google Sheets, S3).
+
+### Champ téléphone
+
+`components/ui/PhoneField.tsx` : sélecteur de pays (drapeau + indicatif) qui
+impose la forme du numéro du pays choisi — `+216 20 123 456`,
+`+33 6 12 34 56 78`. Tunisie, France, Espagne, Italie et Allemagne ouvrent la
+liste, suivies de l'Afrique, l'Europe, le Moyen-Orient, les Amériques, l'Asie
+et l'Océanie.
+
+```bash
+npm run gen:countries   # régénère lib/data/phoneCountries.ts + public/flags
+npm run test:phone      # vérifie la mise en forme des numéros
+```
+
 ## Notes
 
 - Toutes les images de clients/logos sont des placeholders à remplacer
 - Les témoignages sont fictifs — remplacer par de vrais témoignages
-- Le formulaire de contact est à connecter à votre backend
