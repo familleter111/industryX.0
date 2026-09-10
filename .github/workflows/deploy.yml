@@ -10,16 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Clean install dependencies
+        run: |
+          rm -rf node_modules
+          npm cache clean --force
+          npm ci
+
+      - name: Inspect Next.js installation
+        run: |
+          echo "Next.js version:"
+          node -p "require('./node_modules/next/package.json').version"
+
+          echo "Next.js package location:"
+          node -p "require.resolve('next/package.json')"
+
+          echo "Checking Next.js server directory:"
+          ls -la node_modules/next/server | head -50
 
       - name: Build
         run: npm run build
@@ -27,16 +42,18 @@ jobs:
       - name: Prune dev dependencies
         run: npm prune --omit=dev
 
-      - name: Verify Next.js installation
+      - name: Create deployment package
         run: |
-          echo "Next version:"
-          node -p "require('./node_modules/next/package.json').version"
-          echo "Checking require-hook:"
-          test -f node_modules/next/server/require-hook.js
-          echo "Next require-hook exists."
+          rm -f release.zip
 
-      - name: Zip artifact for deployment
-        run: zip -r release.zip .next public package.json package-lock.json next.config.mjs node_modules -x "*.git*"
+          zip -r release.zip \
+            .next \
+            public \
+            package.json \
+            package-lock.json \
+            next.config.mjs \
+            node_modules \
+            -x "*.git*"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
