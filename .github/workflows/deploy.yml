@@ -9,7 +9,6 @@ jobs:
 build-and-deploy:
 runs-on: ubuntu-latest
 
-```
 steps:
   - uses: actions/checkout@v4
 
@@ -57,4 +56,3 @@ steps:
       package: release.zip
       clean: true
       restart: true
-```
