@@ -1,3 +1,4 @@
+```yaml
 name: Deploy to Azure App Service
 
 on:
@@ -26,6 +27,16 @@ jobs:
       - name: Prune dev dependencies
         run: npm prune --omit=dev
 
+      - name: Verify Next.js installation
+        run: |
+          echo "Next version:"
+          node -p "require('./node_modules/next/package.json').version"
+
+          echo "Checking require-hook:"
+          test -f node_modules/next/server/require-hook.js
+
+          echo "Next require-hook exists."
+
       - name: Zip artifact for deployment
         run: |
           zip -r release.zip \
@@ -43,3 +54,6 @@ jobs:
           app-name: industryx0
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: release.zip
+          clean: true
+          restart: true
+```
