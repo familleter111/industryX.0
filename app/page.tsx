@@ -18,7 +18,7 @@ export default function HomePage() {
       <HowItWorks />
       <CipaSection />
       <CasesSection />
-      <IndustriesSection />
+        {/* <IndustriesSection /> */}
       <TestimonialsSection />
       <PartnersOrbit />
       <CTASection />

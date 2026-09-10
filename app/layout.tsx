@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Syne, Outfit, Inter } from 'next/font/google'
 import './globals.css'
 
-import Navbar from '@/components/layout/Navbar'
+import NavbarBeta from '@/components/layout/NavbarBeta'
 
 const syne = Syne({
   subsets: ['latin'],
@@ -84,7 +84,7 @@ export default function RootLayout({
             remonter demanderait soit de le rendre client pour qu'il lise la
             route, soit de reorganiser app/ en groupes de routes — deux prix
             plus eleves que le gain. */}
-        <Navbar />
+        <NavbarBeta />
         {children}
       </body>
     </html>

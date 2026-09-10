@@ -11,7 +11,6 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/lib/useMotion'
 import Section from '@/components/ui/Section'
-import SdgContribution from '@/components/sections/SdgContribution'
 
 const steps = [
   {
@@ -157,13 +156,6 @@ export default function IndustriesSection() {
             ))}
           </div>
         </div>
-        {/* ================= OBJECTIFS DE DEVELOPPEMENT DURABLE =================
-
-            Bloc isole dans son propre composant : il a son etat (pastille
-            survolee, decalage de l'infobulle) et ses donnees, qui n'ont rien
-            a voir avec les trois etapes du flux ci-dessus.
-            ================================================================= */}
-        <SdgContribution className="mt-20 px-4 sm:mt-28 sm:px-10" />
     </Section>
   )
 }

@@ -9,6 +9,7 @@ import { STATS } from '@/lib/data/orbit'
 import { useMotion } from '@/lib/useMotion'
 import OrbitCanvas from '@/components/sections/orbit/OrbitCanvas'
 import Section from '@/components/ui/Section'
+import SdgContribution from '@/components/sections/SdgContribution'
 
 /* ============================================================
    ORBITE DE L'ÉCOSYSTÈME
@@ -204,6 +205,19 @@ export default function PartnersOrbit({
             <BranchLegend />
           </>
         )}
+
+        {/* ================= OBJECTIFS DE DEVELOPPEMENT DURABLE =================
+
+            Bloc isole dans son propre composant : il a son etat (pastille
+            survolee, decalage de l'infobulle) et ses donnees, qui n'ont rien
+            a voir avec l'orbite ci-dessus.
+
+            Sur l'accueil seulement : /partners rend la meme section en
+            variante `page`, ou la barre ferait doublon avec le reste de la
+            page. Pas de padding horizontal, le conteneur de Section en pose
+            deja un.
+            ================================================================= */}
+        {isHome && <SdgContribution className="mt-20 sm:mt-24" />}
     </Section>
   )
 }

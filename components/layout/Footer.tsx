@@ -8,7 +8,7 @@ import {
   Phone,
   ChevronRight,
 } from 'lucide-react'
-import { LINKEDIN_URL } from '@/lib/data/socials'
+import { FACEBOOK_URL, LINKEDIN_URL } from '@/lib/data/socials'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 
 const footerLinks = [
@@ -79,7 +79,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           {/* LEFT SIDE */}
 
           <div>
-            {/* logos */}
+            {/* logo */}
 
             <div className="flex flex-wrap items-center gap-4">
               <Image
@@ -87,16 +87,6 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                 alt="Industry X.0"
                 width={150}
                 height={40}
-                className="h-auto w-auto"
-              />
-
-              <div className="hidden h-6 w-px bg-white/10 md:block" />
-
-              <Image
-                src="/logoCIPA.png"
-                alt="CIPA"
-                width={80}
-                height={35}
                 className="h-auto w-auto"
               />
             </div>
@@ -232,7 +222,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <p className="text-sm text-white/75">
-                +216 90 199 823
+                +216 51 006 104
               </p>
             </div>
           </div>
@@ -260,7 +250,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <p className="text-sm text-white/75">
-                contact@industryx0.pro
+                hello@industryx0.pro
               </p>
             </div>
           </div>
@@ -275,7 +265,10 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
               <div className="flex gap-3">
                 <a
-                  href="/"
+                  href={FACEBOOK_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Industry X.0 sur Facebook"
                   className="
                   flex h-12 w-12 items-center justify-center
                   rounded-2xl
