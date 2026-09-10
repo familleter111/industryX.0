@@ -46,4 +46,3 @@ steps:
       package: release.zip
       clean: true
       restart: true
-```
