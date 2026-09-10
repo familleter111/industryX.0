@@ -6,4 +6,7 @@
  * page. Tout passe désormais par cette constante.
  */
 
-export const LINKEDIN_URL = 'https://tn.linkedin.com/company/industryx0'
+export const LINKEDIN_URL =
+  'https://www.linkedin.com/company/industryx0/posts/?feedView=all'
+
+export const FACEBOOK_URL = 'https://www.facebook.com/industryx.0'

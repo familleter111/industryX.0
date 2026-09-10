@@ -1,0 +1,298 @@
+.mission {
+  /* The fixed site navigation occupies 82px above this screen. */
+  position: relative;
+  height: calc(100svh - 82px);
+  container-type: size;
+  isolation: isolate;
+  /* Complete the global 5rem scroll padding to match the navigation. */
+  scroll-margin-top: calc(82px - 5rem);
+}
+
+.visual {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 60%;
+  z-index: -1;
+}
+
+.photo {
+  object-fit: contain;
+  object-position: right center;
+}
+
+.content {
+  position: absolute;
+  inset: 9cqh auto 7cqh 3.8%;
+  width: 54.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3cqh;
+}
+
+.heading {
+  flex: 0 0 auto;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.4vw;
+  font-size: min(1.05vw, 2cqh);
+  font-weight: 500;
+  letter-spacing: 0.27em;
+  text-transform: uppercase;
+}
+
+.eyebrow span {
+  width: 4.3vw;
+  height: 2px;
+}
+
+.title {
+  margin-top: 3.8cqh;
+  font-size: min(4.05vw, 8cqh);
+  font-weight: 750;
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+}
+
+.title > span {
+  display: block;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1vw;
+  flex: 0 0 37.4cqh;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  min-width: 0;
+  padding: 3cqh 1.85vw;
+  border: 1px solid rgb(255 255 255 / 90%);
+  border-radius: min(1.2vw, 2.2cqh);
+  background: linear-gradient(135deg, rgb(255 255 255 / 95%), rgb(248 248 249 / 90%));
+  box-shadow: 0 12px 32px rgb(12 13 18 / 9%);
+  backdrop-filter: blur(12px);
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.icon {
+  width: min(4vw, 7cqh);
+  height: min(4vw, 7cqh);
+  flex-shrink: 0;
+}
+
+.number {
+  font-size: min(1.18vw, 2.4cqh);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.cardTitle {
+  margin-top: 2cqh;
+  font-size: min(2.05vw, 4cqh);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.cardTitle span {
+  display: block;
+  white-space: nowrap;
+}
+
+.rule {
+  display: block;
+  width: 3.3vw;
+  height: 2px;
+  margin-top: 2.6cqh;
+}
+
+.description {
+  margin-top: 2.6cqh;
+  font-size: min(1.22vw, 2.55cqh);
+  font-weight: 300;
+  line-height: 1.32;
+  letter-spacing: -0.035em;
+  overflow-wrap: normal;
+}
+
+.signature {
+  position: relative;
+  width: min(70%, 72cqh);
+  height: 10cqh;
+  flex-shrink: 0;
+  overflow: hidden;
+  mix-blend-mode: multiply;
+}
+
+.signature img {
+  position: absolute;
+  top: 50%;
+  left: -7.5%;
+  width: 112%;
+  max-width: none;
+  height: auto;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  .visual {
+    width: 100%;
+    opacity: 0.65;
+  }
+
+  .photo {
+    object-fit: cover;
+    object-position: 65% center;
+  }
+
+  .mission::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, white, rgb(255 255 255 / 88%) 45%, rgb(255 255 255 / 15%));
+  }
+
+  .content {
+    inset: 4cqh 5%;
+    width: auto;
+    gap: 3cqh;
+  }
+
+  .eyebrow {
+    gap: 16px;
+    font-size: clamp(10px, 1.8cqh, 14px);
+  }
+
+  .eyebrow span {
+    width: 42px;
+  }
+
+  .title {
+    margin-top: 2.5cqh;
+    font-size: min(6.8vw, 5.1cqh);
+    line-height: 1.1;
+    letter-spacing: -0.055em;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 2cqh;
+  }
+
+  .card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    align-items: center;
+    column-gap: 5vw;
+    row-gap: 1.3cqh;
+    padding: 2cqh 4vw;
+    border-radius: 14px;
+  }
+
+  .cardTop {
+    grid-column: 1;
+  }
+
+  .icon {
+    width: min(8vw, 4.7cqh);
+    height: min(8vw, 4.7cqh);
+  }
+
+  .number {
+    position: absolute;
+    top: 1.8cqh;
+    right: 3vw;
+    font-size: clamp(11px, 1.8cqh, 15px);
+  }
+
+  .cardTitle {
+    grid-column: 1;
+    margin: 0;
+    font-size: min(4.8vw, 3.2cqh);
+    letter-spacing: -0.05em;
+  }
+
+  .rule {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    left: 49%;
+    width: 2px;
+    height: auto;
+    margin: 0;
+    opacity: 0.6;
+  }
+
+  .description {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    margin: 0;
+    padding-top: 1cqh;
+    font-size: min(3.5vw, 2.45cqh);
+    line-height: 1.4;
+    font-weight: 400;
+  }
+
+  .signature {
+    width: min(calc(100% - 64px), 54cqh);
+    height: 8cqh;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .content {
+    inset-block: 5cqh;
+    width: 62%;
+    gap: 2cqh;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+  }
+
+  .title {
+    margin-top: 2cqh;
+  }
+
+  .cards {
+    flex-basis: 44cqh;
+  }
+
+  .card {
+    padding: 1.8cqh 1.4vw;
+  }
+
+  .cardTitle {
+    margin-top: 1.4cqh;
+    font-size: min(2.05vw, 4.2cqh);
+  }
+
+  .description {
+    margin-top: 1.4cqh;
+    font-size: min(1.5vw, 3.4cqh);
+  }
+
+  .rule {
+    margin-top: 1.4cqh;
+  }
+}

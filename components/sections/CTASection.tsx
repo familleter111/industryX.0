@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
@@ -8,6 +9,10 @@ import {
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { useMotion } from '@/lib/useMotion'
 import Section from '@/components/ui/Section'
+
+/* Les deux appels menent a /contact. `Link` plutot que `a` pour garder
+   la navigation cote client ; anime, donc passe par la fabrique. */
+const MotionLink = motion(Link)
 
 export default function CTASection() {
   const m = useMotion()
@@ -114,10 +119,10 @@ export default function CTASection() {
                 <div className="flex flex-col gap-4">
 
                   {/* PRIMARY */}
-                  <motion.a
+                  <MotionLink
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    href="#demo"
+                    href="/contact"
                     className="group flex items-center justify-between rounded-2xl bg-gradient-to-r from-gold to-yellow-500 px-7 py-5 shadow-2xl shadow-gold/20 transition-all duration-300 hover:shadow-gold/40"
                   >
 
@@ -140,13 +145,13 @@ export default function CTASection() {
 
                     </div>
 
-                  </motion.a>
+                  </MotionLink>
 
                   {/* SECONDARY */}
-                  <motion.a
+                  <MotionLink
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    href="#expert"
+                    href="/contact"
                     className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-7 py-5 backdrop-blur-md transition-all duration-300 hover:bg-white/[0.06]"
                   >
 
@@ -166,7 +171,7 @@ export default function CTASection() {
 
                     </div>
 
-                  </motion.a>
+                  </MotionLink>
 
                 </div>
 

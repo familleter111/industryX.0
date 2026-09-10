@@ -8,7 +8,7 @@ import {
   Phone,
   ChevronRight,
 } from 'lucide-react'
-import { LINKEDIN_URL } from '@/lib/data/socials'
+import { FACEBOOK_URL, LINKEDIN_URL } from '@/lib/data/socials'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 
 const footerLinks = [
@@ -265,7 +265,10 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
               <div className="flex gap-3">
                 <a
-                  href="/"
+                  href={FACEBOOK_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Industry X.0 sur Facebook"
                   className="
                   flex h-12 w-12 items-center justify-center
                   rounded-2xl

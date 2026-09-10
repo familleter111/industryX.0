@@ -225,7 +225,7 @@ export default function Hero() {
             {/* SECONDARY BUTTON */}
 
             <Link
-              href="/solutions/cipa"
+              href="/contact"
               className="
                 inline-flex items-center justify-center gap-2
                 rounded-full border
@@ -302,9 +302,32 @@ export default function Hero() {
         viewport={m.viewport}
         className="relative z-10 mt-8 w-full sm:mt-12"
       >
-        <p className="mb-4 text-center text-[13px] text-stone-600">
-          Ils nous font confiance
-        </p>
+        {/* Titre de la bande. Les deux filets s'effacent vers l'exterieur :
+            ils encadrent le mot sans fermer la ligne. Decoratifs, donc hors
+            de l'arbre d'accessibilite. */}
+        <div className="mb-5 flex items-center justify-center gap-4 px-5 sm:mb-6 sm:gap-7">
+          <span
+            aria-hidden="true"
+            className="h-px w-10 flex-none bg-gradient-to-r from-transparent to-gold sm:w-24 lg:w-40"
+          />
+
+          <p
+            className="text-center font-black leading-tight tracking-[-0.03em] text-gray-900"
+            style={{ fontSize: 'clamp(1rem,1.7vw,1.55rem)' }}
+          >
+            Ils nous font{' '}
+            {/* `gold.deep`, pas `gold.DEFAULT` : meme raison qu'au titre
+                ci-dessus — l'or de marque tombe a 2,04:1 sur le creme, sous
+                le seuil de 3:1 du texte large. Les filets, eux, gardent l'or
+                de marque : ce sont des traits, pas du texte. */}
+            <span style={{ color: tokens.color.gold.deep }}>confiance</span>
+          </p>
+
+          <span
+            aria-hidden="true"
+            className="h-px w-10 flex-none bg-gradient-to-l from-transparent to-gold sm:w-24 lg:w-40"
+          />
+        </div>
 
         <LogoMarquee logos={CLIENT_LOGOS} />
       </motion.div>
