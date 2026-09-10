@@ -25,16 +25,21 @@ jobs:
           npm cache clean --force
           npm ci
 
-      - name: Inspect Next.js installation
+      - name: Verify Next.js installation
         run: |
           echo "Next.js version:"
           node -p "require('./node_modules/next/package.json').version"
 
-          echo "Next.js package location:"
-          node -p "require.resolve('next/package.json')"
+          echo "Next.js executable:"
+          ls -la node_modules/.bin/next
 
-          echo "Checking Next.js server directory:"
-          ls -la node_modules/next/server | head -50
+          echo "Next.js bin:"
+          ls -la node_modules/next/dist/bin/next
+
+          echo "Checking require-hook:"
+          ls -la node_modules/next/dist/server/require-hook.js
+
+          echo "Require-hook exists."
 
       - name: Build
         run: npm run build
