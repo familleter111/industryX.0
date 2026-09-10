@@ -15,7 +15,7 @@ steps:
   - name: Set up Node
     uses: actions/setup-node@v4
     with:
-      node-version: '22'
+      node-version: "22"
       cache: npm
 
   - name: Install dependencies
@@ -31,22 +31,12 @@ steps:
     run: |
       echo "Next version:"
       node -p "require('./node_modules/next/package.json').version"
-
       echo "Checking require-hook:"
       test -f node_modules/next/server/require-hook.js
-
       echo "Next require-hook exists."
 
   - name: Zip artifact for deployment
-    run: |
-      zip -r release.zip \
-        .next \
-        public \
-        package.json \
-        package-lock.json \
-        next.config.mjs \
-        node_modules \
-        -x "*.git*"
+    run: zip -r release.zip .next public package.json package-lock.json next.config.mjs node_modules -x "*.git*"
 
   - name: Deploy to Azure Web App
     uses: azure/webapps-deploy@v3
@@ -56,3 +46,4 @@ steps:
       package: release.zip
       clean: true
       restart: true
+```
