@@ -1,48 +1,48 @@
 name: Deploy to Azure App Service
 
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+      - main
 
 jobs:
-build-and-deploy:
-runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-steps:
-  - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  - name: Set up Node
-    uses: actions/setup-node@v4
-    with:
-      node-version: "22"
-      cache: npm
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
 
-  - name: Install dependencies
-    run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-  - name: Build
-    run: npm run build
+      - name: Build
+        run: npm run build
 
-  - name: Prune dev dependencies
-    run: npm prune --omit=dev
+      - name: Prune dev dependencies
+        run: npm prune --omit=dev
 
-  - name: Verify Next.js installation
-    run: |
-      echo "Next version:"
-      node -p "require('./node_modules/next/package.json').version"
-      echo "Checking require-hook:"
-      test -f node_modules/next/server/require-hook.js
-      echo "Next require-hook exists."
+      - name: Verify Next.js installation
+        run: |
+          echo "Next version:"
+          node -p "require('./node_modules/next/package.json').version"
+          echo "Checking require-hook:"
+          test -f node_modules/next/server/require-hook.js
+          echo "Next require-hook exists."
 
-  - name: Zip artifact for deployment
-    run: zip -r release.zip .next public package.json package-lock.json next.config.mjs node_modules -x "*.git*"
+      - name: Zip artifact for deployment
+        run: zip -r release.zip .next public package.json package-lock.json next.config.mjs node_modules -x "*.git*"
 
-  - name: Deploy to Azure Web App
-    uses: azure/webapps-deploy@v3
-    with:
-      app-name: industryx0
-      publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-      package: release.zip
-      clean: true
-      restart: true
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: industryx0
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: release.zip
+          clean: true
+          restart: true
