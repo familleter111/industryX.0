@@ -3,8 +3,22 @@ import createNextIntlPlugin from 'next-intl/plugin'
 // Branche src/i18n/request.ts : c'est lui qui donne la langue de chaque requête.
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
+// Relais PostHog (région UE par défaut) : voir src/lib/analytics/posthog.ts.
+const POSTHOG_HOST = process.env.POSTHOG_INGEST_HOST || 'https://eu.i.posthog.com'
+const POSTHOG_ASSETS = process.env.POSTHOG_ASSETS_HOST || 'https://eu-assets.i.posthog.com'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Les événements partent vers /ingest sur notre domaine, que Next relaie à
+  // PostHog : les bloqueurs de publicité ne coupent pas un appel au site.
+  async rewrites() {
+    return [
+      { source: '/ingest/static/:path*', destination: `${POSTHOG_ASSETS}/static/:path*` },
+      { source: '/ingest/:path*', destination: `${POSTHOG_HOST}/:path*` },
+    ]
+  },
+  // PostHog appelle /ingest/e/ : sans ceci, Next le redirige vers /ingest/e.
+  skipTrailingSlashRedirect: true,
   // /about faisait doublon avec /entreprise : les anciens liens y sont renvoyés.
   async redirects() {
     return [

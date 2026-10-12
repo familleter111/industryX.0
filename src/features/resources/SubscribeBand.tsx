@@ -5,6 +5,8 @@ import { Link } from '@/i18n/navigation'
 import { AlertCircle, ArrowRight, Check, CheckCircle2, Loader2, Mail } from 'lucide-react'
 
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
+import { getAttribution } from '@/lib/analytics/attribution'
+import { distinctId, track } from '@/lib/analytics/posthog'
 
 /**
  * « Recevoir les prochains guides » : la capture de prospects de /resources.
@@ -96,6 +98,8 @@ export default function SubscribeBand({ source }: { source: string }) {
           company: company.trim(),
           consent,
           source,
+          attribution: getAttribution(),
+          posthogId: distinctId(),
           locale,
           website: honeypot.current?.value ?? '',
         }),
@@ -113,6 +117,7 @@ export default function SubscribeBand({ source }: { source: string }) {
         return
       }
       setStatus('sent')
+      track('newsletter_subscribed', { page: window.location.pathname })
     } catch {
       setSubmitError(t.offline)
       setStatus('idle')

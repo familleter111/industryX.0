@@ -55,7 +55,7 @@ export default function Hero() {
   const m = useMotion()
   const t = useCopy(COPY)
   return (
-    <section className="relative overflow-hidden bg-cream pt-[106px] sm:pt-[114px] lg:pt-28 pb-6 lg:pb-8">
+    <section data-cta-location="hero" className="relative overflow-hidden bg-cream pt-[106px] sm:pt-[114px] lg:pt-28 pb-6 lg:pb-8">
       {/* Le Hero n'utilise pas <Section> : son padding haut degage la navbar
           fixe et son padding bas est volontairement asymetrique, deux
           contraintes que l'echelle de rythme ne doit pas connaitre. Le fond,

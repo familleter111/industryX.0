@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, ArrowRight, CalendarCheck, Clock, Lightbulb } from 'lucide-react'
 
+import TrackOnMount from '@/components/analytics/TrackOnMount'
 import Footer from '@/components/layout/Footer'
 import GuideCard from '@/features/resources/GuideCard'
 import SubscribeBand from '@/features/resources/SubscribeBand'
@@ -135,6 +136,7 @@ export default function GuidePage({ params }: Params) {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
+      <TrackOnMount event="guide_viewed" properties={{ slug: guide.slug, category: guide.category }} />
       <article>
         {/* ==================== EN-TÊTE ==================== */}
         <header className="mx-auto max-w-[1080px] px-5 pt-[calc(82px+2.5rem)] sm:px-7 lg:px-8 lg:pt-[calc(82px+3.5rem)]">

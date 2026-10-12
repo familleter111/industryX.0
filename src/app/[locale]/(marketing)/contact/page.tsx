@@ -33,6 +33,8 @@ import { CLIENT_LOGOS, logoFrameWidth } from '@/lib/data/clientLogos'
 import { viewport } from '@/lib/motion'
 import Footer from '@/components/layout/Footer'
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
+import { getAttribution } from '@/lib/analytics/attribution'
+import { distinctId, track } from '@/lib/analytics/posthog'
 
 /* ============================================================
    DONNÉES STATIQUES
@@ -353,6 +355,13 @@ function ContactForm() {
   // aucun champ, elle vise l'envoi.
   const [submitError, setSubmitError] = useState<string | null>(null)
   const honeypot = useRef<HTMLInputElement>(null)
+  // demo_form_started ne part qu'une fois, au premier champ touché.
+  const started = useRef(false)
+  const onFormFocus = () => {
+    if (started.current) return
+    started.current = true
+    track('demo_form_started', { page: window.location.pathname })
+  }
   const t = useCopy(COPY)
   const locale = useCurrentLocale()
 
@@ -409,6 +418,9 @@ function ContactForm() {
           message: form.message.trim(),
           consent: form.consent,
           source: window.location.pathname,
+          // Campagne d'origine et identifiant PostHog : relient la demande à son parcours.
+          attribution: getAttribution(),
+          posthogId: distinctId(),
           locale,
           website: honeypot.current?.value ?? '',
         }),
@@ -421,6 +433,10 @@ function ContactForm() {
       }
 
       if (!response.ok || !data.ok) {
+        track('demo_form_failed', {
+          status: response.status,
+          fields: Object.keys(data.fields ?? {}),
+        })
         // Le serveur revalide tout : ses erreurs de champ font foi.
         if (data.fields) setErrors(data.fields)
         setSubmitError(data.error ?? t.failed)
@@ -429,7 +445,12 @@ function ContactForm() {
       }
 
       setStatus('sent')
+      track('demo_form_submitted', {
+        industry: form.industry,
+        has_phone: phoneDigits(form.phone) !== '',
+      })
     } catch {
+      track('demo_form_failed', { status: 0, fields: [] })
       setSubmitError(t.offline)
       setStatus('idle')
     }
@@ -466,7 +487,7 @@ function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="relative mt-5 lg:mt-6">
+    <form onSubmit={onSubmit} onFocus={onFormFocus} noValidate className="relative mt-5 lg:mt-6">
       {/* Sans cette ligne, l'asterisque rouge est un signe que rien
           n'explique : il faut savoir d'avance ce qu'il veut dire. */}
       <p className="mb-3 text-[11.5px] leading-snug text-subtle">

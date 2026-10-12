@@ -43,6 +43,44 @@ et chaque push hors de `main`, suivis de `npm run build`.
 native est bloquée par le contrôle d'applications de Windows, la version
 WebAssembly tourne partout.
 
+## Analytics (PostHog) et campagnes
+
+Sans `NEXT_PUBLIC_POSTHOG_KEY`, rien n'est chargé : pas de mesure, pas de bandeau. Pour
+l'activer :
+
+1. Créer un projet **PostHog EU Cloud** (et un second pour la preview et le dev).
+2. Mettre la clé `phc_…` dans `.env.local` (voir `.env.example`) et dans une
+   **variable GitHub Actions** `NEXT_PUBLIC_POSTHOG_KEY`. La valeur est figée au build,
+   la déclarer dans Azure ne suffit pas (voir `deploy.yml`).
+
+Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
+
+- **Taxonomie** : `events.ts` est la seule liste d'événements autorisée. `track()` est
+  typé dessus, donc un nom ou une propriété faux ne compile pas.
+- **CTA** : aucun lien n'est instrumenté à la main. Un écouteur unique suit tout lien
+  vers `/contact`, ainsi que tout élément `data-cta="<id>"`. La zone vient de
+  `data-cta-location` (`hero`, `cta_band`…), sinon `footer` / `navbar` / `page`.
+  Pour un lien vers Enti Win, poser `data-cta="entiwin_<zone>"` : le clic envoie
+  `entiwin_clicked`, et le lien emporte les UTM et l'identifiant PostHog (`ix0_id`).
+- **Consentement** (`ConsentBanner`) : avant réponse, PostHog tourne en mémoire, sans
+  cookie. « Accepter » passe en cookie et active les replays (champs masqués).
+  « Refuser » coupe tout. Le lien « Gérer les cookies » du pied de page rouvre le bandeau.
+- **Proxy** : les appels passent par `/ingest` sur notre domaine (rewrites de
+  `next.config.mjs`), sinon les bloqueurs de publicité les coupent.
+- **Attribution** : UTM et `ref` sont captés à l'arrivée, puis joints aux demandes de
+  démo et aux inscriptions (colonnes `utm_*`, `ref`, `Première visite`, `ID PostHog` du
+  fichier Excel). Convention de nommage : [docs/utm.md](docs/utm.md).
+
+| Événement | Quand |
+|---|---|
+| `$pageview` | chaque page, avec `locale` |
+| `cta_clicked` | clic sur un CTA (`cta_id`, `location`, `destination`) |
+| `demo_form_started` / `_submitted` / `_failed` | formulaire /contact |
+| `newsletter_subscribed` | inscription aux guides |
+| `chat_opened`, `chat_message_sent` | assistant (jamais le texte) |
+| `guide_viewed` | page guide |
+| `language_switched`, `entiwin_clicked` | sélecteur de langue, liens Enti Win |
+
 ## SEO
 
 - `src/app/sitemap.ts` et `src/app/robots.ts` servent `/sitemap.xml` et `/robots.txt`.
@@ -73,6 +111,7 @@ WebAssembly tourne partout.
 │   │       └── subscribe/route.ts
 │   ├── components/             # Composants réutilisables
 │   │   ├── ui/                 # Briques d'interface (Section, Reveal, PhoneField…)
+│   │   ├── analytics/          # AnalyticsProvider, ConsentBanner, TrackOnMount
 │   │   ├── layout/             # Navbar, Footer, ChatWidget, WelcomeIntro
 │   │   └── sections/           # Sections de pages (Hero, CTASection…)
 │   ├── features/               # Composants métier
@@ -81,6 +120,7 @@ WebAssembly tourne partout.
 │   │   └── resources/          # Guides, inscription
 │   ├── lib/                    # Utilitaires et configuration
 │   │   ├── data/               # Contenus (fr + overlays en)
+│   │   ├── analytics/          # PostHog, taxonomie, consentement, UTM
 │   │   ├── server/             # Helpers des routes API (messages, rateLimit)
 │   │   ├── tokens.ts  motion.ts  i18n.ts  phone.ts  orbit-geometry.ts
 │   ├── hooks/                  # useMotion
@@ -91,6 +131,7 @@ WebAssembly tourne partout.
 │   └── middleware.ts           # Redirection de langue
 ├── scripts/                    # check-hex, check-i18n, gen-countries
 ├── tests/                      # Tests Vitest (npm test)
+├── docs/                       # utm.md : convention des campagnes
 ├── tailwind.config.ts
 ├── next.config.mjs
 └── tsconfig.json               # Alias @/* → src/*

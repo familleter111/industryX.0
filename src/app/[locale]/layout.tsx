@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import '@/styles/globals.css'
 
+import AnalyticsProvider from '@/components/analytics/AnalyticsProvider'
 import Navbar from '@/components/layout/Navbar'
 import { isLocale, routing } from '@/i18n/routing'
 import { pageMetadata, type Locale } from '@/lib/i18n'
@@ -122,6 +123,7 @@ export default function RootLayout({
         <NextIntlClientProvider locale={locale} messages={{}}>
           <Navbar />
           {children}
+          <AnalyticsProvider locale={locale} />
         </NextIntlClientProvider>
       </body>
     </html>

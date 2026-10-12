@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server'
 import { appendLead } from '@/services/leads'
 import { clean, clientIp, createRateLimiter } from '@/lib/server/rateLimit'
 import { API_MESSAGES, apiLocale } from '@/lib/server/messages'
+import { leadAttribution } from '@/lib/analytics/attribution'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -72,6 +73,7 @@ export async function POST(request: Request) {
       message: 'Inscription aux guides & insights',
       consent,
       source,
+      ...leadAttribution(payload),
     })
     if (result.warning) console.warn('[subscribe]', result.warning)
 

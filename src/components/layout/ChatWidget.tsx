@@ -6,6 +6,7 @@ import { Bot, Send, X } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 import { useCurrentLocale } from '@/lib/i18n'
+import { track } from '@/lib/analytics/posthog'
 
 interface Message {
   id: string
@@ -123,6 +124,10 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     return () => timeouts.forEach(clearTimeout)
   }, [])
 
+  useEffect(() => {
+    if (isOpen) track('chat_opened', { page: window.location.pathname })
+  }, [isOpen])
+
   // Auto scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -134,6 +139,10 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
 
     const userText = input.trim()
     const userMsg: Message = { id: rid(), sender: 'user', text: userText, timestamp: new Date() }
+    // Le rang du message seulement : la question elle-même ne quitte pas le navigateur.
+    track('chat_message_sent', {
+      message_index: messages.filter((m) => m.sender === 'user').length + 1,
+    })
 
     setMessages((prev) => [...prev, userMsg])
     setInput('')

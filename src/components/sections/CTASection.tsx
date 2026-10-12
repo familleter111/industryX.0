@@ -72,6 +72,7 @@ export default function CTASection() {
           initial="hidden"
           whileInView="visible"
           viewport={m.viewport}
+          data-cta-location="cta_band"
           className="relative overflow-hidden rounded-[40px] border border-white/10 bg-dark shadow-[0_30px_120px_rgba(0,0,0,0.25)]"
         >
 

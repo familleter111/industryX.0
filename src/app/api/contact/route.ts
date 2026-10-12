@@ -13,6 +13,7 @@ import { appendLead, type Lead } from '@/services/leads'
 import { clean, clientIp, createRateLimiter } from '@/lib/server/rateLimit'
 import { API_MESSAGES, apiLocale } from '@/lib/server/messages'
 import { findPhoneCountry, DEFAULT_PHONE_COUNTRY } from '@/lib/data/phoneCountries'
+import { leadAttribution } from '@/lib/analytics/attribution'
 
 // exceljs lit et écrit sur le disque : ni Edge, ni mise en cache.
 export const runtime = 'nodejs'
@@ -108,6 +109,7 @@ export async function POST(request: Request) {
     message,
     consent,
     source,
+    ...leadAttribution(payload),
   }
 
   try {

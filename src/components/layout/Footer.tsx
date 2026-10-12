@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { FACEBOOK_URL, LINKEDIN_URL } from '@/lib/data/socials'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import CookieSettingsButton from '@/components/analytics/CookieSettingsButton'
 import { useCopy } from '@/lib/i18n'
 
 // Chaque lien mene a une page existante. Les anciens libelles sans page
@@ -36,6 +37,7 @@ const COPY = {
     facebook: 'Industry X.0 sur Facebook',
     linkedin: 'Industry X.0 sur LinkedIn',
     rights: 'Tous droits réservés',
+    cookies: 'Gérer les cookies',
   },
   en: {
     sections: [
@@ -52,6 +54,7 @@ const COPY = {
     facebook: 'Industry X.0 on Facebook',
     linkedin: 'Industry X.0 on LinkedIn',
     rights: 'All rights reserved',
+    cookies: 'Cookie settings',
   },
 }
 
@@ -346,6 +349,12 @@ export default function Footer({ variant = 'full' }: FooterProps) {
             <div className="h-1 w-1 rounded-full bg-white/20" />
 
             <span>Designed in Tunis</span>
+
+            {/* Rien n'apparaît tant que la mesure d'audience n'est pas configurée. */}
+            <CookieSettingsButton
+              label={t.cookies}
+              className="border-l border-white/20 pl-3 underline-offset-2 transition-colors hover:text-white hover:underline"
+            />
           </div>
         </div>
       </div>

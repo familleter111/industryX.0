@@ -46,6 +46,18 @@ export type Lead = {
   consent: boolean
   /** Page d'où vient la demande. */
   source: string
+  /** Dernière source de visite connue (voir lib/analytics/attribution.ts). Vide si inconnue. */
+  utmSource: string
+  utmMedium: string
+  utmCampaign: string
+  /** Code de QR code ou d'URL dédiée (?ref=…). */
+  ref: string
+  /** Hôte du site référent. */
+  referrer: string
+  /** Première visite connue, résumée : « linkedin / social / salon-2026-11 ». */
+  firstTouch: string
+  /** Identifiant PostHog : retrouve le parcours du visiteur dans PostHog. */
+  posthogId: string
 }
 
 const SHEET_NAME = 'Demandes'
@@ -62,6 +74,13 @@ const COLUMNS: Array<{ key: string; header: string; width: number }> = [
   { key: 'message', header: 'Message', width: 60 },
   { key: 'consent', header: 'Consentement', width: 14 },
   { key: 'source', header: 'Origine', width: 22 },
+  { key: 'utmSource', header: 'utm_source', width: 16 },
+  { key: 'utmMedium', header: 'utm_medium', width: 14 },
+  { key: 'utmCampaign', header: 'utm_campaign', width: 22 },
+  { key: 'ref', header: 'ref', width: 14 },
+  { key: 'referrer', header: 'Site référent', width: 20 },
+  { key: 'firstTouch', header: 'Première visite', width: 30 },
+  { key: 'posthogId', header: 'ID PostHog', width: 38 },
 ]
 
 /** data/contacts.xlsx, sauf si CONTACT_XLSX_PATH dit autre chose. */
@@ -141,6 +160,13 @@ async function writeLead(lead: Lead): Promise<{ file: string; format: 'xlsx' | '
     message: lead.message,
     consent: lead.consent ? 'Oui' : 'Non',
     source: lead.source,
+    utmSource: lead.utmSource,
+    utmMedium: lead.utmMedium,
+    utmCampaign: lead.utmCampaign,
+    ref: lead.ref,
+    referrer: lead.referrer,
+    firstTouch: lead.firstTouch,
+    posthogId: lead.posthogId,
   })
 
   row.alignment = { vertical: 'top', wrapText: true }
@@ -184,6 +210,13 @@ async function writeBackup(lead: Lead): Promise<{ file: string; format: 'csv' }>
     lead.message.replace(/\r?\n/g, ' '),
     lead.consent ? 'Oui' : 'Non',
     lead.source,
+    lead.utmSource,
+    lead.utmMedium,
+    lead.utmCampaign,
+    lead.ref,
+    lead.referrer,
+    lead.firstTouch,
+    lead.posthogId,
   ]
     .map(csvCell)
     .join(';')

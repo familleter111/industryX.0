@@ -32,6 +32,7 @@ import ChatWidget from '@/components/layout/ChatWidget'
 import { platformHref, platformPages } from '@/lib/data/platform'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
+import { track } from '@/lib/analytics/posthog'
 
 type NavItem = {
   title: string
@@ -202,6 +203,7 @@ export default function Navbar() {
     setLanguageOpen(false)
     setMobileOpen(false)
     if (target === locale) return
+    track('language_switched', { from: locale, to: target })
     const { search, hash } = window.location
     router.replace(`${pathname}${search}${hash}`, { locale: target })
   }

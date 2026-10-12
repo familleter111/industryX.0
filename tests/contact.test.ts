@@ -43,6 +43,29 @@ describe('POST /api/contact', () => {
     expect(appendLead.mock.calls[0][0]).toMatchObject({ email: 'amel@usine.tn', phone: '+21620123456' })
   })
 
+  it('joint la source de la visite et l’identifiant PostHog au lead', async () => {
+    await post({
+      ...VALID,
+      attribution: {
+        first: { utm_source: 'linkedin', utm_medium: 'social', landing: '/', at: '' },
+        last: { utm_source: 'event-sifp', utm_campaign: 'salon-2026-11', ref: 'stand12', landing: '/', at: '' },
+      },
+      posthogId: 'ph-123',
+    })
+    expect(appendLead.mock.calls[0][0]).toMatchObject({
+      utmSource: 'event-sifp',
+      utmCampaign: 'salon-2026-11',
+      ref: 'stand12',
+      firstTouch: 'linkedin / social',
+      posthogId: 'ph-123',
+    })
+  })
+
+  it('accepte une demande sans attribution (visiteur qui a refusé la mesure)', async () => {
+    await post(VALID)
+    expect(appendLead.mock.calls[0][0]).toMatchObject({ utmSource: '', firstTouch: '', posthogId: '' })
+  })
+
   it('refuse un email invalide et un consentement absent', async () => {
     const res = await post({ ...VALID, email: 'pas-un-email', consent: false })
     expect(res.status).toBe(422)
