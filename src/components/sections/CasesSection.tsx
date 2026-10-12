@@ -258,40 +258,43 @@ export default function CasesSection({
                   </Link>
                 </div>
 
-                {/* RIGHT — Mockup iPhone vierge (#9 : à personnaliser avec image/GIF) */}
+                {/* RIGHT — Mockup tablette (portrait, ratio iPad 3:4) */}
                 <div
-                  className="relative flex items-center justify-center overflow-hidden p-4 lg:p-5"
+                  className="relative flex items-center justify-center overflow-hidden px-4 py-6 lg:p-6"
                   style={{
                     borderLeft: `1px solid ${colors.border}`,
                     background:
                       `radial-gradient(circle at 50% 28%, ${colors.goldBg}, transparent 60%), linear-gradient(160deg, ${colors.bg} 0%, ${tokens.color.cream.border} 100%)`,
                   }}
                 >
-                  {/* Cadre iPhone */}
-                  <div className="relative h-[320px] w-[158px] rounded-[2rem] border border-black/10 bg-gray-900 p-1.5 shadow-[0_30px_70px_rgba(15,23,42,0.30)]">
-                    {/* Boutons latéraux */}
-                    <div className="absolute -left-[3px] top-16 h-8 w-[3px] rounded-l-sm bg-gray-900" />
-                    <div className="absolute -left-[3px] top-[104px] h-8 w-[3px] rounded-l-sm bg-gray-900" />
-                    <div className="absolute -right-[3px] top-[88px] h-11 w-[3px] rounded-r-sm bg-gray-900" />
+                  {/* Cadre tablette : bordure fine et régulière, comme un iPad récent */}
+                  <div className="relative h-[336px] w-[252px] rounded-[1.75rem] border border-black/10 bg-gray-900 p-2.5 shadow-[0_30px_80px_rgba(15,23,42,0.30)] sm:h-[400px] sm:w-[300px]">
+                    {/* Boutons : veille en haut, volume sur la tranche droite */}
+                    <div className="absolute -top-[3px] right-12 h-[3px] w-10 rounded-t-sm bg-gray-900" />
+                    <div className="absolute -right-[3px] top-16 h-10 w-[3px] rounded-r-sm bg-gray-900" />
+                    <div className="absolute -right-[3px] top-[118px] h-10 w-[3px] rounded-r-sm bg-gray-900" />
+
+                    {/* Caméra frontale, dans la bordure */}
+                    <div className="absolute left-1/2 top-[3px] z-20 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-gray-700" />
 
                     {/* Écran */}
-                    <div className="relative h-full w-full overflow-hidden rounded-[1.7rem] bg-white">
-                      {/* Dynamic island */}
-                      <div className="absolute left-1/2 top-2 z-20 h-4 w-16 -translate-x-1/2 rounded-full bg-black" />
-
+                    <div className="relative h-full w-full overflow-hidden rounded-[1.2rem] bg-white">
                       {/* Capture de l'onglet actif, ou l'ecran schematique tant
                           que le fichier n'existe pas : la page ne montre jamais
-                          d'image cassee. */}
+                          d'image cassee. Les captures sont au format telephone
+                          (1:2,16) : la tablette (3:4) en montre le haut — en-tete,
+                          titre, indicateurs — et rogne la barre d'onglets. Une
+                          capture tablette (`tablet` dans features.ts) la remplace. */}
                       {showPlaceholder ? (
                         <AppScreenPlaceholder className="h-full w-full" />
                       ) : (
                         <Image
                           key={active.id}
-                          src={active.screenshot.src}
+                          src={(active.tablet ?? active.screenshot).src}
                           alt={active.screenshot.alt}
-                          width={active.screenshot.width}
-                          height={active.screenshot.height}
-                          sizes="144px"
+                          width={(active.tablet ?? active.screenshot).width}
+                          height={(active.tablet ?? active.screenshot).height}
+                          sizes="(min-width: 640px) 280px, 232px"
                           className="h-full w-full object-cover object-top"
                           onError={() =>
                             setFailed((prev) => ({ ...prev, [active.id]: true }))

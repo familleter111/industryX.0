@@ -13,7 +13,7 @@ import type { Locale } from '@/i18n/routing'
 /**
  * Les six usages presentes dans le carrousel de CasesSection.
  *
- * `screenshot` decrit la capture affichee dans le mockup telephone. Les
+ * `screenshot` decrit la capture affichee dans le mockup tablette. Les
  * fichiers sont les public/ecran-*.png ; si l'un d'eux manque, le
  * composant retombe sur un ecran schematique (voir AppScreenPlaceholder).
  * Les dimensions sont celles de l'ecran du mockup en 3x : voir
@@ -29,6 +29,11 @@ export type FeatureTab = {
   bullets: string[]
   href: string
   screenshot: { src: string; alt: string; width: number; height: number }
+  /**
+   * Capture au format tablette portrait (3:4, ex. 1536 x 2048), facultative.
+   * Absente, le mockup tablette montre le haut de `screenshot`.
+   */
+  tablet?: { src: string; width: number; height: number }
 }
 
 /** Captures sources (public/ecran-*.png), exportees en 1170 x 2532. */
