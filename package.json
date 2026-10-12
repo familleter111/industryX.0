@@ -9,7 +9,8 @@
     "lint": "next lint",
     "check:hex": "node scripts/check-hex.mjs",
     "gen:countries": "node scripts/gen-countries.mjs",
-    "test:phone": "node --experimental-strip-types --no-warnings scripts/test-phone.mjs"
+    "test:phone": "node --experimental-strip-types --no-warnings scripts/test-phone.mjs",
+    "check:i18n": "node scripts/check-i18n.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -17,6 +18,7 @@
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.376.0",
     "next": "14.2.35",
+    "next-intl": "^3.26.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -1,17 +1,34 @@
 import type { Config } from 'tailwindcss'
-import { tokens, durationCss, easeCss } from './lib/tokens'
+import { tokens, durationCss, easeCss } from './src/lib/tokens'
 
 const { color, radius } = tokens
 
 const config: Config = {
   content: [
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './lib/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/lib/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/features/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/hooks/**/*.{js,ts,jsx,tsx,mdx}',
     // Sections désactivées : conservées pour référence, exclues du CSS généré.
-    '!./components/_archive/**',
+    '!./src/components/_archive/**',
   ],
   theme: {
+    // Les ecrans Tailwind par defaut, plus deux :
+    // - `xs` : petits telephones au-dela de 370 px (iPhone SE et plus) ;
+    // - `short` : desktop peu haut (portable 1366×768, fenetre reduite…), ou
+    //   les sections pensees pour tenir en un ecran se compactent. Il est
+    //   declare en dernier pour l'emporter sur lg/xl. Consequence d'un ecran
+    //   `raw` : les variantes min-[…]/max-[…] sont indisponibles.
+    screens: {
+      xs: '370px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+      short: { raw: '(min-width: 1024px) and (max-height: 900px)' },
+    },
     extend: {
       // Aucune valeur n'est écrite ici : tout vient de lib/tokens.ts.
       // Les neutres (stone, gray, slate, red, green, blue…) restent ceux de

@@ -1,0 +1,1409 @@
+'use client'
+
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  ArrowRight,
+  ChevronRight,
+  ChevronLeft,
+  ShieldCheck,
+  CheckCircle2,
+  XCircle,
+  Leaf,
+  Network,
+  Cpu,
+  Truck,
+  Database,
+  Eye,
+  Wheat,
+  Factory,
+  Play,
+  Pause,
+  ClipboardCheck,
+  FlaskConical,
+  Rocket,
+  TrendingUp
+} from 'lucide-react'
+import Image from 'next/image'
+import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
+import heroStyles from './hero.module.css'
+import { Link } from '@/i18n/navigation'
+import { INDUSTRY_CHROME } from '@/lib/data/industries/chrome'
+import { overlay, useCopy, useCurrentLocale, useTr, type TextOverlay } from '@/lib/i18n'
+
+// Animation réutilisable
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-100px' },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+}
+
+/* ============================================================
+   TYPES & DONNÉES DES CARTES CAROUSEL
+============================================================ */
+
+type SlideVisual =
+  | 'haccp-flow'
+  | 'tablet'
+  | 'predictive-chart'
+  | 'supply-chain'
+  | 'launch-timeline'
+  | 'dashboard'
+  | 'energy-chart'
+
+interface CarouselSlide {
+  num: string
+  tag: string
+  title: string
+  desc: string
+  before: string[]
+  after: string[]
+  kpis: { value: string; label: string }[]
+  visual: SlideVisual
+  visualCaption: string
+}
+
+const coreSlides: CarouselSlide[] = [
+  {
+    num: '01',
+    tag: 'Sécurité Alimentaire & Conformité',
+    title: 'Documentation automatisée de conformité et de sécurité alimentaire',
+    desc: "Assurez une conformité HACCP, FSMA et ISO 22000 grâce à une documentation digitale de bout en bout. Chaque point de contrôle critique (CCP) est enregistré, horodaté et prêt pour l'audit — sans papier.",
+    before: [
+      'Journaux manuels et enregistrements papier',
+      'Documentation incomplète ou incohérente',
+      "Constats et écarts lors des audits",
+      'Réponse lente aux incidents et rappels'
+    ],
+    after: [
+      'Conformité HACCP automatisée',
+      "Enregistrements temps réel, prêts pour l'audit",
+      'Inspections et audits plus rapides',
+      'Confiance totale en sécurité alimentaire'
+    ],
+    kpis: [
+      { value: '90%', label: "de réduction du temps de préparation des audits" },
+      { value: '100%', label: 'des CCP tracés et horodatés digitalement' }
+    ],
+    visual: 'haccp-flow',
+    visualCaption: 'Workflow HACCP digitalisé : chaque point de contrôle critique est validé en temps réel dans CIPA.'
+  },
+  {
+    num: '02',
+    tag: 'Production & Qualité',
+    title: 'Production digitale et contrôle qualité',
+    desc: "Standardisez la production et les contrôles qualité avec une visibilité et un contrôle en temps réel. Les opérateurs suivent des instructions digitales guidées, les écarts sont détectés immédiatement.",
+    before: [
+      'Contrôles qualité manuels',
+      'Qualité de lot incohérente',
+      'Visibilité limitée sur la production en cours',
+      'Taux élevé de rebuts et de gaspillage'
+    ],
+    after: [
+      'SPC en temps réel et alertes qualité',
+      'Qualité constante, lot après lot',
+      'Traçabilité complète de chaque lot',
+      'Rework et rebuts fortement réduits'
+    ],
+    kpis: [
+      { value: '30%', label: 'de réduction des rebuts et du gaspillage matière' },
+      { value: '25%', label: "d'amélioration de la régularité des lots" }
+    ],
+    visual: 'tablet',
+    visualCaption: "Application CIPA sur tablette industrielle : instructions guidées et contrôles qualité en ligne."
+  },
+  {
+    num: '03',
+    tag: 'IA & Maintenance Prédictive',
+    title: 'Analyses prédictives pour la qualité et la maintenance',
+    desc: "Utilisez l'IA pour prédire les problèmes et prévenir les pannes avant qu'elles n'impactent la production. Les modèles CIPA détectent les dérives de process et anticipent les défaillances d'équipements.",
+    before: [
+      "Pannes d'équipement inattendues",
+      'Maintenance uniquement réactive',
+      'Problèmes qualité détectés trop tard',
+      "Temps d'arrêt non planifiés"
+    ],
+    after: [
+      'Plannings de maintenance prédictive',
+      'Détection précoce des risques qualité',
+      'Disponibilité machine améliorée',
+      'Flux de production plus fluide'
+    ],
+    kpis: [
+      { value: '+15%', label: 'de disponibilité des équipements critiques' },
+      { value: '-45%', label: "de temps d'arrêt non planifiés" }
+    ],
+    visual: 'predictive-chart',
+    visualCaption: 'Score de santé machine : la dérive est détectée et corrigée avant la panne.'
+  },
+  {
+    num: '04',
+    tag: 'Traçabilité de la Ferme à la Fourchette',
+    title: 'Traçabilité des ingrédients et matières premières',
+    desc: "Traçabilité de bout en bout pour les ingrédients, les allergènes et les produits finis. Chaque lot est généalogiquement relié à ses matières premières, ses fournisseurs et ses destinations.",
+    before: [
+      'Visibilité fournisseur limitée',
+      'Processus de traçabilité manuels',
+      'Rappels et investigations lents',
+      'Généalogie de lot imprécise'
+    ],
+    after: [
+      'Traçabilité complète, de la ferme à la fourchette',
+      'Visibilité fournisseurs et lots entrants',
+      'Rappels ciblés et analyse des causes racines',
+      'Généalogie de lot précise et instantanée'
+    ],
+    kpis: [
+      { value: '-70%', label: "de temps d'exécution d'un rappel produit" },
+      { value: '100%', label: 'de généalogie amont / aval par lot' }
+    ],
+    visual: 'supply-chain',
+    visualCaption: "Chaîne généalogique d'un lot : du fournisseur d'ingrédients jusqu'à la distribution."
+  }
+]
+
+const performanceSlides: CarouselSlide[] = [
+  {
+    num: '01',
+    tag: 'Innovation & Go-To-Market',
+    title: 'Développement produit et mise sur le marché accélérés',
+    desc: "Rationalisez la formulation, les tests et les approbations pour lancer vos produits plus vite. R&D, qualité et production collaborent sur un référentiel unique de recettes et d'essais.",
+    before: [
+      'R&D et qualité en silos',
+      'Cycles de validation interminables',
+      'Approbations lentes et dispersées',
+      'Opportunités de marché manquées'
+    ],
+    after: [
+      'Données de formulation centralisées',
+      'Tests et validations accélérés',
+      'Approbations digitales fluides',
+      'Time-to-market réduit'
+    ],
+    kpis: [
+      { value: '-40%', label: 'de réduction du time-to-market' },
+      { value: '2x', label: "plus d'itérations de recettes testées par an" }
+    ],
+    visual: 'launch-timeline',
+    visualCaption: 'Cycle de lancement produit : chaque phase est raccourcie par la collaboration digitale.'
+  },
+  {
+    num: '02',
+    tag: 'Reporting Automatisé',
+    title: 'Surveillance qualité continue avec reporting automatisé',
+    desc: "Automatisez la capture de données et générez des rapports en temps réel pour les inspections et le management. Fini la ressaisie : les tableaux de bord se construisent tout seuls.",
+    before: [
+      'Saisie manuelle des données',
+      'Reporting chronophage',
+      'Visibilité retardée sur la qualité',
+      'Préparation des audits sous pression'
+    ],
+    after: [
+      'Capture de données automatique',
+      'Rapports et dashboards en temps réel',
+      'Alertes instantanées sur déviation',
+      "Toujours prêt pour l'inspection"
+    ],
+    kpis: [
+      { value: '100%', label: 'de visibilité qualité en temps réel' },
+      { value: '-80%', label: 'de temps passé sur le reporting manuel' }
+    ],
+    visual: 'dashboard',
+    visualCaption: 'Tableau de bord qualité CIPA : indicateurs en direct, alertes et tendances automatiques.'
+  },
+  {
+    num: '03',
+    tag: 'Durabilité & Ressources',
+    title: "Réduction de la consommation d'énergie et des déchets",
+    desc: "Optimisez les ressources et réduisez les déchets pour des opérations plus durables. CIPA suit l'énergie, l'eau et les pertes matière en temps réel et identifie les gisements d'économies.",
+    before: [
+      "Consommation d'énergie et d'eau élevée",
+      'Gaspillage matière excessif',
+      'Visibilité limitée sur les pertes',
+      "Coûts d'élimination des déchets élevés"
+    ],
+    after: [
+      'Suivi énergie et ressources en temps réel',
+      'Consommations et émissions réduites',
+      "Moins de gaspillage d'énergie et d'eau",
+      'Opérations plus durables et rentables'
+    ],
+    kpis: [
+      { value: '-20%', label: 'de réduction de la production de déchets' },
+      { value: '-15%', label: "de consommation d'énergie par tonne produite" }
+    ],
+    visual: 'energy-chart',
+    visualCaption: "Profil de consommation énergétique : la courbe optimisée par CIPA décroche de la base historique."
+  }
+]
+
+/* ============================================================
+   VERSION ANGLAISE
+
+   `SLIDES_EN` ne porte que les textes des cartes, dans l'ordre du
+   francais : chiffres et visuels viennent de coreSlides /
+   performanceSlides (voir `overlay`). `EN` traduit les textes propres
+   a cette page, indexes par leur version francaise (voir `useTr`) ;
+   les libelles communs aux pages sectorielles sont dans INDUSTRY_CHROME.
+   ============================================================ */
+
+const SLIDES_EN: { core: TextOverlay<CarouselSlide[]>; performance: TextOverlay<CarouselSlide[]> } = {
+  core: [
+    {
+      tag: "Food safety & compliance",
+      title: "Automated compliance and food safety documentation",
+      desc: "Ensure HACCP, FSMA and ISO 22000 compliance with end-to-end digital documentation. Every critical control point (CCP) is recorded, time-stamped and audit-ready — with no paper.",
+      before: [
+        "Manual logs and paper records",
+        "Incomplete or inconsistent documentation",
+        "Findings and deviations during audits",
+        "Slow response to incidents and recalls",
+      ],
+      after: [
+        "Automated HACCP compliance",
+        "Real-time, audit-ready records",
+        "Faster inspections and audits",
+        "Full confidence in food safety",
+      ],
+      kpis: [
+        {
+          label: "reduction in audit preparation time",
+        },
+        {
+          label: "of CCPs traced and time-stamped digitally",
+        },
+      ],
+      visualCaption: "Digital HACCP workflow: every critical control point is validated in real time in CIPA.",
+    },
+    {
+      tag: "Production & quality",
+      title: "Digital production and quality control",
+      desc: "Standardize production and quality checks with real-time visibility and control. Operators follow guided digital instructions and deviations are detected immediately.",
+      before: [
+        "Manual quality checks",
+        "Inconsistent batch quality",
+        "Limited visibility on production in progress",
+        "High scrap and waste rates",
+      ],
+      after: [
+        "Real-time SPC and quality alerts",
+        "Consistent quality, batch after batch",
+        "Full traceability of every batch",
+        "Much less rework and scrap",
+      ],
+      kpis: [
+        {
+          label: "reduction in scrap and material waste",
+        },
+        {
+          label: "improvement in batch consistency",
+        },
+      ],
+      visualCaption: "CIPA app on an industrial tablet: guided instructions and in-line quality checks.",
+    },
+    {
+      tag: "AI & predictive maintenance",
+      title: "Predictive analytics for quality and maintenance",
+      desc: "Use AI to predict problems and prevent breakdowns before they hit production. CIPA models detect process drift and anticipate equipment failures.",
+      before: [
+        "Unexpected equipment breakdowns",
+        "Purely reactive maintenance",
+        "Quality problems detected too late",
+        "Unplanned downtime",
+      ],
+      after: [
+        "Predictive maintenance schedules",
+        "Early detection of quality risks",
+        "Better machine availability",
+        "Smoother production flow",
+      ],
+      kpis: [
+        {
+          label: "availability of critical equipment",
+        },
+        {
+          label: "unplanned downtime",
+        },
+      ],
+      visualCaption: "Machine health score: drift is detected and corrected before the breakdown.",
+    },
+    {
+      tag: "Farm-to-fork traceability",
+      title: "Traceability of ingredients and raw materials",
+      desc: "End-to-end traceability for ingredients, allergens and finished products. Every batch is genealogically linked to its raw materials, suppliers and destinations.",
+      before: [
+        "Limited supplier visibility",
+        "Manual traceability processes",
+        "Slow recalls and investigations",
+        "Imprecise batch genealogy",
+      ],
+      after: [
+        "Full farm-to-fork traceability",
+        "Visibility on suppliers and incoming batches",
+        "Targeted recalls and root-cause analysis",
+        "Precise, instant batch genealogy",
+      ],
+      kpis: [
+        {
+          label: "time to execute a product recall",
+        },
+        {
+          label: "upstream / downstream genealogy per batch",
+        },
+      ],
+      visualCaption: "Batch genealogy chain: from ingredient supplier all the way to distribution.",
+    },
+  ],
+  performance: [
+    {
+      tag: "Innovation & go-to-market",
+      title: "Faster product development and market launch",
+      desc: "Streamline formulation, testing and approvals to launch products faster. R&D, quality and production work together on a single repository of recipes and trials.",
+      before: [
+        "R&D and quality in silos",
+        "Endless validation cycles",
+        "Slow, scattered approvals",
+        "Missed market opportunities",
+      ],
+      after: [
+        "Centralized formulation data",
+        "Faster testing and validation",
+        "Smooth digital approvals",
+        "Shorter time-to-market",
+      ],
+      kpis: [
+        {
+          label: "reduction in time-to-market",
+        },
+        {
+          label: "more recipe iterations tested per year",
+        },
+      ],
+      visualCaption: "Product launch cycle: every phase is shortened by digital collaboration.",
+    },
+    {
+      tag: "Automated reporting",
+      title: "Continuous quality monitoring with automated reporting",
+      desc: "Automate data capture and generate real-time reports for inspections and management. No more retyping: dashboards build themselves.",
+      before: [
+        "Manual data entry",
+        "Time-consuming reporting",
+        "Delayed visibility on quality",
+        "Audit preparation under pressure",
+      ],
+      after: [
+        "Automatic data capture",
+        "Real-time reports and dashboards",
+        "Instant alerts on deviations",
+        "Always inspection-ready",
+      ],
+      kpis: [
+        {
+          label: "real-time quality visibility",
+        },
+        {
+          label: "less time spent on manual reporting",
+        },
+      ],
+      visualCaption: "CIPA quality dashboard: live indicators, alerts and automatic trends.",
+    },
+    {
+      tag: "Sustainability & resources",
+      title: "Lower energy consumption and less waste",
+      desc: "Optimize resources and reduce waste for more sustainable operations. CIPA tracks energy, water and material losses in real time and identifies savings opportunities.",
+      before: [
+        "High energy and water consumption",
+        "Excessive material waste",
+        "Limited visibility on losses",
+        "High waste disposal costs",
+      ],
+      after: [
+        "Real-time energy and resource tracking",
+        "Lower consumption and emissions",
+        "Less wasted energy and water",
+        "More sustainable, more profitable operations",
+      ],
+      kpis: [
+        {
+          label: "reduction in waste generated",
+        },
+        {
+          label: "energy consumption per tonne produced",
+        },
+      ],
+      visualCaption: "Energy consumption profile: the curve optimized by CIPA pulls away from the historical baseline.",
+    },
+  ],
+}
+
+const EN: Record<string, string> = {
+  "Réception matières premières": "Raw material receipt",
+  "Contrôle température & certificat fournisseur": "Temperature check & supplier certificate",
+  "CCP — Pasteurisation 72°C / 15s": "CCP — Pasteurization 72°C / 15s",
+  "Relevé capteur automatique + validation opérateur": "Automatic sensor reading + operator sign-off",
+  "Étiquetage allergènes & libération": "Allergen labeling & release",
+  "Vérification automatique avant expédition": "Automatic check before shipping",
+  "Ordre de Fabrication": "Work order",
+  "Ligne active": "Line active",
+  "Contrôles Qualité en Ligne": "In-line quality checks",
+  "pH sauce : 4.2 (cible 4.0–4.4)": "Sauce pH: 4.2 (target 4.0–4.4)",
+  "Poids net : 502 g (± 3 g)": "Net weight: 502 g (± 3 g)",
+  "Détection métaux : en cours…": "Metal detection: in progress…",
+  "Lot conforme": "Batch compliant",
+  "Valider le contrôle qualité du lot": "Confirm batch quality check",
+  "Seuil d'alerte IA": "AI alert threshold",
+  "Maintenance planifiée ici": "Maintenance planned here",
+  "Sem. 1": "Wk 1",
+  "Sem. 12": "Wk 12",
+  Fournisseur: "Supplier",
+  Réception: "Receipt",
+  Production: "Production",
+  Distribution: "Distribution",
+  "Rappel simulé :": "Simulated recall:",
+  "le lot ING-2214 (allergène arachide) est isolé — CIPA identifie en 3 minutes les 2 lots finis et 14 points de vente impactés.": "batch ING-2214 (peanut allergen) is isolated — within 3 minutes CIPA identifies the 2 finished batches and 14 points of sale affected.",
+  Formulation: "Formulation",
+  "Essais pilotes": "Pilot trials",
+  "Validation qualité": "Quality validation",
+  Industrialisation: "Industrialization",
+  "Durée relative des phases (%)": "Relative phase duration (%)",
+  "Taux de conformité": "Compliance rate",
+  "Déviations ouvertes": "Open deviations",
+  "Alertes allergènes": "Allergen alerts",
+  "Plaintes clients": "Customer complaints",
+  "Contrôles réalisés / jour": "Checks completed / day",
+  "Rapport auto — chaque matin 06:00": "Auto report — every morning 06:00",
+  Lun: "Mon",
+  Mar: "Tue",
+  Mer: "Wed",
+  Jeu: "Thu",
+  Ven: "Fri",
+  Sam: "Sat",
+  Dim: "Sun",
+  "Résultats mesurés": "Measured results",
+  "Secteur d'activité": "Industry",
+  "Comment CIPA transforme l'industrie ": "How CIPA is transforming the ",
+  "agroalimentaire & des boissons": "food & beverage industry",
+  "CIPA transforme les opérations agroalimentaires et FMCG grâce à l'automatisation intelligente, l'IA, la traçabilité et les analyses avancées — améliorant la sécurité alimentaire, la qualité, la conformité et la performance sur toute votre chaîne de valeur.": "CIPA transforms food and FMCG operations through smart automation, AI, traceability and advanced analytics — improving food safety, quality, compliance and performance across your entire value chain.",
+  "Demander une démo": "Book a demo",
+  "Découvrir les solutions": "Explore the solutions",
+  "Efficacité opérationnelle": "Operational efficiency",
+  "Erreurs de conformité en moins": "Fewer compliance errors",
+  "Déviations qualité en moins": "Fewer quality deviations",
+  "Plateforme CIPA en usine agroalimentaire : tableau de bord qualité, conformité HACCP et assistance IA": "CIPA platform in a food plant: quality dashboard, HACCP compliance and AI assistance",
+  "Des matières premières aux produits finis, CIPA aide les organisations agroalimentaires à améliorer la qualité, la conformité, la rapidité et la résilience — à travers sept domaines de valeur.": "From raw materials to finished products, CIPA helps food organizations improve quality, compliance, speed and resilience — across seven value areas.",
+  "opérations agroalimentaires essentielles": "core food operations",
+  "Opérations essentielles": "Core operations",
+  "qualité, l’innovation et la performance durable": "quality, innovation and sustainable performance",
+  "Performance durable": "Sustainable performance",
+  "Une plateforme unique pour la qualité, la traçabilité et l'excellence opérationnelle.": "One platform for quality, traceability and operational excellence.",
+  "CIPA unifie les personnes, les processus et les données pour fournir des insights connectés sur toute la chaîne de valeur alimentaire — sécurité des aliments, visibilité atelier, visibilité fournisseurs et amélioration continue.": "CIPA unifies people, processes and data to deliver connected insights across the food value chain — food safety, shop-floor visibility, supplier visibility and continuous improvement.",
+  "Données connectées": "Connected data",
+  "Visibilité atelier": "Shop-floor visibility",
+  "Visibilité fournisseurs": "Supplier visibility",
+  "Assurance sécurité alimentaire": "Food safety assurance",
+  "1. Connecter": "1. Connect",
+  "Unifiez les données des systèmes, équipements et opérateurs.": "Unify data from systems, equipment and operators.",
+  "2. Analyser": "2. Analyze",
+  "L'IA et les analyses transforment les données en insights actionnables.": "AI and analytics turn data into actionable insights.",
+  "3. Agir": "3. Act",
+  "Automatisez les workflows et déclenchez la meilleure action.": "Automate workflows and trigger the best action.",
+  "4. Améliorer": "4. Improve",
+  "Surveillez, mesurez et optimisez en continu.": "Monitor, measure and optimize continuously.",
+  "5. Impact": "5. Impact",
+  "Des résultats mesurables en qualité, efficacité et croissance durable.": "Measurable results in quality, efficiency and sustainable growth.",
+  "Prêt à transformer vos opérations agroalimentaires ?": "Ready to transform your food operations?",
+  "Découvrez comment CIPA by Industry X.0 peut vous aider à garantir la sécurité alimentaire, améliorer l'efficacité et générer une croissance durable. Nos experts réalisent une démonstration personnalisée basée sur vos lignes et vos contraintes réelles.": "See how CIPA by Industry X.0 can help you guarantee food safety, improve efficiency and drive sustainable growth. Our experts will give you a tailored demo based on your lines and your real constraints.",
+}
+
+/* ============================================================
+   VISUELS DE CARTES (DATA-VIZ PAR SLIDE)
+============================================================ */
+
+function VisualPanel({ slide }: { slide: CarouselSlide }) {
+  const c = useCopy(INDUSTRY_CHROME)
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-1 bg-white rounded-2xl border border-black/[0.06] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-subtle">
+            {slide.tag}
+          </span>
+          <span className="ml-auto text-[9px] bg-[#F5F5F4] text-subtle font-bold px-2 py-0.5 rounded-full">
+            {c.live}
+          </span>
+        </div>
+        <div className="flex-1 flex items-center">
+          <SlideVisualRenderer visual={slide.visual} />
+        </div>
+        <div className="mt-3 text-[10px] text-subtle text-center italic leading-snug">
+          {slide.visualCaption}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SlideVisualRenderer({ visual }: { visual: SlideVisual }) {
+  switch (visual) {
+    case 'haccp-flow':
+      return <HaccpFlowVisual />
+    case 'tablet':
+      return <TabletVisual />
+    case 'predictive-chart':
+      return <PredictiveChartVisual />
+    case 'supply-chain':
+      return <SupplyChainVisual />
+    case 'launch-timeline':
+      return <LaunchTimelineVisual />
+    case 'dashboard':
+      return <DashboardVisual />
+    case 'energy-chart':
+      return <EnergyChartVisual />
+  }
+}
+
+// 01 — Workflow HACCP (schéma à étapes)
+function HaccpFlowVisual() {
+  const tr = useTr(EN)
+  const c = useCopy(INDUSTRY_CHROME)
+  const steps = [
+    { n: 1, title: tr("Réception matières premières"), sub: tr("Contrôle température & certificat fournisseur"), state: 'done' },
+    { n: 2, title: tr("CCP — Pasteurisation 72°C / 15s"), sub: tr("Relevé capteur automatique + validation opérateur"), state: 'active' },
+    { n: 3, title: tr("Étiquetage allergènes & libération"), sub: tr("Vérification automatique avant expédition"), state: 'todo' }
+  ]
+  return (
+    <div className="w-full flex flex-col gap-4 py-2">
+      {steps.map((s, i) => (
+        <div key={s.n} className="relative">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className={`relative z-10 flex items-center gap-3 rounded-xl p-3 shadow-sm border ${
+              s.state === 'active'
+                ? 'bg-gold/5 border-gold/40'
+                : 'bg-slate-50/80 border-slate-200/80'
+            }`}
+          >
+            <div
+              className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
+                s.state === 'todo' ? 'bg-slate-100 text-subtle' : 'bg-gold/10 text-gold'
+              }`}
+            >
+              {s.n}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-subtle' : 'text-dark'}`}>{s.title}</h4>
+              <p className="text-[10px] text-subtle truncate">{s.sub}</p>
+            </div>
+            {s.state === 'done' && <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />}
+            {s.state === 'active' && (
+              <span className="text-[9px] font-bold text-gold-ink px-2 py-0.5 bg-gold/10 rounded-full shrink-0">{c.inProgress}</span>
+            )}
+            {s.state === 'todo' && <ClipboardCheck size={16} className="text-slate-300 shrink-0" />}
+          </motion.div>
+          {i < steps.length - 1 && (
+            <div className="flex justify-center py-1">
+              <div className="h-4 w-0.5 border-l-2 border-dashed border-slate-200" />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// 02 — Mock tablette opérateur (sombre)
+function TabletVisual() {
+  const tr = useTr(EN)
+  return (
+    <div className="w-full bg-[#141520] rounded-2xl p-4 border border-white/5 text-white flex flex-col gap-3">
+      <div className="flex justify-between items-center bg-[#1a1b24] p-3 rounded-xl">
+        <div>
+          <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{tr("Ordre de Fabrication")}</div>
+          <div className="text-xs font-black text-white">OF-2026-FOOD-L2-118</div>
+        </div>
+        <div className="flex items-center gap-2 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full text-[9px] font-bold">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+          {tr("Ligne active")}
+        </div>
+      </div>
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-7 bg-[#1a1b24] p-3 rounded-xl">
+          <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2">{tr("Contrôles Qualité en Ligne")}</div>
+          <ul className="text-[10px] text-slate-300 space-y-1.5 leading-tight">
+            <li className="flex items-center gap-1.5"><CheckCircle2 size={11} className="text-emerald-400 shrink-0" /> {tr("pH sauce : 4.2 (cible 4.0–4.4)")}</li>
+            <li className="flex items-center gap-1.5"><CheckCircle2 size={11} className="text-emerald-400 shrink-0" /> {tr("Poids net : 502 g (± 3 g)")}</li>
+            <li className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full border-2 border-gold shrink-0 animate-pulse" /> {tr("Détection métaux : en cours…")}</li>
+          </ul>
+        </div>
+        <div className="col-span-5 bg-[#1a1b24] p-3 rounded-xl flex flex-col justify-between">
+          <div>
+            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1">{tr("Lot conforme")}</div>
+            <div className="text-lg font-black text-gold">98.6%</div>
+          </div>
+          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+            <div className="bg-gold h-full w-[98.6%] rounded-full" />
+          </div>
+        </div>
+      </div>
+      <div className="bg-[#DAA250] hover:bg-gold text-dark text-center py-2 rounded-xl text-[11px] font-bold cursor-pointer transition-colors">
+        {tr("Valider le contrôle qualité du lot")}
+      </div>
+    </div>
+  )
+}
+
+// 03 — Courbe prédictive santé machine
+function PredictiveChartVisual() {
+  const tr = useTr(EN)
+  const [hovered, setHovered] = useState<number | null>(null)
+  const pts = [
+    { x: 30, y: 35, val: '96%' },
+    { x: 120, y: 45, val: '92%' },
+    { x: 210, y: 70, val: '84%' },
+    { x: 300, y: 55, val: '89%' },
+    { x: 370, y: 30, val: '97%' }
+  ]
+  return (
+    <svg viewBox="0 0 400 160" className="w-full h-44">
+      <line x1="20" y1="140" x2="380" y2="140" stroke="#ECE7DD" strokeWidth="1" />
+      <line x1="20" y1="10" x2="20" y2="140" stroke="#ECE7DD" strokeWidth="1" />
+      <line x1="20" y1="100" x2="380" y2="100" stroke="#F5F5F4" strokeDasharray="3,3" />
+      <line x1="20" y1="60" x2="380" y2="60" stroke="#F5F5F4" strokeDasharray="3,3" />
+
+      {/* Seuil d'alerte */}
+      <line x1="20" y1="85" x2="380" y2="85" stroke="#EF4444" strokeWidth="1" strokeDasharray="5,4" opacity="0.5" />
+      <text x="375" y="81" textAnchor="end" className="fill-red-400 font-bold text-[8px]">{tr("Seuil d'alerte IA")}</text>
+
+      <defs>
+        <linearGradient id="foodPredGlow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#DAA250" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#DAA250" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M30 35 C 70 38, 90 40, 120 45 C 160 52, 180 65, 210 70 C 245 74, 270 62, 300 55 C 330 47, 350 34, 370 30 L 370 140 L 30 140 Z"
+        fill="url(#foodPredGlow)"
+      />
+      <path
+        d="M30 35 C 70 38, 90 40, 120 45 C 160 52, 180 65, 210 70 C 245 74, 270 62, 300 55 C 330 47, 350 34, 370 30"
+        fill="none"
+        stroke="#DAA250"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      {/* Marqueur intervention */}
+      <g>
+        <line x1="210" y1="70" x2="210" y2="112" stroke="#22C55E" strokeWidth="1" strokeDasharray="3,3" />
+        <rect x="158" y="112" width="104" height="15" rx="4" className="fill-emerald-500/10" />
+        <text x="210" y="123" textAnchor="middle" className="fill-emerald-600 font-bold text-[8px]">{tr("Maintenance planifiée ici")}</text>
+      </g>
+
+      {pts.map((pt, i) => (
+        <g key={i}>
+          <circle
+            cx={pt.x}
+            cy={pt.y}
+            r={hovered === i ? 6 : 4}
+            className="fill-white stroke-gold stroke-[2px] transition-all cursor-pointer"
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+          />
+          {hovered === i && (
+            <g>
+              <rect x={pt.x - 20} y={pt.y - 26} width="40" height="16" rx="4" className="fill-[#0F172A]" />
+              <text x={pt.x} y={pt.y - 15} textAnchor="middle" className="fill-white font-bold text-[9px]">{pt.val}</text>
+            </g>
+          )}
+        </g>
+      ))}
+      <text x="30" y="152" className="fill-slate-400 font-bold text-[8px]">{tr("Sem. 1")}</text>
+      <text x="355" y="152" className="fill-slate-400 font-bold text-[8px]">{tr("Sem. 12")}</text>
+    </svg>
+  )
+}
+
+// 04 — Chaîne de traçabilité
+function SupplyChainVisual() {
+  const tr = useTr(EN)
+  const steps = [
+    { icon: Wheat, title: tr("Fournisseur"), id: 'ING-2214' },
+    { icon: Truck, title: tr("Réception"), id: 'REC-0917' },
+    { icon: Cpu, title: tr("Production"), id: 'LOT-FB-33' },
+    { icon: Network, title: tr("Distribution"), id: 'EXP-4820' }
+  ]
+  return (
+    <div className="w-full py-4">
+      <div className="flex justify-between items-start relative px-2">
+        <div className="absolute left-6 right-6 top-[22px] h-0.5 border-t border-dashed border-slate-200 z-0" />
+        {steps.map((step, i) => {
+          const Icon = step.icon
+          return (
+            <div key={i} className="flex flex-col items-center gap-2 relative z-10 flex-1">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                className="w-11 h-11 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shadow-md cursor-pointer hover:border-gold hover:bg-gold/5"
+              >
+                <Icon size={17} className="text-gold" />
+              </motion.div>
+              <div className="text-center">
+                <div className="text-[10px] font-bold text-dark">{step.title}</div>
+                <div className="text-[8px] text-subtle bg-slate-100 px-1 py-0.5 rounded font-mono mt-0.5">{step.id}</div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <div className="mt-5 mx-2 p-3 rounded-xl bg-[#FAF9F5] border border-[#ECE7DD] flex items-center gap-3">
+        <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold flex items-center justify-center shrink-0">
+          <Eye size={15} />
+        </div>
+        <p className="text-[10px] text-subtle leading-snug">
+          <span className="font-bold text-dark">{tr("Rappel simulé :")}</span>{' '}
+          {tr("le lot ING-2214 (allergène arachide) est isolé — CIPA identifie en 3 minutes les 2 lots finis et 14 points de vente impactés.")}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// 05 — Timeline de lancement produit
+function LaunchTimelineVisual() {
+  const tr = useTr(EN)
+  const c = useCopy(INDUSTRY_CHROME)
+  const phases = [
+    { name: tr("Formulation"), before: 90, after: 55 },
+    { name: tr("Essais pilotes"), before: 75, after: 45 },
+    { name: tr("Validation qualité"), before: 60, after: 30 },
+    { name: tr("Industrialisation"), before: 80, after: 50 }
+  ]
+  return (
+    <div className="w-full py-2 flex flex-col gap-3">
+      <div className="flex items-center gap-4 text-[9px] font-bold">
+        <span className="flex items-center gap-1.5 text-subtle">
+          <span className="w-3 h-2 rounded-sm bg-slate-200 inline-block" /> {c.before}
+        </span>
+        <span className="flex items-center gap-1.5 text-gold-ink">
+          <span className="w-3 h-2 rounded-sm bg-gold inline-block" /> {c.after}
+        </span>
+      </div>
+      {phases.map((p, i) => (
+        <div key={i}>
+          <div className="text-[10px] font-bold text-dark mb-1">{p.name}</div>
+          <div className="flex flex-col gap-1">
+            <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+              <div className="bg-slate-200 h-full rounded-full" style={{ width: `${p.before}%` }} />
+            </div>
+            <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: `${p.after}%` }}
+                viewport={viewport}
+                transition={{ duration: 0.9, delay: i * 0.12 }}
+                className="bg-gold h-full rounded-full"
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+      <div className="text-[9px] text-subtle text-right font-bold">{tr("Durée relative des phases (%)")}</div>
+    </div>
+  )
+}
+
+// 06 — Mini dashboard qualité
+function DashboardVisual() {
+  const tr = useTr(EN)
+  const tiles = [
+    { label: tr("Taux de conformité"), value: '99.2%', trend: '+0.8', good: true },
+    { label: tr("Déviations ouvertes"), value: '3', trend: '-5', good: true },
+    { label: tr("Alertes allergènes"), value: '0', trend: '0', good: true },
+    { label: tr("Plaintes clients"), value: '1.2‰', trend: '-40%', good: true }
+  ]
+  const bars = [62, 75, 58, 88, 70, 92, 84]
+  return (
+    <div className="w-full flex flex-col gap-3 py-1">
+      <div className="grid grid-cols-2 gap-2">
+        {tiles.map((t, i) => (
+          <div key={i} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <div className="text-[9px] text-subtle font-bold uppercase tracking-wide truncate">{t.label}</div>
+            <div className="flex items-baseline gap-1.5 mt-0.5">
+              <span className="text-base font-black font-display text-dark">{t.value}</span>
+              <span className={`text-[9px] font-bold ${t.good ? 'text-emerald-700' : 'text-red-600'}`}>{t.trend}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[9px] text-subtle font-bold uppercase tracking-wide">{tr("Contrôles réalisés / jour")}</span>
+          <span className="text-[9px] font-bold text-gold">{tr("Rapport auto — chaque matin 06:00")}</span>
+        </div>
+        <div className="flex items-end gap-1.5 h-14">
+          {bars.map((b, i) => (
+            <motion.div
+              key={i}
+              initial={{ height: 0 }}
+              whileInView={{ height: `${b}%` }}
+              viewport={viewport}
+              transition={{ duration: 0.6, delay: i * 0.06 }}
+              className="flex-1 bg-gold/80 hover:bg-gold rounded-t-md transition-colors"
+            />
+          ))}
+        </div>
+        <div className="flex justify-between text-[8px] font-bold text-subtle mt-1">
+          <span>{tr("Lun")}</span><span>{tr("Mar")}</span><span>{tr("Mer")}</span><span>{tr("Jeu")}</span><span>{tr("Ven")}</span><span>{tr("Sam")}</span><span>{tr("Dim")}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// 07 — Courbe énergie / déchets
+function EnergyChartVisual() {
+  const c = useCopy(INDUSTRY_CHROME)
+  return (
+    <svg viewBox="0 0 400 160" className="w-full h-44">
+      <line x1="30" y1="10" x2="30" y2="130" stroke="#ECE7DD" strokeWidth="1" />
+      <line x1="30" y1="130" x2="370" y2="130" stroke="#ECE7DD" strokeWidth="1" />
+      <line x1="30" y1="80" x2="370" y2="80" stroke="#F5F5F4" strokeDasharray="3,3" />
+      <line x1="30" y1="40" x2="370" y2="40" stroke="#F5F5F4" strokeDasharray="3,3" />
+
+      <path d="M30,30 L110,26 L190,34 L270,29 L350,27" fill="none" stroke="#A8A29E" strokeWidth="1.5" strokeDasharray="4,4" />
+      <text x="355" y="30" className="fill-slate-400 text-[7px] font-bold">{c.baseline}</text>
+
+      <path d="M30,30 L110,46 L190,62 L270,78 L350,88" fill="none" stroke="#22C55E" strokeWidth="3" strokeLinecap="round" />
+      <text x="355" y="92" className="fill-emerald-500 text-[7px] font-bold">-20%</text>
+
+      <circle cx="110" cy="46" r="3" className="fill-white stroke-emerald-500 stroke-2" />
+      <circle cx="190" cy="62" r="3" className="fill-white stroke-emerald-500 stroke-2" />
+      <circle cx="270" cy="78" r="3" className="fill-white stroke-emerald-500 stroke-2" />
+      <circle cx="350" cy="88" r="3" className="fill-white stroke-emerald-500 stroke-2" />
+
+      <text x="30" y="142" textAnchor="middle" className="text-[8px] font-bold fill-slate-400">{c.months[0]}</text>
+      <text x="110" y="142" textAnchor="middle" className="text-[8px] font-bold fill-slate-400">{c.months[1]}</text>
+      <text x="190" y="142" textAnchor="middle" className="text-[8px] font-bold fill-slate-400">{c.months[2]}</text>
+      <text x="270" y="142" textAnchor="middle" className="text-[8px] font-bold fill-slate-400">{c.months[3]}</text>
+      <text x="350" y="142" textAnchor="middle" className="text-[8px] font-bold fill-slate-400">{c.months[4]}</text>
+    </svg>
+  )
+}
+
+/* ============================================================
+   CAROUSEL INTELLIGENT
+============================================================ */
+
+function SmartCarousel({ slides, accentLabel }: { slides: CarouselSlide[]; accentLabel: string }) {
+  const tr = useTr(EN)
+  const c = useCopy(INDUSTRY_CHROME)
+  const [index, setIndex] = useState(0)
+  const [direction, setDirection] = useState(1)
+  const [playing, setPlaying] = useState(true)
+  const hoverRef = useRef(false)
+
+  const goTo = useCallback(
+    (next: number) => {
+      setDirection(next > index || (index === slides.length - 1 && next === 0) ? 1 : -1)
+      setIndex(((next % slides.length) + slides.length) % slides.length)
+    },
+    [index, slides.length]
+  )
+
+  const next = useCallback(() => goTo(index + 1), [goTo, index])
+  const prev = useCallback(() => goTo(index - 1), [goTo, index])
+
+  // Auto-défilement (8s), en pause au survol
+  useEffect(() => {
+    if (!playing) return
+    const t = setInterval(() => {
+      if (!hoverRef.current) next()
+    }, 8000)
+    return () => clearInterval(t)
+  }, [playing, next])
+
+  const slide = slides[index]
+
+  return (
+    <div
+      onMouseEnter={() => (hoverRef.current = true)}
+      onMouseLeave={() => (hoverRef.current = false)}
+    >
+      {/* Onglets de navigation par carte */}
+      <div className="flex flex-wrap justify-center gap-2 mb-8">
+        {slides.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`group flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold border transition-all duration-300 ${
+              i === index
+                ? 'bg-[#111827] text-white border-[#111827] shadow-lg'
+                : 'bg-white/70 text-subtle border-slate-200 hover:border-gold hover:text-dark'
+            }`}
+          >
+            <span className={`font-black ${i === index ? 'text-gold' : 'text-gold-ink'}`}>{s.num}</span>
+            <span className="hidden sm:inline max-w-[180px] truncate">{s.tag}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Carte active */}
+      <div className="relative">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={index}
+            custom={direction}
+            initial={{ opacity: 0, x: direction * 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction * -60 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.12}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -80) next()
+              else if (info.offset.x > 80) prev()
+            }}
+            className="bg-[#FAF9F5] rounded-[2rem] border border-[#ECE7DD] shadow-[0_25px_60px_rgba(0,0,0,0.05)] overflow-hidden cursor-grab active:cursor-grabbing"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-8 md:p-10">
+              {/* Contenu texte */}
+              <div className="lg:col-span-6 flex flex-col">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-3xl font-black font-display text-gold/30">{slide.num}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold-ink">{slide.tag}</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black font-display text-[#111827] tracking-tight mb-4 leading-snug">
+                  {slide.title}
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed mb-6">{slide.desc}</p>
+
+                {/* Avant / Après */}
+                <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-0 mb-6">
+                  <div className="relative rounded-2xl sm:rounded-r-none border border-red-100 sm:border-r-0 bg-gradient-to-br from-red-50/70 to-white p-4 sm:p-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100">
+                        <XCircle size={13} className="text-red-600" />
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">{c.before}</span>
+                    </div>
+                    <ul className="space-y-2.5">
+                      {slide.before.map((b, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[11px] text-subtle leading-snug">
+                          <XCircle size={13} className="text-red-300 shrink-0 mt-[1px]" />
+                          {b}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="hidden sm:flex absolute left-1/2 top-1/2 z-10 h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200 bg-white shadow-[0_6px_16px_rgba(0,0,0,0.08)]">
+                    <ArrowRight size={15} className="text-emerald-500" />
+                  </div>
+
+                  <div className="relative rounded-2xl sm:rounded-l-none border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/70 to-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(16,185,129,0.08)]">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                        <CheckCircle2 size={13} className="text-emerald-700" />
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">{c.after}</span>
+                    </div>
+                    <ul className="space-y-2.5">
+                      {slide.after.map((a, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[11px] text-slate-600 leading-snug">
+                          <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-[1px]" />
+                          {a}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* KPIs */}
+                <div className="mt-auto">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-subtle">{tr("Résultats mesurés")}</p>
+                  <div className="grid grid-cols-2 divide-x divide-black/[0.06] overflow-hidden rounded-2xl border border-black/[0.05] bg-gradient-to-br from-gold/[0.06] to-white shadow-sm">
+                    {slide.kpis.map((k, i) => (
+                      <div key={i} className="p-4">
+                        <div className="text-xl sm:text-2xl font-black font-display text-gold-deep">{k.value}</div>
+                        <div className="text-[10px] text-subtle mt-0.5 leading-snug">{k.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Visuel data */}
+              <div className="lg:col-span-6">
+                <VisualPanel slide={slide} />
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Flèches */}
+        <button
+          onClick={prev}
+          aria-label={c.prev}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-5 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center text-dark hover:border-gold hover:text-gold transition-all z-20"
+        >
+          <ChevronLeft size={18} />
+        </button>
+        <button
+          onClick={next}
+          aria-label={c.next}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-5 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center text-dark hover:border-gold hover:text-gold transition-all z-20"
+        >
+          <ChevronRight size={18} />
+        </button>
+      </div>
+
+      {/* Points + lecture auto */}
+      <div className="flex items-center justify-center gap-4 mt-7">
+        <button
+          onClick={() => setPlaying(!playing)}
+          aria-label={playing ? c.pause : c.play}
+          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-subtle hover:border-gold hover:text-gold transition-all"
+        >
+          {playing ? <Pause size={12} /> : <Play size={12} />}
+        </button>
+        <div className="flex items-center gap-2">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`${c.goTo} ${i + 1}`}
+              className={`rounded-full transition-all duration-300 ${
+                i === index ? 'w-8 h-2 bg-gold' : 'w-2 h-2 bg-slate-300 hover:bg-gold/50'
+              }`}
+            />
+          ))}
+        </div>
+        <span className="text-[10px] font-bold text-subtle tabular-nums">
+          {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+        </span>
+        <span className="sr-only">{accentLabel}</span>
+      </div>
+    </div>
+  )
+}
+
+/* ============================================================
+   PAGE AGROALIMENTAIRE
+============================================================ */
+
+export default function FoodPage() {
+  const tr = useTr(EN)
+  const localeIsEn = useCurrentLocale() === 'en'
+  const core = localeIsEn ? overlay(coreSlides, SLIDES_EN.core) : coreSlides
+  const performance = localeIsEn ? overlay(performanceSlides, SLIDES_EN.performance) : performanceSlides
+  const c = useCopy(INDUSTRY_CHROME)
+  return (
+    <main className="min-h-screen bg-[#F7F7F6] text-dark overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold-900">
+
+      {/* 1. HERO — CIPA & l'industrie agroalimentaire et des boissons */}
+      <section className={`${heroStyles.hero} relative overflow-hidden bg-white pt-[82px] pb-6`}>
+        <div className={`${heroStyles.content} relative lg:min-h-[calc(min(40.5vw,570px,100svh_-_150px)_-_2.5rem)]`}>
+          <div className={`${heroStyles.grid} mx-auto grid w-full max-w-[1400px] grid-cols-1 items-start gap-8 px-5 sm:px-7 lg:grid-cols-12 lg:gap-6 lg:px-10`}>
+            {/* ---------- Colonne texte ---------- */}
+            <div className={`${heroStyles.copy} relative z-10 pt-10 lg:col-span-6 lg:pt-[clamp(2rem,3vw,3rem)] lg:pb-4`}>
+              <div className={heroStyles.intro}>
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="inline-flex items-center gap-2.5 rounded-full border border-[#EFDFC4] bg-[#FDF7EC] py-2 pl-3.5 pr-5"
+                >
+                  <Factory size={14} aria-hidden="true" className="text-[#DAA250]" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B6842B] sm:text-[11px]">
+                    {tr("Secteur d'activité")}
+                  </span>
+                </motion.div>
+
+                <motion.h1
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className={`${heroStyles.title} mt-6 font-display text-[32px] font-black leading-[1.08] tracking-[-0.02em] text-dark sm:text-[40px] lg:text-[clamp(32px,3.5vw_-_4px,46px)]`}
+                >
+                  {tr("Comment CIPA transforme l'industrie ")}
+                  <span className="text-[#DAA250]">{tr("agroalimentaire & des boissons")}</span>
+                </motion.h1>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="mt-6 max-w-[34rem] text-[14px] leading-[1.75] text-[#57534E] sm:text-[15.5px]"
+                >
+                  {tr("CIPA transforme les opérations agroalimentaires et FMCG grâce à l'automatisation intelligente, l'IA, la traçabilité et les analyses avancées — améliorant la sécurité alimentaire, la qualité, la conformité et la performance sur toute votre chaîne de valeur.")}
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="mt-8 flex flex-wrap items-center gap-3.5"
+                >
+                  <Link
+                    href="/contact"
+                    className="group inline-flex items-center gap-3 rounded-full bg-[#111827] px-7 py-4 text-[14px] font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
+                  >
+                    {tr("Demander une démo")}
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
+                  <a
+                    href="#core-ops"
+                    className="group inline-flex items-center gap-3 rounded-full border border-[#E4DED2] bg-white px-7 py-4 text-[14px] font-semibold text-[#292524] shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_10px_26px_rgba(218,162,80,0.18)]"
+                  >
+                    {tr("Découvrir les solutions")}
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </a>
+                </motion.div>
+              </div>
+
+              <ul className={`${heroStyles.indicators} mt-10 grid grid-cols-3 gap-x-3 sm:gap-x-6`}>
+                {[
+                  tr("Efficacité opérationnelle"),
+                  tr("Erreurs de conformité en moins"),
+                  tr("Déviations qualité en moins")
+                ].map((title) => (
+                  <li key={title} className="flex items-start gap-2 sm:items-center">
+                    <CheckCircle2 size={15} aria-hidden="true" className="shrink-0 text-[#22C55E]" />
+                    <span className="text-[13px] font-medium text-[#57534E]">{title}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* ---------- Colonne visuel ---------- */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              className={`${heroStyles.visual} relative -mx-5 sm:-mx-7 lg:absolute lg:right-0 lg:top-0 lg:m-0 lg:w-[54%] lg:max-w-[min(760px,calc((100svh_-_150px)*4/3))]`}
+            >
+              <div className={`${heroStyles.imageFrame} relative w-full`}>
+                <Image
+                  src="/Secteur/agroalimentaire_hero.png"
+                  alt={tr("Plateforme CIPA en usine agroalimentaire : tableau de bord qualité, conformité HACCP et assistance IA")}
+                  width={1448}
+                  height={1086}
+                  priority
+                  sizes="(max-width: 1023px) 100vw, (max-width: 1439px) 54vw, 57vw"
+                  className={`${heroStyles.image} block h-auto w-full select-none object-contain`}
+                />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-[6%] bg-gradient-to-r from-white to-transparent" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[6%] bg-gradient-to-t from-white to-transparent" />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        <div className={`${heroStyles.footer} relative z-10 mx-auto w-full max-w-[1400px] px-5 sm:px-7 lg:px-10`}>
+          {/* ---------- Barre de bas de héros ---------- */}
+          <div className="mt-4 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1">
+                <span className="h-1.5 w-9 rounded-full bg-[#DAA250]" />
+                <span className="h-1.5 w-5 rounded-full bg-[#EBD3AC]" />
+                <span className="h-1.5 w-5 rounded-full bg-[#E7E2D8]" />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+                {c.tagline}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+              {c.domains.map((item, i) => (
+                <span key={item} className="flex items-center gap-2.5">
+                  {i > 0 && <span className="text-[#DAA250]">•</span>}
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. BANDEAU 7 DOMAINES DE VALEUR */}
+      <section className="py-10 border-y border-[#ECE7DD] bg-[#F1EFE9]/40 relative">
+        <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
+          <motion.div
+            {...fadeInUp}
+            className="bg-dark rounded-2xl px-6 py-5 md:px-10 flex flex-col md:flex-row items-center gap-5 relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-mesh-dark opacity-30" />
+            <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-gold-deep flex items-center justify-center shrink-0 relative z-10">
+              <Wheat size={19} />
+            </div>
+            <p className="text-[13px] sm:text-sm text-white/85 leading-relaxed relative z-10 text-center md:text-left">
+              {tr("Des matières premières aux produits finis, CIPA aide les organisations agroalimentaires à améliorer la qualité, la conformité, la rapidité et la résilience — à travers sept domaines de valeur.")}
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 3. CAROUSEL — 4 FAÇONS (OPÉRATIONS ESSENTIELLES) */}
+      <section id="core-ops" className="py-20 md:py-28 relative">
+        <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
+          <div className="text-center max-w-5xl mx-auto mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
+              <span className="md:block">{c.coreTitle}</span>
+              <span className="text-gold-deep md:block">
+                {tr("opérations agroalimentaires essentielles")}
+              </span>
+            </h2>
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
+              {c.coreLead}
+            </p>
+          </div>
+
+          <SmartCarousel slides={core} accentLabel={tr("Opérations essentielles")} />
+        </div>
+      </section>
+
+      {/* 4. CAROUSEL — 3 FAÇONS (PERFORMANCE DURABLE) */}
+      <section className="py-20 md:py-28 relative bg-[#F1EFE9]/40 border-y border-[#ECE7DD]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
+          <div className="text-center max-w-5xl mx-auto mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
+              <span className="md:block">{c.perfTitle}</span>
+              <span className="text-gold-deep md:block">
+                {tr("qualité, l’innovation et la performance durable")}
+              </span>
+            </h2>
+            <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">
+              {c.perfLead}
+            </p>
+          </div>
+
+          <SmartCarousel slides={performance} accentLabel={tr("Performance durable")} />
+        </div>
+      </section>
+
+      {/* 5. UNE PLATEFORME UNIQUE */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
+          <motion.div
+            {...fadeInUp}
+            className="bg-dark rounded-[2rem] p-8 md:p-12 relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-mesh-dark opacity-30" />
+            <div className="absolute top-[-80px] right-[-80px] w-72 h-72 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div className="lg:col-span-6">
+                <h2 className="text-2xl sm:text-3xl font-black font-display text-white tracking-tight mb-4">
+                  {tr("Une plateforme unique pour la qualité, la traçabilité et l'excellence opérationnelle.")}
+                </h2>
+                <p className="text-sm text-white/70 leading-relaxed">
+                  {tr("CIPA unifie les personnes, les processus et les données pour fournir des insights connectés sur toute la chaîne de valeur alimentaire — sécurité des aliments, visibilité atelier, visibilité fournisseurs et amélioration continue.")}
+                </p>
+              </div>
+              <div className="lg:col-span-6 grid grid-cols-2 gap-4">
+                {[
+                  { icon: Database, label: tr("Données connectées") },
+                  { icon: Eye, label: tr("Visibilité atelier") },
+                  { icon: Truck, label: tr("Visibilité fournisseurs") },
+                  { icon: ShieldCheck, label: tr("Assurance sécurité alimentaire") }
+                ].map((f, i) => {
+                  const Icon = f.icon
+                  return (
+                    <motion.div
+                      key={i}
+                      whileHover={{ scale: 1.03 }}
+                      className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-gold/40 transition-colors"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-gold/15 text-gold flex items-center justify-center shrink-0">
+                        <Icon size={17} />
+                      </div>
+                      <span className="text-xs font-bold text-white leading-snug">{f.label}</span>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 6. COMMENT CIPA FONCTIONNE */}
+      <section className="py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <h2 className="text-3xl sm:text-4xl font-black font-display text-dark tracking-tight mb-3">
+              {c.how[0]} <span className="text-gold-deep">CIPA</span> {c.how[1]}
+            </h2>
+            <p className="text-sm sm:text-[15px] text-subtle">
+              {c.howLead}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 relative">
+            <div className="hidden lg:block absolute top-[26px] left-[10%] right-[10%] h-0.5 border-t-2 border-dashed border-[#ECE7DD] z-0" />
+            {[
+              { icon: Network, title: tr("1. Connecter"), desc: tr("Unifiez les données des systèmes, équipements et opérateurs.") },
+              { icon: FlaskConical, title: tr("2. Analyser"), desc: tr("L'IA et les analyses transforment les données en insights actionnables.") },
+              { icon: Rocket, title: tr("3. Agir"), desc: tr("Automatisez les workflows et déclenchez la meilleure action.") },
+              { icon: TrendingUp, title: tr("4. Améliorer"), desc: tr("Surveillez, mesurez et optimisez en continu.") },
+              { icon: Leaf, title: tr("5. Impact"), desc: tr("Des résultats mesurables en qualité, efficacité et croissance durable.") }
+            ].map((step, i) => {
+              const Icon = step.icon
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={viewport}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="relative z-10 flex flex-col items-center text-center"
+                >
+                  <div className="w-[52px] h-[52px] rounded-2xl bg-white border border-[#ECE7DD] shadow-md text-gold flex items-center justify-center mb-4">
+                    <Icon size={22} />
+                  </div>
+                  <h4 className="text-sm font-black text-dark mb-1.5">{step.title}</h4>
+                  <p className="text-[11px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. CALL TO ACTION FINAL */}
+      <section className="py-20 bg-dark text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-mesh-dark opacity-30" />
+        <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[-100px] right-[-100px] w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-5xl mx-auto px-5 text-center relative z-10">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-display tracking-tight text-white mb-6">
+            {tr("Prêt à transformer vos opérations agroalimentaires ?")}
+          </h2>
+          <p className="text-sm sm:text-base text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+            {tr("Découvrez comment CIPA by Industry X.0 peut vous aider à garantir la sécurité alimentaire, améliorer l'efficacité et générer une croissance durable. Nos experts réalisent une démonstration personnalisée basée sur vos lignes et vos contraintes réelles.")}
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Link
+              href="/contact"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-bold text-dark shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold hover:text-dark"
+            >
+              {c.ctaDemo}
+              <ArrowRight size={15} className="text-dark transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+            <a
+              href="mailto:contact@industryx0.com"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 px-7 py-4 text-sm font-semibold text-white transition-all duration-300"
+            >
+              {c.ctaAdvisor}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <Footer variant="compact" />
+    </main>
+  )
+}

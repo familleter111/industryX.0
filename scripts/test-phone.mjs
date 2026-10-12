@@ -2,10 +2,10 @@
 /**
  * Vérifie la mise en forme des numéros — `npm run test:phone`.
  *
- * Node exécute lib/phone.ts directement (--experimental-strip-types) : pas de
+ * Node exécute src/lib/phone.ts directement (--experimental-strip-types) : pas de
  * chaîne de compilation à installer pour tester quatre fonctions pures.
  */
-import { formatNationalPhone, toE164 } from '../lib/phone.ts'
+import { formatNationalPhone, toE164 } from '../src/lib/phone.ts'
 
 const TN = { dial: '216', mask: '## ### ###', trunk: '' }
 const FR = { dial: '33', mask: '# ## ## ## ##', trunk: '0' }

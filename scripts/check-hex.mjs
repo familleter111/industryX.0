@@ -2,7 +2,7 @@
 /**
  * Échoue si un littéral hexadécimal de couleur apparaît dans un .tsx.
  *
- * Toute couleur doit passer par lib/tokens.ts (via une classe Tailwind) ou
+ * Toute couleur doit passer par src/lib/tokens.ts (via une classe Tailwind) ou
  * par la palette Tailwind par défaut. Un hex en dur recrée une source de
  * vérité parallèle : c'est exactement ce qu'on a mis des heures à résorber.
  *
@@ -11,7 +11,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 
-const ROOTS = ['app', 'components']
+const ROOTS = ['src/app', 'src/components', 'src/features']
 const SKIP = new Set(['node_modules', '.next', '.git', '_archive'])
 const HEX = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/g
 const ALLOW = /(?:eslint-disable-next-line\s+no-hex-color|check-hex-ignore)/
@@ -53,7 +53,7 @@ const byFile = new Map()
 for (const v of violations) byFile.set(v.file, (byFile.get(v.file) ?? 0) + 1)
 
 console.error(`✗ ${violations.length} littéral(aux) hex dans ${byFile.size} fichier(s).`)
-console.error('  Utilisez une classe Tailwind adossée à lib/tokens.ts.\n')
+console.error('  Utilisez une classe Tailwind adossée à src/lib/tokens.ts.\n')
 for (const [file, n] of [...byFile].sort((a, b) => b[1] - a[1])) {
   console.error(`  ${String(n).padStart(4)}  ${file}`)
 }

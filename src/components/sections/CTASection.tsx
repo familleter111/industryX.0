@@ -1,0 +1,224 @@
+'use client'
+
+import { Link } from '@/i18n/navigation'
+import { motion } from 'framer-motion'
+import {
+  ArrowRight,
+  MessageCircle,
+} from 'lucide-react'
+import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import { useMotion } from '@/hooks/useMotion'
+import Section from '@/components/ui/Section'
+import { useCopy } from '@/lib/i18n'
+
+const COPY = {
+  fr: {
+    title: 'Donnez à vos opérations',
+    accent: 'une base plus intelligente',
+    lead: 'Découvrez comment CIPA peut vous aider à structurer la donnée terrain, mieux coordonner vos équipes et renforcer le pilotage qualité et production.',
+    tags: ['Qualité', 'Production', 'Traçabilité', 'Workflows terrain'],
+    panelTitle: 'Voyez comment CIPA s’adapte à vos opérations terrain.',
+    panelLead: 'Une démonstration claire, orientée qualité, production et pilotage terrain.',
+    demo: 'Demander une démo',
+    demoSub: 'Démo guidée avec nos experts',
+    expert: 'Parler à un expert',
+    expertSub: 'Échange rapide sur vos besoins',
+    trust: ['Déploiement rapide', 'Pensé pour les PME'],
+  },
+  en: {
+    title: 'Give your operations',
+    accent: 'a smarter foundation',
+    lead: 'See how CIPA can help you structure shop-floor data, coordinate your teams better and strengthen quality and production management.',
+    tags: ['Quality', 'Production', 'Traceability', 'Field workflows'],
+    panelTitle: 'See how CIPA fits your shop-floor operations.',
+    panelLead: 'A clear demo focused on quality, production and shop-floor management.',
+    demo: 'Book a demo',
+    demoSub: 'Guided demo with our experts',
+    expert: 'Talk to an expert',
+    expertSub: 'A quick conversation about your needs',
+    trust: ['Fast deployment', 'Designed for SMEs'],
+  },
+}
+
+/* Les deux appels menent a /contact. `Link` plutot que `a` pour garder
+   la navigation cote client ; anime, donc passe par la fabrique. */
+const MotionLink = motion(Link)
+
+export default function CTASection() {
+  const m = useMotion()
+  const t = useCopy(COPY)
+
+  return (
+    <Section
+      variant="default"
+      background="cream"
+      id="contact"
+      backdrop={
+        <AnimatedMeshBackground
+          gridColor="rgba(0,0,0,0.04)"
+          orbs={[
+            { color: 'rgba(218,162,80,0.10)', size: 420, position: { left: '0', top: '-128px' }, duration: 12, parallax: 35 },
+            { color: 'rgba(34,197,94,0.05)', size: 420, position: { right: '0', bottom: '0' }, duration: 10, parallax: 30 },
+          ]}
+        />
+      }
+    >
+
+      {/* ================= BACKGROUND — mesh animé avec parallax léger ================= */}
+
+        {/* ================= MAIN CARD ================= */}
+        <motion.div
+          variants={m.fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={m.viewport}
+          className="relative overflow-hidden rounded-[40px] border border-white/10 bg-dark shadow-[0_30px_120px_rgba(0,0,0,0.25)]"
+        >
+
+          {/* TOP BORDER LIGHT */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+
+          <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
+
+            {/* ================= LEFT ================= */}
+            <div className="relative p-8 sm:p-12 lg:p-16">
+
+              {/* TITLE */}
+              <h2 className="max-w-3xl text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.02] text-white mb-7">
+
+                {t.title}
+                <span className="block mt-2 text-gradient-gold">
+                  {t.accent}
+                </span>
+
+              </h2>
+
+              {/* TEXT */}
+              <p className="max-w-2xl text-lg leading-relaxed text-white/60">
+
+                {t.lead}
+
+              </p>
+
+              {/* BOTTOM LINE */}
+              <div className="mt-10 flex flex-wrap gap-3">
+
+                {t.tags.map((item, i) => (
+                  <div
+                    key={i}
+                    className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/55"
+                  >
+                    {item}
+                  </div>
+                ))}
+
+              </div>
+
+            </div>
+
+            {/* ================= RIGHT CTA PANEL ================= */}
+            <div className="relative border-t border-white/10 lg:border-l lg:border-t-0">
+
+              {/* PANEL BG */}
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(218,162,80,0.06),transparent)]" />
+
+              <div className="relative flex h-full flex-col justify-center p-8 sm:p-12">
+
+                {/* TITLE */}
+                <div className="mb-10">
+
+
+                  <h3 className="text-3xl font-bold leading-tight text-white mb-4">
+                    {t.panelTitle}
+                  </h3>
+
+                  <p className="text-white/55 leading-relaxed">
+                    {t.panelLead}
+                  </p>
+
+                </div>
+
+                {/* CTA BUTTONS */}
+                <div className="flex flex-col gap-4">
+
+                  {/* PRIMARY */}
+                  <MotionLink
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    href="/contact"
+                    className="group flex items-center justify-between rounded-2xl bg-gradient-to-r from-gold to-yellow-500 px-7 py-5 shadow-2xl shadow-gold/20 transition-all duration-300 hover:shadow-gold/40"
+                  >
+
+                    <div>
+                      <p className="text-lg font-semibold text-dark">
+                        {t.demo}
+                      </p>
+
+                      <p className="text-sm text-dark/70 mt-1">
+                        {t.demoSub}
+                      </p>
+                    </div>
+
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-dark text-white">
+
+                      <ArrowRight
+                        size={18}
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                      />
+
+                    </div>
+
+                  </MotionLink>
+
+                  {/* SECONDARY */}
+                  <MotionLink
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    href="/contact"
+                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-7 py-5 backdrop-blur-md transition-all duration-300 hover:bg-white/[0.06]"
+                  >
+
+                    <div>
+                      <p className="text-lg font-semibold text-white">
+                        {t.expert}
+                      </p>
+
+                      <p className="text-sm text-white/50 mt-1">
+                        {t.expertSub}
+                      </p>
+                    </div>
+
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-white">
+
+                      <MessageCircle size={18} />
+
+                    </div>
+
+                  </MotionLink>
+
+                </div>
+
+                {/* TRUST */}
+                <div className="mt-8 pt-8 border-t border-white/10">
+
+                  <div className="flex items-center gap-6 text-sm text-white/50">
+
+                    <span>✓ {t.trust[0]}</span>
+
+                    <span>✓ {t.trust[1]}</span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </motion.div>
+
+    </Section>
+  )
+}
