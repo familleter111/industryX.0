@@ -16,7 +16,7 @@ import { useCopy } from '@/lib/i18n'
 // Chaque lien mene a une page existante. Les anciens libelles sans page
 // (Mises a jour, Blog, Conditions, Cookies) pointaient tous vers l'accueil.
 const FOOTER_HREFS = [
-  ['/plateforme/terrain', '/plateforme/qualite', '/plateforme/pilotage', '/plateforme/pilotage#securite'],
+  ['/plateforme/terrain', '/plateforme/qualite', '/plateforme/pilotage', '/plateforme/pilotage#securite', '/plateforme/entiwin'],
   ['/entreprise', '/partners', '/resources', '/contact'],
   ['/privacy', '/faq'],
 ]
@@ -24,7 +24,7 @@ const FOOTER_HREFS = [
 const COPY = {
   fr: {
     sections: [
-      ['Produit', ['Structurer', 'Orchestrer', 'Piloter', 'Sécurité']],
+      ['Produit', ['Structurer', 'Orchestrer', 'Piloter', 'Sécurité', 'Enti Win']],
       ['Entreprise', ['À propos', 'Partenaires', 'Guides & insights', 'Contact']],
       ['Légal', ['Confidentialité', 'FAQ']],
     ] as [string, string[]][],
@@ -41,7 +41,7 @@ const COPY = {
   },
   en: {
     sections: [
-      ['Product', ['Structure', 'Orchestrate', 'Drive', 'Security']],
+      ['Product', ['Structure', 'Orchestrate', 'Drive', 'Security', 'Enti Win']],
       ['Company', ['About us', 'Partners', 'Guides & insights', 'Contact']],
       ['Legal', ['Privacy', 'FAQ']],
     ] as [string, string[]][],

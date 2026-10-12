@@ -18,6 +18,7 @@ const PAGES = [
   '/en/plateforme/terrain',
   '/en/plateforme/qualite',
   '/en/plateforme/pilotage',
+  '/en/plateforme/entiwin',
   '/en/industries/pharma',
   '/en/industries/food',
   '/en/industries/cosmetics',

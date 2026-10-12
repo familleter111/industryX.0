@@ -19,6 +19,7 @@ import {
   Mail,
   Menu,
   MessageCircle,
+  ScanSearch,
   ShieldCheck,
   Users,
   Utensils,
@@ -30,6 +31,7 @@ import Image from 'next/image'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import ChatWidget from '@/components/layout/ChatWidget'
 import { platformHref, platformPages } from '@/lib/data/platform'
+import { ENTIWIN_PATH } from '@/lib/data/entiwin'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
@@ -66,6 +68,7 @@ const COPY = {
     openChat: 'Ouvrir le chat',
     closeChat: 'Fermer le chat',
     platform: 'Plateforme',
+    entiwin: ['Enti Win', 'Évaluation qualité pharmaceutique assistée par IA', 'Nouveau'],
     featured:
       'CIPA capte la donnée terrain, orchestre les processus critiques et active l’IA pour améliorer les opérations industrielles.',
     industries: 'Industries',
@@ -100,6 +103,7 @@ const COPY = {
     openChat: 'Open chat',
     closeChat: 'Close chat',
     platform: 'Platform',
+    entiwin: ['Enti Win', 'AI-assisted pharmaceutical quality assessment', 'New'],
     featured:
       'CIPA captures shop-floor data, orchestrates critical processes and puts AI to work to improve industrial operations.',
     industries: 'Industries',
@@ -161,12 +165,16 @@ function buildNavGroups(locale: Locale): NavGroup[] {
       },
       // Une entree par pilier, generee depuis lib/data/platform.ts : le menu
       // et les trois pages ne peuvent pas diverger.
-      items: platformPages(locale).map((page) => ({
-        title: page.menuTitle,
-        description: page.menuDescription,
-        href: platformHref(page.slug),
-        icon: page.icon,
-      })),
+      items: [
+        ...platformPages(locale).map((page) => ({
+          title: page.menuTitle,
+          description: page.menuDescription,
+          href: platformHref(page.slug),
+          icon: page.icon,
+        })),
+        // Nouveau produit : page de présentation, badge « Nouveau » / « New ».
+        { title: t.entiwin[0], description: t.entiwin[1], badge: t.entiwin[2], href: ENTIWIN_PATH, icon: ScanSearch },
+      ],
     },
     { id: 'industries', label: t.industries, compact: true, items: withText(INDUSTRY_LINKS, t.industryItems) },
     { id: 'resources', label: t.resources, compact: true, items: withText(RESOURCE_LINKS, t.resourceItems) },

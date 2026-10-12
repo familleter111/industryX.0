@@ -1,3 +1,4 @@
+import { ENTIWIN_PATH } from '@/lib/data/entiwin'
 import { GUIDES } from '@/lib/data/guides'
 import { industrySlugs } from '@/lib/data/industries'
 import { PLATFORM_PAGES } from '@/lib/data/platform'
@@ -37,6 +38,7 @@ export function publicPaths(): string[] {
     '/resources',
     ...GUIDES.map(({ slug }) => `/resources/${slug}`),
     ...PLATFORM_PAGES.map(({ slug }) => `/plateforme/${slug}`),
+    ENTIWIN_PATH,
     ...[...STATIC_INDUSTRIES, ...industrySlugs()].map((slug) => `/industries/${slug}`),
   ]
 }
