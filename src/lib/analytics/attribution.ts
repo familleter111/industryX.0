@@ -14,7 +14,6 @@
  *
  * Paramètres lus : utm_source, utm_medium, utm_campaign, utm_content,
  * utm_term, et `ref` pour les QR codes et URL dédiées (salons, radio…).
- * Convention de nommage : voir docs/utm.md.
  */
 
 export const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const

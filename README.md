@@ -69,7 +69,7 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
   `next.config.mjs`), sinon les bloqueurs de publicité les coupent.
 - **Attribution** : UTM et `ref` sont captés à l'arrivée, puis joints aux demandes de
   démo et aux inscriptions (colonnes `utm_*`, `ref`, `Première visite`, `ID PostHog` du
-  fichier Excel). Convention de nommage : [docs/utm.md](docs/utm.md).
+  fichier Excel).
 
 | Événement | Quand |
 |---|---|
@@ -131,7 +131,6 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 │   └── middleware.ts           # Redirection de langue
 ├── scripts/                    # check-hex, check-i18n, gen-countries
 ├── tests/                      # Tests Vitest (npm test)
-├── docs/                       # utm.md : convention des campagnes
 ├── tailwind.config.ts
 ├── next.config.mjs
 └── tsconfig.json               # Alias @/* → src/*
