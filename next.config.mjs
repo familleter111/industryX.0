@@ -5,6 +5,13 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // /about faisait doublon avec /entreprise : les anciens liens y sont renvoyés.
+  async redirects() {
+    return [
+      { source: '/about', destination: '/entreprise', permanent: true },
+      { source: '/en/about', destination: '/en/entreprise', permanent: true },
+    ]
+  },
   images: {
     remotePatterns: [],
   },

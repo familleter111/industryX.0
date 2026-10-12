@@ -27,6 +27,30 @@ npm start
 
 Le site sera disponible sur [http://localhost:3000](http://localhost:3000)
 
+## Qualité
+
+```bash
+npm run lint        # ESLint (next/core-web-vitals)
+npm run typecheck   # TypeScript, sans émettre
+npm test            # Vitest : téléphone, limiteur, route /api/contact, sitemap / SEO
+npm run test:watch  # Vitest en continu
+```
+
+Les trois tournent en CI (`.github/workflows/ci.yml`) sur chaque pull request
+et chaque push hors de `main`, suivis de `npm run build`.
+
+`rollup` est un alias de `@rollup/wasm-node` (voir package.json) : la version
+native est bloquée par le contrôle d'applications de Windows, la version
+WebAssembly tourne partout.
+
+## SEO
+
+- `src/app/sitemap.ts` et `src/app/robots.ts` servent `/sitemap.xml` et `/robots.txt`.
+- La liste des pages vit dans `src/lib/site.ts` (`publicPaths`) : une page ajoutée
+  doit y être déclarée, sinon le test `tests/site.test.ts` échoue.
+- L'adresse publique vient de `NEXT_PUBLIC_SITE_URL` (défaut : https://www.industryx0.pro).
+- `/about` redirige vers `/entreprise` (next.config.mjs).
+
 ## Structure
 
 ```
@@ -38,19 +62,19 @@ Le site sera disponible sur [http://localhost:3000](http://localhost:3000)
 │   │   │   ├── layout.tsx
 │   │   │   ├── page.tsx        # Accueil
 │   │   │   ├── (marketing)/    # Route group (n'apparaît pas dans l'URL)
-│   │   │   │   ├── about/  contact/  customers/  entreprise/
+│   │   │   │   ├── contact/  customers/  entreprise/
 │   │   │   │   └── faq/  partners/  privacy/
 │   │   │   ├── industries/     # Pages sectorielles + [slug]
 │   │   │   ├── plateforme/[slug]/
 │   │   │   └── resources/      # Bibliothèque de guides + [slug]
+│   │   ├── sitemap.ts, robots.ts  # SEO (liste des pages : lib/site.ts)
 │   │   └── api/
 │   │       ├── contact/route.ts
 │   │       └── subscribe/route.ts
 │   ├── components/             # Composants réutilisables
 │   │   ├── ui/                 # Briques d'interface (Section, Reveal, PhoneField…)
 │   │   ├── layout/             # Navbar, Footer, ChatWidget, WelcomeIntro
-│   │   ├── sections/           # Sections de pages (Hero, CTASection…)
-│   │   └── _archive/           # Sections désactivées, exclues du CSS
+│   │   └── sections/           # Sections de pages (Hero, CTASection…)
 │   ├── features/               # Composants métier
 │   │   ├── industries/         # IndustryPage, SmartCarousel, visuels
 │   │   ├── platform/           # Pages plateforme
@@ -65,7 +89,8 @@ Le site sera disponible sur [http://localhost:3000](http://localhost:3000)
 │   ├── types/                  # Déclarations TypeScript
 │   ├── styles/                 # globals.css
 │   └── middleware.ts           # Redirection de langue
-├── scripts/                    # check-hex, check-i18n, gen-countries, test-phone
+├── scripts/                    # check-hex, check-i18n, gen-countries
+├── tests/                      # Tests Vitest (npm test)
 ├── tailwind.config.ts
 ├── next.config.mjs
 └── tsconfig.json               # Alias @/* → src/*
@@ -154,7 +179,7 @@ et l'Océanie.
 
 ```bash
 npm run gen:countries   # régénère src/lib/data/phoneCountries.ts + public/flags
-npm run test:phone      # vérifie la mise en forme des numéros
+npm test                # vérifie notamment la mise en forme des numéros (tests/phone.test.ts)
 ```
 
 ## Notes

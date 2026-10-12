@@ -10,8 +10,6 @@ const config: Config = {
     './src/lib/**/*.{js,ts,jsx,tsx,mdx}',
     './src/features/**/*.{js,ts,jsx,tsx,mdx}',
     './src/hooks/**/*.{js,ts,jsx,tsx,mdx}',
-    // Sections désactivées : conservées pour référence, exclues du CSS généré.
-    '!./src/components/_archive/**',
   ],
   theme: {
     // Les ecrans Tailwind par defaut, plus deux :

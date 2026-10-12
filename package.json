@@ -9,8 +9,10 @@
     "lint": "next lint",
     "check:hex": "node scripts/check-hex.mjs",
     "gen:countries": "node scripts/gen-countries.mjs",
-    "test:phone": "node --experimental-strip-types --no-warnings scripts/test-phone.mjs",
-    "check:i18n": "node scripts/check-i18n.mjs"
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -31,7 +33,9 @@
     "eslint-config-next": "14.2.35",
     "libphonenumber-js": "^1.13.12",
     "postcss": "^8.4.38",
+    "rollup": "npm:@rollup/wasm-node@^4.64.5",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^3.2.7"
   }
 }

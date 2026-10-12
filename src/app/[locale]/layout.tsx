@@ -8,6 +8,7 @@ import '@/styles/globals.css'
 import Navbar from '@/components/layout/Navbar'
 import { isLocale, routing } from '@/i18n/routing'
 import { pageMetadata, type Locale } from '@/lib/i18n'
+import { SITE_URL } from '@/lib/site'
 
 const syne = Syne({
   subsets: ['latin'],
@@ -57,6 +58,8 @@ export function generateMetadata({
 }): Metadata {
   const { keywords, ...meta } = META[isLocale(locale) ? locale : routing.defaultLocale]
   return {
+    // Base des URL relatives (canonical, hreflang, Open Graph) de toutes les pages.
+    metadataBase: new URL(SITE_URL),
     ...pageMetadata({ locale, path: '/', ...meta }),
     keywords,
     authors: [{ name: 'Industry X.0' }],

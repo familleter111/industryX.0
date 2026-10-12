@@ -12,7 +12,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 
 const ROOTS = ['src/app', 'src/components', 'src/features']
-const SKIP = new Set(['node_modules', '.next', '.git', '_archive'])
+const SKIP = new Set(['node_modules', '.next', '.git'])
 const HEX = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/g
 const ALLOW = /(?:eslint-disable-next-line\s+no-hex-color|check-hex-ignore)/
 

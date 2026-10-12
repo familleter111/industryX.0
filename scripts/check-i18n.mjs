@@ -24,7 +24,6 @@ const PAGES = [
   '/en/industries/automotive',
   '/en/industries/electronics',
   '/en/industries/packaging',
-  '/en/about',
   '/en/entreprise',
   '/en/customers',
   '/en/partners',
