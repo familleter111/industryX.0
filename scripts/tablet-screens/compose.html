@@ -1,0 +1,85 @@
+<!doctype html><meta charset="utf-8"><body><pre id="out">pending</pre><script>
+const CW = 1600, CH = 1200, TOL = +(q0().get("tol") || 9)
+function q0() { return new URLSearchParams(location.search) }
+const q = new URLSearchParams(location.search)
+const img = new Image()
+img.onload = () => {
+  try { compose() } catch (e) { document.getElementById('out').textContent = 'ERR ' + e.stack }
+}
+img.onerror = () => { document.getElementById('out').textContent = 'ERR load' }
+img.src = '/public/' + q.get('src')
+
+function compose() {
+  const W = img.naturalWidth, H = img.naturalHeight
+  const c = document.createElement('canvas'); c.width = W; c.height = H
+  const x = c.getContext('2d'); x.drawImage(img, 0, 0)
+  const d = x.getImageData(0, 0, W, H).data
+  const px = (i, j) => { const k = (j * W + i) * 4; return [d[k], d[k + 1], d[k + 2]] }
+  const bg = px(5, Math.floor(H / 2))
+  const isBg = (i, j) => { const p = px(i, j); return Math.max(Math.abs(p[0] - bg[0]), Math.abs(p[1] - bg[1]), Math.abs(p[2] - bg[2])) <= TOL }
+  const rowBlank = (j) => { let n = 0; for (let i = 0; i < W; i += 2) if (!isBg(i, j) && ++n > 3) return false; return true }
+
+  // Bandes = lignes consécutives non vides ; fusion des trous < 8 px.
+  let bands = [], cur = null
+  for (let j = 0; j < H; j++) {
+    if (!rowBlank(j)) { if (cur && j - cur.end <= 4) cur.end = j + 1; else { cur = { y: j, end: j + 1 }; bands.push(cur) } }
+  }
+  // Coupes manuelles (?cuts=866,1200) : là où l'ombre d'une carte rejoint la suivante.
+  for (const cut of (q0().get('cuts') || '').split(',').filter(Boolean).map(Number)) {
+    const i = bands.findIndex(b => b.y < cut && cut < b.end)
+    if (i < 0) continue
+    const tail = { y: cut, end: bands[i].end }
+    // Le fondu du haut de la carte suivante est rattaché à cette carte.
+    const next = bands[i + 1]
+    if (next && next.y - tail.end < 20) { tail.end = next.end; bands.splice(i + 1, 1) }
+    bands.splice(i, 1, { y: bands[i].y, end: cut }, tail)
+  }
+  bands.forEach(b => b.h = b.end - b.y)
+  const log = { bg, bands: bands.map(b => [b.y, b.h]) }
+
+  // Barre d'accueil iPhone (fine, tout en bas) : retirée. La barre d'onglets est la bande d'avant.
+  if (bands[bands.length - 1].h < 40) bands.pop()
+  const header = bands.slice(0, 3)
+  const nav = bands[bands.length - 1]
+  const blocks = bands.slice(3, bands.length - 1)
+
+  // Point de coupe gauche / droite de chaque bande d'en-tête : milieu du plus grand vide intérieur.
+  for (const b of header) {
+    const occ = []
+    for (let i = 0; i < W; i++) { let o = false; for (let j = b.y; j < b.end && !o; j += 2) if (!isBg(i, j)) o = true; occ.push(o) }
+    let first = occ.indexOf(true), last = occ.lastIndexOf(true), best = null, run = null
+    for (let i = first; i <= last; i++) {
+      if (!occ[i]) { if (!run) run = { a: i }; run.b = i } else if (run) { if (!best || run.b - run.a > best.b - best.a) best = run; run = null }
+    }
+    b.split = best && best.b - best.a > 30 ? Math.floor((best.a + best.b) / 2) : W
+  }
+
+  // Colonnes équilibrées : on coupe la pile de cartes là où les hauteurs s'équilibrent.
+  const gaps = blocks.slice(1).map((b, i) => b.y - blocks[i].end)
+  const g = gaps.length ? gaps.sort((a, b) => a - b)[Math.floor(gaps.length / 2)] : 40
+  const colH = (arr) => arr.reduce((s, b) => s + b.h, 0) + g * Math.max(arr.length - 1, 0)
+  let k = 1, bestMax = Infinity
+  for (let i = 1; i < blocks.length; i++) { const m = Math.max(colH(blocks.slice(0, i)), colH(blocks.slice(i))); if (m < bestMax) { bestMax = m; k = i } }
+  if (blocks.length < 2) { k = blocks.length; bestMax = colH(blocks) }
+  const top = blocks.length ? blocks[0].y : header[2].end + g
+  const navZone = H - nav.y
+  const s = Math.min(CW / (2 * W), CH / (top + bestMax + g * 1.5 + navZone))
+  log.s = s; log.split = k; log.splits = header.map(b => b.split)
+
+  const o = document.createElement('canvas'); o.width = CW; o.height = CH
+  const ctx = o.getContext('2d'); ctx.imageSmoothingQuality = 'high'
+  ctx.fillStyle = `rgb(${bg})`; ctx.fillRect(0, 0, CW, CH)
+  const L = CW / 2 - W * s, R = CW / 2 + W * s
+
+  for (const b of header) {
+    ctx.drawImage(c, 0, b.y, b.split, b.h, L, b.y * s, b.split * s, b.h * s)
+    if (b.split < W) ctx.drawImage(c, b.split, b.y, W - b.split, b.h, R - (W - b.split) * s, b.y * s, (W - b.split) * s, b.h * s)
+  }
+  const column = (arr, X) => { let y = top * s; for (const b of arr) { ctx.drawImage(c, 0, b.y, W, b.h, X, y, W * s, b.h * s); y += (b.h + g) * s } }
+  column(blocks.slice(0, k), L)
+  column(blocks.slice(k), CW / 2)
+  ctx.drawImage(c, 0, nav.y, W, nav.h, (CW - W * s) / 2, CH - navZone * s, W * s, nav.h * s)
+
+  document.getElementById('out').textContent = JSON.stringify(log) + '\n' + o.toDataURL('image/webp', 0.9)
+}
+</script>

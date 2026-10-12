@@ -12,7 +12,8 @@
     "check:i18n": "node scripts/check-i18n.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "gen:tablet": "node scripts/tablet-screens/run.cjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

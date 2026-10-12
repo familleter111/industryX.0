@@ -30,7 +30,7 @@ export type FeatureTab = {
   href: string
   screenshot: { src: string; alt: string; width: number; height: number }
   /**
-   * Capture au format tablette portrait (3:4, ex. 1536 x 2048), facultative.
+   * Capture au format tablette paysage (4:3, 1600 x 1200), facultative.
    * Absente, le mockup tablette montre le haut de `screenshot`.
    */
   tablet?: { src: string; width: number; height: number }
@@ -38,6 +38,12 @@ export type FeatureTab = {
 
 /** Captures sources (public/ecran-*.png), exportees en 1170 x 2532. */
 const SHOT = { width: 1170, height: 2532 } as const
+
+/**
+ * Versions tablette paysage (public/ecran-*-tablette.webp), recomposees en
+ * deux colonnes depuis les captures telephone : scripts/tablet-screens.
+ */
+const TABLET = { width: 1600, height: 1200 } as const
 
 export const FEATURE_TABS: FeatureTab[] = [
   {
@@ -60,6 +66,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       alt: "Écran CIPA d'exécution d'un audit interne sur mobile",
       ...SHOT,
     },
+    tablet: { src: '/ecran-teaser-v2-tablette.webp', ...TABLET },
   },
   {
     id: 'quality',
@@ -81,6 +88,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       alt: 'Écran CIPA de saisie d’une inspection qualité sur mobile',
       ...SHOT,
     },
+    tablet: { src: '/ecran-inspections-qualite-tablette.webp', ...TABLET },
   },
   {
     id: 'deviations',
@@ -102,6 +110,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       alt: 'Écran CIPA de traitement d’une non-conformité sur mobile',
       ...SHOT,
     },
+    tablet: { src: '/ecran-deviations-nc-tablette.webp', ...TABLET },
   },
   {
     id: 'production',
@@ -123,6 +132,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       alt: 'Écran CIPA de contrôle de production sur mobile',
       ...SHOT,
     },
+    tablet: { src: '/ecran-controles-production-tablette.webp', ...TABLET },
   },
   {
     id: 'rounds',
@@ -144,6 +154,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       alt: 'Écran CIPA de suivi d’une tournée terrain sur mobile',
       ...SHOT,
     },
+    tablet: { src: '/ecran-tournees-terrain-tablette.webp', ...TABLET },
   },
   {
     id: 'improvement',
@@ -165,6 +176,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       alt: 'Écran CIPA de pilotage des plans d’action sur mobile',
       ...SHOT,
     },
+    tablet: { src: '/ecran-amelioration-continue-tablette.webp', ...TABLET },
   },
 ]
 
