@@ -6,7 +6,8 @@ pour gérer vos opérations industrielles » sur la page d'accueil
 
 Tant qu'un fichier est absent, la page affiche un écran schématique
 (`components/ui/AppScreenPlaceholder.tsx`) — jamais une image cassée. Rien
-d'autre n'est à modifier : déposer le fichier au bon nom suffit.
+d'autre n'est à modifier : déposer le fichier au bon nom, puis reconstruire le
+site (`npm run build`) — la page relève les captures présentes à la construction.
 
 ## Fichiers attendus
 

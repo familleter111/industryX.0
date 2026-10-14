@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Génère lib/data/phoneCountries.ts et public/flags/*.png.
+ * Génère src/lib/data/phoneCountries.ts et public/flags/*.png.
  *
  * Exécuté à la main (`npm run gen:countries`), jamais au build : le résultat
  * est un fichier statique versionné. libphonenumber-js reste donc une
@@ -225,10 +225,10 @@ const footer = [
   '',
 ].join('\n')
 
-writeFileSync(join('lib', 'data', 'phoneCountries.ts'), header + '\n' + body + '\n' + footer, 'utf8')
+writeFileSync(join('src', 'lib', 'data', 'phoneCountries.ts'), header + '\n' + body + '\n' + footer, 'utf8')
 
 const total = groups.reduce((n, group) => n + group.countries.length, 0)
-console.log('✓ lib/data/phoneCountries.ts — ' + total + ' pays, ' + groups.length + ' groupes')
+console.log('✓ src/lib/data/phoneCountries.ts — ' + total + ' pays, ' + groups.length + ' groupes')
 if (skipped.length) console.warn('  ignorés : ' + skipped.join(', '))
 
 /* --------------------------------------------------------- drapeaux (PNG) */

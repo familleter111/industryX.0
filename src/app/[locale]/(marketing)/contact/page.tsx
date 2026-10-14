@@ -1,0 +1,1363 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import { Link } from '@/i18n/navigation'
+import { AnimatePresence, motion } from 'framer-motion'
+import {
+  AlertCircle,
+  ArrowRight,
+  Check,
+  CheckCircle2,
+  ChevronDown,
+  Clock4,
+  ClipboardCheck,
+  Crosshair,
+  Info,
+  LineChart,
+  Loader2,
+  Lock,
+  MessageSquare,
+  Presentation,
+  ShieldCheck,
+  Users,
+  UserSearch,
+  Zap,
+} from 'lucide-react'
+
+import PhoneField from '@/components/ui/PhoneField'
+import { phoneDigits } from '@/lib/phone'
+import { DEFAULT_PHONE_COUNTRY } from '@/lib/data/phoneCountries'
+import { SectionBadge } from '@/components/ui/SectionHeading'
+import { CLIENT_LOGOS, logoFrameWidth } from '@/lib/data/clientLogos'
+import { viewport } from '@/lib/motion'
+import Footer from '@/components/layout/Footer'
+import { useCopy, useCurrentLocale } from '@/lib/i18n'
+import { getAttribution } from '@/lib/analytics/attribution'
+import { distinctId, track } from '@/lib/analytics/posthog'
+
+/* ============================================================
+   DONNÉES STATIQUES
+   ============================================================ */
+
+// Logos clients — voir components/clientLogos.ts (source unique, /public/logos)
+
+const PROMISE_ICONS = [LineChart, Clock4, Users]
+
+/**
+ * Valeurs envoyees au serveur et enregistrees dans le classeur des prospects :
+ * elles restent en francais quelle que soit la langue de la page, pour que
+ * l'equipe filtre une seule liste. Seul le libelle affiche se traduit.
+ */
+const INDUSTRIES = [
+  'Pharmaceutique',
+  'Agroalimentaire & boissons',
+  'Cosmétique & dispositifs médicaux',
+  'Automobile & composants',
+  'Électronique & câblage',
+  'Packaging & plasturgie',
+  'Chimie',
+  'Distribution & logistique',
+  'Autre secteur',
+]
+
+const STEP_ICONS = [UserSearch, Presentation, Crosshair, ClipboardCheck]
+
+const IMPACT_VALUES = ['92%', '-28%', '+18%']
+
+const ENGAGEMENT_ICONS = [Zap, Users, ShieldCheck]
+
+const COPY = {
+  fr: {
+    promises: [
+      ['Démo personnalisée', 'Adaptée à vos enjeux'],
+      ['Réponse en 24h', 'Un expert vous recontacte'],
+      ['Accompagnement métier', 'De l’analyse à la réussite'],
+    ],
+    industries: INDUSTRIES,
+    steps: [
+      ['Qualification', 'Identification des enjeux terrain, qualité, production, maintenance.'],
+      ['Démonstration ciblée', 'Présentation des cas d’usage CIPA adaptés au contexte du client.'],
+      ['Cadrage', 'Priorités, périmètre pilote, données, intégrations.'],
+      ['Plan d’action', 'Proposition de déploiement progressive et orientée valeur.'],
+    ],
+    impact: ['Projets livrés dans les délais', 'Arrêts non planifiés en moyenne', 'Performance opérationnelle'],
+    engagements: [
+      ['Réponse rapide', 'Sous 24h ouvrées'],
+      ['Approche métier', 'Alignée sur vos enjeux'],
+      ['Vision Ops + Quality', 'Du terrain à la décision'],
+    ],
+    required: ' (obligatoire)',
+    errors: {
+      firstName: 'Prénom requis',
+      lastName: 'Nom requis',
+      email: 'Email requis',
+      emailInvalid: 'Adresse email invalide',
+      company: 'Société requise',
+      industry: 'Sélectionnez votre industrie',
+      message: 'Message requis',
+      consent: 'Merci d’accepter le traitement de vos données',
+      phone: 'Numéro incomplet',
+    },
+    failed: 'L’envoi a échoué. Merci de réessayer dans un instant.',
+    offline: 'Connexion impossible. Vérifiez votre réseau, puis réessayez.',
+    sentTitle: 'Demande bien reçue',
+    sentText: (name: string) =>
+      `Merci ${name} — un expert Industry X.0 revient vers vous sous 24h pour organiser votre démonstration CIPA.`,
+    another: 'Envoyer une autre demande',
+    legend: 'Les champs suivis d’un astérisque (*) sont obligatoires.',
+    firstName: 'Prénom',
+    firstNamePh: 'Votre prénom',
+    lastName: 'Nom',
+    lastNamePh: 'Votre nom',
+    email: 'Email',
+    emailPh: 'exemple@entreprise.com',
+    phone: 'Téléphone',
+    company: 'Société',
+    companyPh: 'Nom de votre entreprise',
+    industry: 'Industrie',
+    industryPh: 'Sélectionnez votre industrie',
+    message: 'Message',
+    messagePh: 'Parlez-nous de vos enjeux, projets ou objectifs.',
+    consent: 'J’accepte que Industry X.0 collecte et traite mes données pour répondre à ma demande. Voir notre',
+    privacy: 'politique de confidentialité',
+    honeypot: 'Ne remplissez pas ce champ',
+    sending: 'Envoi en cours…',
+    submit: 'Planifier une démonstration',
+    secure: 'Vos données sont sécurisées et 100% confidentielles.',
+    chart: 'Courbe de progression de la performance de janvier à juin',
+    months: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+    afterTitle: 'Ce qui se passe après votre',
+    afterAccent: 'prise de contact',
+    afterLead: 'Nous transformons votre échange en un plan d’actions structuré, concret et orienté impact opérationnel.',
+    impactTitle: 'Impact attendu',
+    describe: 'Décrire mon projet',
+    heroTitle: 'Parlons de vos',
+    heroAccent: 'opérations',
+    heroLead:
+      'Industry X.0 aide les organisations industrielles à connecter le terrain, la qualité, la production, la maintenance et la décision grâce à CIPA, pour des opérations plus performantes et durables.',
+    trust: 'Ils nous font confiance',
+    siteAlt: 'Site industriel en exploitation',
+    teamAlt: 'Équipes terrain utilisant CIPA sur tablette',
+    dashboardAlt: 'Tableau de bord Performance CIPA — conformité globale 92%',
+    trendAlt: 'Courbe des tendances d’amélioration continue',
+    clients: 'clients industriels',
+    countries: 'pays',
+    formTitle: 'Contactez-nous',
+    formLead: 'Un expert Industry X.0 vous accompagne.',
+  },
+  en: {
+    promises: [
+      ['Tailored demo', 'Adapted to your challenges'],
+      ['Reply within 24h', 'An expert gets back to you'],
+      ['Hands-on support', 'From analysis to success'],
+    ],
+    industries: [
+      'Pharmaceuticals',
+      'Food & beverage',
+      'Cosmetics & medical devices',
+      'Automotive & components',
+      'Electronics & wiring',
+      'Packaging & plastics',
+      'Chemicals',
+      'Distribution & logistics',
+      'Other industry',
+    ],
+    steps: [
+      ['Qualification', 'Identifying your shop-floor, quality, production and maintenance challenges.'],
+      ['Targeted demo', 'Presenting the CIPA use cases that fit your context.'],
+      ['Scoping', 'Priorities, pilot scope, data, integrations.'],
+      ['Action plan', 'A step-by-step, value-driven deployment proposal.'],
+    ],
+    impact: ['Projects delivered on time', 'Fewer unplanned stoppages on average', 'Operational performance'],
+    engagements: [
+      ['Fast response', 'Within 24 business hours'],
+      ['Business approach', 'Aligned with your challenges'],
+      ['Ops + Quality vision', 'From shop floor to decision'],
+    ],
+    required: ' (required)',
+    errors: {
+      firstName: 'First name is required',
+      lastName: 'Last name is required',
+      email: 'Email is required',
+      emailInvalid: 'Invalid email address',
+      company: 'Company is required',
+      industry: 'Select your industry',
+      message: 'Message is required',
+      consent: 'Please accept the processing of your data',
+      phone: 'Incomplete number',
+    },
+    failed: 'Sending failed. Please try again in a moment.',
+    offline: 'Unable to connect. Check your network, then try again.',
+    sentTitle: 'Request received',
+    sentText: (name: string) =>
+      `Thank you ${name} — an Industry X.0 expert will get back to you within 24 hours to arrange your CIPA demo.`,
+    another: 'Send another request',
+    legend: 'Fields marked with an asterisk (*) are required.',
+    firstName: 'First name',
+    firstNamePh: 'Your first name',
+    lastName: 'Last name',
+    lastNamePh: 'Your last name',
+    email: 'Email',
+    emailPh: 'name@company.com',
+    phone: 'Phone',
+    company: 'Company',
+    companyPh: 'Your company name',
+    industry: 'Industry',
+    industryPh: 'Select your industry',
+    message: 'Message',
+    messagePh: 'Tell us about your challenges, projects or goals.',
+    consent: 'I agree that Industry X.0 may collect and process my data to answer my request. See our',
+    privacy: 'privacy policy',
+    honeypot: 'Leave this field empty',
+    sending: 'Sending…',
+    submit: 'Book a demo',
+    secure: 'Your data is secure and 100% confidential.',
+    chart: 'Performance progress curve from January to June',
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    afterTitle: 'What happens after you',
+    afterAccent: 'get in touch',
+    afterLead: 'We turn our conversation into a structured, concrete action plan focused on operational impact.',
+    impactTitle: 'Expected impact',
+    describe: 'Describe my project',
+    heroTitle: 'Let’s talk about your',
+    heroAccent: 'operations',
+    heroLead:
+      'Industry X.0 helps industrial organizations connect the shop floor, quality, production, maintenance and decision-making through CIPA, for higher-performing, more sustainable operations.',
+    trust: 'They trust us',
+    siteAlt: 'Industrial site in operation',
+    teamAlt: 'Shop-floor teams using CIPA on a tablet',
+    dashboardAlt: 'CIPA Performance dashboard — overall compliance 92%',
+    trendAlt: 'Continuous improvement trend curve',
+    clients: 'industrial customers',
+    countries: 'countries',
+    formTitle: 'Contact us',
+    formLead: 'An Industry X.0 expert will guide you.',
+  },
+}
+
+const MESSAGE_MAX = 1000
+
+/* ============================================================
+   FORMULAIRE
+   ============================================================ */
+
+type FormState = {
+  firstName: string
+  lastName: string
+  email: string
+  /** Pays de l'indicatif (ISO) — commande la forme du numéro. */
+  phoneCountry: string
+  /** Numéro national mis en forme : « 20 123 456 », sans indicatif. */
+  phone: string
+  company: string
+  industry: string
+  message: string
+  consent: boolean
+}
+
+const EMPTY_FORM: FormState = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneCountry: DEFAULT_PHONE_COUNTRY,
+  phone: '',
+  company: '',
+  industry: '',
+  message: '',
+  consent: false,
+}
+
+const inputBase =
+  'w-full rounded-xl border bg-white px-4 text-[14px] text-[#1C1917] outline-none transition-all duration-200 placeholder:text-placeholder focus:border-gold-deep focus:ring-4 focus:ring-gold-deep/15'
+
+/**
+ * Libelle de champ.
+ *
+ * L'asterisque rouge est desormais decoratif (`aria-hidden`) et double d'un
+ * mot lu par la synthese vocale. WCAG 1.4.1 interdit de faire porter une
+ * information par la seule couleur : la forme de l'asterisque y repond pour
+ * l'oeil — a condition d'etre expliquee, d'ou la legende en tete de
+ * formulaire — et le mot « obligatoire » y repond pour l'oreille.
+ */
+function FieldLabel({
+  htmlFor,
+  children,
+  required = true,
+}: {
+  htmlFor: string
+  children: React.ReactNode
+  required?: boolean
+}) {
+  const t = useCopy(COPY)
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="mb-1.5 block text-[12.5px] font-semibold tracking-[-0.01em] text-[#292524] sm:text-[13px]"
+    >
+      {children}
+      {required && (
+        <>
+          <span aria-hidden="true" className="ml-0.5 text-[#DC2626]">
+            *
+          </span>
+          <span className="sr-only">{t.required}</span>
+        </>
+      )}
+    </label>
+  )
+}
+
+/**
+ * Message d'erreur d'un champ.
+ *
+ * `id` le relie au champ via `aria-describedby` : l'erreur est alors lue
+ * quand le champ prend le focus, et non perdue quelque part sous lui.
+ * `role="alert"` la fait annoncer des son apparition, apres une soumission
+ * refusee — sans quoi rien ne signalerait l'echec a qui ne voit pas l'ecran.
+ */
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null
+  return (
+    <p
+      id={id}
+      role="alert"
+      className="mt-1.5 text-[12px] font-medium text-[#DC2626]"
+    >
+      {message}
+    </p>
+  )
+}
+
+/**
+ * Attributs d'accessibilite communs a tous les champs obligatoires.
+ *
+ * `aria-required` et non l'attribut `required` : le formulaire est en
+ * `noValidate` — la validation est faite en JS pour rester en francais et
+ * dans le style du site — et poser `required` ferait remonter en plus la
+ * bulle native du navigateur.
+ */
+function fieldA11y(name: string, error?: string) {
+  return {
+    'aria-required': true,
+    'aria-invalid': Boolean(error),
+    'aria-describedby': error ? `${name}-error` : undefined,
+  } as const
+}
+
+function ContactForm() {
+  const [form, setForm] = useState<FormState>(EMPTY_FORM)
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({})
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+  // Panne d'enregistrement, opposee a une erreur de saisie : elle ne vise
+  // aucun champ, elle vise l'envoi.
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const honeypot = useRef<HTMLInputElement>(null)
+  // demo_form_started ne part qu'une fois, au premier champ touché.
+  const started = useRef(false)
+  const onFormFocus = () => {
+    if (started.current) return
+    started.current = true
+    track('demo_form_started', { page: window.location.pathname })
+  }
+  const t = useCopy(COPY)
+  const locale = useCurrentLocale()
+
+  const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+    setForm((prev) => ({ ...prev, [key]: value }))
+    setErrors((prev) => ({ ...prev, [key]: undefined }))
+  }
+
+  const validate = () => {
+    const next: Partial<Record<keyof FormState, string>> = {}
+
+    if (!form.firstName.trim()) next.firstName = t.errors.firstName
+    if (!form.lastName.trim()) next.lastName = t.errors.lastName
+    if (!form.email.trim()) next.email = t.errors.email
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim()))
+      next.email = t.errors.emailInvalid
+    if (!form.company.trim()) next.company = t.errors.company
+    if (!form.industry) next.industry = t.errors.industry
+    if (!form.message.trim()) next.message = t.errors.message
+    if (!form.consent) next.consent = t.errors.consent
+
+    // Le telephone reste facultatif — mais un numero commence n'est pas un
+    // numero. Aucune longueur imposee par pays : fixes et mobiles n'ont pas
+    // le meme nombre de chiffres presque partout.
+    const digits = phoneDigits(form.phone)
+    if (digits && (digits.length < 6 || digits.length > 15))
+      next.phone = t.errors.phone
+
+    setErrors(next)
+    return Object.keys(next).length === 0
+  }
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (status === 'sending') return
+    setSubmitError(null)
+    if (!validate()) return
+
+    setStatus('sending')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
+          email: form.email.trim(),
+          phoneCountry: form.phoneCountry,
+          // Chiffres bruts : le serveur recompose « +216… » depuis le pays.
+          phone: phoneDigits(form.phone),
+          company: form.company.trim(),
+          industry: form.industry,
+          message: form.message.trim(),
+          consent: form.consent,
+          source: window.location.pathname,
+          // Campagne d'origine et identifiant PostHog : relient la demande à son parcours.
+          attribution: getAttribution(),
+          posthogId: distinctId(),
+          locale,
+          website: honeypot.current?.value ?? '',
+        }),
+      })
+
+      const data = (await response.json().catch(() => ({}))) as {
+        ok?: boolean
+        error?: string
+        fields?: Partial<Record<keyof FormState, string>>
+      }
+
+      if (!response.ok || !data.ok) {
+        track('demo_form_failed', {
+          status: response.status,
+          fields: Object.keys(data.fields ?? {}),
+        })
+        // Le serveur revalide tout : ses erreurs de champ font foi.
+        if (data.fields) setErrors(data.fields)
+        setSubmitError(data.error ?? t.failed)
+        setStatus('idle')
+        return
+      }
+
+      setStatus('sent')
+      track('demo_form_submitted', {
+        industry: form.industry,
+        has_phone: phoneDigits(form.phone) !== '',
+      })
+    } catch {
+      track('demo_form_failed', { status: 0, fields: [] })
+      setSubmitError(t.offline)
+      setStatus('idle')
+    }
+  }
+
+  if (status === 'sent') {
+    return (
+      <div className="flex min-h-[420px] flex-col items-center justify-center px-2 text-center sm:min-h-[500px]">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#111827] text-gold">
+          <CheckCircle2 size={28} />
+        </div>
+
+        <h3 className="mt-6 font-display text-[20px] font-black tracking-[-0.03em] text-[#111827] sm:text-[22px]">
+          {t.sentTitle}
+        </h3>
+
+        <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-[#57534E]">
+          {t.sentText(form.firstName.trim())}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => {
+            setForm(EMPTY_FORM)
+            setSubmitError(null)
+            setStatus('idle')
+          }}
+          className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#E7E5E4] px-5 py-2.5 text-[13px] font-semibold text-[#44403C] transition-all duration-300 hover:border-gold/40 hover:text-[#111827]"
+        >
+          {t.another}
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={onSubmit} onFocus={onFormFocus} noValidate className="relative mt-5 lg:mt-6">
+      {/* Sans cette ligne, l'asterisque rouge est un signe que rien
+          n'explique : il faut savoir d'avance ce qu'il veut dire. */}
+      <p className="mb-3 text-[11.5px] leading-snug text-subtle">
+        {t.legend}
+      </p>
+
+      {/* PRÉNOM / NOM */}
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <div>
+          <FieldLabel htmlFor="firstName">{t.firstName}</FieldLabel>
+          <input
+            id="firstName"
+            name="firstName"
+            type="text"
+            autoComplete="given-name"
+            placeholder={t.firstNamePh}
+            value={form.firstName}
+            onChange={(e) => update('firstName', e.target.value)}
+            {...fieldA11y('firstName', errors.firstName)}
+            className={`${inputBase} h-11 ${
+              errors.firstName ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
+            }`}
+          />
+          <FieldError id="firstName-error" message={errors.firstName} />
+        </div>
+
+        <div>
+          <FieldLabel htmlFor="lastName">{t.lastName}</FieldLabel>
+          <input
+            id="lastName"
+            name="lastName"
+            type="text"
+            autoComplete="family-name"
+            placeholder={t.lastNamePh}
+            value={form.lastName}
+            onChange={(e) => update('lastName', e.target.value)}
+            {...fieldA11y('lastName', errors.lastName)}
+            className={`${inputBase} h-11 ${
+              errors.lastName ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
+            }`}
+          />
+          <FieldError id="lastName-error" message={errors.lastName} />
+        </div>
+      </div>
+
+      {/* EMAIL / TÉLÉPHONE */}
+      <div className="mt-3.5 grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <div>
+          <FieldLabel htmlFor="email">{t.email}</FieldLabel>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder={t.emailPh}
+            value={form.email}
+            onChange={(e) => update('email', e.target.value)}
+            {...fieldA11y('email', errors.email)}
+            className={`${inputBase} h-11 ${
+              errors.email ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
+            }`}
+          />
+          <FieldError id="email-error" message={errors.email} />
+        </div>
+
+        <div>
+          <FieldLabel htmlFor="phone" required={false}>
+            {t.phone}
+          </FieldLabel>
+          <PhoneField
+            id="phone"
+            country={form.phoneCountry}
+            onCountryChange={(iso) => update('phoneCountry', iso)}
+            value={form.phone}
+            onValueChange={(value) => update('phone', value)}
+            error={errors.phone}
+            describedBy={errors.phone ? 'phone-error' : undefined}
+          />
+          <FieldError id="phone-error" message={errors.phone} />
+        </div>
+      </div>
+
+      {/* SOCIÉTÉ */}
+      <div className="mt-3.5">
+        <FieldLabel htmlFor="company">{t.company}</FieldLabel>
+        <input
+          id="company"
+          name="company"
+          type="text"
+          autoComplete="organization"
+          placeholder={t.companyPh}
+          value={form.company}
+          onChange={(e) => update('company', e.target.value)}
+          {...fieldA11y('company', errors.company)}
+          className={`${inputBase} h-11 ${
+            errors.company ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
+          }`}
+        />
+        <FieldError id="company-error" message={errors.company} />
+      </div>
+
+      {/* INDUSTRIE */}
+      <div className="mt-3.5">
+        <FieldLabel htmlFor="industry">{t.industry}</FieldLabel>
+        <div className="relative">
+          <select
+            id="industry"
+            name="industry"
+            value={form.industry}
+            onChange={(e) => update('industry', e.target.value)}
+            {...fieldA11y('industry', errors.industry)}
+            className={`${inputBase} h-11 appearance-none pr-11 ${
+              form.industry ? 'text-[#1C1917]' : 'text-placeholder'
+            } ${errors.industry ? 'border-[#DC2626]' : 'border-[#E7E5E4]'}`}
+          >
+            <option value="">{t.industryPh}</option>
+            {INDUSTRIES.map((industry, i) => (
+              <option key={industry} value={industry}>
+                {t.industries[i]}
+              </option>
+            ))}
+          </select>
+
+          <ChevronDown
+            size={16}
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-subtle"
+          />
+        </div>
+        <FieldError id="industry-error" message={errors.industry} />
+      </div>
+
+      {/* MESSAGE */}
+      <div className="mt-3.5">
+        <FieldLabel htmlFor="message">{t.message}</FieldLabel>
+        <div className="relative">
+          <textarea
+            id="message"
+            name="message"
+            rows={3}
+            maxLength={MESSAGE_MAX}
+            placeholder={t.messagePh}
+            value={form.message}
+            onChange={(e) => update('message', e.target.value)}
+            {...fieldA11y('message', errors.message)}
+            className={`${inputBase} min-h-[88px] resize-y py-3 pb-8 leading-relaxed lg:min-h-[96px] ${
+              errors.message ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
+            }`}
+          />
+
+          <span className="pointer-events-none absolute bottom-2.5 right-4 text-[11px] font-medium text-subtle">
+            {form.message.length} / {MESSAGE_MAX}
+          </span>
+        </div>
+        <FieldError id="message-error" message={errors.message} />
+      </div>
+
+      {/* CONSENTEMENT
+
+          C'etait un <button role="checkbox"> nomme par aria-labelledby : la
+          case s'annoncait correctement, mais son libelle n'etait pas
+          cliquable — 18 px de cible pour cocher, quand la phrase juste a cote
+          ne faisait rien. C'est maintenant une vraie case, masquee
+          visuellement (`sr-only`) et pilotee par un <label for> qui enveloppe
+          a la fois le carre dessine et le texte : toute la ligne est cliquable
+          et la semantique native revient gratuitement (etat, role, clavier).
+
+          `peer` porte l'anneau de focus sur le carre visible : la case reelle
+          etant hors ecran, `:focus-visible` n'aurait rien eu a souligner. */}
+      <div className="mt-4">
+        <label htmlFor="consent" className="flex cursor-pointer gap-3">
+          <input
+            id="consent"
+            name="consent"
+            type="checkbox"
+            checked={form.consent}
+            onChange={(e) => update('consent', e.target.checked)}
+            {...fieldA11y('consent', errors.consent)}
+            className="peer sr-only"
+          />
+
+          <span
+            aria-hidden="true"
+            className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border transition-all duration-200 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[3px] peer-focus-visible:outline-gold-deep ${
+              form.consent
+                ? 'border-[#111827] bg-[#111827] text-white'
+                : errors.consent
+                  ? 'border-[#DC2626] bg-white'
+                  : 'border-[#D6D3D1] bg-white hover:border-gold'
+            }`}
+          >
+            {form.consent && <Check size={12} strokeWidth={3.2} />}
+          </span>
+
+          <span className="text-[12.5px] leading-relaxed text-[#57534E] sm:text-[13px]">
+            {t.consent}{' '}
+            {/* Le lien vit a l'interieur du <label> : sans stopPropagation, le
+                clic remonterait jusqu'a lui et cocherait la case au passage. */}
+            <Link
+              href="/privacy"
+              onClick={(event) => event.stopPropagation()}
+              className="font-medium text-gold-ink underline-offset-2 hover:underline"
+            >
+              {t.privacy}
+            </Link>
+            .
+          </span>
+        </label>
+        <FieldError id="consent-error" message={errors.consent} />
+      </div>
+
+      {/* POT DE MIEL
+
+          Invisible pour l'oeil comme pour le lecteur d'ecran (aria-hidden +
+          tabIndex -1) : seul un robot qui remplit tous les champs le trouve.
+          `hidden` suffirait a le cacher, mais certains robots ignorent
+          justement les champs caches — celui-ci reste dans le flux, pousse
+          hors de l'ecran. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="website">{t.honeypot}</label>
+        <input
+          ref={honeypot}
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+        />
+      </div>
+
+      {/* ÉCHEC D'ENVOI
+
+          `role="alert"` : l'erreur arrive apres une action, elle doit etre
+          annoncee sans avoir a repartir a la recherche du bouton. */}
+      {submitError && (
+        <div
+          role="alert"
+          className="mt-4 flex items-start gap-2.5 rounded-xl border border-red-300 bg-red-50 px-3.5 py-3 text-[12.5px] leading-relaxed text-red-700"
+        >
+          <AlertCircle size={16} className="mt-px shrink-0" />
+          <span>{submitError}</span>
+        </div>
+      )}
+
+      {/* SUBMIT */}
+      <button
+        type="submit"
+        disabled={status === 'sending'}
+        className="group mt-5 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-[#111827] px-5 py-3.5 text-[14px] font-bold tracking-[-0.01em] text-white shadow-[0_16px_40px_rgba(17,24,39,0.20)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black disabled:cursor-not-allowed disabled:opacity-70 sm:text-[15px]"
+      >
+        {status === 'sending' ? (
+          <>
+            <Loader2 size={17} className="animate-spin" />
+            {t.sending}
+          </>
+        ) : (
+          <>
+            {t.submit}
+            <ArrowRight
+              size={17}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </>
+        )}
+      </button>
+
+      <div className="mt-3.5 flex items-center justify-center gap-2 text-center text-[12px] text-subtle sm:text-[12.5px]">
+        <ShieldCheck size={15} className="shrink-0 text-subtle" />
+        {t.secure}
+      </div>
+    </form>
+  )
+}
+
+/* ============================================================
+   SECTION SOMBRE — « CE QUI SE PASSE APRÈS »
+   ============================================================ */
+
+/** Courbe « Impact attendu » — SVG statique, 6 points Jan → Juin. */
+function ImpactChart() {
+  const t = useCopy(COPY)
+  const points = [24, 50, 44, 66, 63, 78, 72, 100]
+  const width = 260
+  const height = 120
+  const stepX = width / (points.length - 1)
+
+  const coords = points.map((value, index) => ({
+    x: index * stepX,
+    y: height - (value / 100) * height,
+  }))
+
+  const line = coords
+    .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`)
+    .join(' ')
+
+  const area = `${line} L ${width} ${height} L 0 ${height} Z`
+
+  return (
+    <div className="flex min-w-0 flex-1 gap-2">
+      {/* axe Y */}
+      <div className="flex flex-col justify-between py-[2px] text-[9px] font-medium text-white/50">
+        {['100%', '75%', '50%', '25%', '0%'].map((tick) => (
+          <span key={tick}>{tick}</span>
+        ))}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="none"
+          className="h-[100px] w-full short:h-[76px]"
+          role="img"
+          aria-label={t.chart}
+        >
+          <defs>
+            <linearGradient id="impactFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#DAA250" stopOpacity="0.28" />
+              <stop offset="100%" stopColor="#DAA250" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => (
+            <line
+              key={ratio}
+              x1="0"
+              x2={width}
+              y1={ratio * height}
+              y2={ratio * height}
+              stroke="rgba(255,255,255,0.08)"
+              strokeWidth="1"
+              strokeDasharray="3 4"
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+
+          <path d={area} fill="url(#impactFill)" />
+          <path
+            d={line}
+            fill="none"
+            stroke="#DAA250"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+          />
+          <circle
+            cx={coords[coords.length - 1].x}
+            cy={coords[coords.length - 1].y}
+            r="4"
+            fill="#FFFFFF"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        <div className="mt-2 flex justify-between gap-1 text-[9px] font-medium text-white/50 lg:text-[8px] xl:text-[9px]">
+          {t.months.map((month) => (
+            <span key={month}>{month}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AfterContactSection() {
+  const t = useCopy(COPY)
+  const STEPS = STEP_ICONS.map((icon, i) => ({
+    num: String(i + 1).padStart(2, '0'),
+    icon,
+    title: t.steps[i][0],
+    desc: t.steps[i][1],
+  }))
+  const IMPACT_STATS = IMPACT_VALUES.map((value, i) => ({ value, label: t.impact[i] }))
+  const ENGAGEMENTS = ENGAGEMENT_ICONS.map((icon, i) => ({
+    icon,
+    title: t.engagements[i][0],
+    desc: t.engagements[i][1],
+  }))
+  return (
+    <section className="relative overflow-hidden bg-[#0A0A0C] pb-14 pt-[calc(82px+2.5rem)] sm:pb-16 sm:pt-[calc(82px+3rem)] lg:flex lg:min-h-[100svh] lg:flex-col lg:justify-center lg:pb-10 lg:pt-[calc(82px+2rem)] short:pb-6 short:pt-[calc(82px+1.25rem)]">
+      {/* photo de fond */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 md:block">
+        <Image
+          src="/c1%20(1).png"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="50vw"
+          className="object-cover opacity-45"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(90deg, #0A0A0C 8%, rgba(10,10,12,0.72) 45%, rgba(10,10,12,0.45) 100%)',
+          }}
+        />
+      </div>
+
+      <div
+        className="pointer-events-none absolute -left-32 top-1/4 h-[420px] w-[420px] rounded-full"
+        style={{ background: 'rgba(218,162,80,0.07)', filter: 'blur(120px)' }}
+      />
+
+      <div className="relative z-10 mx-auto w-full max-w-[1380px] px-5 sm:px-7 lg:px-8">
+        {/* EN-TÊTE */}
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col items-center text-center"
+        >
+          <SectionBadge tone="dark" />
+
+          <h2 className="mt-5 max-w-3xl font-display text-[26px] font-black leading-[1.08] tracking-[-0.04em] text-white sm:text-[36px] lg:text-[42px] xl:text-[46px] short:mt-3 short:text-[34px]">
+            {t.afterTitle}{' '}
+            <span className="text-gold">{t.afterAccent}</span>
+          </h2>
+
+          <p className="mt-4 max-w-2xl text-[14px] leading-[1.7] text-white/55 sm:text-[15px] short:mt-2 short:text-[14px]">
+            {t.afterLead}
+          </p>
+        </motion.div>
+
+        {/* 4 ÉTAPES */}
+        <div className="mt-9 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:mt-10 lg:grid-cols-4 lg:gap-10 short:mt-6">
+          {STEPS.map((step, index) => {
+            const Icon = step.icon
+            return (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewport}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="group relative"
+              >
+                {/* connecteur */}
+                {index < STEPS.length - 1 && (
+                  <div className="pointer-events-none absolute left-full top-1/2 hidden h-px w-10 -translate-y-1/2 bg-gold/35 lg:block">
+                    <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold" />
+                  </div>
+                )}
+
+                <div className="relative h-full overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.03] p-5 pb-7 text-center backdrop-blur-sm sm:p-6 sm:pb-7 short:p-4 short:pb-5 transition-all duration-300 hover:border-gold/25 hover:bg-white/[0.05]">
+                  {/* numéro */}
+                  <span className="absolute left-5 top-5 flex h-8 w-8 items-center justify-center rounded-full border border-gold/35 text-[11px] font-bold text-gold">
+                    {step.num}
+                  </span>
+
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.05] text-gold sm:h-16 sm:w-16 short:h-12 short:w-12">
+                    <Icon size={26} strokeWidth={1.6} />
+                  </div>
+
+                  <h3 className="mt-5 text-[17px] font-bold tracking-[-0.02em] text-white sm:text-[18px] short:mt-3 short:text-[16px]">
+                    {step.title}
+                  </h3>
+
+                  <p className="mt-2 text-[13px] leading-[1.6] text-white/50">
+                    {step.desc}
+                  </p>
+
+                  <span className="absolute bottom-0 left-1/2 h-[3px] w-16 -translate-x-1/2 rounded-t-full bg-gold" />
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* BAS DE SECTION */}
+        <div className="mt-4 grid gap-4 sm:mt-5 sm:gap-5 lg:mt-6 short:mt-4 lg:grid-cols-2">
+          {/* IMPACT ATTENDU */}
+          <div className="rounded-[26px] border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm sm:p-6 short:p-5">
+            <div className="flex items-center gap-2">
+              <h3 className="text-[15px] font-bold text-white">
+                {t.impactTitle}
+              </h3>
+              <Info size={14} className="text-gold/70" />
+            </div>
+
+            <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-center short:mt-4">
+              <div className="grid grid-cols-1 gap-3 xs:grid-cols-3 sm:gap-4 lg:w-[66%] lg:shrink-0 lg:gap-3 xl:w-[58%] xl:gap-4">
+                {IMPACT_STATS.map((stat, index) => (
+                  <div
+                    key={stat.value}
+                    className={
+                      index > 0
+                        ? 'border-t border-white/[0.08] pt-3 xs:border-l xs:border-t-0 xs:pl-3 xs:pt-0 sm:pl-4 lg:pl-3 xl:pl-4'
+                        : ''
+                    }
+                  >
+                    <p className="font-display whitespace-nowrap text-[21px] font-black leading-none tracking-[-0.04em] text-gold sm:text-[28px] lg:text-[22px] xl:text-[28px] short:text-[22px] short:xl:text-[24px]">
+                      {stat.value}
+                    </p>
+                    <p className="mt-2 text-[11.5px] leading-[1.45] text-white/50 xs:text-[10.5px] sm:text-[11.5px] lg:text-[11px] xl:text-[11.5px]">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <ImpactChart />
+            </div>
+          </div>
+
+          {/* ENGAGEMENTS + CTA */}
+          <div className="flex flex-col gap-5">
+            <div className="grid gap-4 rounded-[26px] border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm sm:grid-cols-3 sm:gap-0 sm:p-6 short:p-5">
+              {ENGAGEMENTS.map((item, index) => {
+                const Icon = item.icon
+                return (
+                  <div
+                    key={item.title}
+                    className={`flex min-w-0 items-center gap-3 lg:gap-2.5 xl:gap-3 ${
+                      index > 0 ? 'sm:border-l sm:border-white/[0.08] sm:pl-3 xl:pl-4' : ''
+                    }`}
+                  >
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/25 bg-gold/[0.08] text-gold lg:h-9 lg:w-9 xl:h-11 xl:w-11">
+                      <Icon size={17} />
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="text-[13.5px] font-bold leading-snug text-white lg:text-[13px] xl:text-[13.5px]">
+                        {item.title}
+                      </p>
+                      <p className="mt-0.5 text-[11.5px] text-white/50">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Le bouton occupe toute la largeur : c'est la seule action de la
+                section, l'aperçu produit qui l'accompagnait ne faisait que la
+                rétrécir. */}
+            <div>
+              <a
+                href="#contact-form"
+                className="group flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gold px-6 py-4 text-[15px] short:py-3 font-bold tracking-[-0.01em] text-[#0C0D12] shadow-[0_18px_45px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
+              >
+                {t.describe}
+                <ArrowRight
+                  size={17}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </a>
+
+              <div className="mt-3 flex items-center justify-center gap-2 text-[12px] text-white/50">
+                <Lock size={14} className="shrink-0" />
+                <span>{t.secure}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ============================================================
+   BANDEAU « ILS NOUS FONT CONFIANCE »
+
+   Les 21 clients ne tiennent pas dans le hero, et une liste figée en montre
+   toujours les cinq mêmes. Le bandeau affiche donc quatre pastilles et fait
+   défiler la liste entière par groupes de quatre, en boucle.
+
+   La fenêtre avance de 4 à chaque tour et repart à zéro par modulo : 21 n'étant
+   pas multiple de 4, les groupes se décalent d'un tour à l'autre — chaque logo
+   finit par apparaître à chaque position, et on ne revoit jamais deux fois la
+   même composition d'affilée.
+
+   Deux garde-fous d'accessibilité : la rotation s'arrête au survol et au focus
+   clavier, et ne démarre pas du tout sous `prefers-reduced-motion` (les quatre
+   premiers logos restent alors affichés).
+   ============================================================ */
+
+const TRUST_WINDOW = 4
+const TRUST_INTERVAL = 3400
+
+function TrustStrip() {
+  const [start, setStart] = useState(0)
+  const [paused, setPaused] = useState(false)
+
+  useEffect(() => {
+    if (paused) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (reduced.matches) return
+
+    const id = window.setInterval(() => {
+      setStart((current) => (current + TRUST_WINDOW) % CLIENT_LOGOS.length)
+    }, TRUST_INTERVAL)
+
+    return () => window.clearInterval(id)
+  }, [paused])
+
+  const visible = Array.from(
+    { length: TRUST_WINDOW },
+    (_, offset) => CLIENT_LOGOS[(start + offset) % CLIENT_LOGOS.length]
+  )
+
+  return (
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+      className="-mx-5 mt-2.5 flex snap-x gap-2.5 overflow-x-auto px-5 pb-1 sm:mx-0 sm:overflow-visible sm:px-0"
+    >
+      {visible.map((logo, slot) => (
+        <div
+          key={slot}
+          className="relative flex h-[60px] w-[116px] shrink-0 snap-start items-center justify-center overflow-hidden rounded-full border border-[#EFEDE8] bg-white px-2.5 shadow-[0_8px_24px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-[1px] hover:border-gold/30 sm:h-[64px] sm:w-[122px]"
+        >
+          {/* `mode="wait"` ferait clignoter la pastille : on laisse les deux
+              logos se croiser en absolu, le sortant s'efface pendant que le
+              suivant monte. */}
+          <AnimatePresence initial={false}>
+            <motion.span
+              key={logo.src}
+              initial={{ opacity: 0, y: 9 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -9 }}
+              transition={{
+                duration: 0.45,
+                delay: slot * 0.07,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="absolute inset-0 flex items-center justify-center px-2.5"
+            >
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                width={512}
+                height={512}
+                /* contenu inscrit dans 70×34 — cadre max ≈ 81 px, sous les
+                   96 px utiles de la pastille */
+                style={{ width: logoFrameWidth(logo, 70, 34) }}
+                className="h-auto max-w-full shrink-0 object-contain"
+              />
+            </motion.span>
+          </AnimatePresence>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+export default function ContactPage() {
+  const t = useCopy(COPY)
+  const PROMISES = PROMISE_ICONS.map((icon, i) => ({
+    icon,
+    title: t.promises[i][0],
+    desc: t.promises[i][1],
+  }))
+  return (
+    <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
+
+      <AfterContactSection />
+
+      {/* ==================== HERO — PLEIN ÉCRAN ==================== */}
+      <section className="relative flex items-center overflow-hidden bg-mesh-light py-14 sm:py-16 lg:min-h-[100svh] lg:py-10">
+        {/* halos décoratifs */}
+        <div className="pointer-events-none absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-gold/10 blur-[110px]" />
+        <div className="pointer-events-none absolute -right-20 top-10 h-72 w-72 rounded-full bg-gold/[0.07] blur-[110px]" />
+
+        <div className="relative z-10 mx-auto w-full max-w-[1380px] px-5 sm:px-7 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.04fr_0.96fr] lg:gap-10 xl:gap-14">
+            {/* ==================== COLONNE GAUCHE ==================== */}
+            <motion.div
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="min-w-0"
+            >
+              <SectionBadge />
+
+              {/* TITRE */}
+              <h1 className="mt-4 font-display text-[32px] font-black leading-[1.03] tracking-[-0.04em] text-[#111827] sm:text-[44px] lg:mt-4 lg:text-[40px] xl:text-[48px]">
+                {t.heroTitle}
+                <br />
+                <span className="text-gold-deep">{t.heroAccent}</span>
+              </h1>
+
+              <p className="mt-3.5 max-w-[540px] text-pretty text-[14.5px] leading-[1.65] text-[#57534E] sm:text-[15.5px] lg:text-[15px]">
+                {t.heroLead}
+              </p>
+
+              {/* LOGOS CLIENTS */}
+              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[11px] lg:mt-4">
+                {t.trust}
+              </p>
+
+              <TrustStrip />
+
+              {/* PROMESSES */}
+              <div className="mt-5 grid gap-4 border-y border-[#E7E5E4] py-3.5 sm:grid-cols-3 sm:gap-0 lg:mt-4">
+                {PROMISES.map((promise, index) => {
+                  const Icon = promise.icon
+                  return (
+                    <div
+                      key={promise.title}
+                      className={`flex items-start gap-2.5 ${
+                        index > 0
+                          ? 'sm:border-l sm:border-[#E7E5E4] sm:pl-3.5'
+                          : ''
+                      }`}
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#111827] text-gold">
+                        <Icon size={17} strokeWidth={2} />
+                      </div>
+
+                      <div className="min-w-0 pt-0.5">
+                        <p className="text-[12.5px] font-bold leading-[1.25] tracking-[-0.015em] text-[#111827] sm:text-[13px]">
+                          {promise.title}
+                        </p>
+                        <p className="mt-1 text-[11.5px] leading-[1.25] text-subtle">
+                          {promise.desc}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* ==================== COLLAGE VISUEL ==================== */}
+              <div className="relative mt-5 lg:mt-4">
+                {/*
+                  Hauteur pilotée explicitement : les deux captures produit sont
+                  des PNG 4:3 avec de larges marges blanches. En `object-cover`
+                  dans une boîte plus large, la marge est rognée — la carte
+                  apparaît plus grande et le collage tient dans la hauteur d'écran.
+                  La variante de hauteur d'écran gère les portables 1080p.
+                */}
+                <div className="grid grid-cols-2 gap-3 lg:h-[236px] lg:grid-cols-[1fr_1fr_1.2fr] xl:h-[278px] [@media(min-width:1024px)_and_(max-height:940px)]:h-[196px]">
+                  {/* raffinerie */}
+                  <div className="relative aspect-[230/300] overflow-hidden rounded-[22px] shadow-[0_22px_55px_rgba(15,23,42,0.16)] sm:aspect-[230/335] lg:aspect-auto lg:h-full">
+                    <Image
+                      src="/c1%20(1).png"
+                      alt={t.siteAlt}
+                      fill
+                      sizes="(max-width: 1024px) 45vw, 16vw"
+                      className="object-cover"
+                    />
+                  </div>
+
+                  {/* opérateurs terrain */}
+                  <div className="relative aspect-[230/300] overflow-hidden rounded-[22px] shadow-[0_22px_55px_rgba(15,23,42,0.16)] sm:aspect-[230/335] lg:aspect-auto lg:h-full">
+                    <Image
+                      src="/c1%20(4).png"
+                      alt={t.teamAlt}
+                      fill
+                      sizes="(max-width: 1024px) 45vw, 16vw"
+                      className="object-cover object-[50%_35%]"
+                    />
+                  </div>
+
+                  {/* cartes produit */}
+                  <div className="col-span-2 grid grid-cols-2 gap-3 lg:col-span-1 lg:flex lg:h-full lg:flex-col">
+                    <div className="relative aspect-[4/3] shrink-0 overflow-hidden rounded-[18px] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.10)] lg:aspect-auto lg:h-auto lg:flex-1">
+                      <Image
+                        src="/c1%20(2).png"
+                        alt={t.dashboardAlt}
+                        fill
+                        sizes="(max-width: 1024px) 46vw, 20vw"
+                        className="scale-[1.08] object-cover"
+                      />
+                    </div>
+
+                    <div className="relative aspect-[4/3] shrink-0 overflow-hidden rounded-[18px] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.10)] lg:aspect-auto lg:h-auto lg:flex-1">
+                      <Image
+                        src="/c1%20(3).png"
+                        alt={t.trendAlt}
+                        fill
+                        sizes="(max-width: 1024px) 46vw, 20vw"
+                        className="scale-[1.08] object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* CARTE CHIFFRES */}
+                <div className="mt-3 rounded-[18px] bg-[#111827] p-4 text-white shadow-[0_24px_55px_rgba(15,23,42,0.32)] lg:absolute lg:left-[21%] lg:top-1/2 lg:mt-0 lg:w-[118px] lg:-translate-y-1/2 lg:px-4 lg:py-3.5">
+                  <div className="flex items-end gap-8 lg:block">
+                    <div>
+                      <p className="font-display text-[26px] font-black leading-none tracking-[-0.04em] text-gold lg:text-[24px]">
+                        15+
+                      </p>
+                      <p className="mt-1 text-[11px] leading-[1.25] text-white/70">
+                        {t.clients}
+                      </p>
+                    </div>
+
+                    <div className="hidden bg-white/10 lg:my-2.5 lg:block lg:h-px lg:w-full" />
+
+                    <div>
+                      <p className="font-display text-[26px] font-black leading-none tracking-[-0.04em] text-gold lg:text-[24px]">
+                        5
+                      </p>
+                      <p className="mt-1 text-[11px] leading-[1.25] text-white/70">
+                        {t.countries}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 h-px w-full bg-white/10 lg:mt-2.5" />
+
+                  <div className="mt-3 flex items-center gap-2 lg:mt-2.5">
+                    <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-gold" />
+                    <span className="text-[10.5px] font-semibold text-white/80">
+                      Ops + Quality
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ==================== COLONNE DROITE — FORMULAIRE ==================== */}
+            <motion.div
+              id="contact-form"
+              initial={{ opacity: 0, y: 26 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.12,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="min-w-0 scroll-mt-24"
+            >
+              <div className="rounded-[26px] border border-white/60 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.10)] sm:rounded-[32px] sm:p-6 xl:p-7">
+                {/* EN-TÊTE */}
+                <div className="flex items-start gap-3.5 sm:gap-4">
+                  <div className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full bg-[#111827] text-gold sm:h-[52px] sm:w-[52px]">
+                    <MessageSquare size={20} />
+                  </div>
+
+                  <div className="min-w-0">
+                    <h2 className="font-display text-[20px] font-black tracking-[-0.03em] text-[#111827] sm:text-[22px]">
+                      {t.formTitle}
+                    </h2>
+                    <p className="mt-1 text-[13px] text-[#57534E] sm:text-[13.5px]">
+                      {t.formLead}
+                    </p>
+                    <div className="mt-2 h-[3px] w-12 rounded-full bg-gold" />
+                  </div>
+                </div>
+
+                <ContactForm />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+
+    </main>
+  )
+}
