@@ -21,6 +21,7 @@ const colors = {
   gold: tokens.color.gold.DEFAULT,
   lime: tokens.color.accent.lime,
   green: tokens.color.accent.green,
+  bronze: tokens.color.gold[700],
   text: 'rgb(17 17 17)',
   muted: 'rgba(17,17,17,.65)',
 }
@@ -28,7 +29,7 @@ const colors = {
 const PILLAR_STYLES = [
   { icon: Database, iconColor: colors.gold },
   { icon: Workflow, iconColor: colors.green },
-  { icon: Activity, iconColor: colors.lime },
+  { icon: Activity, iconColor: colors.bronze },
 ]
 
 // Cartes secteurs — déplacées depuis le Hero (#2)
@@ -126,7 +127,9 @@ export default function CipaSection() {
 
   return (
     <Section
-      className="font-inter"
+      // Cible du bouton « Voir la plateforme » du hero : `scroll-mt`
+      // compense la barre de navigation fixe (82 px).
+      className="font-inter scroll-mt-[82px]"
       variant="default"
       background="cream"
       id="solutions"

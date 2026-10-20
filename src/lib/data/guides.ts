@@ -66,7 +66,7 @@ export const GUIDES: Guide[] = [
       src: '/cipa-1-digitalisation-audits-terrain.png',
       alt: 'Écrans CIPA d’audit interne sur mobile, de tournée de sécurité et de traçabilité horodatée',
     },
-    related: { label: 'Découvrir CIPA Terrain', href: '/plateforme/terrain' },
+    related: { label: 'Découvrir la remontée terrain', href: '/plateforme/remontee-terrain' },
     body: [
       {
         type: 'p',
@@ -139,7 +139,7 @@ export const GUIDES: Guide[] = [
       src: '/cipa-2-gestion-ecarts-qualite.png',
       alt: 'Écrans CIPA d’un workflow de non-conformité, du signalement au plan CAPA',
     },
-    related: { label: 'Découvrir CIPA Qualité', href: '/plateforme/qualite' },
+    related: { label: 'Découvrir la gestion des écarts', href: '/plateforme/gestion-ecarts' },
     body: [
       {
         type: 'p',
@@ -200,9 +200,9 @@ export const GUIDES: Guide[] = [
     author: 'Équipe Industry X.0',
     image: {
       src: '/cipa-3-pilotage-performance-ia.png',
-      alt: 'Tableau de bord qualité CIPA avec indicateurs, signal faible détecté par l’IA et intégrations',
+      alt: 'Tableau de bord qualité CIPA avec indicateurs, signal faible détecté et intégrations',
     },
-    related: { label: 'Découvrir CIPA Pilotage', href: '/plateforme/pilotage' },
+    related: { label: 'Découvrir le pilotage de la performance', href: '/plateforme/pilotage-performance' },
     body: [
       {
         type: 'p',

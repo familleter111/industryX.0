@@ -15,9 +15,13 @@ const BASE = process.env.BASE_URL ?? 'http://localhost:3000'
 
 const PAGES = [
   '/en',
-  '/en/plateforme/terrain',
-  '/en/plateforme/qualite',
-  '/en/plateforme/pilotage',
+  '/en/plateforme/remontee-terrain',
+  '/en/plateforme/planification-maintenance',
+  '/en/plateforme/gestion-ecarts',
+  '/en/plateforme/conformite-tracabilite',
+  '/en/plateforme/pilotage-performance',
+  '/en/plateforme/intelligence-operationnelle',
+  '/en/plateforme/integrations',
   '/en/plateforme/entiwin',
   '/en/industries/pharma',
   '/en/industries/food',
@@ -36,6 +40,7 @@ const PAGES = [
   '/en/faq',
   '/en/contact',
   '/en/privacy',
+  '/en/conditions-utilisation',
 ]
 
 const ACCENTS = /[éèêàùçôîœ]/i
@@ -43,7 +48,7 @@ const FUNCTION_WORDS =
   /\b(les|des|vos|nous|votre|pour|avec|dans|une|sur|est|sont|aux|du|au|et|ou|qui|que|pas|plus|chaque|notre|nos|vous|cette|ces|leur|leurs)\b/gi
 // Noms propres et adresses : français par nature, pas des oublis de traduction.
 const ALLOWED =
-  /^(Médis|Ministère de la Santé Publique.*|Municipalité|Neapolis Pharma|Rose Blanche Group|Kilani Groupe|Cité les pins,?|Tunis 1053|Français|Startup Act.*|© 2026.*|Industry X\.0, Cité les pins.*)$/
+  /^(Médis|Ministère de la Santé Publique.*|Municipalité|Neapolis Pharma|Rose Blanche Group|Kilani Groupe|Cité les pins,?( Tunis 1053, Tunisia)?|Tunis 1053|Français|Startup Act.*|© 2026.*|Industry X\.0, Cité les pins.*)$/
 
 const decode = (s) =>
   s

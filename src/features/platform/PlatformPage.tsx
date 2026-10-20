@@ -22,9 +22,9 @@ import { useCopy, useCurrentLocale } from '@/lib/i18n'
 
 const COPY = {
   fr: {
-    pillarsTitle: 'Les trois piliers de',
+    pillarsTitle: 'Les sept solutions',
     pillarsSubtitle:
-      'Structurer la donnée terrain, orchestrer les processus qualité, piloter la performance : une seule plateforme.',
+      'Structurer la donnée terrain, orchestrer les processus qualité, piloter la performance : sept solutions, une seule plateforme.',
     here: 'Vous êtes ici',
     discover: 'Découvrir',
     ctaTitle: 'Voyons ce que CIPA peut',
@@ -34,9 +34,9 @@ const COPY = {
     ctaCases: 'Voir les cas clients',
   },
   en: {
-    pillarsTitle: 'The three pillars of',
+    pillarsTitle: 'The seven solutions of',
     pillarsSubtitle:
-      'Structure shop-floor data, orchestrate quality processes, drive performance: one platform.',
+      'Structure shop-floor data, orchestrate quality processes, drive performance: seven solutions, one platform.',
     here: 'You are here',
     discover: 'Explore',
     ctaTitle: 'Let’s see what CIPA can',
@@ -48,7 +48,7 @@ const COPY = {
 }
 
 /**
- * Gabarit commun des trois pages Plateforme (Terrain, Qualite, Pilotage).
+ * Gabarit commun des sept pages Solution (lib/data/platform.ts).
  *
  * Pas de 'use client' : la donnee contient des icones Lucide, qui ne
  * traversent pas la frontiere serveur / client. Les parties interactives
@@ -56,14 +56,14 @@ const COPY = {
  * que des donnees serialisables.
  *
  * Ordre : hero, preuves (si renseignees), usages, trois etapes et elements
- * inclus (si renseignes), architecture (Pilotage), piliers, appel final.
+ * inclus (si renseignes), architecture (Integrations), solutions, appel final.
  * Les usages portent les ancres visees par le menu et les cartes de
  * l'accueil ; `scroll-mt` compense la barre de navigation fixe (82 px).
  */
 
 const ANCHOR_OFFSET = 'scroll-mt-[82px]'
 
-/** Les trois piliers, la page courante signalee. */
+/** Les sept solutions, la page courante signalee. */
 function PillarLinks({ current }: { current: string }) {
   const t = useCopy(COPY)
   const pages = platformPages(useCurrentLocale())
@@ -75,7 +75,7 @@ function PillarLinks({ current }: { current: string }) {
         subtitle={t.pillarsSubtitle}
       />
 
-      <RevealGroup className="mt-12 grid gap-4 md:grid-cols-3" stagger={0.08}>
+      <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" stagger={0.08}>
         {pages.map((page, index) => {
           const Icon = page.icon
           const isCurrent = page.slug === current

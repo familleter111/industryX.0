@@ -7,8 +7,8 @@ import { PLATFORM_PAGES, platformHref, platformPage } from '@/lib/data/platform'
 import { pageMetadata, type Locale } from '@/lib/i18n'
 
 /**
- * Les trois pages Plateforme : /plateforme/terrain, /plateforme/qualite et
- * /plateforme/pilotage (et leurs versions /en/...). Contenu dans
+ * Les sept pages Solution : /plateforme/remontee-terrain,
+ * /plateforme/gestion-ecarts… (et leurs versions /en/...). Contenu dans
  * lib/data/platform.ts.
  */
 

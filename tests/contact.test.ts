@@ -12,8 +12,8 @@ const VALID = {
   lastName: 'Ben Salah',
   email: 'amel@usine.tn',
   company: 'Usine SA',
-  industry: 'Pharma',
-  message: 'Démo CIPA',
+  industry: 'Pharmaceutique',
+  message: 'Démo CIPA pour notre usine',
   consent: true,
   phoneCountry: 'TN',
   phone: '20 123 456',
@@ -41,6 +41,19 @@ describe('POST /api/contact', () => {
     expect(res.status).toBe(200)
     expect(appendLead).toHaveBeenCalledOnce()
     expect(appendLead.mock.calls[0][0]).toMatchObject({ email: 'amel@usine.tn', phone: '+21620123456' })
+  })
+
+  it('ajoute industrie stable, langue et heure du consentement', async () => {
+    await post({ ...VALID, locale: 'en' })
+    const lead = appendLead.mock.calls[0][0]
+    expect(lead).toMatchObject({ industry: 'Pharmaceutique', industryKey: 'pharma', locale: 'en' })
+    expect(new Date(lead.consentAt).toString()).not.toBe('Invalid Date')
+  })
+
+  it('renvoie les erreurs de champ dans la langue de la page', async () => {
+    const res = await post({ ...VALID, firstName: '', locale: 'en' })
+    expect(res.status).toBe(422)
+    expect((await res.json()).fields).toEqual({ firstName: 'First name is required' })
   })
 
   it('joint la source de la visite et l’identifiant PostHog au lead', async () => {

@@ -30,6 +30,7 @@ import {
 import Image from 'next/image'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import ChatWidget from '@/components/layout/ChatWidget'
+import { CHAT_OPEN_EVENT, type OpenChatDetail } from '@/lib/chat/open'
 import { platformHref, platformPages } from '@/lib/data/platform'
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
@@ -67,10 +68,10 @@ const COPY = {
     closeMenu: 'Fermer le menu',
     openChat: 'Ouvrir le chat',
     closeChat: 'Fermer le chat',
-    platform: 'Plateforme',
+    platform: 'Solution',
     entiwin: ['Enti Win', 'Évaluation qualité pharmaceutique assistée par IA', 'Nouveau'],
     featured:
-      'CIPA capte la donnée terrain, orchestre les processus critiques et active l’IA pour améliorer les opérations industrielles.',
+      'CIPA capte la donnée terrain, orchestre les processus critiques et met l’intelligence opérationnelle au service des opérations industrielles.',
     industries: 'Industries',
     industryItems: [
       ['Pharmaceutique', 'GMP, traçabilité, déviations, CAPA, audits et dossier de lot électronique.'],
@@ -102,10 +103,10 @@ const COPY = {
     closeMenu: 'Close menu',
     openChat: 'Open chat',
     closeChat: 'Close chat',
-    platform: 'Platform',
+    platform: 'Solution',
     entiwin: ['Enti Win', 'AI-assisted pharmaceutical quality assessment', 'New'],
     featured:
-      'CIPA captures shop-floor data, orchestrates critical processes and puts AI to work to improve industrial operations.',
+      'CIPA captures shop-floor data, orchestrates critical processes and puts operational intelligence to work for industrial operations.',
     industries: 'Industries',
     industryItems: [
       ['Pharmaceuticals', 'GMP, traceability, deviations, CAPA, audits and electronic batch records.'],
@@ -163,8 +164,8 @@ function buildNavGroups(locale: Locale): NavGroup[] {
         description: t.featured,
         href: '/#solutions',
       },
-      // Une entree par pilier, generee depuis lib/data/platform.ts : le menu
-      // et les trois pages ne peuvent pas diverger.
+      // Une entree par page Solution, generee depuis lib/data/platform.ts : le menu
+      // et les sept pages ne peuvent pas diverger.
       items: [
         ...platformPages(locale).map((page) => ({
           title: page.menuTitle,
@@ -193,6 +194,19 @@ export default function Navbar() {
   const [languageOpen, setLanguageOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
+  // Origine de la dernière ouverture du chat (bouton flottant, FAQ…).
+  const [chatSource, setChatSource] = useState('bouton')
+
+  // Ouverture demandée par une autre partie du site (lib/chat/open.ts).
+  useEffect(() => {
+    const onOpen = (event: Event) => {
+      const detail = (event as CustomEvent<OpenChatDetail>).detail ?? {}
+      setChatSource(detail.source ?? 'lien')
+      setIsChatOpen(true)
+    }
+    window.addEventListener(CHAT_OPEN_EVENT, onOpen)
+    return () => window.removeEventListener(CHAT_OPEN_EVENT, onOpen)
+  }, [])
 
   const locale = useCurrentLocale()
   const t = COPY[locale]
@@ -800,14 +814,17 @@ export default function Navbar() {
 
       {/* CHAT BUTTON & WIDGET */}
       <button
-        onClick={() => setIsChatOpen(!isChatOpen)}
+        onClick={() => {
+          setChatSource('bouton')
+          setIsChatOpen(!isChatOpen)
+        }}
         className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-dark border border-gold/20 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition-all duration-300 hover:scale-105 hover:border-gold/50"
         aria-label={isChatOpen ? t.closeChat : t.openChat}
       >
         {isChatOpen ? <X size={20} className="text-gold" /> : <MessageCircle size={20} />}
       </button>
 
-      <ChatWidget isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <ChatWidget isOpen={isChatOpen} source={chatSource} onClose={() => setIsChatOpen(false)} />
     </div>
   )
 }

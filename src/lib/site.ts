@@ -35,6 +35,7 @@ export function publicPaths(): string[] {
     '/faq',
     '/contact',
     '/privacy',
+    '/conditions-utilisation',
     '/resources',
     ...GUIDES.map(({ slug }) => `/resources/${slug}`),
     ...PLATFORM_PAGES.map(({ slug }) => `/plateforme/${slug}`),

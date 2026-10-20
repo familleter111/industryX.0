@@ -61,7 +61,7 @@ type Copy = (typeof COPY)['fr']
  * des icones Lucide, donc des fonctions, qui ne se serialisent pas.
  *
  * ANCRES. Le menu et les cartes de l'accueil visent un usage precis
- * (/plateforme/terrain#audits). Une seule carte etant affichee a la fois,
+ * (/plateforme/remontee-terrain#audits). Une seule carte etant affichee a la fois,
  * chaque `id` est porte par un repere invisible en tete du carrousel : le
  * navigateur y defile, puis le carrousel lit l'ancre et ouvre la bonne carte.
  * La lecture automatique s'arrete alors, pour ne pas quitter la carte

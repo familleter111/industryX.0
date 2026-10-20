@@ -7,6 +7,12 @@ import { Bot, Send, X } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useCurrentLocale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
+import { askAssistant } from '@/lib/chat/client'
+import { CHAT_LIMITS, chatAiEnabled } from '@/lib/chat/config'
+import { instantReply, localReply, WELCOME } from '@/lib/chat/local'
+
+/** Mode IA (NEXT_PUBLIC_CHAT_AI=on) : figé au build, voir lib/chat/config.ts. */
+const AI = chatAiEnabled()
 
 interface Message {
   id: string
@@ -17,63 +23,61 @@ interface Message {
 
 interface ChatWidgetProps {
   isOpen: boolean
+  /** Origine de l'ouverture, pour la mesure d'audience (bouton, faq…). */
+  source?: string
   onClose: () => void
-}
-
-// Messages de bienvenue joués séquentiellement (effet de frappe)
-const WELCOME: Record<string, string[]> = {
-  FR: [
-    "Bonjour 👋 Je suis l'assistant virtuel d'Industry X.0.",
-    'Prêt à découvrir comment digitaliser et piloter vos opérations industrielles avec CIPA ?',
-    'Avez-vous des questions sur notre plateforme, ou souhaitez-vous planifier une démonstration ?',
-  ],
-  EN: [
-    "Hi 👋 I'm the Industry X.0 virtual assistant.",
-    'Ready to see how CIPA can digitize and streamline your industrial operations?',
-    'Any questions about our platform, or would you like to schedule a live demo?',
-  ],
 }
 
 const rid = () => Math.random().toString(36).slice(2, 11)
 
-// Réponse contextuelle simple selon le message de l'utilisateur
-function getBotResponse(userText: string, language: string): string {
-  const t = userText.toLowerCase()
-  if (language === 'FR') {
-    if (/(demo|démo|rdv|rendez|contact|tester)/.test(t))
-      return "C'est une excellente idée ! Pour réserver une démonstration personnalisée de CIPA, cliquez sur « Planifier une démo » dans le menu, ou laissez-moi votre email et notre équipe vous recontacte."
-    if (/(prix|tarif|coût|cout|abonnement)/.test(t))
-      return "Nos tarifs s'adaptent à la taille de votre usine et aux modules choisis (Qualité, Production, Maintenance). Nous serions ravis de vous préparer une estimation rapide lors d'un court échange !"
-    if (/(cipa|produit|logiciel|app|solution|fonctionne)/.test(t))
-      return "CIPA est notre suite modulaire conçue pour collecter les données terrain, digitaliser les formulaires et exploiter l'IA afin d'optimiser vos performances. Elle fonctionne sur mobile, tablette et PC."
-    if (/(merci|super|ok|parfait)/.test(t))
-      return "Je vous en prie ! C'est un plaisir de vous aider. N'hésitez pas si vous avez besoin d'autre chose."
-    return "Merci pour votre message ! Un membre de l'équipe Industry X.0 va vous répondre sous peu. Comment puis-je vous aider concernant la digitalisation de vos usines ?"
-  }
-  if (/(demo|book|schedule|meeting|contact|test)/.test(t))
-    return "Excellent choice! To book a personalized CIPA demo, click « Schedule a demo » in the menu, or drop your email here and our team will reach out."
-  if (/(price|pricing|cost|license|subscription)/.test(t))
-    return "Our pricing adapts to your factory scale and the modules you activate (Quality, Production, Maintenance). Let's set up a short call to estimate your needs!"
-  if (/(cipa|product|software|app|solution|works|platform)/.test(t))
-    return 'CIPA is our modular industrial platform built to capture shop-floor data, digitize checklists and leverage AI insights. It runs on mobile, tablet and desktop.'
-  if (/(thanks|thank you|awesome|ok|perfect)/.test(t))
-    return "You're very welcome! It's my pleasure to help. Let me know if you have other questions."
-  return 'Thank you for your message! A member of the Industry X.0 team will get back to you shortly. Is there anything else I can help you with?'
+/** Liens, e-mails et numéros de téléphone d'une réponse, rendus cliquables. */
+const LINKABLE = /(https?:\/\/[^\s]+|[\w.+-]+@[\w-]+(?:\.[\w-]+)+|\+\d{3}(?: \d{2,3}){3})/g
+
+function linkify(text: string) {
+  return text.split(LINKABLE).map((part, i) => {
+    if (i % 2 === 0) return part
+    // Ponctuation collée au lien (« …contact). ») : elle reste du texte.
+    const [, target, tail] = part.match(/^(.*?)([.,;:!?)]*)$/) ?? [part, part, '']
+    const href = target.startsWith('http')
+      ? target
+      : target.includes('@')
+        ? `mailto:${target}`
+        : `tel:${target.replace(/\s/g, '')}`
+    const external = href.startsWith('http')
+    return (
+      <span key={i}>
+        <a
+          href={href}
+          {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          className="break-all font-semibold text-gold-deep underline hover:text-gold"
+        >
+          {target}
+        </a>
+        {tail}
+      </span>
+    )
+  })
 }
 
-export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
+/** Les messages de bienvenue sont joués par le widget, pas par le modèle. */
+const isWelcome = (message: Message) => message.id.startsWith('welcome-')
+
+export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps) {
+  const locale = useCurrentLocale() === 'en' ? 'en' : 'fr'
   // Les textes du widget sont indexes FR / EN : on les aligne sur la langue de la page.
-  const language = useCurrentLocale() === 'en' ? 'EN' : 'FR'
+  const language = locale === 'en' ? 'EN' : 'FR'
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [streamingId, setStreamingId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const abortRef = useRef<AbortController | null>(null)
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
   // Joue les messages de bienvenue un par un, avec effet de frappe
   useEffect(() => {
-    const welcome = WELCOME[language === 'FR' ? 'FR' : 'EN']
+    const welcome = WELCOME[locale]
     setMessages([])
     setIsTyping(false)
     setStreamingId(null)
@@ -116,7 +120,7 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
       cancelled = true
       timeouts.forEach(clearTimeout)
     }
-  }, [language])
+  }, [locale])
 
   // Nettoyage des timeouts de réponse au démontage
   useEffect(() => {
@@ -125,7 +129,26 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
   }, [])
 
   useEffect(() => {
-    if (isOpen) track('chat_opened', { page: window.location.pathname })
+    if (!isOpen) return
+    track('chat_opened', { page: window.location.pathname, source })
+    // Le visiteur peut écrire tout de suite, sans cliquer dans le champ.
+    const focus = setTimeout(() => inputRef.current?.focus(), 250)
+    return () => clearTimeout(focus)
+  }, [isOpen, source])
+
+  // Échap ferme le panneau, comme le menu de navigation.
+  useEffect(() => {
+    if (!isOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [isOpen, onClose])
+
+  // Fermeture du widget : la réponse en cours n'a plus de lecteur.
+  useEffect(() => {
+    if (!isOpen) abortRef.current?.abort()
   }, [isOpen])
 
   // Auto scroll to bottom
@@ -133,42 +156,92 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isTyping])
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  /** Écrit une réponse locale lettre par lettre (mode local et secours). */
+  const typeLocally = (id: string, full: string) => {
+    let c = 0
+    const typeNext = () => {
+      c += 1
+      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: full.slice(0, c) } : m)))
+      if (c < full.length) {
+        const t = setTimeout(typeNext, 14)
+        timeoutsRef.current.push(t)
+      } else {
+        setStreamingId((s) => (s === id ? null : s))
+      }
+    }
+    typeNext()
+  }
+
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isTyping || streamingId) return
 
-    const userText = input.trim()
+    const userText = input.trim().slice(0, CHAT_LIMITS.messageMax)
     const userMsg: Message = { id: rid(), sender: 'user', text: userText, timestamp: new Date() }
-    // Le rang du message seulement : la question elle-même ne quitte pas le navigateur.
+    // Le rang du message seulement : la question elle-même n'est jamais mesurée.
     track('chat_message_sent', {
       message_index: messages.filter((m) => m.sender === 'user').length + 1,
     })
+
+    // Historique envoyé à l'IA : la conversation réelle, sans les messages
+    // de bienvenue joués par le widget.
+    const history = [...messages, userMsg]
+      .filter((m) => !isWelcome(m) && m.text)
+      .map((m) => ({ role: m.sender === 'user' ? ('user' as const) : ('assistant' as const), content: m.text }))
 
     setMessages((prev) => [...prev, userMsg])
     setInput('')
     setIsTyping(true)
 
-    // Réflexion (points animés) puis réponse écrite lettre par lettre
-    const think = setTimeout(() => {
-      const full = getBotResponse(userText, language)
+    const id = rid()
+    const startReply = () => {
       setIsTyping(false)
-
-      const id = rid()
       setMessages((prev) => [...prev, { id, sender: 'bot', text: '', timestamp: new Date() }])
       setStreamingId(id)
+    }
 
-      let c = 0
-      const typeNext = () => {
-        c += 1
-        setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: full.slice(0, c) } : m)))
-        if (c < full.length) {
-          const t = setTimeout(typeNext, 14)
-          timeoutsRef.current.push(t)
-        } else {
+    // Questions de la FAQ et conversation courante (bonjour, comment vas-tu…)
+    // sont répondues sur place : aucun appel à l'IA, rien de consommé sur le
+    // plafond quotidien.
+    if (AI && !instantReply(userText, locale)) {
+      const controller = new AbortController()
+      abortRef.current = controller
+      let started = false
+      try {
+        await askAssistant(
+          history,
+          locale,
+          (chunk) => {
+            if (!started) {
+              started = true
+              startReply()
+            }
+            setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: m.text + chunk } : m)))
+          },
+          controller.signal,
+        )
+        if (started) {
           setStreamingId((s) => (s === id ? null : s))
+          return
+        }
+      } catch {
+        if (controller.signal.aborted) return
+        // Une réponse déjà commencée est gardée telle quelle.
+        if (started) {
+          setStreamingId((s) => (s === id ? null : s))
+          return
         }
       }
-      typeNext()
+      // IA indisponible : réponse locale, pour ne jamais laisser une question sans suite.
+      startReply()
+      typeLocally(id, localReply(userText, locale))
+      return
+    }
+
+    // Mode local : courte « réflexion », puis réponse écrite lettre par lettre.
+    const think = setTimeout(() => {
+      startReply()
+      typeLocally(id, localReply(userText, locale))
     }, 1000)
     timeoutsRef.current.push(think)
   }
@@ -177,6 +250,8 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          role="dialog"
+          aria-label={language === 'FR' ? 'Assistant CIPA' : 'CIPA Assistant'}
           initial={{ opacity: 0, y: 40, scale: 0.92 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 40, scale: 0.92 }}
@@ -208,10 +283,11 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
                 <h3 className="text-sm font-semibold font-display tracking-wide text-white">
                   {language === 'FR' ? 'Assistant CIPA' : 'CIPA Assistant'}
                 </h3>
-                <div className="flex items-center gap-1.5 text-[11px] text-stone-400 font-medium">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  <span>{language === 'FR' ? 'En ligne' : 'Online'}</span>
-                </div>
+                {/* « En ligne » et sa pastille verte laissaient croire à une
+                    personne disponible : c'est un assistant automatique. */}
+                <p className="text-[11px] text-stone-400 font-medium">
+                  {language === 'FR' ? 'Assistant automatique' : 'Automated assistant'}
+                </p>
               </div>
             </div>
 
@@ -245,8 +321,8 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
                     <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-dark text-gold text-[9px] font-bold border border-gold/20 mt-0.5 shadow-sm">
                       C
                     </div>
-                    <div className="rounded-2xl rounded-tl-none bg-white border border-cream-border px-4 py-2.5 text-[13px] text-stone-800 leading-relaxed shadow-sm font-normal">
-                      {msg.text}
+                    <div className="rounded-2xl rounded-tl-none bg-white border border-cream-border px-4 py-2.5 text-[13px] text-stone-800 leading-relaxed shadow-sm font-normal whitespace-pre-line">
+                      {streamingId === msg.id ? msg.text : linkify(msg.text)}
                       {streamingId === msg.id && (
                         <span className="animate-blink ml-0.5 inline-block text-gold">▌</span>
                       )}
@@ -281,7 +357,9 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
           <form onSubmit={handleSendMessage} className="border-t border-cream-border bg-white p-3 flex flex-col gap-2 shadow-2xl">
             <div className="flex items-center gap-2 rounded-xl border border-cream-border bg-stone-50 px-3.5 py-2.5 focus-within:border-gold focus-within:ring-1 focus-within:ring-gold transition duration-200">
               <input
+                ref={inputRef}
                 type="text"
+                maxLength={CHAT_LIMITS.messageMax}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={language === 'FR' ? "Saisir un message..." : "Enter a message..."}
@@ -299,9 +377,13 @@ export default function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
             </div>
 
             <p className="text-[10px] text-center text-stone-500 leading-relaxed pt-1 px-2 select-none">
-              {language === 'FR'
-                ? "Vos messages restent dans votre navigateur : ils ne sont pas enregistrés. Consultez notre politique de confidentialité "
-                : "Your messages stay in your browser: they are not recorded. Read our privacy policy "}
+              {AI
+                ? language === 'FR'
+                  ? "Réponses générées par IA, à vérifier. Vos messages sont transmis à notre fournisseur d'IA pour y répondre, sans être conservés par Industry X.0. Politique de confidentialité "
+                  : 'AI-generated answers, to be checked. Your messages are sent to our AI provider to answer them and are not stored by Industry X.0. Privacy policy '
+                : language === 'FR'
+                  ? 'Vos messages restent dans votre navigateur : ils ne sont pas enregistrés. Consultez notre politique de confidentialité '
+                  : 'Your messages stay in your browser: they are not recorded. Read our privacy policy '}
               <Link href="/privacy" className="underline hover:text-gold transition font-semibold">
                 {language === 'FR' ? "ici" : "here"}
               </Link>.

@@ -156,7 +156,7 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 
 Le site existe en français et en anglais, avec `next-intl` pour le routage :
 
-- le français garde les adresses historiques (`/`, `/plateforme/terrain`…),
+- le français garde les adresses historiques (`/`, `/plateforme/remontee-terrain`…),
   l'anglais vit sous `/en/...` (`src/i18n/routing.ts`, `src/middleware.ts`) ;
 - le sélecteur de la barre de navigation change de langue sans quitter la
   page (ancre comprise) et mémorise le choix dans le cookie `NEXT_LOCALE` ;

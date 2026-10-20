@@ -60,7 +60,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       'Suivi des écarts',
       'Validation numérique',
     ],
-    href: platformHref('terrain', 'audits'),
+    href: platformHref('remontee-terrain', 'audits'),
     screenshot: {
       src: '/ecran-teaser-v2.png',
       alt: "Écran CIPA d'exécution d'un audit interne sur mobile",
@@ -82,7 +82,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       'Contrôles standardisés',
       'Historique complet',
     ],
-    href: platformHref('terrain', 'inspections'),
+    href: platformHref('remontee-terrain', 'inspections'),
     screenshot: {
       src: '/ecran-inspections-qualite.png',
       alt: 'Écran CIPA de saisie d’une inspection qualité sur mobile',
@@ -104,7 +104,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       'Validation multi-niveaux',
       'Suivi temps réel',
     ],
-    href: platformHref('qualite', 'deviations'),
+    href: platformHref('gestion-ecarts', 'deviations'),
     screenshot: {
       src: '/ecran-deviations-nc.png',
       alt: 'Écran CIPA de traitement d’une non-conformité sur mobile',
@@ -126,7 +126,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       'Indicateurs terrain',
       'Traçabilité totale',
     ],
-    href: platformHref('terrain', 'production'),
+    href: platformHref('remontee-terrain', 'production'),
     screenshot: {
       src: '/ecran-controles-production.png',
       alt: 'Écran CIPA de contrôle de production sur mobile',
@@ -148,7 +148,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       'Checklists terrain',
       'Historique des visites',
     ],
-    href: platformHref('terrain', 'tournees'),
+    href: platformHref('planification-maintenance', 'tournees'),
     screenshot: {
       src: '/ecran-tournees-terrain.png',
       alt: 'Écran CIPA de suivi d’une tournée terrain sur mobile',
@@ -170,7 +170,7 @@ export const FEATURE_TABS: FeatureTab[] = [
       'Analyses avancées',
       'Suivi des progrès',
     ],
-    href: platformHref('qualite', 'amelioration'),
+    href: platformHref('pilotage-performance', 'amelioration'),
     screenshot: {
       src: '/ecran-amelioration-continue.png',
       alt: 'Écran CIPA de pilotage des plans d’action sur mobile',

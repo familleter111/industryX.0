@@ -34,6 +34,18 @@ import { viewport } from '@/lib/motion'
 import Footer from '@/components/layout/Footer'
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
 import { getAttribution } from '@/lib/analytics/attribution'
+import { INDUSTRY_LABELS } from '@/lib/leads/industries'
+import {
+  checkCompany,
+  checkEmail,
+  checkMessage,
+  checkName,
+  fieldMessage,
+  MESSAGE_MAX,
+  suggestEmail,
+  type FieldName,
+  type RuleError,
+} from '@/lib/leads/rules'
 import { distinctId, track } from '@/lib/analytics/posthog'
 
 /* ============================================================
@@ -49,17 +61,7 @@ const PROMISE_ICONS = [LineChart, Clock4, Users]
  * elles restent en francais quelle que soit la langue de la page, pour que
  * l'equipe filtre une seule liste. Seul le libelle affiche se traduit.
  */
-const INDUSTRIES = [
-  'Pharmaceutique',
-  'Agroalimentaire & boissons',
-  'Cosmétique & dispositifs médicaux',
-  'Automobile & composants',
-  'Électronique & câblage',
-  'Packaging & plasturgie',
-  'Chimie',
-  'Distribution & logistique',
-  'Autre secteur',
-]
+const INDUSTRIES: readonly string[] = INDUSTRY_LABELS
 
 const STEP_ICONS = [UserSearch, Presentation, Crosshair, ClipboardCheck]
 
@@ -88,17 +90,14 @@ const COPY = {
       ['Vision Ops + Quality', 'Du terrain à la décision'],
     ],
     required: ' (obligatoire)',
+    // Les autres messages d'erreur viennent de lib/leads/rules.ts, partagés
+    // avec le serveur.
     errors: {
-      firstName: 'Prénom requis',
-      lastName: 'Nom requis',
-      email: 'Email requis',
-      emailInvalid: 'Adresse email invalide',
-      company: 'Société requise',
       industry: 'Sélectionnez votre industrie',
-      message: 'Message requis',
       consent: 'Merci d’accepter le traitement de vos données',
-      phone: 'Numéro incomplet',
     },
+    didYouMean: 'Vouliez-vous dire',
+    didYouMeanEnd: ' ?',
     failed: 'L’envoi a échoué. Merci de réessayer dans un instant.',
     offline: 'Connexion impossible. Vérifiez votre réseau, puis réessayez.',
     sentTitle: 'Demande bien reçue',
@@ -132,6 +131,7 @@ const COPY = {
     afterLead: 'Nous transformons votre échange en un plan d’actions structuré, concret et orienté impact opérationnel.',
     impactTitle: 'Impact attendu',
     describe: 'Décrire mon projet',
+    toForm: 'Aller au formulaire de contact',
     heroTitle: 'Parlons de vos',
     heroAccent: 'opérations',
     heroLead:
@@ -177,16 +177,11 @@ const COPY = {
     ],
     required: ' (required)',
     errors: {
-      firstName: 'First name is required',
-      lastName: 'Last name is required',
-      email: 'Email is required',
-      emailInvalid: 'Invalid email address',
-      company: 'Company is required',
       industry: 'Select your industry',
-      message: 'Message is required',
       consent: 'Please accept the processing of your data',
-      phone: 'Incomplete number',
     },
+    didYouMean: 'Did you mean',
+    didYouMeanEnd: '?',
     failed: 'Sending failed. Please try again in a moment.',
     offline: 'Unable to connect. Check your network, then try again.',
     sentTitle: 'Request received',
@@ -220,6 +215,7 @@ const COPY = {
     afterLead: 'We turn our conversation into a structured, concrete action plan focused on operational impact.',
     impactTitle: 'Expected impact',
     describe: 'Describe my project',
+    toForm: 'Go to the contact form',
     heroTitle: 'Let’s talk about your',
     heroAccent: 'operations',
     heroLead:
@@ -236,11 +232,11 @@ const COPY = {
   },
 }
 
-const MESSAGE_MAX = 1000
-
 /* ============================================================
    FORMULAIRE
    ============================================================ */
+
+type PhoneRules = typeof import('@/lib/leads/phoneRules')
 
 type FormState = {
   firstName: string
@@ -361,44 +357,117 @@ function ContactForm() {
     if (started.current) return
     started.current = true
     track('demo_form_started', { page: window.location.pathname })
+    // Règles du téléphone par pays : chargées ici, au premier champ touché,
+    // pour ne rien peser sur le chargement de la page.
+    void loadPhoneRules()
   }
   const t = useCopy(COPY)
   const locale = useCurrentLocale()
 
-  const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
-    setForm((prev) => ({ ...prev, [key]: value }))
-    setErrors((prev) => ({ ...prev, [key]: undefined }))
+  /* ---------- Contrôle de saisie
+
+     Mêmes règles que le serveur (lib/leads/rules.ts). Pendant la frappe,
+     seules les erreurs « dures » s'affichent — caractère interdit, texte
+     trop long — : signaler « trop court » à la deuxième lettre serait
+     agaçant. Le contrôle complet vient quand on quitte le champ, puis suit
+     chaque frappe jusqu'à ce que le champ soit juste. */
+
+  const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({})
+  const phoneRules = useRef<PhoneRules | null>(null)
+  const loadPhoneRules = async () => {
+    phoneRules.current ??= await import('@/lib/leads/phoneRules')
+    return phoneRules.current
   }
 
-  const validate = () => {
+  const fieldError = (key: keyof FormState, values: FormState): { code?: RuleError; message: string } | undefined => {
+    const ruled = (field: FieldName, code: RuleError | undefined) =>
+      code ? { code, message: fieldMessage(locale, field, code) } : undefined
+
+    switch (key) {
+      case 'firstName':
+      case 'lastName':
+        return ruled(key, checkName(values[key]))
+      case 'email':
+        return ruled('email', checkEmail(values.email))
+      case 'company':
+        return ruled('company', checkCompany(values.company))
+      case 'message':
+        return ruled('message', checkMessage(values.message))
+      case 'phone':
+      case 'phoneCountry': {
+        const digits = phoneDigits(values.phone)
+        // Règles pas encore chargées (réseau lent) : simple garde-fou de
+        // longueur ; le serveur fait de toute façon le contrôle complet.
+        const code = phoneRules.current
+          ? phoneRules.current.checkPhone(digits, values.phoneCountry)
+          : digits && digits.length < 6
+            ? 'tooShort'
+            : digits.length > 15
+              ? 'tooLong'
+              : undefined
+        return ruled('phone', code)
+      }
+      case 'industry':
+        return values.industry ? undefined : { message: t.errors.industry }
+      case 'consent':
+        return values.consent ? undefined : { message: t.errors.consent }
+    }
+  }
+
+  /** Erreurs montrées pendant la frappe, avant que le champ ait été quitté. */
+  const LIVE_ERRORS: (RuleError | undefined)[] = ['chars', 'tooLong']
+
+  const showError = (key: keyof FormState, values: FormState, isTouched: boolean) => {
+    // L'indicatif commande le numéro : son erreur s'affiche sous le numéro.
+    const target = key === 'phoneCountry' ? 'phone' : key
+    const error = fieldError(target, values)
+    const visible = isTouched || LIVE_ERRORS.includes(error?.code)
+    setErrors((prev) => ({ ...prev, [target]: visible ? error?.message : undefined }))
+  }
+
+  const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+    const next = { ...form, [key]: value }
+    setForm(next)
+    // Liste et case à cocher : le choix vaut sortie du champ.
+    const immediate = key === 'industry' || key === 'consent'
+    showError(key, next, immediate || Boolean(touched[key === 'phoneCountry' ? 'phone' : key]))
+  }
+
+  const leave = (key: keyof FormState) => {
+    setTouched((prev) => ({ ...prev, [key]: true }))
+    // Un téléphone vide n'est pas une erreur : il est facultatif.
+    showError(key, form, true)
+  }
+
+  const validate = async () => {
+    if (phoneDigits(form.phone)) await loadPhoneRules().catch(() => null)
+    const keys: (keyof FormState)[] = [
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'company',
+      'industry',
+      'message',
+      'consent',
+    ]
     const next: Partial<Record<keyof FormState, string>> = {}
-
-    if (!form.firstName.trim()) next.firstName = t.errors.firstName
-    if (!form.lastName.trim()) next.lastName = t.errors.lastName
-    if (!form.email.trim()) next.email = t.errors.email
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim()))
-      next.email = t.errors.emailInvalid
-    if (!form.company.trim()) next.company = t.errors.company
-    if (!form.industry) next.industry = t.errors.industry
-    if (!form.message.trim()) next.message = t.errors.message
-    if (!form.consent) next.consent = t.errors.consent
-
-    // Le telephone reste facultatif — mais un numero commence n'est pas un
-    // numero. Aucune longueur imposee par pays : fixes et mobiles n'ont pas
-    // le meme nombre de chiffres presque partout.
-    const digits = phoneDigits(form.phone)
-    if (digits && (digits.length < 6 || digits.length > 15))
-      next.phone = t.errors.phone
-
+    for (const key of keys) {
+      const error = fieldError(key, form)
+      if (error) next[key] = error.message
+    }
+    setTouched(Object.fromEntries(keys.map((key) => [key, true])))
     setErrors(next)
     return Object.keys(next).length === 0
   }
+
+  const emailSuggestion = touched.email && !errors.email ? suggestEmail(form.email) : undefined
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (status === 'sending') return
     setSubmitError(null)
-    if (!validate()) return
+    if (!(await validate())) return
 
     setStatus('sending')
 
@@ -417,7 +486,8 @@ function ContactForm() {
           industry: form.industry,
           message: form.message.trim(),
           consent: form.consent,
-          source: window.location.pathname,
+          // URL de la page, sans paramètres : les UTM arrivent par `attribution`.
+          source: `${window.location.origin}${window.location.pathname}`,
           // Campagne d'origine et identifiant PostHog : relient la demande à son parcours.
           attribution: getAttribution(),
           posthogId: distinctId(),
@@ -506,6 +576,7 @@ function ContactForm() {
             placeholder={t.firstNamePh}
             value={form.firstName}
             onChange={(e) => update('firstName', e.target.value)}
+            onBlur={() => leave('firstName')}
             {...fieldA11y('firstName', errors.firstName)}
             className={`${inputBase} h-11 ${
               errors.firstName ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
@@ -524,6 +595,7 @@ function ContactForm() {
             placeholder={t.lastNamePh}
             value={form.lastName}
             onChange={(e) => update('lastName', e.target.value)}
+            onBlur={() => leave('lastName')}
             {...fieldA11y('lastName', errors.lastName)}
             className={`${inputBase} h-11 ${
               errors.lastName ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
@@ -545,18 +617,39 @@ function ContactForm() {
             placeholder={t.emailPh}
             value={form.email}
             onChange={(e) => update('email', e.target.value)}
+            onBlur={() => leave('email')}
             {...fieldA11y('email', errors.email)}
             className={`${inputBase} h-11 ${
               errors.email ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
             }`}
           />
           <FieldError id="email-error" message={errors.email} />
+          {emailSuggestion && (
+            <p className="mt-1.5 text-[12px] text-[#57534E]">
+              {t.didYouMean}{' '}
+              <button
+                type="button"
+                onClick={() => update('email', emailSuggestion)}
+                className="font-semibold text-gold-ink underline underline-offset-2 hover:text-[#111827]"
+              >
+                {emailSuggestion}
+              </button>
+              {t.didYouMeanEnd}
+            </p>
+          )}
         </div>
 
         <div>
           <FieldLabel htmlFor="phone" required={false}>
             {t.phone}
           </FieldLabel>
+          {/* Le champ réunit deux commandes (indicatif et numéro) : on ne
+              contrôle qu'une fois le focus sorti des deux. */}
+          <div
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) leave('phone')
+            }}
+          >
           <PhoneField
             id="phone"
             country={form.phoneCountry}
@@ -565,7 +658,11 @@ function ContactForm() {
             onValueChange={(value) => update('phone', value)}
             error={errors.phone}
             describedBy={errors.phone ? 'phone-error' : undefined}
+            onBlocked={() =>
+              setErrors((prev) => ({ ...prev, phone: fieldMessage(locale, 'phone', 'blocked') }))
+            }
           />
+          </div>
           <FieldError id="phone-error" message={errors.phone} />
         </div>
       </div>
@@ -581,6 +678,7 @@ function ContactForm() {
           placeholder={t.companyPh}
           value={form.company}
           onChange={(e) => update('company', e.target.value)}
+            onBlur={() => leave('company')}
           {...fieldA11y('company', errors.company)}
           className={`${inputBase} h-11 ${
             errors.company ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
@@ -631,6 +729,7 @@ function ContactForm() {
             placeholder={t.messagePh}
             value={form.message}
             onChange={(e) => update('message', e.target.value)}
+            onBlur={() => leave('message')}
             {...fieldA11y('message', errors.message)}
             className={`${inputBase} min-h-[88px] resize-y py-3 pb-8 leading-relaxed lg:min-h-[96px] ${
               errors.message ? 'border-[#DC2626]' : 'border-[#E7E5E4]'
@@ -855,6 +954,19 @@ function ImpactChart() {
   )
 }
 
+/**
+ * Descente douce vers le formulaire (saut direct si l'utilisateur limite les
+ * animations). Le lien garde son `href` : sans JavaScript, il marche aussi.
+ */
+function scrollToForm(event: React.MouseEvent<HTMLAnchorElement>) {
+  const form = document.getElementById('contact-form')
+  if (!form) return
+  event.preventDefault()
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  form.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+  history.replaceState(null, '', '#contact-form')
+}
+
 function AfterContactSection() {
   const t = useCopy(COPY)
   const STEPS = STEP_ICONS.map((icon, i) => ({
@@ -1036,6 +1148,7 @@ function AfterContactSection() {
             <div>
               <a
                 href="#contact-form"
+                onClick={scrollToForm}
                 className="group flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gold px-6 py-4 text-[15px] short:py-3 font-bold tracking-[-0.01em] text-[#0C0D12] shadow-[0_18px_45px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
               >
                 {t.describe}
@@ -1051,6 +1164,19 @@ function AfterContactSection() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Flèche vers le formulaire, juste en dessous de cette section. */}
+        <div className="mt-8 flex justify-center short:mt-4">
+          <a
+            href="#contact-form"
+            onClick={scrollToForm}
+            aria-label={t.toForm}
+            title={t.toForm}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-gold transition-colors duration-300 hover:border-gold/50 hover:bg-gold/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/30"
+          >
+            <ChevronDown size={22} className="motion-safe:animate-bounce" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>

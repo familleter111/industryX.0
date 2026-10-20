@@ -8,6 +8,7 @@ import {
   Phone,
   ChevronRight,
 } from 'lucide-react'
+import { CONTACT, MAILTO, TEL } from '@/lib/data/contact'
 import { FACEBOOK_URL, LINKEDIN_URL } from '@/lib/data/socials'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import CookieSettingsButton from '@/components/analytics/CookieSettingsButton'
@@ -16,17 +17,27 @@ import { useCopy } from '@/lib/i18n'
 // Chaque lien mene a une page existante. Les anciens libelles sans page
 // (Mises a jour, Blog, Conditions, Cookies) pointaient tous vers l'accueil.
 const FOOTER_HREFS = [
-  ['/plateforme/terrain', '/plateforme/qualite', '/plateforme/pilotage', '/plateforme/pilotage#securite', '/plateforme/entiwin'],
+  [
+    '/plateforme/remontee-terrain',
+    '/plateforme/planification-maintenance',
+    '/plateforme/gestion-ecarts',
+    '/plateforme/conformite-tracabilite',
+    '/plateforme/pilotage-performance',
+    '/plateforme/intelligence-operationnelle',
+    '/plateforme/integrations',
+    '/plateforme/integrations#securite',
+    '/plateforme/entiwin',
+  ],
   ['/entreprise', '/partners', '/resources', '/contact'],
-  ['/privacy', '/faq'],
+  ['/privacy', '/conditions-utilisation', '/faq'],
 ]
 
 const COPY = {
   fr: {
     sections: [
-      ['Produit', ['Structurer', 'Orchestrer', 'Piloter', 'Sécurité', 'Enti Win']],
+      ['Solution', ['Remontée terrain', 'Planification', 'Gestion des écarts', 'Conformité', 'Pilotage', 'Intelligence opérationnelle', 'Intégrations', 'Sécurité', 'Enti Win']],
       ['Entreprise', ['À propos', 'Partenaires', 'Guides & insights', 'Contact']],
-      ['Légal', ['Confidentialité', 'FAQ']],
+      ['Légal', ['Politique de confidentialité', 'Conditions d’utilisation', 'FAQ']],
     ] as [string, string[]][],
     about:
       'Plateforme de transformation digitale dédiée à l’industrie africaine et méditerranéenne, conçue pour accélérer l’adoption des technologies Industrie 4.0 et optimiser les performances industrielles.',
@@ -41,9 +52,9 @@ const COPY = {
   },
   en: {
     sections: [
-      ['Product', ['Structure', 'Orchestrate', 'Drive', 'Security', 'Enti Win']],
+      ['Solution', ['Shop-floor capture', 'Planning', 'Deviation management', 'Compliance', 'Performance', 'Operational intelligence', 'Integrations', 'Security', 'Enti Win']],
       ['Company', ['About us', 'Partners', 'Guides & insights', 'Contact']],
-      ['Legal', ['Privacy', 'FAQ']],
+      ['Legal', ['Privacy policy', 'Terms of use', 'FAQ']],
     ] as [string, string[]][],
     about:
       'A digital transformation platform for African and Mediterranean industry, built to speed up the adoption of Industry 4.0 technologies and improve industrial performance.',
@@ -210,11 +221,16 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                 {t.address}
               </p>
 
-              <p className="text-sm leading-6 text-white/75">
-                Cité les pins,
+              <a
+                href={CONTACT.maps}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-sm leading-6 text-white/75 transition hover:text-yellow-400"
+              >
+                {CONTACT.address.street},
                 <br />
-                Tunis 1053
-              </p>
+                {CONTACT.address.city}
+              </a>
             </div>
           </div>
 
@@ -240,9 +256,9 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                 {t.phone}
               </p>
 
-              <p className="text-sm text-white/75">
-                +216 51 006 104
-              </p>
+              <a href={TEL} className="text-sm text-white/75 transition hover:text-yellow-400">
+                {CONTACT.phone}
+              </a>
             </div>
           </div>
 
@@ -268,9 +284,9 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                 {t.email}
               </p>
 
-              <p className="text-sm text-white/75">
-                hello@industryx0.pro
-              </p>
+              <a href={MAILTO} className="text-sm text-white/75 transition hover:text-yellow-400">
+                {CONTACT.email}
+              </a>
             </div>
           </div>
 

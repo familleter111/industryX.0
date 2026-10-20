@@ -55,7 +55,7 @@ const REGIONS = [
   {
     label: 'Moyen-Orient',
     codes: [
-      'AE', 'BH', 'IL', 'IQ', 'IR', 'JO', 'KW', 'LB', 'OM', 'PS', 'QA', 'SA',
+      'AE', 'BH', 'IQ', 'IR', 'JO', 'KW', 'LB', 'OM', 'PS', 'QA', 'SA',
       'SY', 'TR', 'YE',
     ],
   },

@@ -50,6 +50,8 @@ export type Lead = {
   utmSource: string
   utmMedium: string
   utmCampaign: string
+  utmTerm: string
+  utmContent: string
   /** Code de QR code ou d'URL dédiée (?ref=…). */
   ref: string
   /** Hôte du site référent. */
@@ -58,6 +60,12 @@ export type Lead = {
   firstTouch: string
   /** Identifiant PostHog : retrouve le parcours du visiteur dans PostHog. */
   posthogId: string
+  /** Valeur stable de l'industrie (lib/leads/industries.ts). Demandes de démo seulement. */
+  industryKey?: string
+  /** Langue du site au moment de l'envoi. */
+  locale?: string
+  /** Date ISO à laquelle le consentement a été donné (envoi du formulaire). */
+  consentAt?: string
 }
 
 const SHEET_NAME = 'Demandes'
@@ -81,6 +89,13 @@ const COLUMNS: Array<{ key: string; header: string; width: number }> = [
   { key: 'referrer', header: 'Site référent', width: 20 },
   { key: 'firstTouch', header: 'Première visite', width: 30 },
   { key: 'posthogId', header: 'ID PostHog', width: 38 },
+  // Colonnes ajoutées en fin de tableau : un classeur existant garde ses
+  // colonnes à leur place.
+  { key: 'utmTerm', header: 'utm_term', width: 16 },
+  { key: 'utmContent', header: 'utm_content', width: 16 },
+  { key: 'industryKey', header: 'Code industrie', width: 16 },
+  { key: 'locale', header: 'Langue', width: 8 },
+  { key: 'consentAt', header: 'Consentement le', width: 22 },
 ]
 
 /** data/contacts.xlsx, sauf si CONTACT_XLSX_PATH dit autre chose. */
@@ -167,6 +182,11 @@ async function writeLead(lead: Lead): Promise<{ file: string; format: 'xlsx' | '
     referrer: lead.referrer,
     firstTouch: lead.firstTouch,
     posthogId: lead.posthogId,
+    utmTerm: lead.utmTerm,
+    utmContent: lead.utmContent,
+    industryKey: lead.industryKey ?? '',
+    locale: lead.locale ?? '',
+    consentAt: lead.consentAt ?? '',
   })
 
   row.alignment = { vertical: 'top', wrapText: true }
@@ -217,6 +237,11 @@ async function writeBackup(lead: Lead): Promise<{ file: string; format: 'csv' }>
     lead.referrer,
     lead.firstTouch,
     lead.posthogId,
+    lead.utmTerm,
+    lead.utmContent,
+    lead.industryKey ?? '',
+    lead.locale ?? '',
+    lead.consentAt ?? '',
   ]
     .map(csvCell)
     .join(';')

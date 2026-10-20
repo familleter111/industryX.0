@@ -24,6 +24,31 @@ const nextConfig = {
     return [
       { source: '/about', destination: '/entreprise', permanent: true },
       { source: '/en/about', destination: '/en/entreprise', permanent: true },
+      // Les trois anciennes pages Plateforme, eclatees en sept pages Solution
+      // (lib/data/platform.ts) : chacune renvoie vers la page qui reprend
+      // l'essentiel de son contenu.
+      ...[
+        ['terrain', 'remontee-terrain'],
+        ['qualite', 'gestion-ecarts'],
+        ['pilotage', 'pilotage-performance'],
+      ].flatMap(([from, to]) => [
+        { source: `/plateforme/${from}`, destination: `/plateforme/${to}`, permanent: true },
+        { source: `/en/plateforme/${from}`, destination: `/en/plateforme/${to}`, permanent: true },
+      ]),
+      // Onglets de l'accueil de l'ancien site (/solutions/<onglet>, 404 à
+      // l'audit du 14/10/2026) : chacun mène à l'usage qu'il présentait,
+      // comme les onglets actuels (lib/data/features.ts).
+      ...[
+        ['audits', 'remontee-terrain#audits'],
+        ['quality', 'remontee-terrain#inspections'],
+        ['deviations', 'gestion-ecarts#deviations'],
+        ['production', 'remontee-terrain#production'],
+        ['rounds', 'planification-maintenance#tournees'],
+        ['improvement', 'pilotage-performance#amelioration'],
+      ].flatMap(([from, to]) => [
+        { source: `/solutions/${from}`, destination: `/plateforme/${to}`, permanent: true },
+        { source: `/en/solutions/${from}`, destination: `/en/plateforme/${to}`, permanent: true },
+      ]),
     ]
   },
   images: {

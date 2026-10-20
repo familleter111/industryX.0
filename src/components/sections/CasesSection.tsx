@@ -247,9 +247,6 @@ export default function CasesSection({
                   {/* CTA link */}
                   <Link
                     href={active.href}
-                    // Les pages /solutions/* n'existent pas encore : sans ce
-                    // drapeau Next les precharge et la home emet six 404.
-                    prefetch={false}
                     className="mt-4 flex items-center gap-2 text-sm font-semibold transition-all duration-300 hover:gap-3"
                     style={{ color: colors.gold }}
                   >

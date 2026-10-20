@@ -202,6 +202,8 @@ export function leadAttribution(payload: Record<string, unknown>) {
     utmSource: last?.utm_source ?? '',
     utmMedium: last?.utm_medium ?? '',
     utmCampaign: last?.utm_campaign ?? '',
+    utmTerm: last?.utm_term ?? '',
+    utmContent: last?.utm_content ?? '',
     ref: last?.ref ?? '',
     referrer: last?.referrer ?? '',
     firstTouch: describeTouch(first),

@@ -255,7 +255,7 @@ const TEAM_ICONS = [Users, Settings, BarChart3]
  * valeurs viennent de la position mesuree du visage dans chaque fichier.
  */
 const FOUNDERS = [
-  { photo: '/bilel.png', focus: '58% 42%', name: 'Bilal Labidi' },
+  { photo: '/bilel.png', focus: '58% 42%', name: 'Bilel Labidi' },
   { photo: '/aziz.png', focus: '54% 45%', name: 'Aziz Battikh' },
 ]
 

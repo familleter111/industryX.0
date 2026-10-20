@@ -1,4 +1,5 @@
 import {
+  Activity,
   BarChart3,
   Bell,
   BrainCircuit,
@@ -18,7 +19,9 @@ import {
   PenLine,
   Plug,
   SearchCheck,
+  ShieldCheck,
   TrendingUp,
+  Users,
   WifiOff,
   Workflow,
   Wrench,
@@ -28,23 +31,30 @@ import {
 import type { Locale } from '@/i18n/routing'
 
 /**
- * Les trois pages Plateforme, alignees sur les piliers de l'accueil
- * (Structurer / Orchestrer / Piloter, voir CipaSection).
+ * Les sept pages Solution, rangees sous les trois piliers de l'accueil
+ * (Structurer / Orchestrer / Piloter, voir CipaSection) :
  *
- * Elles remplacent les douze entrees de l'ancien menu, dont beaucoup
- * disaient la meme chose. Il n'y a pas de page « Vue d'ensemble » : l'accueil
- * joue deja ce role.
+ *   Structurer : Remontee terrain, Planification & maintenance
+ *   Orchestrer : Gestion des ecarts, Conformite & tracabilite
+ *   Piloter    : Pilotage de la performance, Intelligence operationnelle,
+ *                Integrations & organisation
+ *
+ * Chaque usage n'apparait que sur une page : pas de contenu repete d'une
+ * page a l'autre. « Intelligence operationnelle » remplace le terme « IA ».
+ * Il n'y a pas de page « Vue d'ensemble » : l'accueil joue deja ce role.
  *
  * Chaque section porte un `id` stable : c'est l'ancre visee par le menu et
  * par les six cartes de fonctionnalites de l'accueil (lib/data/features.ts).
- * Renommer un `id` casse ces liens — passer par `platformHref`.
+ * Renommer un `id` casse ces liens — passer par `platformHref`. Les anciennes
+ * URL (/plateforme/terrain, /qualite, /pilotage) sont redirigees dans
+ * next.config.mjs.
  *
  * Le texte suit les modules montres dans la video de demonstration de
  * l'application web CIPA (tableaux de bord, audits et planificateur, produits,
  * change control, deviations / actions / reclamations, workflows,
  * organisation, audit trail, preferences), completes de ce que le site
- * affirme deja ailleurs (IA, integrations, section architecture). Pas de
- * promesse nouvelle qu'il faudrait pouvoir prouver.
+ * affirme deja ailleurs (intelligence operationnelle, integrations, section
+ * architecture). Pas de promesse nouvelle qu'il faudrait pouvoir prouver.
  */
 
 export type PlatformSection = {
@@ -77,17 +87,21 @@ export type PlatformProof = {
 
 export type PlatformPageData = {
   slug: string
-  /** Pilier de l'accueil auquel la page correspond. */
+  /** Pilier de l'accueil auquel la page se rattache. */
   pillar: 'Structurer' | 'Orchestrer' | 'Piloter'
-  /** Libelle court : menu, cartes croisees. */
+  /** Libelle court : menu, cartes croisees, pied de page. */
   name: string
   /** Sous-titre court des cartes croisees. */
   summary: string
-  /** Titre de l'entree dans le mega-menu Plateforme. */
+  /** Titre de l'entree dans le mega-menu Solution. */
   menuTitle: string
   /** Sous-titre de l'entree dans le mega-menu. */
   menuDescription: string
   icon: LucideIcon
+  /**
+   * Verbe d'action du hero. Repris en minuscules dans l'appel final
+   * (« Voyons ce que CIPA peut capter chez vous ») : garder un infinitif.
+   */
   title: string
   /** Fin du titre, rendue en dore. */
   accent: string
@@ -108,37 +122,43 @@ export type PlatformPageData = {
   proof?: PlatformProof
   /**
    * Ajoute en fin de page le schema « Architecture & securite » (flux de la
-   * donnee, stack, securite). Seule la page Pilotage l'affiche.
+   * donnee, stack, securite). Seule la page Integrations l'affiche.
    */
   architecture?: boolean
 }
 
+/* Les trois visuels existants, partages entre les pages d'un meme pilier. */
+const IMAGE_TERRAIN = '/cipa-1-digitalisation-audits-terrain.png'
+const IMAGE_QUALITE = '/cipa-2-gestion-ecarts-qualite.png'
+const IMAGE_PILOTAGE = '/cipa-3-pilotage-performance-ia.png'
+
 export const PLATFORM_PAGES: PlatformPageData[] = [
+  /* ---------- Structurer ---------- */
   {
-    slug: 'terrain',
+    slug: 'remontee-terrain',
     pillar: 'Structurer',
-    name: 'Terrain',
-    summary: 'Audits, planification, produits & maintenance',
-    menuTitle: 'Digitalisation des audits terrain',
-    menuDescription: 'Audits, tournées, planning, produits et maintenance',
+    name: 'Remontée terrain',
+    summary: 'Audits, inspections & contrôles de production',
+    menuTitle: 'Remontée terrain',
+    menuDescription: 'Audits, inspections, checklists et contrôles de production',
     icon: ClipboardCheck,
-    title: 'Structurer',
+    title: 'Capter',
     accent: 'la donnée terrain',
     description:
-      'Audits internes, tournées qualité, checklists, suivi de production et contrôles de maintenance : CIPA capte la donnée sur mobile, au poste, et la range dans un référentiel unique organisé par zone, équipe et équipement.',
-    metaTitle: 'Terrain : audits, planification, produits & maintenance — CIPA',
+      'Audits internes, tournées qualité, checklists et suivi de production : CIPA capte la donnée sur mobile, au poste, et la range dans un référentiel unique organisé par zone, équipe et équipement.',
+    metaTitle: 'Remontée terrain : audits, inspections & production — CIPA',
     metaDescription:
-      'Digitalisez audits internes, tournées qualité, planification des audits, checklists, suivi de production par étape et contrôles de maintenance avec CIPA.',
+      'Digitalisez audits internes, tournées qualité, checklists, formulaires et suivi de production par étape avec CIPA : une saisie mobile, une donnée fiable.',
     image: {
-      src: '/cipa-1-digitalisation-audits-terrain.png',
+      src: IMAGE_TERRAIN,
       alt: 'Écrans CIPA d’audit interne sur mobile, de tournée de sécurité et de traçabilité horodatée',
     },
-    highlights: ['Saisie mobile', 'Audits planifiés', 'Traçabilité complète'],
+    highlights: ['Saisie mobile', 'Checklists standardisées', 'Traçabilité complète'],
     usesIntro: {
       eyebrow: 'Usages terrain',
-      title: 'Cinq usages, un seul référentiel',
+      title: 'Trois usages, un seul référentiel',
       lead:
-        'Audits, planning, checklists, production et maintenance partagent la même application, les mêmes zones, les mêmes équipes et la même traçabilité.',
+        'Audits, inspections et contrôles de production partagent la même application, les mêmes zones, les mêmes équipes et la même traçabilité.',
     },
     sections: [
       {
@@ -158,25 +178,6 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
           'Score calculé à la fin de chaque audit',
           'KPI PRP, sécurité et environnement',
           'Chaque constat devient une action suivie',
-        ],
-      },
-      {
-        id: 'planification',
-        icon: CalendarDays,
-        title: 'Planification des audits',
-        lead:
-          'Le planificateur d’audits affiche le programme au mois, à la semaine ou en liste. Les responsables créent les plans d’audit et les partagent en PDF.',
-        before: [
-          'Programme d’audit tenu sur un tableur',
-          'Audits oubliés ou réalisés en retard',
-          'Aucune vue sur la charge des auditeurs',
-          'Planning renvoyé par e-mail à chaque modification',
-        ],
-        points: [
-          'Calendrier mois, semaine et liste',
-          'Plans d’audit assignés aux auditeurs',
-          'Suivi des audits créés, démarrés et terminés',
-          'Export du planning en PDF',
         ],
       },
       {
@@ -217,31 +218,12 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
           'Écarts liés au lot et au produit',
         ],
       },
-      {
-        id: 'tournees',
-        icon: Wrench,
-        title: 'Maintenance & équipements',
-        lead:
-          'Les contrôles de maintenance, le suivi des équipements et le planning des équipes s’appuient sur les mêmes zones et le même historique.',
-        before: [
-          'Rondes planifiées sur un tableur',
-          'Exécution variable selon l’équipe',
-          'Interventions non tracées',
-          'Aucune vue sur l’état des équipements',
-        ],
-        points: [
-          'Contrôles de maintenance avec score',
-          'Suivi des équipements par zone',
-          'Planning de travail des équipes',
-          'Historique des contrôles et interventions',
-        ],
-      },
     ],
     steps: [
       {
         icon: ListChecks,
         title: 'Créez vos checklists',
-        text: 'À partir d’un modèle, de vos procédures existantes ou générées par l’IA de CIPA.',
+        text: 'À partir d’un modèle, de vos procédures existantes ou générées par l’intelligence opérationnelle de CIPA.',
       },
       {
         icon: CalendarDays,
@@ -267,30 +249,99 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     ],
   },
   {
-    slug: 'qualite',
-    pillar: 'Orchestrer',
-    name: 'Qualité',
-    summary: 'Déviations, CAPA, réclamations & workflows',
-    menuTitle: 'Gestion des écarts et de la qualité',
-    menuDescription: 'Déviations, CAPA, réclamations et change control',
-    icon: GitBranch,
-    title: 'Orchestrer',
-    accent: 'les processus qualité',
+    slug: 'planification-maintenance',
+    pillar: 'Structurer',
+    name: 'Planification',
+    summary: 'Programme d’audit, maintenance & équipements',
+    menuTitle: 'Planification & maintenance',
+    menuDescription: 'Programme d’audit, contrôles de maintenance et équipements',
+    icon: CalendarDays,
+    title: 'Planifier',
+    accent: 'audits et maintenance',
     description:
-      'Déviations, actions correctives, réclamations, maîtrise des changements et workflows de validation : CIPA orchestre le traitement des écarts jusqu’à la clôture, puis en fait des gains durables.',
-    metaTitle: 'Qualité : déviations, CAPA, réclamations & workflows — CIPA',
+      'Programme d’audit, contrôles de maintenance, suivi des équipements et planning des équipes : CIPA organise qui contrôle quoi, où et quand, et garde l’historique de chaque intervention.',
+    metaTitle: 'Planification des audits & maintenance — CIPA',
     metaDescription:
-      'Gérez déviations, non-conformités, CAPA, réclamations, change control et workflows de validation jusqu’à la clôture, puis pilotez l’amélioration continue avec CIPA.',
+      'Planifiez vos audits au mois, à la semaine ou en liste, assignez les plans d’audit, suivez contrôles de maintenance et équipements par zone avec CIPA.',
     image: {
-      src: '/cipa-2-gestion-ecarts-qualite.png',
+      src: IMAGE_TERRAIN,
+      alt: 'Écrans CIPA de tournée planifiée sur mobile et de traçabilité horodatée',
+    },
+    highlights: ['Calendrier partagé', 'Plans d’audit assignés', 'Historique des interventions'],
+    usesIntro: {
+      eyebrow: 'Usages planification',
+      title: 'Le bon contrôle, au bon moment',
+      lead:
+        'Programme d’audit, contrôles de maintenance et planning des équipes s’appuient sur les mêmes zones et le même calendrier.',
+    },
+    sections: [
+      {
+        id: 'planification',
+        icon: CalendarDays,
+        title: 'Planification des audits',
+        lead:
+          'Le planificateur d’audits affiche le programme au mois, à la semaine ou en liste. Les responsables créent les plans d’audit et les partagent en PDF.',
+        before: [
+          'Programme d’audit tenu sur un tableur',
+          'Audits oubliés ou réalisés en retard',
+          'Aucune vue sur la charge des auditeurs',
+          'Planning renvoyé par e-mail à chaque modification',
+        ],
+        points: [
+          'Calendrier mois, semaine et liste',
+          'Plans d’audit assignés aux auditeurs',
+          'Suivi des audits créés, démarrés et terminés',
+          'Export du planning en PDF',
+        ],
+      },
+      {
+        id: 'tournees',
+        icon: Wrench,
+        title: 'Maintenance & équipements',
+        lead:
+          'Les contrôles de maintenance, le suivi des équipements et le planning des équipes s’appuient sur les mêmes zones et le même historique.',
+        before: [
+          'Rondes planifiées sur un tableur',
+          'Exécution variable selon l’équipe',
+          'Interventions non tracées',
+          'Aucune vue sur l’état des équipements',
+        ],
+        points: [
+          'Contrôles de maintenance avec score',
+          'Suivi des équipements par zone',
+          'Planning de travail des équipes',
+          'Historique des contrôles et interventions',
+        ],
+      },
+    ],
+  },
+
+  /* ---------- Orchestrer ---------- */
+  {
+    slug: 'gestion-ecarts',
+    pillar: 'Orchestrer',
+    name: 'Gestion des écarts',
+    summary: 'Déviations, CAPA & réclamations',
+    menuTitle: 'Gestion des écarts',
+    menuDescription: 'Déviations, non-conformités, CAPA et réclamations',
+    icon: Bell,
+    title: 'Maîtriser',
+    accent: 'chaque écart',
+    description:
+      'Déviations, non-conformités, actions correctives et réclamations clients : CIPA trace chaque écart depuis son origine et orchestre son traitement jusqu’à la clôture.',
+    metaTitle: 'Gestion des écarts : déviations, CAPA & réclamations — CIPA',
+    metaDescription:
+      'Gérez déviations, non-conformités, CAPA et réclamations clients jusqu’à la clôture avec CIPA : origine tracée, pilotes, échéances et validation.',
+    image: {
+      src: IMAGE_QUALITE,
       alt: 'Écrans CIPA d’un workflow de non-conformité, du signalement au plan CAPA',
     },
-    highlights: ['Écarts classifiés', 'CAPA suivies', 'Workflows versionnés'],
+    highlights: ['Écarts classifiés', 'CAPA suivies', 'Réclamations tracées'],
     usesIntro: {
-      eyebrow: 'Usages qualité',
-      title: 'Un seul flux, de l’écart à la clôture',
+      eyebrow: 'Usages écarts',
+      title: 'De l’écart à la clôture',
       lead:
-        'Déviations, actions, réclamations, changements et validations s’enchaînent dans le même outil, sans ressaisie ni perte d’information.',
+        'Déviations, actions et réclamations s’enchaînent dans le même outil, sans ressaisie ni perte d’information.',
     },
     sections: [
       {
@@ -334,22 +385,51 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
       {
         id: 'reclamations',
         icon: MessageSquareWarning,
-        title: 'Réclamations & maîtrise des changements',
+        title: 'Réclamations clients',
         lead:
-          'Les réclamations clients et les demandes de changement suivent le même circuit que les écarts : enregistrées, évaluées, validées et tracées.',
+          'Les réclamations clients suivent le même circuit que les écarts internes : enregistrées, évaluées, validées et tracées, avec leurs actions.',
         before: [
           'Réclamations reçues par e-mail, sans suivi',
-          'Changements décidés hors de tout circuit',
-          'Impact des changements rarement évalué',
-          'Aucune trace de qui a approuvé quoi',
+          'Traitement hors du circuit qualité',
+          'Lien avec les écarts internes perdu',
+          'Aucune trace de qui a validé quoi',
         ],
         points: [
           'Registre des réclamations',
-          'Demandes de changement (change control)',
-          'Évaluation et approbation tracées',
-          'Actions déclenchées depuis la demande',
+          'Évaluation et validation tracées',
+          'Actions déclenchées depuis la réclamation',
+          'Même circuit que les déviations',
         ],
       },
+    ],
+  },
+  {
+    slug: 'conformite-tracabilite',
+    pillar: 'Orchestrer',
+    name: 'Conformité',
+    summary: 'Workflows, change control & audit trail',
+    menuTitle: 'Conformité & traçabilité',
+    menuDescription: 'Workflows de validation, change control et audit trail',
+    icon: ShieldCheck,
+    title: 'Prouver',
+    accent: 'la conformité',
+    description:
+      'Workflows de validation, maîtrise des changements et journal d’audit : CIPA exécute vos processus tels que définis et garde la preuve de qui a fait quoi, quand, et selon quelle version.',
+    metaTitle: 'Conformité & traçabilité : workflows, change control, audit trail — CIPA',
+    metaDescription:
+      'Modélisez vos workflows de validation, maîtrisez les changements et disposez d’un audit trail complet, web et mobile, avec CIPA.',
+    image: {
+      src: IMAGE_QUALITE,
+      alt: 'Écrans CIPA d’un workflow de validation tracé étape par étape',
+    },
+    highlights: ['Workflows versionnés', 'Change control', 'Audit trail'],
+    usesIntro: {
+      eyebrow: 'Usages conformité',
+      title: 'Chaque décision, tracée',
+      lead:
+        'Workflows, changements et journal d’audit gardent la preuve de qui a fait quoi, quand, et selon quelle version.',
+    },
+    sections: [
       {
         id: 'workflows',
         icon: Workflow,
@@ -367,6 +447,113 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
           'Historique des versions',
           'Validation multi-niveaux',
           'Droits par rôle',
+        ],
+      },
+      {
+        id: 'change-control',
+        icon: GitBranch,
+        title: 'Maîtrise des changements',
+        lead:
+          'Chaque demande de changement est enregistrée, son impact évalué, puis approuvée avant d’être appliquée. Les actions nécessaires partent de la demande.',
+        before: [
+          'Changements décidés hors de tout circuit',
+          'Impact des changements rarement évalué',
+          'Aucune trace de qui a approuvé quoi',
+          'Actions de mise en œuvre oubliées',
+        ],
+        points: [
+          'Demandes de changement (change control)',
+          'Évaluation de l’impact',
+          'Approbation tracée',
+          'Actions déclenchées depuis la demande',
+        ],
+      },
+      {
+        id: 'tracabilite',
+        icon: History,
+        title: 'Audit trail',
+        lead:
+          'Chaque action est journalisée : qui, quoi, sur quelle page, quand, depuis le web ou le mobile. Les preuves sont prêtes le jour de l’inspection.',
+        before: [
+          'Aucune trace des modifications',
+          'Historique dispersé entre les outils',
+          'Sessions mobiles invisibles',
+          'Preuves reconstituées la veille d’une inspection',
+        ],
+        points: [
+          'Journal horodaté de chaque action',
+          'Utilisateur, page et action enregistrés',
+          'Sessions web et mobile tracées',
+          'Preuves prêtes pour l’inspection',
+        ],
+      },
+    ],
+  },
+
+  /* ---------- Piloter ---------- */
+  {
+    slug: 'pilotage-performance',
+    pillar: 'Piloter',
+    name: 'Pilotage',
+    summary: 'Tableaux de bord, rapports & amélioration continue',
+    menuTitle: 'Pilotage de la performance',
+    menuDescription: 'Tableaux de bord, rapports automatiques et Pareto',
+    icon: LayoutDashboard,
+    title: 'Piloter',
+    accent: 'la performance',
+    description:
+      'Indicateurs en temps réel sur les audits, les tournées, les déviations et les actions, rapports envoyés automatiquement et analyse Pareto des problèmes : CIPA transforme la donnée terrain en décisions.',
+    metaTitle: 'Pilotage de la performance : tableaux de bord & KPI — CIPA',
+    metaDescription:
+      'Tableaux de bord et KPI en temps réel, rapports automatiques et amélioration continue par Pareto : pilotez vos opérations avec CIPA.',
+    image: {
+      src: IMAGE_PILOTAGE,
+      alt: 'Tableau de bord qualité CIPA avec indicateurs, signal faible détecté et intégrations',
+    },
+    highlights: ['Temps réel', 'Rapports automatiques', 'Pareto des problèmes'],
+    usesIntro: {
+      eyebrow: 'Usages pilotage',
+      title: 'Des données terrain aux décisions',
+      lead:
+        'Indicateurs, rapports et analyses exploitent les mêmes données, saisies une seule fois sur le terrain.',
+    },
+    sections: [
+      {
+        id: 'tableaux-de-bord',
+        icon: LayoutDashboard,
+        title: 'Tableaux de bord & KPI',
+        lead:
+          'Audits, tournées qualité, déviations et actions ont chacun leur tableau de bord : volume, mois de pointe, scores moyen, maximum et minimum, vus à la semaine, au mois ou à l’année.',
+        before: [
+          'Indicateurs consolidés à la main dans Excel',
+          'Chiffres disponibles avec plusieurs jours de retard',
+          'Versions contradictoires selon les services',
+          'Dérives repérées après coup',
+        ],
+        points: [
+          'KPI audits, tournées, déviations et actions',
+          'Vues hebdomadaire, mensuelle et annuelle',
+          'Filtres par zone, équipe et période',
+          'Scores moyen, maximum et minimum',
+        ],
+      },
+      {
+        id: 'rapports',
+        icon: FileBarChart,
+        title: 'Rapports automatiques',
+        lead:
+          'Rapports d’audit, plannings et synthèses se génèrent à partir des données déjà saisies. Le rapport général part par e-mail au rythme choisi par chaque utilisateur.',
+        before: [
+          'Rapports montés par copier-coller',
+          'Des heures pour préparer chaque revue',
+          'Mise en forme différente selon l’auteur',
+          'Exports réglementaires préparés dans l’urgence',
+        ],
+        points: [
+          'Rapports d’audit en PDF',
+          'Rapport général envoyé par e-mail',
+          'Fréquence d’envoi au choix (revue mensuelle…)',
+          'Exports réglementaires',
         ],
       },
       {
@@ -391,109 +578,100 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     ],
   },
   {
-    slug: 'pilotage',
+    slug: 'intelligence-operationnelle',
     pillar: 'Piloter',
-    name: 'Pilotage',
-    summary: 'Tableaux de bord, traçabilité & IA',
-    menuTitle: 'Pilotage de la performance et IA',
-    menuDescription: 'Tableaux de bord, rapports, audit trail et IA',
-    icon: LayoutDashboard,
-    title: 'Piloter',
-    accent: 'la performance',
+    name: 'Intelligence opérationnelle',
+    summary: 'Signaux faibles, cohérence & checklists générées',
+    menuTitle: 'Intelligence opérationnelle',
+    menuDescription: 'Détection des écarts, signaux faibles et checklists générées',
+    icon: BrainCircuit,
+    title: 'Anticiper',
+    accent: 'les dérives',
     description:
-      'Indicateurs en temps réel sur les audits, les tournées, les déviations et les actions, rapports envoyés automatiquement, journal d’audit complet et une IA qui prépare les checklists. CIPA se connecte à votre ERP, votre BI et votre MES.',
-    metaTitle: 'Pilotage : tableaux de bord, audit trail & IA — CIPA',
+      'CIPA exploite les données déjà saisies sur le terrain pour repérer les écarts et les signaux faibles avant qu’ils ne deviennent des incidents, et prépare vos checklists à partir de vos procédures.',
+    metaTitle: 'Intelligence opérationnelle : signaux faibles & checklists — CIPA',
     metaDescription:
-      'Tableaux de bord et KPI en temps réel, rapports automatiques, audit trail, gestion des utilisateurs, IA opérationnelle et intégrations ERP, BI et MES : pilotez vos opérations avec CIPA.',
-    architecture: true,
+      'Détection des écarts, contrôles de cohérence, signaux faibles et checklists générées depuis vos procédures : l’intelligence opérationnelle de CIPA.',
     image: {
-      src: '/cipa-3-pilotage-performance-ia.png',
-      alt: 'Tableau de bord qualité CIPA avec indicateurs, signal faible détecté par l’IA et intégrations',
+      src: IMAGE_PILOTAGE,
+      alt: 'Tableau de bord CIPA signalant un signal faible détecté sur les données terrain',
     },
-    highlights: ['Temps réel', 'Audit trail', 'ERP · BI · MES'],
+    highlights: ['Signaux faibles', 'Contrôles de cohérence', 'Checklists générées'],
     usesIntro: {
-      eyebrow: 'Usages pilotage',
-      title: 'Des données terrain aux décisions',
+      eyebrow: 'Usages intelligence opérationnelle',
+      title: 'Voir venir plutôt que constater',
       lead:
-        'Indicateurs, rapports, traçabilité, IA et intégrations exploitent les mêmes données, saisies une seule fois sur le terrain.',
+        'CIPA travaille sur les données déjà saisies pour signaler ce qui dérive et préparer vos checklists.',
     },
     sections: [
       {
-        id: 'tableaux-de-bord',
-        icon: LayoutDashboard,
-        title: 'Tableaux de bord & KPI',
+        id: 'detection',
+        icon: Activity,
+        title: 'Détection des écarts & signaux faibles',
         lead:
-          'Audits, tournées qualité, déviations et actions ont chacun leur tableau de bord : volume, mois de pointe, scores moyen, maximum et minimum, vus à la semaine, au mois ou à l’année.',
+          'CIPA analyse les données saisies sur le terrain, contrôle leur cohérence et fait remonter les écarts et signaux faibles avant qu’ils ne deviennent des incidents.',
         before: [
-          'Indicateurs consolidés à la main dans Excel',
-          'Chiffres disponibles avec plusieurs jours de retard',
-          'Versions contradictoires selon les services',
-          'Dérives repérées après coup',
-        ],
-        points: [
-          'KPI audits, tournées, déviations et actions',
-          'Vues hebdomadaire, mensuelle et annuelle',
-          'Filtres par zone, équipe et période',
-          'Classement des pilotes d’actions',
-        ],
-      },
-      {
-        id: 'rapports',
-        icon: FileBarChart,
-        title: 'Rapports automatiques',
-        lead:
-          'Rapports d’audit, plannings et synthèses se génèrent à partir des données déjà saisies. Le rapport général part par e-mail au rythme choisi par chaque utilisateur.',
-        before: [
-          'Rapports montés par copier-coller',
-          'Des heures pour préparer chaque revue',
-          'Mise en forme différente selon l’auteur',
-          'Exports réglementaires préparés dans l’urgence',
-        ],
-        points: [
-          'Rapports d’audit en PDF',
-          'Rapport général envoyé par e-mail',
-          'Fréquence d’envoi au choix (revue mensuelle…)',
-          'Exports réglementaires',
-        ],
-      },
-      {
-        id: 'tracabilite',
-        icon: History,
-        title: 'Audit trail & organisation',
-        lead:
-          'Chaque action est journalisée : qui, quoi, sur quelle page, quand, depuis le web ou le mobile. Utilisateurs, rôles, zones et référentiels se gèrent au même endroit.',
-        before: [
-          'Aucune trace des modifications',
-          'Droits d’accès gérés au cas par cas',
-          'Zones et équipes décrites différemment selon les outils',
-          'Preuves reconstituées la veille d’une inspection',
-        ],
-        points: [
-          'Journal horodaté de chaque action',
-          'Sessions web et mobile tracées',
-          'Utilisateurs et rôles : auditeur, organisateur…',
-          'Zones, équipements et plannings centralisés',
-        ],
-      },
-      {
-        id: 'ia',
-        icon: BrainCircuit,
-        title: 'Intelligence opérationnelle',
-        lead:
-          'L’IA génère les checklists à partir de vos procédures et repère les écarts et signaux faibles avant qu’ils ne deviennent des incidents.',
-        before: [
-          'Checklists rédigées et mises à jour à la main',
           'Signaux faibles noyés dans les données',
           'Incohérences repérées trop tard',
           'Analyses réservées à quelques experts',
+          'Incidents constatés au lieu d’être anticipés',
         ],
         points: [
-          'Checklists générées par l’IA',
           'Détection des écarts',
           'Contrôles de cohérence',
           'Signaux faibles remontés',
+          'Analyse des données déjà saisies',
         ],
       },
+      {
+        id: 'checklists',
+        icon: ListChecks,
+        title: 'Checklists générées depuis vos procédures',
+        lead:
+          'CIPA rédige les checklists à partir de vos procédures existantes. Vos équipes les relisent et les ajustent, puis elles servent à toutes les inspections.',
+        before: [
+          'Checklists rédigées et mises à jour à la main',
+          'Procédures et grilles qui divergent',
+          'Des jours pour créer une nouvelle grille',
+          'Mises à jour oubliées après un changement de procédure',
+        ],
+        points: [
+          'Checklists générées depuis vos procédures',
+          'Relues et ajustées par vos équipes',
+          'Ajoutées à la bibliothèque de checklists',
+          'Utilisables sur mobile et sur le web',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'integrations',
+    pillar: 'Piloter',
+    name: 'Intégrations',
+    summary: 'ERP, MES, BI, organisation & sécurité',
+    menuTitle: 'Intégrations & organisation',
+    menuDescription: 'ERP, MES, GMAO, BI, utilisateurs et sécurité',
+    icon: Plug,
+    title: 'Connecter',
+    accent: 'votre écosystème',
+    description:
+      'CIPA se connecte à votre ERP, votre MES, votre GMAO et vos outils de BI, et partage un référentiel commun d’utilisateurs, de rôles, de zones et d’équipements. Une seule source de vérité, sécurisée.',
+    metaTitle: 'Intégrations ERP, MES, BI & organisation — CIPA',
+    metaDescription:
+      'Intégrations ERP, MES, GMAO et BI, API, gestion des utilisateurs, rôles, zones et équipements, architecture et sécurité : CIPA s’insère dans votre SI.',
+    architecture: true,
+    image: {
+      src: IMAGE_PILOTAGE,
+      alt: 'Tableau de bord CIPA relié aux intégrations ERP, BI et MES',
+    },
+    highlights: ['ERP · MES · GMAO', 'Outils de BI', 'API'],
+    usesIntro: {
+      eyebrow: 'Usages intégration',
+      title: 'Une source de vérité unique',
+      lead:
+        'CIPA s’insère dans votre SI existant et partage un référentiel commun : utilisateurs, rôles, zones et équipements.',
+    },
+    sections: [
       {
         id: 'integrations',
         icon: Plug,
@@ -511,6 +689,25 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
           'MES et GMAO',
           'Outils de BI',
           'API et connecteurs dédiés',
+        ],
+      },
+      {
+        id: 'organisation',
+        icon: Users,
+        title: 'Organisation & référentiels',
+        lead:
+          'Utilisateurs, rôles, zones, équipements et plannings se gèrent au même endroit et servent de référentiel commun à tous les modules.',
+        before: [
+          'Droits d’accès gérés au cas par cas',
+          'Zones et équipes décrites différemment selon les outils',
+          'Équipements listés dans plusieurs fichiers',
+          'Référentiels à mettre à jour dans chaque outil',
+        ],
+        points: [
+          'Utilisateurs et rôles : auditeur, organisateur…',
+          'Droits par rôle',
+          'Zones, équipements et plannings centralisés',
+          'Préférences par utilisateur',
         ],
       },
     ],
@@ -550,25 +747,25 @@ type PageText = Pick<
 }
 
 const EN: Record<string, PageText> = {
-  terrain: {
-    name: 'Shop floor',
-    summary: 'Audits, planning, products & maintenance',
-    menuTitle: 'Digital shop-floor audits',
-    menuDescription: 'Audits, tours, planning, products and maintenance',
-    title: 'Structure',
+  'remontee-terrain': {
+    name: 'Shop-floor capture',
+    summary: 'Audits, inspections & production checks',
+    menuTitle: 'Shop-floor data capture',
+    menuDescription: 'Audits, inspections, checklists and production checks',
+    title: 'Capture',
     accent: 'shop-floor data',
     description:
-      'Internal audits, quality tours, checklists, production tracking and maintenance checks: CIPA captures data on mobile, at the workstation, and files it in a single repository organized by area, team and equipment.',
-    metaTitle: 'Shop floor: audits, planning, products & maintenance — CIPA',
+      'Internal audits, quality tours, checklists and production tracking: CIPA captures data on mobile, at the workstation, and files it in a single repository organized by area, team and equipment.',
+    metaTitle: 'Shop-floor capture: audits, inspections & production — CIPA',
     metaDescription:
-      'Digitize internal audits, quality tours, audit planning, checklists, step-by-step production tracking and maintenance checks with CIPA.',
+      'Digitize internal audits, quality tours, checklists, forms and step-by-step production tracking with CIPA: mobile capture, reliable data.',
     imageAlt: 'CIPA screens for a mobile internal audit, a safety tour and time-stamped traceability',
-    highlights: ['Mobile capture', 'Planned audits', 'Full traceability'],
+    highlights: ['Mobile capture', 'Standard checklists', 'Full traceability'],
     usesIntro: {
       eyebrow: 'Shop-floor use cases',
-      title: 'Five use cases, one repository',
+      title: 'Three use cases, one repository',
       lead:
-        'Audits, planning, checklists, production and maintenance share the same app, the same areas, the same teams and the same traceability.',
+        'Audits, inspections and production checks share the same app, the same areas, the same teams and the same traceability.',
     },
     sections: {
       audits: {
@@ -586,23 +783,6 @@ const EN: Record<string, PageText> = {
           'Score calculated at the end of each audit',
           'PRP, safety and environment KPIs',
           'Every finding becomes a tracked action',
-        ],
-      },
-      planification: {
-        title: 'Audit planning',
-        lead:
-          'The audit planner shows the programme by month, by week or as a list. Managers create audit plans and share them as PDF.',
-        before: [
-          'Audit programme kept in a spreadsheet',
-          'Audits forgotten or carried out late',
-          'No view of auditor workload',
-          'Schedule emailed again after every change',
-        ],
-        points: [
-          'Month, week and list calendar',
-          'Audit plans assigned to auditors',
-          'Tracking of created, started and finished audits',
-          'Schedule exported as PDF',
         ],
       },
       inspections: {
@@ -639,28 +819,11 @@ const EN: Record<string, PageText> = {
           'Deviations linked to batch and product',
         ],
       },
-      tournees: {
-        title: 'Maintenance & equipment',
-        lead:
-          'Maintenance checks, equipment monitoring and team schedules rely on the same areas and the same history.',
-        before: [
-          'Rounds planned in a spreadsheet',
-          'Execution varies from team to team',
-          'Interventions not recorded',
-          'No view of equipment condition',
-        ],
-        points: [
-          'Scored maintenance checks',
-          'Equipment monitoring by area',
-          'Team work schedule',
-          'History of checks and interventions',
-        ],
-      },
     },
     steps: [
       {
         title: 'Create your checklists',
-        text: 'From a template, from your existing procedures, or generated by CIPA’s AI.',
+        text: 'From a template, from your existing procedures, or generated by CIPA’s operational intelligence.',
       },
       {
         title: 'Plan and run them',
@@ -680,25 +843,82 @@ const EN: Record<string, PageText> = {
       { title: 'PDF exports', text: 'Reports and schedules to share or archive.' },
     ],
   },
-  qualite: {
-    name: 'Quality',
-    summary: 'Deviations, CAPA, complaints & workflows',
-    menuTitle: 'Deviation and quality management',
-    menuDescription: 'Deviations, CAPA, complaints and change control',
-    title: 'Orchestrate',
-    accent: 'quality processes',
+  'planification-maintenance': {
+    name: 'Planning',
+    summary: 'Audit programme, maintenance & equipment',
+    menuTitle: 'Planning & maintenance',
+    menuDescription: 'Audit programme, maintenance checks and equipment',
+    title: 'Plan',
+    accent: 'audits and maintenance',
     description:
-      'Deviations, corrective actions, complaints, change control and approval workflows: CIPA drives deviation handling through to closure, then turns it into lasting gains.',
-    metaTitle: 'Quality: deviations, CAPA, complaints & workflows — CIPA',
+      'Audit programme, maintenance checks, equipment monitoring and team schedules: CIPA organizes who checks what, where and when, and keeps the history of every intervention.',
+    metaTitle: 'Audit planning & maintenance — CIPA',
     metaDescription:
-      'Manage deviations, non-conformities, CAPA, complaints, change control and approval workflows through to closure, then drive continuous improvement with CIPA.',
-    imageAlt: 'CIPA screens of a non-conformity workflow, from report to CAPA plan',
-    highlights: ['Classified deviations', 'Tracked CAPA', 'Versioned workflows'],
+      'Plan your audits by month, week or list, assign audit plans, and track maintenance checks and equipment by area with CIPA.',
+    imageAlt: 'CIPA screens of a planned mobile tour and time-stamped traceability',
+    highlights: ['Shared calendar', 'Assigned audit plans', 'Intervention history'],
     usesIntro: {
-      eyebrow: 'Quality use cases',
-      title: 'One flow, from deviation to closure',
+      eyebrow: 'Planning use cases',
+      title: 'The right check, at the right time',
       lead:
-        'Deviations, actions, complaints, changes and approvals follow on from each other in the same tool, with no retyping and nothing lost.',
+        'Audit programme, maintenance checks and team schedules rely on the same areas and the same calendar.',
+    },
+    sections: {
+      planification: {
+        title: 'Audit planning',
+        lead:
+          'The audit planner shows the programme by month, by week or as a list. Managers create audit plans and share them as PDF.',
+        before: [
+          'Audit programme kept in a spreadsheet',
+          'Audits forgotten or carried out late',
+          'No view of auditor workload',
+          'Schedule emailed again after every change',
+        ],
+        points: [
+          'Month, week and list calendar',
+          'Audit plans assigned to auditors',
+          'Tracking of created, started and finished audits',
+          'Schedule exported as PDF',
+        ],
+      },
+      tournees: {
+        title: 'Maintenance & equipment',
+        lead:
+          'Maintenance checks, equipment monitoring and team schedules rely on the same areas and the same history.',
+        before: [
+          'Rounds planned in a spreadsheet',
+          'Execution varies from team to team',
+          'Interventions not recorded',
+          'No view of equipment condition',
+        ],
+        points: [
+          'Scored maintenance checks',
+          'Equipment monitoring by area',
+          'Team work schedule',
+          'History of checks and interventions',
+        ],
+      },
+    },
+  },
+  'gestion-ecarts': {
+    name: 'Deviation management',
+    summary: 'Deviations, CAPA & complaints',
+    menuTitle: 'Deviation management',
+    menuDescription: 'Deviations, non-conformities, CAPA and complaints',
+    title: 'Control',
+    accent: 'every deviation',
+    description:
+      'Deviations, non-conformities, corrective actions and customer complaints: CIPA traces every deviation from its origin and drives its handling through to closure.',
+    metaTitle: 'Deviation management: deviations, CAPA & complaints — CIPA',
+    metaDescription:
+      'Manage deviations, non-conformities, CAPA and customer complaints through to closure with CIPA: traced origin, owners, due dates and approval.',
+    imageAlt: 'CIPA screens of a non-conformity workflow, from report to CAPA plan',
+    highlights: ['Classified deviations', 'Tracked CAPA', 'Traced complaints'],
+    usesIntro: {
+      eyebrow: 'Deviation use cases',
+      title: 'From deviation to closure',
+      lead:
+        'Deviations, actions and complaints follow on from each other in the same tool, with no retyping and nothing lost.',
     },
     sections: {
       deviations: {
@@ -736,22 +956,45 @@ const EN: Record<string, PageText> = {
         ],
       },
       reclamations: {
-        title: 'Complaints & change control',
+        title: 'Customer complaints',
         lead:
-          'Customer complaints and change requests follow the same path as deviations: recorded, assessed, approved and traced.',
+          'Customer complaints follow the same path as internal deviations: recorded, assessed, approved and traced, along with their actions.',
         before: [
           'Complaints received by email, with no follow-up',
-          'Changes decided outside any process',
-          'Impact of changes rarely assessed',
+          'Handled outside the quality process',
+          'Link with internal deviations lost',
           'No record of who approved what',
         ],
         points: [
           'Complaint register',
-          'Change requests (change control)',
           'Traced assessment and approval',
-          'Actions triggered from the request',
+          'Actions triggered from the complaint',
+          'Same path as deviations',
         ],
       },
+    },
+  },
+  'conformite-tracabilite': {
+    name: 'Compliance',
+    summary: 'Workflows, change control & audit trail',
+    menuTitle: 'Compliance & traceability',
+    menuDescription: 'Approval workflows, change control and audit trail',
+    title: 'Prove',
+    accent: 'compliance',
+    description:
+      'Approval workflows, change control and audit trail: CIPA runs your processes as defined and keeps proof of who did what, when, and under which version.',
+    metaTitle: 'Compliance & traceability: workflows, change control, audit trail — CIPA',
+    metaDescription:
+      'Model your approval workflows, control changes and get a complete audit trail, on web and mobile, with CIPA.',
+    imageAlt: 'CIPA screens of an approval workflow traced step by step',
+    highlights: ['Versioned workflows', 'Change control', 'Audit trail'],
+    usesIntro: {
+      eyebrow: 'Compliance use cases',
+      title: 'Every decision, traced',
+      lead:
+        'Workflows, changes and the audit trail keep proof of who did what, when, and under which version.',
+    },
+    sections: {
       workflows: {
         title: 'Workflows & approvals',
         lead:
@@ -767,6 +1010,97 @@ const EN: Record<string, PageText> = {
           'Version history',
           'Multi-level approval',
           'Role-based permissions',
+        ],
+      },
+      'change-control': {
+        title: 'Change control',
+        lead:
+          'Every change request is recorded, its impact assessed, then approved before it is applied. The required actions start from the request.',
+        before: [
+          'Changes decided outside any process',
+          'Impact of changes rarely assessed',
+          'No record of who approved what',
+          'Implementation actions forgotten',
+        ],
+        points: [
+          'Change requests (change control)',
+          'Impact assessment',
+          'Traced approval',
+          'Actions triggered from the request',
+        ],
+      },
+      tracabilite: {
+        title: 'Audit trail',
+        lead:
+          'Every action is logged: who, what, on which page, when, from the web or from mobile. Evidence is ready on inspection day.',
+        before: [
+          'No record of changes',
+          'History scattered across tools',
+          'Mobile sessions invisible',
+          'Evidence pieced together the day before an inspection',
+        ],
+        points: [
+          'Time-stamped log of every action',
+          'User, page and action recorded',
+          'Web and mobile sessions traced',
+          'Evidence ready for inspection',
+        ],
+      },
+    },
+  },
+  'pilotage-performance': {
+    name: 'Performance',
+    summary: 'Dashboards, reports & continuous improvement',
+    menuTitle: 'Performance management',
+    menuDescription: 'Dashboards, automatic reports and Pareto',
+    title: 'Drive',
+    accent: 'performance',
+    description:
+      'Real-time indicators on audits, tours, deviations and actions, reports sent automatically and Pareto analysis of problems: CIPA turns shop-floor data into decisions.',
+    metaTitle: 'Performance management: dashboards & KPIs — CIPA',
+    metaDescription:
+      'Real-time dashboards and KPIs, automatic reports and Pareto-based continuous improvement: run your operations with CIPA.',
+    imageAlt: 'CIPA quality dashboard with indicators, a detected weak signal and integrations',
+    highlights: ['Real time', 'Automatic reports', 'Problem Pareto'],
+    usesIntro: {
+      eyebrow: 'Performance use cases',
+      title: 'From shop-floor data to decisions',
+      lead:
+        'Indicators, reports and analyses all use the same data, captured once on the shop floor.',
+    },
+    sections: {
+      'tableaux-de-bord': {
+        title: 'Dashboards & KPIs',
+        lead:
+          'Audits, quality tours, deviations and actions each have their own dashboard: volume, peak month, average, highest and lowest scores, by week, month or year.',
+        before: [
+          'Indicators consolidated by hand in Excel',
+          'Figures available several days late',
+          'Conflicting versions between departments',
+          'Drifts spotted after the fact',
+        ],
+        points: [
+          'KPIs for audits, tours, deviations and actions',
+          'Weekly, monthly and yearly views',
+          'Filters by area, team and period',
+          'Average, highest and lowest scores',
+        ],
+      },
+      rapports: {
+        title: 'Automatic reports',
+        lead:
+          'Audit reports, schedules and summaries are generated from data already captured. The general report goes out by email at the pace each user chooses.',
+        before: [
+          'Reports built by copy and paste',
+          'Hours spent preparing each review',
+          'Layout that changes with the author',
+          'Regulatory exports prepared in a rush',
+        ],
+        points: [
+          'Audit reports as PDF',
+          'General report sent by email',
+          'Choice of sending frequency (monthly review…)',
+          'Regulatory exports',
         ],
       },
       amelioration: {
@@ -788,95 +1122,84 @@ const EN: Record<string, PageText> = {
       },
     },
   },
-  pilotage: {
-    name: 'Performance',
-    summary: 'Dashboards, traceability & AI',
-    menuTitle: 'Performance management and AI',
-    menuDescription: 'Dashboards, reports, audit trail and AI',
-    title: 'Drive',
-    accent: 'performance',
+  'intelligence-operationnelle': {
+    name: 'Operational intelligence',
+    summary: 'Weak signals, consistency & generated checklists',
+    menuTitle: 'Operational intelligence',
+    menuDescription: 'Deviation detection, weak signals and generated checklists',
+    title: 'Anticipate',
+    accent: 'drifts',
     description:
-      'Real-time indicators on audits, tours, deviations and actions, reports sent automatically, a complete audit trail and an AI that prepares checklists. CIPA connects to your ERP, BI and MES.',
-    metaTitle: 'Performance: dashboards, audit trail & AI — CIPA',
+      'CIPA uses the data already captured on the shop floor to spot deviations and weak signals before they turn into incidents, and prepares your checklists from your procedures.',
+    metaTitle: 'Operational intelligence: weak signals & checklists — CIPA',
     metaDescription:
-      'Real-time dashboards and KPIs, automatic reports, audit trail, user management, operational AI and ERP, BI and MES integrations: run your operations with CIPA.',
-    imageAlt: 'CIPA quality dashboard with indicators, an AI-detected weak signal and integrations',
-    highlights: ['Real time', 'Audit trail', 'ERP · BI · MES'],
+      'Deviation detection, consistency checks, weak signals and checklists generated from your procedures: CIPA’s operational intelligence.',
+    imageAlt: 'CIPA dashboard flagging a weak signal detected in shop-floor data',
+    highlights: ['Weak signals', 'Consistency checks', 'Generated checklists'],
     usesIntro: {
-      eyebrow: 'Performance use cases',
-      title: 'From shop-floor data to decisions',
+      eyebrow: 'Operational intelligence use cases',
+      title: 'See it coming instead of finding out',
       lead:
-        'Indicators, reports, traceability, AI and integrations all use the same data, captured once on the shop floor.',
+        'CIPA works on the data already captured to flag what is drifting and to prepare your checklists.',
     },
     sections: {
-      'tableaux-de-bord': {
-        title: 'Dashboards & KPIs',
+      detection: {
+        title: 'Deviation & weak-signal detection',
         lead:
-          'Audits, quality tours, deviations and actions each have their own dashboard: volume, peak month, average, highest and lowest scores, by week, month or year.',
+          'CIPA analyses shop-floor data, checks its consistency and surfaces deviations and weak signals before they turn into incidents.',
         before: [
-          'Indicators consolidated by hand in Excel',
-          'Figures available several days late',
-          'Conflicting versions between departments',
-          'Drifts spotted after the fact',
-        ],
-        points: [
-          'KPIs for audits, tours, deviations and actions',
-          'Weekly, monthly and yearly views',
-          'Filters by area, team and period',
-          'Action owner ranking',
-        ],
-      },
-      rapports: {
-        title: 'Automatic reports',
-        lead:
-          'Audit reports, schedules and summaries are generated from data already captured. The general report goes out by email at the pace each user chooses.',
-        before: [
-          'Reports built by copy and paste',
-          'Hours spent preparing each review',
-          'Layout that changes with the author',
-          'Regulatory exports prepared in a rush',
-        ],
-        points: [
-          'Audit reports as PDF',
-          'General report sent by email',
-          'Choice of sending frequency (monthly review…)',
-          'Regulatory exports',
-        ],
-      },
-      tracabilite: {
-        title: 'Audit trail & organization',
-        lead:
-          'Every action is logged: who, what, on which page, when, from the web or from mobile. Users, roles, areas and master data are managed in one place.',
-        before: [
-          'No record of changes',
-          'Access rights handled case by case',
-          'Areas and teams described differently in each tool',
-          'Evidence pieced together the day before an inspection',
-        ],
-        points: [
-          'Time-stamped log of every action',
-          'Web and mobile sessions traced',
-          'Users and roles: auditor, organizer…',
-          'Areas, equipment and schedules in one place',
-        ],
-      },
-      ia: {
-        title: 'Operational intelligence',
-        lead:
-          'The AI generates checklists from your procedures and spots deviations and weak signals before they turn into incidents.',
-        before: [
-          'Checklists written and updated by hand',
           'Weak signals buried in the data',
           'Inconsistencies found too late',
           'Analysis limited to a few experts',
+          'Incidents found rather than anticipated',
         ],
         points: [
-          'AI-generated checklists',
           'Deviation detection',
           'Consistency checks',
           'Weak signals surfaced',
+          'Analysis of data already captured',
         ],
       },
+      checklists: {
+        title: 'Checklists generated from your procedures',
+        lead:
+          'CIPA drafts checklists from your existing procedures. Your teams review and adjust them, then they drive every inspection.',
+        before: [
+          'Checklists written and updated by hand',
+          'Procedures and grids that drift apart',
+          'Days to build a new grid',
+          'Updates forgotten after a procedure changes',
+        ],
+        points: [
+          'Checklists generated from your procedures',
+          'Reviewed and adjusted by your teams',
+          'Added to the checklist library',
+          'Usable on mobile and on the web',
+        ],
+      },
+    },
+  },
+  integrations: {
+    name: 'Integrations',
+    summary: 'ERP, MES, BI, organization & security',
+    menuTitle: 'Integrations & organization',
+    menuDescription: 'ERP, MES, CMMS, BI, users and security',
+    title: 'Connect',
+    accent: 'your ecosystem',
+    description:
+      'CIPA connects to your ERP, MES, CMMS and BI tools, and shares common master data for users, roles, areas and equipment. A single, secure source of truth.',
+    metaTitle: 'ERP, MES & BI integrations and organization — CIPA',
+    metaDescription:
+      'ERP, MES, CMMS and BI integrations, APIs, management of users, roles, areas and equipment, architecture and security: CIPA fits into your IT system.',
+    imageAlt: 'CIPA dashboard linked to ERP, BI and MES integrations',
+    highlights: ['ERP · MES · CMMS', 'BI tools', 'API'],
+    usesIntro: {
+      eyebrow: 'Integration use cases',
+      title: 'A single source of truth',
+      lead:
+        'CIPA fits into your existing IT system and shares common master data: users, roles, areas and equipment.',
+    },
+    sections: {
       integrations: {
         title: 'Industrial integrations',
         lead:
@@ -888,6 +1211,23 @@ const EN: Record<string, PageText> = {
           'Several sources of truth',
         ],
         points: ['ERP', 'MES and CMMS', 'BI tools', 'APIs and dedicated connectors'],
+      },
+      organisation: {
+        title: 'Organization & master data',
+        lead:
+          'Users, roles, areas, equipment and schedules are managed in one place and serve as common master data for every module.',
+        before: [
+          'Access rights handled case by case',
+          'Areas and teams described differently in each tool',
+          'Equipment listed in several files',
+          'Master data updated in every tool',
+        ],
+        points: [
+          'Users and roles: auditor, organizer…',
+          'Role-based permissions',
+          'Areas, equipment and schedules in one place',
+          'Per-user preferences',
+        ],
       },
     },
   },
@@ -908,7 +1248,7 @@ function translate(page: PlatformPageData): PlatformPageData {
 
 const PLATFORM_PAGES_EN = PLATFORM_PAGES.map(translate)
 
-/** Les trois pages Plateforme dans la langue demandée. */
+/** Les sept pages Solution dans la langue demandée. */
 export function platformPages(locale: Locale): PlatformPageData[] {
   return locale === 'en' ? PLATFORM_PAGES_EN : PLATFORM_PAGES
 }
@@ -917,7 +1257,7 @@ export function platformPage(slug: string, locale: Locale = 'fr') {
   return platformPages(locale).find((page) => page.slug === slug)
 }
 
-/** Lien vers une page Plateforme, et vers l'une de ses sections si `anchor`. */
+/** Lien vers une page Solution, et vers l'une de ses sections si `anchor`. */
 export function platformHref(slug: string, anchor?: string) {
   return `/plateforme/${slug}${anchor ? `#${anchor}` : ''}`
 }

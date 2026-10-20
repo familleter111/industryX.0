@@ -2,7 +2,7 @@ import { defineRouting } from 'next-intl/routing'
 
 /**
  * Deux langues. Le français reste servi aux adresses historiques (`/`,
- * `/plateforme/terrain`…) : aucun lien existant ne casse. L'anglais vit sous
+ * `/plateforme/remontee-terrain`…) : aucun lien existant ne casse. L'anglais vit sous
  * `/en/...`.
  *
  * Pas de détection par `Accept-Language` : un visiteur tunisien dont le

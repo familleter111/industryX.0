@@ -22,6 +22,7 @@ import { Check, ChevronDown, Search } from 'lucide-react'
 import { type PhoneCountry } from '@/lib/data/phoneCountries'
 import { findLocalizedPhoneCountry, phoneCountryGroups } from '@/lib/data/phoneCountries.i18n'
 import { deburr, formatNationalPhone } from '@/lib/phone'
+import { isBlockedPhone } from '@/lib/leads/rules'
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
 
 const COPY = {
@@ -32,6 +33,8 @@ const COPY = {
     searchPh: 'Rechercher un pays ou un indicatif',
     list: 'Pays',
     none: (q: string) => `Aucun pays ne correspond à « ${q} ».`,
+    more: 'Tapez le nom ou l’indicatif d’un autre pays.',
+    refine: 'Précisez la recherche pour voir d’autres pays.',
   },
   en: {
     trigger: (name: string, dial: string) => `Country code: ${name}, +${dial}. Change`,
@@ -40,8 +43,16 @@ const COPY = {
     searchPh: 'Search for a country or dialing code',
     list: 'Countries',
     none: (q: string) => `No country matches “${q}”.`,
+    more: 'Type the name or dialing code of another country.',
+    refine: 'Refine your search to see more countries.',
   },
 }
+
+/**
+ * La liste ne défile pas : sans recherche, elle montre les pays fréquents ;
+ * avec une recherche, au plus MAX_RESULTS pays, dans l'ordre des groupes.
+ */
+const MAX_RESULTS = 6
 
 /* ============================================================
    DRAPEAU
@@ -80,6 +91,11 @@ type PhoneFieldProps = {
   onValueChange: (value: string) => void
   error?: string
   describedBy?: string
+  /**
+   * Appelé quand le visiteur saisit ou colle un numéro à indicatif refusé
+   * (« +972… ») : le champ est vidé, le formulaire affiche l'erreur.
+   */
+  onBlocked?: () => void
 }
 
 export default function PhoneField({
@@ -91,6 +107,7 @@ export default function PhoneField({
   onValueChange,
   error,
   describedBy,
+  onBlocked,
 }: PhoneFieldProps) {
   const locale = useCurrentLocale()
   const t = useCopy(COPY)
@@ -105,19 +122,18 @@ export default function PhoneField({
   const rootRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
-  const listRef = useRef<HTMLDivElement>(null)
 
   const listboxId = useId()
   const optionId = (iso: string) => `${listboxId}-${iso}`
 
   /* --- filtrage : nom, code ISO ou indicatif --- */
-  const groups = useMemo(() => {
+  const { groups, truncated } = useMemo(() => {
     const needle = deburr(query)
-    if (!needle) return PHONE_COUNTRY_GROUPS
+    if (!needle) return { groups: PHONE_COUNTRY_GROUPS.slice(0, 1), truncated: false }
 
     const digits = needle.replace(/\D/g, '')
 
-    return PHONE_COUNTRY_GROUPS.map((group) => ({
+    const matches = PHONE_COUNTRY_GROUPS.map((group) => ({
       label: group.label,
       countries: group.countries.filter(
         (item) =>
@@ -126,6 +142,18 @@ export default function PhoneField({
           (digits.length > 0 && item.dial.startsWith(digits)),
       ),
     })).filter((group) => group.countries.length > 0)
+
+    // Coupe à MAX_RESULTS pays au total, groupes compris.
+    let left = MAX_RESULTS
+    const total = matches.reduce((sum, group) => sum + group.countries.length, 0)
+    const kept = matches
+      .map((group) => {
+        const countries = group.countries.slice(0, Math.max(0, left))
+        left -= countries.length
+        return { label: group.label, countries }
+      })
+      .filter((group) => group.countries.length > 0)
+    return { groups: kept, truncated: total > MAX_RESULTS }
   }, [query, PHONE_COUNTRY_GROUPS])
 
   const flat = useMemo(() => groups.flatMap((group) => group.countries), [groups])
@@ -144,15 +172,6 @@ export default function PhoneField({
       setActiveIso(flat[0]?.iso ?? '')
     }
   }, [open, flat, activeIso])
-
-  // Garde l'option active visible, sans faire defiler la page autour d'elle.
-  useEffect(() => {
-    if (!open || !activeIso) return
-    const node = listRef.current?.querySelector<HTMLElement>(
-      `[data-iso="${activeIso}"]`,
-    )
-    node?.scrollIntoView({ block: 'nearest' })
-  }, [open, activeIso])
 
   /* --- fermeture au clic exterieur --- */
   useEffect(() => {
@@ -266,9 +285,14 @@ export default function PhoneField({
           autoComplete="tel-national"
           placeholder={selected.example || t.number}
           value={value}
-          onChange={(event) =>
+          onChange={(event) => {
+            if (isBlockedPhone(event.target.value, selected.iso)) {
+              onValueChange('')
+              onBlocked?.()
+              return
+            }
             onValueChange(formatNationalPhone(event.target.value, selected))
-          }
+          }}
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
           className="h-full min-w-0 flex-1 rounded-r-xl bg-transparent px-3 text-[14px] text-stone-900 outline-none placeholder:text-placeholder"
@@ -302,11 +326,10 @@ export default function PhoneField({
           </div>
 
           <div
-            ref={listRef}
             id={listboxId}
             role="listbox"
             aria-label={t.list}
-            className="max-h-64 overflow-y-auto overscroll-contain py-1"
+            className="py-1"
           >
             {groups.length === 0 && (
               <p className="px-3 py-6 text-center text-[13px] text-subtle">
@@ -318,7 +341,7 @@ export default function PhoneField({
               <div key={group.label} role="group" aria-label={group.label}>
                 <div
                   aria-hidden="true"
-                  className="sticky top-0 z-10 bg-white/95 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.09em] text-subtle backdrop-blur-sm"
+                  className="px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.09em] text-subtle"
                 >
                   {group.label}
                 </div>
@@ -363,6 +386,12 @@ export default function PhoneField({
                 })}
               </div>
             ))}
+
+            {(!query || truncated) && (
+              <p className="border-t border-stone-100 px-3 pb-1.5 pt-2 text-[11.5px] text-subtle">
+                {query ? t.refine : t.more}
+              </p>
+            )}
           </div>
         </div>
       )}

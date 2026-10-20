@@ -158,7 +158,6 @@ export const PHONE_COUNTRY_GROUPS: PhoneCountryGroup[] = [
       { iso: 'AE', name: 'Émirats arabes unis', dial: '971', mask: '## ### ####', example: '50 123 4567', trunk: '0' },
       { iso: 'IQ', name: 'Irak', dial: '964', mask: '### ### ####', example: '791 234 5678', trunk: '0' },
       { iso: 'IR', name: 'Iran', dial: '98', mask: '### ### ####', example: '912 345 6789', trunk: '0' },
-      { iso: 'IL', name: 'Israël', dial: '972', mask: '## ### ####', example: '50 234 5678', trunk: '0' },
       { iso: 'JO', name: 'Jordanie', dial: '962', mask: '# #### ####', example: '7 9012 3456', trunk: '0' },
       { iso: 'KW', name: 'Koweït', dial: '965', mask: '### #####', example: '500 12345', trunk: '' },
       { iso: 'LB', name: 'Liban', dial: '961', mask: '## ### ###', example: '71 123 456', trunk: '0' },

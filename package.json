@@ -13,18 +13,22 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "gen:tablet": "node scripts/tablet-screens/run.cjs"
+    "gen:tablet": "node scripts/tablet-screens/run.cjs",
+    "leads:check": "node --env-file-if-exists=.env.local scripts/leads-check.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
     "clsx": "^2.1.1",
     "exceljs": "^4.4.0",
     "framer-motion": "^11.2.10",
+    "libphonenumber-js": "^1.13.12",
     "lucide-react": "^0.376.0",
     "next": "14.2.35",
     "next-intl": "^3.26.5",
     "posthog-js": "^1.438.7",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",
@@ -34,7 +38,6 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.35",
     "happy-dom": "^15.11.7",
-    "libphonenumber-js": "^1.13.12",
     "postcss": "^8.4.38",
     "rollup": "npm:@rollup/wasm-node@^4.64.5",
     "tailwindcss": "^3.4.4",

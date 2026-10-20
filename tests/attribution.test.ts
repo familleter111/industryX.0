@@ -113,6 +113,8 @@ describe('validation serveur', () => {
       utmSource: 'radio',
       utmMedium: '',
       utmCampaign: '',
+      utmTerm: '',
+      utmContent: '',
       ref: 'qr1',
       referrer: 'www.google.com',
       firstTouch: 'linkedin / social',

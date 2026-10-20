@@ -28,7 +28,8 @@ export type AnalyticsEvents = {
   /** Demande refusée (validation, quota) ou en échec (serveur, réseau). */
   demo_form_failed: { status: number; fields: string[] }
   newsletter_subscribed: { page: string }
-  chat_opened: { page: string }
+  /** `source` : bouton flottant, faq… (lib/chat/open.ts). */
+  chat_opened: { page: string; source?: string }
   /** Rang du message dans la conversation — jamais son contenu. */
   chat_message_sent: { message_index: number }
   guide_viewed: { slug: string; category: string }

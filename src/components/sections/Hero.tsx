@@ -242,10 +242,12 @@ export default function Hero() {
               />
             </Link>
 
-            {/* SECONDARY BUTTON */}
+            {/* SECONDARY BUTTON — découverte, pas formulaire : mène au bloc
+                CIPA de l'accueil (#solutions) en attendant la page produit
+                dédiée (lot 2, L2-05). */}
 
             <Link
-              href="/contact"
+              href="/#solutions"
               className="
                 inline-flex items-center justify-center gap-2
                 rounded-full border
