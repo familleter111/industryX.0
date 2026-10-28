@@ -97,6 +97,11 @@ export default function SmartCarousel({
   const next = useCallback(() => goTo(index + 1), [goTo, index])
   const prev = useCallback(() => goTo(index - 1), [goTo, index])
 
+  // Mouvement réduit demandé : pas de défilement automatique (règle 6).
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setPlaying(false)
+  }, [])
+
   useEffect(() => {
     if (!playing) return
     const t = setInterval(() => {
@@ -217,6 +222,28 @@ export default function SmartCarousel({
             </div>
           </motion.div>
         </AnimatePresence>
+
+        {/* Texte des autres diapositives, présent dans le HTML (règle 5) :
+            moteurs, lecteurs sans JavaScript, outils d'extraction. `hidden` :
+            ni affiché ni lu en double par les lecteurs d'écran. */}
+        <div hidden>
+          {slides.map((s, i) =>
+            i === index ? null : (
+              <section key={i}>
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+                <ul>
+                  {s.before.map((b) => (
+                    <li key={b}>{b}</li>
+                  ))}
+                  {s.after.map((a) => (
+                    <li key={a}>{a}</li>
+                  ))}
+                </ul>
+              </section>
+            ),
+          )}
+        </div>
 
         <button
           onClick={prev}
