@@ -38,6 +38,8 @@ const nextConfig = {
       // Onglets de l'accueil de l'ancien site (/solutions/<onglet>, 404 à
       // l'audit du 14/10/2026) : chacun mène à l'usage qu'il présentait,
       // comme les onglets actuels (lib/data/features.ts).
+      // L1-02 : provisoire. Quand le hub /solutions existera (L2-06),
+      // /solutions/audits pointera vers sa section Audits.
       ...[
         ['audits', 'remontee-terrain#audits'],
         ['quality', 'remontee-terrain#inspections'],
