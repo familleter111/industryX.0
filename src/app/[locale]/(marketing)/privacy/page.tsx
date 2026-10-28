@@ -185,7 +185,7 @@ function sectionsFr(): LegalSection[] {
               ],
               ['Mesure d’audience', 'PostHog, hébergé dans l’Union européenne, si vous l’acceptez'],
               ...(chatAiEnabled()
-                ? [['Assistant de chat', 'Anthropic, qui génère les réponses de l’assistant à partir de vos messages'] as [string, string]]
+                ? [['Assistant de chat', 'Microsoft (service Azure OpenAI), qui génère les réponses de l’assistant à partir de vos messages'] as [string, string]]
                 : []),
               ['Obligations légales', 'sur demande d’une autorité ou d’une décision de justice'],
             ]}
@@ -318,8 +318,8 @@ function sectionsFr(): LegalSection[] {
           <>
             <p>
               L’assistant de chat répond grâce à un modèle d’intelligence artificielle fourni par
-              Anthropic. Les messages que vous y tapez, avec l’historique de la conversation en
-              cours, sont transmis à notre serveur puis à Anthropic, qui les traite pour notre
+              Microsoft (service Azure OpenAI). Les messages que vous y tapez, avec l’historique de la conversation en
+              cours, sont transmis à notre serveur puis à Microsoft, qui les traite pour notre
               compte afin de générer la réponse.
             </p>
             <p>
@@ -494,7 +494,7 @@ function sectionsEn(): LegalSection[] {
               ['Email delivery', 'a sending service used to alert our team if a transfer fails'],
               ['Audience measurement', 'PostHog, hosted in the European Union, if you accept it'],
               ...(chatAiEnabled()
-                ? [['Chat assistant', 'Anthropic, which generates the assistant’s answers from your messages'] as [string, string]]
+                ? [['Chat assistant', 'Microsoft (Azure OpenAI Service), which generates the assistant’s answers from your messages'] as [string, string]]
                 : []),
               ['Legal obligations', 'at the request of an authority or a court decision'],
             ]}
@@ -622,8 +622,8 @@ function sectionsEn(): LegalSection[] {
           <>
             <p>
               The chat assistant answers using an artificial intelligence model provided by
-              Anthropic. The messages you type, with the history of the current conversation, are
-              sent to our server and then to Anthropic, which processes them on our behalf to
+              Microsoft (Azure OpenAI Service). The messages you type, with the history of the current conversation, are
+              sent to our server and then to Microsoft, which processes them on our behalf to
               generate the answer.
             </p>
             <p>

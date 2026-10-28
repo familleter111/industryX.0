@@ -6,7 +6,7 @@
  * /api/chat est désactivée ou injoignable, le widget répond d'ici.
  */
 
-import type { ChatLocale } from '@/lib/chat/config'
+import { CHAT_NAME, type ChatLocale } from '@/lib/chat/config'
 import { SITE } from '@/lib/chat/knowledge'
 import { CONTACT, postalAddress } from '@/lib/data/contact'
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
@@ -14,20 +14,6 @@ import { FAQ_ENTRIES } from '@/lib/data/faq'
 import { platformPages } from '@/lib/data/platform'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import { deburr } from '@/lib/phone'
-
-/** Messages de bienvenue, joués un par un à l'ouverture. */
-export const WELCOME: Record<ChatLocale, string[]> = {
-  fr: [
-    "Bonjour 👋 Je suis l'assistant virtuel d'Industry X.0.",
-    'Prêt à découvrir comment digitaliser et piloter vos opérations industrielles avec CIPA ?',
-    'Avez-vous des questions sur notre plateforme, ou souhaitez-vous planifier une démonstration ?',
-  ],
-  en: [
-    "Hi 👋 I'm the Industry X.0 virtual assistant.",
-    'Ready to see how CIPA can digitize and streamline your industrial operations?',
-    'Any questions about our platform, or would you like to schedule a live demo?',
-  ],
-}
 
 /**
  * Reconnaissance des questions de la FAQ, dans l'ordre de lib/data/faq.ts.
@@ -113,16 +99,16 @@ const SMALL_TALK: SmallTalk[] = [
   {
     pattern: /\b(qui (es|etes)[ -](tu|vous)|tu es qui|t'?es qui|(es[ -]tu|tu es|t'?es) (un |une )?(robot|bot|humain|ia|vrai)|(etes[ -]vous|vous etes) (un |une )?(robot|bot|humain|ia)|who are you|what are you|are you (a |an )?(bot|robot|human|ai|real))\b/,
     fr: [
-      'Je suis l’assistant virtuel d’Industry X.0, un programme et non une personne. Je réponds aux questions sur CIPA ; pour un échange avec l’équipe, le formulaire de contact est là.',
+      `Je suis ${CHAT_NAME}, l’assistant virtuel d’Industry X.0, un programme et non une personne. Je réponds aux questions sur CIPA ; pour un échange avec l’équipe, le formulaire de contact est là.`,
     ],
     en: [
-      "I'm Industry X.0's virtual assistant, a program rather than a person. I answer questions about CIPA; to talk with the team, use the contact form.",
+      `I'm ${CHAT_NAME}, Industry X.0's virtual assistant, a program rather than a person. I answer questions about CIPA; to talk with the team, use the contact form.`,
     ],
   },
   {
     pattern: /\b(comment tu t'?appelles|comment vous appelez[ -]vous|ton nom|votre nom|what'?s your name|your name)\b/,
-    fr: ['Je suis l’Assistant CIPA, le guide virtuel d’Industry X.0. Et vous, que puis-je faire pour vous ?'],
-    en: ["I'm the CIPA Assistant, Industry X.0's virtual guide. What can I do for you?"],
+    fr: [`Je m’appelle ${CHAT_NAME}, le guide virtuel d’Industry X.0. Et vous, que puis-je faire pour vous ?`],
+    en: [`My name is ${CHAT_NAME}, Industry X.0's virtual guide. What can I do for you?`],
   },
   {
     pattern: /\b(que (peux|sais)[ -]tu faire|tu (peux|sais) faire quoi|a quoi tu sers|comment (tu peux|pouvez[ -]vous) m'?aider|aide[ -]moi|what can you do|how can you help|help me)\b/,

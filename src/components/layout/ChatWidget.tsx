@@ -2,24 +2,26 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Bot, Send, X } from 'lucide-react'
+import { RotateCcw, Send, X } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 import { useCurrentLocale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
-import { askAssistant } from '@/lib/chat/client'
-import { CHAT_LIMITS, chatAiEnabled } from '@/lib/chat/config'
-import { instantReply, localReply, WELCOME } from '@/lib/chat/local'
+import { CHAT_LIMITS, CHAT_NAME, chatAiEnabled } from '@/lib/chat/config'
+import {
+  isBusy,
+  resetChat,
+  sendMessage,
+  stopReply,
+  useChatState,
+  type SendResult,
+} from '@/lib/chat/store'
+import AssistantLogo from '@/features/chat/AssistantLogo'
+import MessageText from '@/features/chat/MessageText'
+import { PRESET_ORDER, usePanelSize } from '@/features/chat/usePanelSize'
 
 /** Mode IA (NEXT_PUBLIC_CHAT_AI=on) : figé au build, voir lib/chat/config.ts. */
 const AI = chatAiEnabled()
-
-interface Message {
-  id: string
-  sender: 'bot' | 'user'
-  text: string
-  timestamp: Date
-}
 
 interface ChatWidgetProps {
   isOpen: boolean
@@ -28,105 +30,50 @@ interface ChatWidgetProps {
   onClose: () => void
 }
 
-const rid = () => Math.random().toString(36).slice(2, 11)
-
-/** Liens, e-mails et numéros de téléphone d'une réponse, rendus cliquables. */
-const LINKABLE = /(https?:\/\/[^\s]+|[\w.+-]+@[\w-]+(?:\.[\w-]+)+|\+\d{3}(?: \d{2,3}){3})/g
-
-function linkify(text: string) {
-  return text.split(LINKABLE).map((part, i) => {
-    if (i % 2 === 0) return part
-    // Ponctuation collée au lien (« …contact). ») : elle reste du texte.
-    const [, target, tail] = part.match(/^(.*?)([.,;:!?)]*)$/) ?? [part, part, '']
-    const href = target.startsWith('http')
-      ? target
-      : target.includes('@')
-        ? `mailto:${target}`
-        : `tel:${target.replace(/\s/g, '')}`
-    const external = href.startsWith('http')
-    return (
-      <span key={i}>
-        <a
-          href={href}
-          {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-          className="break-all font-semibold text-gold-deep underline hover:text-gold"
-        >
-          {target}
-        </a>
-        {tail}
-      </span>
-    )
-  })
+/** Message affiché sous le champ quand une question est retenue (lib/chat/store.ts). */
+const NOTICE: Record<Exclude<SendResult, 'sent' | 'ignored'>, { FR: string; EN: string }> = {
+  cooldown: {
+    FR: 'Un instant : laissez quelques secondes entre deux messages.',
+    EN: 'One moment: please wait a few seconds between messages.',
+  },
+  repeat: {
+    FR: 'Vous venez d’envoyer ce message. Pouvez-vous le reformuler ?',
+    EN: 'You just sent this message. Could you rephrase it?',
+  },
+  spam: {
+    FR: 'Ce message ressemble à du spam (liens, répétitions). Posez votre question en quelques mots.',
+    EN: 'This message looks like spam (links, repetition). Please ask your question in a few words.',
+  },
+  'session-limit': {
+    FR: 'Limite de messages atteinte pour cette visite. Notre équipe vous répond via le formulaire de contact.',
+    EN: 'Message limit reached for this visit. Our team can answer you through the contact form.',
+  },
 }
 
-/** Les messages de bienvenue sont joués par le widget, pas par le modèle. */
-const isWelcome = (message: Message) => message.id.startsWith('welcome-')
+/** Boutons des trois tailles standard du panneau. */
+const SIZE_LABEL = {
+  group: { FR: 'Taille de la fenêtre', EN: 'Window size' },
+  small: { FR: 'Petite fenêtre', EN: 'Small window' },
+  medium: { FR: 'Fenêtre moyenne', EN: 'Medium window' },
+  large: { FR: 'Grande fenêtre', EN: 'Large window' },
+}
 
 export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps) {
   const locale = useCurrentLocale() === 'en' ? 'en' : 'fr'
   // Les textes du widget sont indexes FR / EN : on les aligne sur la langue de la page.
   const language = locale === 'en' ? 'EN' : 'FR'
-  const [messages, setMessages] = useState<Message[]>([])
+  // Conversation gardée le temps de l'onglet (lib/chat/store.ts). Pas de
+  // message de bienvenue : l'accueil (logo, nom) attend que le visiteur
+  // écrive le premier.
+  const chat = useChatState()
   const [input, setInput] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-  const [streamingId, setStreamingId] = useState<string | null>(null)
+  const [notice, setNotice] = useState<keyof typeof NOTICE | null>(null)
+  const panel = usePanelSize()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const abortRef = useRef<AbortController | null>(null)
-  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([])
+  const wasOpen = useRef(isOpen)
 
-  // Joue les messages de bienvenue un par un, avec effet de frappe
-  useEffect(() => {
-    const welcome = WELCOME[locale]
-    setMessages([])
-    setIsTyping(false)
-    setStreamingId(null)
-
-    let cancelled = false
-    const timeouts: ReturnType<typeof setTimeout>[] = []
-    const wait = (ms: number) =>
-      new Promise<void>((resolve) => {
-        const t = setTimeout(resolve, ms)
-        timeouts.push(t)
-      })
-
-    const run = async () => {
-      await wait(600)
-      for (let i = 0; i < welcome.length; i++) {
-        if (cancelled) return
-        // "…en train d'écrire" (points animés)
-        setIsTyping(true)
-        await wait(750 + Math.min(welcome[i].length * 9, 750))
-        if (cancelled) return
-        setIsTyping(false)
-
-        // Bulle qui s'écrit lettre par lettre
-        const id = `welcome-${i}`
-        setMessages((prev) => [...prev, { id, sender: 'bot', text: '', timestamp: new Date() }])
-        setStreamingId(id)
-        const full = welcome[i]
-        for (let c = 1; c <= full.length; c++) {
-          if (cancelled) return
-          setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: full.slice(0, c) } : m)))
-          await wait(16)
-        }
-        setStreamingId((s) => (s === id ? null : s))
-        await wait(500)
-      }
-    }
-    run()
-
-    return () => {
-      cancelled = true
-      timeouts.forEach(clearTimeout)
-    }
-  }, [locale])
-
-  // Nettoyage des timeouts de réponse au démontage
-  useEffect(() => {
-    const timeouts = timeoutsRef.current
-    return () => timeouts.forEach(clearTimeout)
-  }, [])
+  const { messages, typing: isTyping, streamingId } = chat
 
   useEffect(() => {
     if (!isOpen) return
@@ -146,9 +93,11 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [isOpen, onClose])
 
-  // Fermeture du widget : la réponse en cours n'a plus de lecteur.
+  // Fermeture du widget : la réponse en cours n'a plus de lecteur. Seulement
+  // au passage ouvert → fermé, pas au premier rendu.
   useEffect(() => {
-    if (!isOpen) abortRef.current?.abort()
+    if (wasOpen.current && !isOpen) stopReply()
+    wasOpen.current = isOpen
   }, [isOpen])
 
   // Auto scroll to bottom
@@ -156,102 +105,26 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isTyping])
 
-  /** Écrit une réponse locale lettre par lettre (mode local et secours). */
-  const typeLocally = (id: string, full: string) => {
-    let c = 0
-    const typeNext = () => {
-      c += 1
-      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: full.slice(0, c) } : m)))
-      if (c < full.length) {
-        const t = setTimeout(typeNext, 14)
-        timeoutsRef.current.push(t)
-      } else {
-        setStreamingId((s) => (s === id ? null : s))
-      }
-    }
-    typeNext()
-  }
-
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim() || isTyping || streamingId) return
-
-    const userText = input.trim().slice(0, CHAT_LIMITS.messageMax)
-    const userMsg: Message = { id: rid(), sender: 'user', text: userText, timestamp: new Date() }
-    // Le rang du message seulement : la question elle-même n'est jamais mesurée.
-    track('chat_message_sent', {
-      message_index: messages.filter((m) => m.sender === 'user').length + 1,
-    })
-
-    // Historique envoyé à l'IA : la conversation réelle, sans les messages
-    // de bienvenue joués par le widget.
-    const history = [...messages, userMsg]
-      .filter((m) => !isWelcome(m) && m.text)
-      .map((m) => ({ role: m.sender === 'user' ? ('user' as const) : ('assistant' as const), content: m.text }))
-
-    setMessages((prev) => [...prev, userMsg])
-    setInput('')
-    setIsTyping(true)
-
-    const id = rid()
-    const startReply = () => {
-      setIsTyping(false)
-      setMessages((prev) => [...prev, { id, sender: 'bot', text: '', timestamp: new Date() }])
-      setStreamingId(id)
+    if (!input.trim() || isBusy(chat)) return
+    const result = sendMessage(input, locale)
+    if (result === 'sent') {
+      setInput('')
+      setNotice(null)
+    } else if (result !== 'ignored') {
+      setNotice(result)
     }
-
-    // Questions de la FAQ et conversation courante (bonjour, comment vas-tu…)
-    // sont répondues sur place : aucun appel à l'IA, rien de consommé sur le
-    // plafond quotidien.
-    if (AI && !instantReply(userText, locale)) {
-      const controller = new AbortController()
-      abortRef.current = controller
-      let started = false
-      try {
-        await askAssistant(
-          history,
-          locale,
-          (chunk) => {
-            if (!started) {
-              started = true
-              startReply()
-            }
-            setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: m.text + chunk } : m)))
-          },
-          controller.signal,
-        )
-        if (started) {
-          setStreamingId((s) => (s === id ? null : s))
-          return
-        }
-      } catch {
-        if (controller.signal.aborted) return
-        // Une réponse déjà commencée est gardée telle quelle.
-        if (started) {
-          setStreamingId((s) => (s === id ? null : s))
-          return
-        }
-      }
-      // IA indisponible : réponse locale, pour ne jamais laisser une question sans suite.
-      startReply()
-      typeLocally(id, localReply(userText, locale))
-      return
-    }
-
-    // Mode local : courte « réflexion », puis réponse écrite lettre par lettre.
-    const think = setTimeout(() => {
-      startReply()
-      typeLocally(id, localReply(userText, locale))
-    }, 1000)
-    timeoutsRef.current.push(think)
   }
+
+  const label = language === 'FR' ? `Assistant ${CHAT_NAME}` : `${CHAT_NAME} assistant`
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           role="dialog"
-          aria-label={language === 'FR' ? 'Assistant CIPA' : 'CIPA Assistant'}
+          aria-label={label}
           initial={{ opacity: 0, y: 40, scale: 0.92 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 40, scale: 0.92 }}
@@ -269,44 +142,96 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
            *
            * `dvh` et non `vh` : sur mobile, la barre d'adresse qui se retracte
            * fait varier la hauteur utile, et `vh` fige la plus grande.
+           *
+           * A partir de 640 px, la taille standard choisie par le visiteur
+           * (features/chat/usePanelSize) remplace ces valeurs.
            */
-          className="fixed bottom-24 right-6 z-50 w-[min(360px,calc(100vw-3rem))] sm:w-[380px] h-[min(500px,calc(100dvh-12rem))] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden border border-cream-border"
+          style={panel.size ?? undefined}
+          className="fixed bottom-24 right-6 z-50 w-[min(360px,calc(100vw-3rem))] sm:w-[380px] h-[min(500px,calc(100dvh-12rem))] bg-white rounded-3xl shadow-[0_24px_60px_rgba(12,13,18,0.18)] ring-1 ring-stone-200 flex flex-col overflow-hidden transition-[width,height] duration-300 ease-out"
         >
-          {/* HEADER */}
-          <div className="bg-dark text-white border-t-[4px] border-gold px-5 py-4 flex items-center justify-between shadow-md">
-            <div className="flex items-center gap-3">
-              {/* Avatar Container with glowing active status */}
-              <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-dark-raised border border-gold/30 shadow-inner">
-                <Bot size={20} className="text-gold" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold font-display tracking-wide text-white">
-                  {language === 'FR' ? 'Assistant CIPA' : 'CIPA Assistant'}
+          {/* EN-TÊTE — clair, logo et nom à gauche, réglages à droite */}
+          <div className="flex items-center justify-between gap-2 border-b border-stone-100 bg-white px-4 py-3">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <AssistantLogo size={36} className="shrink-0" />
+              <div className="min-w-0">
+                <h3 className="flex items-center gap-1.5 text-sm font-semibold font-display text-dark">
+                  {CHAT_NAME}
+                  <span className="rounded-full bg-stone-100 px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-stone-600">
+                    IA
+                  </span>
                 </h3>
                 {/* « En ligne » et sa pastille verte laissaient croire à une
                     personne disponible : c'est un assistant automatique. */}
-                <p className="text-[11px] text-stone-400 font-medium">
+                <p className="truncate text-[11px] text-stone-500">
                   {language === 'FR' ? 'Assistant automatique' : 'Automated assistant'}
                 </p>
               </div>
             </div>
 
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="rounded-lg p-1.5 text-stone-400 hover:bg-dark-raised hover:text-white transition duration-200"
-              aria-label={language === 'FR' ? 'Fermer le chat' : 'Close chat'}
-            >
-              <X size={16} />
-            </button>
+            <div className="flex shrink-0 items-center gap-0.5">
+              {/* Trois tailles standard (features/chat/usePanelSize), à
+                  partir de 640 px de large : un carré de plus en plus grand. */}
+              {panel.size && (
+                <div role="group" aria-label={SIZE_LABEL.group[language]} className="mr-1 flex items-center rounded-full bg-stone-100 p-0.5">
+                  {PRESET_ORDER.map((preset, i) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => panel.setPreset(preset)}
+                      aria-pressed={panel.preset === preset}
+                      aria-label={SIZE_LABEL[preset][language]}
+                      title={SIZE_LABEL[preset][language]}
+                      className={`flex h-6 w-6 items-center justify-center rounded-full transition duration-200 ${
+                        panel.preset === preset ? 'bg-white text-dark shadow-sm' : 'text-stone-500 hover:text-dark'
+                      }`}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="block rounded-[2px] border-[1.5px] border-current"
+                        style={{ width: 6 + i * 3, height: 6 + i * 3 }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {chat.messages.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetChat()
+                    setNotice(null)
+                  }}
+                  className="rounded-full p-1.5 text-stone-500 hover:bg-stone-100 hover:text-dark transition duration-200"
+                  aria-label={language === 'FR' ? 'Nouvelle conversation' : 'New conversation'}
+                  title={language === 'FR' ? 'Nouvelle conversation' : 'New conversation'}
+                >
+                  <RotateCcw size={15} />
+                </button>
+              )}
+
+              <button
+                onClick={onClose}
+                className="rounded-full p-1.5 text-stone-500 hover:bg-stone-100 hover:text-dark transition duration-200"
+                aria-label={language === 'FR' ? 'Fermer le chat' : 'Close chat'}
+              >
+                <X size={16} />
+              </button>
+            </div>
           </div>
 
-          {/* MESSAGE LIST */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-stone-100">
-            {/* Today separator */}
-            <div className="text-center my-2 select-none">
-              <span className="text-[10px] text-stone-600 bg-cream-border px-2.5 py-0.5 rounded-full uppercase tracking-wider font-bold">
-                {language === 'FR' ? "Aujourd'hui" : "Today"}
+          {/* MESSAGES */}
+          <div className="flex-1 overflow-y-auto bg-white px-4 pb-4 space-y-2.5">
+            {/* Accueil de chaque conversation : le logo de l'assistant, en
+                grand, se présente avant le premier message. */}
+            <div className="flex flex-col items-center px-4 pb-3 pt-6 text-center select-none">
+              <AssistantLogo size={72} className="drop-shadow-[0_8px_18px_rgba(12,13,18,0.18)]" />
+              <p className="mt-3 text-base font-semibold font-display text-dark">{CHAT_NAME}</p>
+              <p className="mt-0.5 text-xs text-stone-500">
+                {language === 'FR' ? 'L’assistant virtuel d’Industry X.0' : 'Industry X.0’s virtual assistant'}
+              </p>
+              <span className="mt-3 rounded-full bg-stone-100 px-2.5 py-0.5 text-[10px] font-medium text-stone-600">
+                {language === 'FR' ? "Aujourd'hui" : 'Today'}
               </span>
             </div>
 
@@ -316,77 +241,85 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
                 className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.sender === 'bot' ? (
-                  <div className="flex items-start gap-2.5 max-w-[85%]">
-                    {/* Small Bot Badge */}
-                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-dark text-gold text-[9px] font-bold border border-gold/20 mt-0.5 shadow-sm">
-                      C
-                    </div>
-                    <div className="rounded-2xl rounded-tl-none bg-white border border-cream-border px-4 py-2.5 text-[13px] text-stone-800 leading-relaxed shadow-sm font-normal whitespace-pre-line">
-                      {streamingId === msg.id ? msg.text : linkify(msg.text)}
-                      {streamingId === msg.id && (
-                        <span className="animate-blink ml-0.5 inline-block text-gold">▌</span>
-                      )}
-                    </div>
+                  <div className="max-w-[85%] min-w-0 rounded-2xl rounded-bl-md bg-stone-100 px-3.5 py-2.5 text-[13px] text-stone-800 leading-relaxed whitespace-pre-line break-words">
+                    {streamingId === msg.id ? (
+                      msg.text
+                    ) : (
+                      <MessageText text={msg.text} linkClassName="text-gold-deep underline underline-offset-2 hover:text-dark" />
+                    )}
+                    {streamingId === msg.id && (
+                      <span className="animate-blink ml-0.5 inline-block text-stone-400">▌</span>
+                    )}
                   </div>
                 ) : (
-                  <div className="max-w-[80%] rounded-2xl rounded-tr-none bg-gold px-4 py-2.5 text-[13px] text-white leading-relaxed shadow-md font-medium">
+                  <div className="max-w-[80%] rounded-2xl rounded-br-md bg-dark px-3.5 py-2.5 text-[13px] text-white leading-relaxed whitespace-pre-line break-words">
                     {msg.text}
                   </div>
                 )}
               </div>
             ))}
 
-            {/* Simulated Typing Indicator */}
+            {/* « En train d'écrire » */}
             {isTyping && (
-              <div className="flex items-start gap-2.5 max-w-[85%]">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-dark text-gold text-[9px] font-bold border border-gold/20 mt-0.5 shadow-sm animate-pulse">
-                  C
-                </div>
-                <div className="rounded-2xl rounded-tl-none bg-white border border-cream-border px-4 py-3 text-[13px] text-stone-800 leading-relaxed shadow-sm flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                </div>
+              <div className="flex w-fit items-center gap-1.5 rounded-2xl rounded-bl-md bg-stone-100 px-4 py-3">
+                <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
-          {/* INPUT FORM & DISCLAIMER */}
-          <form onSubmit={handleSendMessage} className="border-t border-cream-border bg-white p-3 flex flex-col gap-2 shadow-2xl">
-            <div className="flex items-center gap-2 rounded-xl border border-cream-border bg-stone-50 px-3.5 py-2.5 focus-within:border-gold focus-within:ring-1 focus-within:ring-gold transition duration-200">
+          {/* SAISIE ET MENTION */}
+          <form onSubmit={handleSendMessage} className="bg-white px-3 pb-2.5 pt-2 flex flex-col gap-1.5">
+            {notice && (
+              <p role="status" className="rounded-xl bg-amber-50 px-3 py-2 text-[11px] leading-snug text-amber-900">
+                {NOTICE[notice][language]}
+              </p>
+            )}
+            <div className="flex items-center gap-2 rounded-full bg-stone-100 py-1.5 pl-4 pr-1.5 ring-1 ring-transparent focus-within:bg-white focus-within:ring-stone-300 transition duration-200">
               <input
                 ref={inputRef}
                 type="text"
                 maxLength={CHAT_LIMITS.messageMax}
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={language === 'FR' ? "Saisir un message..." : "Enter a message..."}
-                className="flex-1 bg-transparent text-sm text-stone-800 outline-none py-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
+                onChange={(e) => {
+                  setInput(e.target.value)
+                  if (notice !== 'session-limit') setNotice(null)
+                }}
+                placeholder={language === 'FR' ? 'Écrivez votre message…' : 'Write your message…'}
+                aria-label={language === 'FR' ? 'Votre message' : 'Your message'}
+                className="flex-1 min-w-0 bg-transparent text-sm text-stone-800 placeholder:text-stone-500 outline-none py-1"
                 disabled={isTyping}
               />
+              {/* Compteur, seulement à l'approche de la limite. */}
+              {input.length > CHAT_LIMITS.messageMax * 0.8 && (
+                <span className="shrink-0 text-[10px] tabular-nums text-stone-500" aria-live="polite">
+                  {input.length}/{CHAT_LIMITS.messageMax}
+                </span>
+              )}
               <button
                 type="submit"
                 aria-label={language === 'FR' ? 'Envoyer' : 'Send'}
                 disabled={!input.trim() || isTyping}
-                className="text-gold hover:text-gold-600 disabled:text-cream-deep transition duration-200 p-1 rounded-lg hover:bg-amber-50"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-dark transition duration-200 hover:bg-gold-deep hover:text-white disabled:bg-stone-200 disabled:text-stone-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
               >
-                <Send size={16} />
+                <Send size={15} />
               </button>
             </div>
 
-            <p className="text-[10px] text-center text-stone-500 leading-relaxed pt-1 px-2 select-none">
+            <p className="px-2 text-[10px] text-center text-stone-500 leading-snug select-none">
               {AI
                 ? language === 'FR'
-                  ? "Réponses générées par IA, à vérifier. Vos messages sont transmis à notre fournisseur d'IA pour y répondre, sans être conservés par Industry X.0. Politique de confidentialité "
-                  : 'AI-generated answers, to be checked. Your messages are sent to our AI provider to answer them and are not stored by Industry X.0. Privacy policy '
+                  ? "Réponses générées par IA, à vérifier. Messages transmis à notre fournisseur d'IA, non conservés par Industry X.0. "
+                  : 'AI-generated answers, to be checked. Messages are sent to our AI provider and not stored by Industry X.0. '
                 : language === 'FR'
-                  ? 'Vos messages restent dans votre navigateur : ils ne sont pas enregistrés. Consultez notre politique de confidentialité '
-                  : 'Your messages stay in your browser: they are not recorded. Read our privacy policy '}
-              <Link href="/privacy" className="underline hover:text-gold transition font-semibold">
-                {language === 'FR' ? "ici" : "here"}
-              </Link>.
+                  ? 'Vos messages restent dans votre navigateur : ils ne sont pas enregistrés. '
+                  : 'Your messages stay in your browser: they are not recorded. '}
+              <Link href="/privacy" className="underline hover:text-dark transition">
+                {language === 'FR' ? 'Confidentialité' : 'Privacy'}
+              </Link>
             </p>
           </form>
         </motion.div>
