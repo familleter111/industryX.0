@@ -5,7 +5,7 @@
  */
 export const INDUSTRY_CHROME = {
   fr: {
-    live: 'Données live',
+    live: 'Données en temps réel',
     before: 'Avant CIPA',
     after: 'Avec CIPA',
     inProgress: 'En cours',
@@ -32,7 +32,7 @@ export const INDUSTRY_CHROME = {
     months: ['T0', 'Mois 1', 'Mois 3', 'Mois 6', 'Mois 12'],
   },
   en: {
-    live: 'Live data',
+    live: 'Real-time data',
     before: 'Before CIPA',
     after: 'With CIPA',
     inProgress: 'In progress',
