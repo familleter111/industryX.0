@@ -1,5 +1,5 @@
 /**
- * Réception du formulaire « Planifier une démonstration ».
+ * Réception du formulaire « Demander une démo ».
  *
  * 1. Pot de miel, limite par IP, validation Zod (lib/leads/schema.ts) : la
  *    validation du client sert le confort de saisie, elle ne protège rien —

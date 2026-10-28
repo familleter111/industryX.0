@@ -122,7 +122,7 @@ const COPY = {
     privacy: 'politique de confidentialité',
     honeypot: 'Ne remplissez pas ce champ',
     sending: 'Envoi en cours…',
-    submit: 'Planifier une démonstration',
+    submit: 'Demander une démo',
     secure: 'Vos données sont sécurisées et 100% confidentielles.',
     chart: 'Courbe de progression de la performance de janvier à juin',
     months: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],

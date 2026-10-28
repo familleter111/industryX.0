@@ -15,6 +15,7 @@ import LogoMarquee from '@/components/ui/LogoMarquee'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 /*
  * Logos clients : source unique dans components/clientLogos.ts.
@@ -28,7 +29,7 @@ const COPY = {
     lines: ['Vos opérations', 'sont complexes.', 'Nous les transformons', 'en'],
     accent: 'système pilotable.',
     lead: 'CIPA structure la donnée terrain, orchestre les processus critiques et active l’IA pour améliorer les opérations industrielles en continu.',
-    primary: 'Planifier une démo',
+    primary: 'Demander une démo',
     secondary: 'Voir la plateforme',
     pills: ['Conformité & qualité', 'Temps réel', 'Traçabilité complète'],
     imageAlt: 'Plateforme CIPA — pilotage des opérations industrielles',
@@ -177,7 +178,7 @@ export default function Hero() {
             {/* PRIMARY BUTTON */}
 
             <Link
-              href="/contact"
+              href={ROUTES.demo}
               className="
                 group relative inline-flex items-center
                 justify-center overflow-hidden
@@ -247,7 +248,7 @@ export default function Hero() {
                 dédiée (lot 2, L2-05). */}
 
             <Link
-              href="/#solutions"
+              href={ROUTES.cipa}
               className="
                 inline-flex items-center justify-center gap-2
                 rounded-full border

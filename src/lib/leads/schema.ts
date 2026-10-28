@@ -1,5 +1,5 @@
 /**
- * Validation serveur du formulaire « Planifier une démonstration ».
+ * Validation serveur du formulaire « Demander une démo ».
  *
  * Mêmes règles que le formulaire (app/[locale]/(marketing)/contact) : la
  * validation du navigateur sert le confort de saisie, celle-ci protège —

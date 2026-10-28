@@ -19,6 +19,7 @@ import {
   type PlatformPageData,
 } from '@/lib/data/platform'
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 const COPY = {
   fr: {
@@ -161,7 +162,7 @@ function ClosingCta({ page }: { page: PlatformPageData }) {
 
           <div className="mt-8 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
             <Link
-              href="/contact"
+              href={ROUTES.demo}
               className="group inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-dark shadow-gold transition-all duration-base hover:-translate-y-[1px] hover:bg-gold-400"
             >
               {t.ctaDemo}
@@ -171,7 +172,7 @@ function ClosingCta({ page }: { page: PlatformPageData }) {
               />
             </Link>
             <Link
-              href="/customers"
+              href={ROUTES.customers}
               className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-6 py-3.5 text-[14px] font-semibold text-white/85 transition-all duration-base hover:border-gold/40 hover:text-white"
             >
               {t.ctaCases}

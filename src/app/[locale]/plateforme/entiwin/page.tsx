@@ -18,6 +18,7 @@ import Footer from '@/components/layout/Footer'
 import { Link } from '@/i18n/navigation'
 import { entiwinHref } from '@/lib/data/entiwin'
 import { useCopy, type Locale } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 /**
  * Enti Win — page de présentation du nouveau produit (badge « New » dans le
@@ -572,7 +573,7 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <LaunchButton content="footer" label={t.launch} newTab={t.newTab} />
             <Link
-              href="/contact"
+              href={ROUTES.demo}
               className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t.cta.demo}

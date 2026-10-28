@@ -9,6 +9,7 @@ import type {
   PlatformProof,
 } from '@/lib/data/platform'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 const COPY = {
   fr: {
@@ -164,7 +165,7 @@ export function IncludedFeatures({ items }: { items: PlatformItem[] }) {
           })}
         </RevealGroup>
         <Link
-          href="/contact"
+          href={ROUTES.demo}
           className="group mt-10 inline-flex items-center gap-2 font-semibold text-gold-ink hover:underline"
         >
           {t.includedCta}

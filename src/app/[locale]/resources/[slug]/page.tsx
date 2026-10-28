@@ -18,6 +18,7 @@ import {
   type GuideBlock,
 } from '@/lib/data/guides'
 import { pageMetadata, useCopy, type Locale } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 const COPY = {
   fr: {
@@ -25,7 +26,7 @@ const COPY = {
     readingTime: 'min de lecture',
     asideTitle: 'Voir CIPA appliqué à votre contexte',
     asideText: '45 minutes avec un expert, centrées sur vos enjeux et vos processus.',
-    demo: 'Planifier une démo',
+    demo: 'Demander une démo',
     next: ['À lire', 'ensuite'],
   },
   en: {
@@ -209,7 +210,7 @@ export default function GuidePage({ params }: Params) {
               </p>
 
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-[13.5px] font-bold text-[#0C0D12] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
               >
                 {t.demo}

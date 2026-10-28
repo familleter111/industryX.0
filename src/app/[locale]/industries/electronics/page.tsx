@@ -31,6 +31,7 @@ import { Link } from '@/i18n/navigation'
 import { MAILTO } from '@/lib/data/contact'
 import { INDUSTRY_CHROME } from '@/lib/data/industries/chrome'
 import { overlay, useCopy, useCurrentLocale, useTr, type TextOverlay } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 // Animation réutilisable
 const fadeInUp = {
@@ -1123,7 +1124,7 @@ export default function ElectronicsPage() {
                   className="mt-8 flex flex-wrap items-center gap-3.5"
                 >
                   <Link
-                    href="/contact"
+                    href={ROUTES.demo}
                     className="group inline-flex items-center gap-3 rounded-full bg-[#111827] px-7 py-4 text-[14px] font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-black"
                   >
                     {tr("Demander une démo")}
@@ -1363,7 +1364,7 @@ export default function ElectronicsPage() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
             <Link
-              href="/contact"
+              href={ROUTES.demo}
               className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-bold text-dark shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold hover:text-dark"
             >
               {c.ctaDemo}

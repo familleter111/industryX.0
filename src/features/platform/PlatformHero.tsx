@@ -10,11 +10,12 @@ import { platformPage } from '@/lib/data/platform'
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
 
 const COPY = {
-  fr: { demo: 'Planifier une démo', uses: 'Voir les usages' },
+  fr: { demo: 'Demander une démo', uses: 'Voir les usages' },
   en: { demo: 'Book a demo', uses: 'See the use cases' },
 }
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
+import { ROUTES } from '@/lib/routes'
 
 /** Fondu des quatre bords du visuel (deux degrades croises). */
 const EDGE_FADE =
@@ -99,7 +100,7 @@ export default function PlatformHero({ slug }: { slug: string }) {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
             <Link
-              href="/contact"
+              href={ROUTES.demo}
               className="group relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-full px-8 py-4 text-[14px] font-bold transition-all duration-500 lg:px-5 xl:px-8 hover:-translate-y-1"
               style={{
                 background: tokens.color.dark.DEFAULT,

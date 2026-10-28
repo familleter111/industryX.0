@@ -10,6 +10,7 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 const COPY = {
   fr: {
@@ -146,7 +147,7 @@ export default function CTASection() {
                   <MotionLink
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    href="/contact"
+                    href={ROUTES.demo}
                     className="group flex items-center justify-between rounded-2xl bg-gradient-to-r from-gold to-yellow-500 px-7 py-5 shadow-2xl shadow-gold/20 transition-all duration-300 hover:shadow-gold/40"
                   >
 
@@ -175,7 +176,7 @@ export default function CTASection() {
                   <MotionLink
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    href="/contact"
+                    href={ROUTES.demo}
                     className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-7 py-5 backdrop-blur-md transition-all duration-300 hover:bg-white/[0.06]"
                   >
 

@@ -257,7 +257,7 @@ export const GUIDES: Guide[] = [
       src: '/c1%20(4).png',
       alt: 'Équipes terrain utilisant CIPA sur tablette',
     },
-    related: { label: 'Planifier une démonstration', href: '/contact' },
+    related: { label: 'Demander une démo', href: '/contact' },
     body: [
       {
         type: 'p',

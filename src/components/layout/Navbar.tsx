@@ -36,6 +36,7 @@ import { ENTIWIN_PATH } from '@/lib/data/entiwin'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
+import { ROUTES } from '@/lib/routes'
 
 type NavItem = {
   title: string
@@ -162,7 +163,7 @@ function buildNavGroups(locale: Locale): NavGroup[] {
       featured: {
         title: 'CIPA — Industrial Intelligence Platform',
         description: t.featured,
-        href: '/#solutions',
+        href: ROUTES.cipa,
       },
       // Une entree par page Solution, generee depuis lib/data/platform.ts : le menu
       // et les sept pages ne peuvent pas diverger.
@@ -489,7 +490,7 @@ export default function Navbar() {
             <div className="hidden items-center gap-3 lg:flex xl:gap-4">
               {/* CTA */}
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 className="group inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gray-900 px-4 py-2.5 text-[13px] xl:px-5 font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.12)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
               >
                 {t.cta}
@@ -757,7 +758,7 @@ export default function Navbar() {
 
               {/* BOUTON D'APPEL À L'ACTION MOBILE (AJOUTÉ) */}
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 onClick={() => setMobileOpen(false)}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-3.5 text-[14px] font-semibold text-white shadow-md transition-all hover:bg-black"
               >

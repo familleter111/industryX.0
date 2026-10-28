@@ -9,6 +9,7 @@ import OrbitCanvas from '@/components/sections/orbit/OrbitCanvas'
 import Section from '@/components/ui/Section'
 import SdgContribution from '@/components/sections/SdgContribution'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 const COPY = {
   fr: {
@@ -128,7 +129,7 @@ export default function PartnersOrbit({
 
               <div className="mt-9 flex flex-wrap items-center gap-3.5">
                 <Link
-                  href="/partners"
+                  href={ROUTES.partners}
                   className="group inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-dark shadow-[0_14px_34px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
                 >
                   {t.discover}
@@ -139,7 +140,7 @@ export default function PartnersOrbit({
                 </Link>
 
                 <Link
-                  href="/contact"
+                  href={ROUTES.demo}
                   className="group inline-flex items-center gap-2 rounded-full border border-dark/15 px-6 py-3.5 text-[14px] font-bold text-stone-900 transition-all duration-300 hover:border-dark/35 hover:bg-white"
                 >
                   {t.join}
