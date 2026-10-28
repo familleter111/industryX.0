@@ -12,6 +12,7 @@ import LegalDocument, {
   type LegalSection,
 } from '@/features/legal/LegalDocument'
 import { chatAiEnabled } from '@/lib/chat/config'
+import { postalAddress } from '@/lib/data/contact'
 import { pageMetadata, type Locale } from '@/lib/i18n'
 
 /**
@@ -100,7 +101,7 @@ function sectionsFr(): LegalSection[] {
           locale={l}
           items={[
             ['Éditeur', 'Industry X.0'],
-            ['Siège', 'Cité les pins, Tunis 1053, Tunisie'],
+            ['Siège', postalAddress('fr')],
             ['E-mail', <MailLink key="m" />],
             ['Téléphone', LEGAL_PHONE],
           ]}
@@ -319,7 +320,7 @@ function sectionsFr(): LegalSection[] {
               ['E-mail', <MailLink key="m" />],
               ['Téléphone', LEGAL_PHONE],
               ['Site', LEGAL_SITE.replace('https://', '')],
-              ['Adresse', 'Cité les pins, Tunis 1053, Tunisie'],
+              ['Adresse', postalAddress('fr')],
             ]}
           />
         </>
@@ -375,7 +376,7 @@ function sectionsEn(): LegalSection[] {
           locale={l}
           items={[
             ['Publisher', 'Industry X.0'],
-            ['Head office', 'Cité les pins, Tunis 1053, Tunisia'],
+            ['Head office', postalAddress('en')],
             ['Email', <MailLink key="m" />],
             ['Phone', LEGAL_PHONE],
           ]}
@@ -585,7 +586,7 @@ function sectionsEn(): LegalSection[] {
               ['Email', <MailLink key="m" />],
               ['Phone', LEGAL_PHONE],
               ['Website', LEGAL_SITE.replace('https://', '')],
-              ['Address', 'Cité les pins, Tunis 1053, Tunisia'],
+              ['Address', postalAddress('en')],
             ]}
           />
         </>

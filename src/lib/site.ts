@@ -22,6 +22,12 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.indust
 const STATIC_INDUSTRIES = ['pharma', 'food', 'cosmetics', 'electronics', 'packaging']
 
 /**
+ * Pages servies mais volontairement hors sitemap (`noindex`) : leur contenu
+ * attend une validation (voir l'en-tête de chaque page).
+ */
+export const NOINDEX_PATHS = ['/mentions-legales']
+
+/**
  * Toutes les pages publiques, en chemin français (sans préfixe de langue).
  * Une page ajoutée sans être listée ici n'entre pas dans le sitemap : le test
  * tests/site.test.ts compare cette liste aux dossiers de src/app.

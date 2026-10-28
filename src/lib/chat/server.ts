@@ -2,7 +2,7 @@
  * Contrôles côté serveur de la route /api/chat, à part pour être testés.
  */
 
-import { createHmac, timingSafeEqual } from 'node:crypto'
+import { createHash, createHmac, timingSafeEqual } from 'node:crypto'
 
 import { azureConfig } from '@/lib/chat/azure'
 import { CHAT_LIMITS } from '@/lib/chat/config'
@@ -120,12 +120,16 @@ export function sameOrigin(request: Request, env: Env = process.env): boolean {
 /**
  * Même question répétée par la même adresse IP dans la fenêtre : `true`.
  * Un visiteur reformule ; un script renvoie le même texte en boucle.
+ *
+ * Seule une empreinte de la question est gardée, jamais son texte : la
+ * politique de confidentialité annonce que les conversations ne sont pas
+ * conservées.
  */
 export function createRepeatGuard(windowMs: number, now: () => number = Date.now) {
   const last = new Map<string, { text: string; at: number }>()
   return function repeated(ip: string, text: string): boolean {
     const time = now()
-    const normalized = text.toLowerCase().replace(/\s+/g, ' ').trim()
+    const normalized = createHash('sha256').update(text.toLowerCase().replace(/\s+/g, ' ').trim()).digest('hex')
     const previous = last.get(ip)
     last.set(ip, { text: normalized, at: time })
     // Purge, comme lib/server/rateLimit.ts : la Map ne grossit pas sans fin.
