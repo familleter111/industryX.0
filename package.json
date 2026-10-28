@@ -10,6 +10,7 @@
     "check:hex": "node scripts/check-hex.mjs",
     "gen:countries": "node scripts/gen-countries.mjs",
     "check:i18n": "node scripts/check-i18n.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
