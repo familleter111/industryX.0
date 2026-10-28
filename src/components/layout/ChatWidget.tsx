@@ -72,11 +72,15 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const wasOpen = useRef(isOpen)
+  /** Élément qui a ouvert le chat (bulle, bouton de la FAQ…) : le focus y revient à la fermeture. */
+  const opener = useRef<HTMLElement | null>(null)
 
   const { messages, typing: isTyping, streamingId } = chat
 
   useEffect(() => {
     if (!isOpen) return
+    // Relevé avant que le focus passe au champ de saisie.
+    opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     track('chat_opened', { page: window.location.pathname, source })
     // Le visiteur peut écrire tout de suite, sans cliquer dans le champ.
     const focus = setTimeout(() => inputRef.current?.focus(), 250)
@@ -93,10 +97,15 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [isOpen, onClose])
 
-  // Fermeture du widget : la réponse en cours n'a plus de lecteur. Seulement
-  // au passage ouvert → fermé, pas au premier rendu.
+  // Fermeture du widget : la réponse en cours n'a plus de lecteur, et le
+  // focus revient à l'élément qui l'avait ouvert (Échap, croix ou bulle).
+  // Seulement au passage ouvert → fermé, pas au premier rendu.
   useEffect(() => {
-    if (wasOpen.current && !isOpen) stopReply()
+    if (wasOpen.current && !isOpen) {
+      stopReply()
+      if (opener.current?.isConnected && opener.current !== document.body) opener.current.focus()
+      opener.current = null
+    }
     wasOpen.current = isOpen
   }, [isOpen])
 

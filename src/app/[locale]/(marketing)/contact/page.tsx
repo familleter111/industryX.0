@@ -73,7 +73,8 @@ const COPY = {
   fr: {
     promises: [
       ['Démo personnalisée', 'Adaptée à vos enjeux'],
-      ['Réponse en 24h', 'Un expert vous recontacte'],
+      // Délai de réponse retiré tant qu'il n'est pas validé — TODO(À CONFIRMER, L2-15).
+      ['Un expert dédié', 'Pour organiser votre démo'],
       ['Accompagnement métier', 'De l’analyse à la réussite'],
     ],
     industries: INDUSTRIES,
@@ -85,7 +86,7 @@ const COPY = {
     ],
     impact: ['Projets livrés dans les délais', 'Arrêts non planifiés en moyenne', 'Performance opérationnelle'],
     engagements: [
-      ['Réponse rapide', 'Sous 24h ouvrées'],
+      ['Contact direct', 'Un expert vous recontacte'],
       ['Approche métier', 'Alignée sur vos enjeux'],
       ['Vision Ops + Quality', 'Du terrain à la décision'],
     ],
@@ -102,7 +103,7 @@ const COPY = {
     offline: 'Connexion impossible. Vérifiez votre réseau, puis réessayez.',
     sentTitle: 'Demande bien reçue',
     sentText: (name: string) =>
-      `Merci ${name} — un expert Industry X.0 revient vers vous sous 24h pour organiser votre démonstration CIPA.`,
+      `Merci ${name} — un expert Industry X.0 revient vers vous pour organiser votre démonstration CIPA.`,
     another: 'Envoyer une autre demande',
     legend: 'Les champs suivis d’un astérisque (*) sont obligatoires.',
     firstName: 'Prénom',
@@ -149,7 +150,7 @@ const COPY = {
   en: {
     promises: [
       ['Tailored demo', 'Adapted to your challenges'],
-      ['Reply within 24h', 'An expert gets back to you'],
+      ['A dedicated expert', 'To arrange your demo'],
       ['Hands-on support', 'From analysis to success'],
     ],
     industries: [
@@ -171,7 +172,7 @@ const COPY = {
     ],
     impact: ['Projects delivered on time', 'Fewer unplanned stoppages on average', 'Operational performance'],
     engagements: [
-      ['Fast response', 'Within 24 business hours'],
+      ['Direct contact', 'An expert gets back to you'],
       ['Business approach', 'Aligned with your challenges'],
       ['Ops + Quality vision', 'From shop floor to decision'],
     ],
@@ -186,7 +187,7 @@ const COPY = {
     offline: 'Unable to connect. Check your network, then try again.',
     sentTitle: 'Request received',
     sentText: (name: string) =>
-      `Thank you ${name} — an Industry X.0 expert will get back to you within 24 hours to arrange your CIPA demo.`,
+      `Thank you ${name} — an Industry X.0 expert will get back to you to arrange your CIPA demo.`,
     another: 'Send another request',
     legend: 'Fields marked with an asterisk (*) are required.',
     firstName: 'First name',

@@ -24,7 +24,7 @@ const FACTS: Record<ChatLocale, string> = {
 Industry X.0 est une startup tunisienne fondée en 2019, spécialisée dans la digitalisation et l'optimisation des opérations industrielles. Elle conçoit et déploie CIPA, une plateforme industrielle pour l'industrie africaine et méditerranéenne : remontée des données terrain, gestion des écarts et de la qualité, pilotage de la performance.
 Enti Win : nouveau produit, évaluation qualité pharmaceutique assistée par IA (${SITE}/plateforme/entiwin).
 Secteurs : pharmaceutique, agroalimentaire et boissons, cosmétique et dispositifs médicaux, automobile et composants, électronique et câblage, packaging et plasturgie.
-Parcours après une prise de contact : 1. Qualification, 2. Démonstration ciblée, 3. Cadrage, 4. Plan d'action. Réponse sous 24 h ouvrées.
+Parcours après une prise de contact : 1. Qualification, 2. Démonstration ciblée, 3. Cadrage, 4. Plan d'action.
 Demander une démo : ${SITE}/contact
 Coordonnées : ${postalAddress('fr')} — ${CONTACT.phone} — ${CONTACT.email}
 Candidatures (emploi, stage, PFE) : CV et motivation à ${CONTACT.email}, objet « Candidature – poste visé ».`,
@@ -32,7 +32,7 @@ Candidatures (emploi, stage, PFE) : CV et motivation à ${CONTACT.email}, objet 
 Industry X.0 is a Tunisian startup founded in 2019, specialized in digitizing and optimizing industrial operations. It designs and deploys CIPA, an industrial platform for African and Mediterranean industry: shop-floor data capture, deviation and quality management, performance management.
 Enti Win: new product, AI-assisted pharmaceutical quality assessment (${SITE}/en/plateforme/entiwin).
 Industries: pharmaceuticals, food and beverage, cosmetics and medical devices, automotive and components, electronics and wiring, packaging and plastics.
-After you get in touch: 1. Qualification, 2. Targeted demo, 3. Scoping, 4. Action plan. Reply within one business day.
+After you get in touch: 1. Qualification, 2. Targeted demo, 3. Scoping, 4. Action plan.
 Book a demo: ${SITE}/en/contact
 Contact: ${postalAddress('en')} — ${CONTACT.phone} — ${CONTACT.email}
 Job applications (jobs, internships): resume and cover letter to ${CONTACT.email}, subject “Application – target role”.`,

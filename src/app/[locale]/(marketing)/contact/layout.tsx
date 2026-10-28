@@ -7,12 +7,12 @@ const META = {
   fr: {
     title: 'Contact — Industry X.0',
     description:
-      'Parlons de vos opérations. Un expert Industry X.0 vous accompagne : démo personnalisée de CIPA, réponse sous 24h et accompagnement métier.',
+      'Parlons de vos opérations. Un expert Industry X.0 vous accompagne : démo personnalisée de CIPA et accompagnement métier.',
   },
   en: {
     title: 'Contact — Industry X.0',
     description:
-      'Let\'s talk about your operations. An Industry X.0 expert guides you: a tailored CIPA demo, a reply within 24 hours and hands-on support.',
+      'Let\'s talk about your operations. An Industry X.0 expert guides you: a tailored CIPA demo and hands-on support.',
   },
 }
 
