@@ -17,6 +17,7 @@ import { NextResponse } from 'next/server'
 import type { ContactLead } from '@/lib/crm'
 import { deliverLead } from '@/lib/leads/deliver'
 import { parseContact } from '@/lib/leads/schema'
+import { createDedupe } from '@/lib/server/dedupe'
 import { clean, clientIp, createRateLimiter } from '@/lib/server/rateLimit'
 import { API_MESSAGES, apiLocale } from '@/lib/server/messages'
 import { leadAttribution } from '@/lib/analytics/attribution'
@@ -27,6 +28,9 @@ export const dynamic = 'force-dynamic'
 
 /** 5 envois par IP et par quart d'heure (voir lib/server/rateLimit.ts). */
 const rateLimited = createRateLimiter(5, 15 * 60 * 1000)
+
+/** Même demande (IP, e-mail, message) livrée une seule fois en 10 minutes. */
+const deliverOnce = createDedupe(10 * 60 * 1000)
 
 /* ------------------------------------------------------------- POST */
 
@@ -57,7 +61,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true })
   }
 
-  if (rateLimited(clientIp(request))) {
+  const ip = clientIp(request)
+  if (rateLimited(ip)) {
     return NextResponse.json({ ok: false, error: t.tooMany }, { status: 429 })
   }
 
@@ -80,8 +85,10 @@ export async function POST(request: Request) {
     submittedAt: now,
   }
 
-  const report = await deliverLead(lead)
-  if (!report.stored) {
+  // Double envoi (double clic, requête rejouée) : la première livraison fait
+  // foi, la seconde reçoit la même réponse sans livrer une deuxième fois.
+  const stored = await deliverOnce([ip, lead.email, lead.message], async () => (await deliverLead(lead)).stored)
+  if (!stored) {
     return NextResponse.json({ ok: false, error: t.contactFailed }, { status: 500 })
   }
   return NextResponse.json({ ok: true })
