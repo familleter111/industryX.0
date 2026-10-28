@@ -1348,7 +1348,7 @@ export default function PackagingPage() {
         </div>
       </section>
 
-      <Footer variant="compact" />
+      <Footer />
     </main>
   )
 }

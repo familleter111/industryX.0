@@ -1303,7 +1303,7 @@ export default function PharmaPage() {
         </div>
       </section>
 
-      <Footer variant="compact" />
+      <Footer />
     </main>
   )
 }

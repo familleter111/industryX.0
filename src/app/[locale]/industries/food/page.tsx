@@ -1404,7 +1404,7 @@ export default function FoodPage() {
         </div>
       </section>
 
-      <Footer variant="compact" />
+      <Footer />
     </main>
   )
 }

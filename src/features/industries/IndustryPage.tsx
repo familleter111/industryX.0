@@ -366,7 +366,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <Footer variant="compact" />
+      <Footer />
     </main>
   )
 }

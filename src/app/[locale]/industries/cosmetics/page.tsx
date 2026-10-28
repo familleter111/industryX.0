@@ -1361,7 +1361,7 @@ export default function CosmeticsPage() {
         </div>
       </section>
 
-      <Footer variant="compact" />
+      <Footer />
     </main>
   )
 }

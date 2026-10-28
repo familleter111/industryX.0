@@ -13,8 +13,10 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import CookieSettingsButton from '@/components/analytics/CookieSettingsButton'
 import { useCopy } from '@/lib/i18n'
 
-// Chaque lien mene a une page existante. Les anciens libelles sans page
-// (Mises a jour, Blog, Conditions, Cookies) pointaient tous vers l'accueil.
+// Chaque lien mene a une page existante (L1-04). Les anciens libelles sans
+// page (Mises a jour, Notre equipe, Blog, Cookies) pointaient tous vers
+// l'accueil : ils sont retires plutot que redirigés vers « / ».
+// Mentions legales : a ajouter quand la page sera publiee (voir son en-tete).
 const FOOTER_HREFS = [
   [
     '/plateforme/remontee-terrain',
@@ -27,16 +29,16 @@ const FOOTER_HREFS = [
     '/plateforme/integrations#securite',
     '/plateforme/entiwin',
   ],
-  ['/entreprise', '/partners', '/resources', '/contact'],
+  ['/entreprise', '/partners', '/customers', '/resources', '/contact'],
   ['/privacy', '/conditions-utilisation', '/faq'],
 ]
 
 const COPY = {
   fr: {
     sections: [
-      ['Solution', ['Remontée terrain', 'Planification', 'Gestion des écarts', 'Conformité', 'Pilotage', 'Intelligence opérationnelle', 'Intégrations', 'Sécurité', 'Enti Win']],
-      ['Entreprise', ['À propos', 'Partenaires', 'Guides & insights', 'Contact']],
-      ['Légal', ['Politique de confidentialité', 'Conditions d’utilisation', 'FAQ']],
+      ['Plateforme', ['Remontée terrain', 'Planification', 'Gestion des écarts', 'Conformité', 'Pilotage', 'Intelligence opérationnelle', 'Intégrations', 'Sécurité', 'Enti Win']],
+      ['Entreprise', ['À propos', 'Partenaires', 'Cas clients', 'Guides & analyses', 'Contact']],
+      ['Ressources & légal', ['Confidentialité', 'Conditions d’utilisation', 'FAQ']],
     ] as [string, string[]][],
     about:
       'Plateforme de transformation digitale dédiée à l’industrie africaine et méditerranéenne, conçue pour accélérer l’adoption des technologies Industrie 4.0 et optimiser les performances industrielles.',
@@ -44,15 +46,18 @@ const COPY = {
     phone: 'Téléphone',
     email: 'Email',
     follow: 'Suivez-nous',
+    navLabel: 'Plan du site',
     linkedin: 'Industry X.0 sur LinkedIn',
     rights: 'Tous droits réservés',
     cookies: 'Gérer les cookies',
+    startupAct: 'Labellisée Startup Act (Tunisie)',
+    madeIn: 'Conçu à Tunis',
   },
   en: {
     sections: [
-      ['Solution', ['Shop-floor capture', 'Planning', 'Deviation management', 'Compliance', 'Performance', 'Operational intelligence', 'Integrations', 'Security', 'Enti Win']],
-      ['Company', ['About us', 'Partners', 'Guides & insights', 'Contact']],
-      ['Legal', ['Privacy policy', 'Terms of use', 'FAQ']],
+      ['Platform', ['Shop-floor capture', 'Planning', 'Deviation management', 'Compliance', 'Performance', 'Operational intelligence', 'Integrations', 'Security', 'Enti Win']],
+      ['Company', ['About us', 'Partners', 'Customer stories', 'Guides & analysis', 'Contact']],
+      ['Resources & legal', ['Privacy', 'Terms of use', 'FAQ']],
     ] as [string, string[]][],
     about:
       'A digital transformation platform for African and Mediterranean industry, built to speed up the adoption of Industry 4.0 technologies and improve industrial performance.',
@@ -60,19 +65,20 @@ const COPY = {
     phone: 'Phone',
     email: 'Email',
     follow: 'Follow us',
+    navLabel: 'Site map',
     linkedin: 'Industry X.0 on LinkedIn',
     rights: 'All rights reserved',
     cookies: 'Cookie settings',
+    startupAct: 'Startup Act label (Tunisia)',
+    madeIn: 'Designed in Tunis',
   },
 }
 
-// 'full' = footer complet (page d'accueil) — 'compact' = logos + informations + copyright (pages secteurs)
-type FooterProps = {
-  variant?: 'full' | 'compact'
-}
-
-export default function Footer({ variant = 'full' }: FooterProps) {
-  const isCompact = variant === 'compact'
+/**
+ * Pied de page unique, identique sur toutes les pages (L1-04) : l'ancienne
+ * variante « compact » des pages secteurs n'avait aucun lien de navigation.
+ */
+export default function Footer() {
   const t = useCopy(COPY)
   const footerLinks = t.sections.map(([title, labels], s) => ({
     title,
@@ -100,13 +106,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 lg:px-8">
         {/* MAIN GRID */}
 
-        <div
-          className={
-            isCompact
-              ? 'grid gap-10'
-              : 'grid gap-10 lg:grid-cols-[1.2fr_0.8fr]'
-          }
-        >
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
           {/* LEFT SIDE */}
 
           <div>
@@ -124,18 +124,15 @@ export default function Footer({ variant = 'full' }: FooterProps) {
 
             {/* description */}
 
-            {!isCompact && (
-              <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
-                {t.about}
-              </p>
-            )}
+            <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
+              {t.about}
+            </p>
 
           </div>
 
           {/* RIGHT SIDE */}
 
-          {!isCompact && (
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 sm:gap-8">
+          <nav aria-label={t.navLabel} className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 sm:gap-8">
             {footerLinks.map((section) => (
               <div key={section.title}>
                 <div className="mb-5">
@@ -178,8 +175,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                 </ul>
               </div>
             ))}
-          </div>
-          )}
+          </nav>
         </div>
 
         {/* CONTACT BAR */}
@@ -337,11 +333,11 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           </p>
 
           <div className="flex items-center gap-3 text-xs text-white/50">
-            <span>Startup Act 🇹🇳</span>
+            <span>{t.startupAct}</span>
 
-            <div className="h-1 w-1 rounded-full bg-white/20" />
+            <div className="h-1 w-1 rounded-full bg-white/20" aria-hidden="true" />
 
-            <span>Designed in Tunis</span>
+            <span>{t.madeIn}</span>
 
             {/* Rien n'apparaît tant que la mesure d'audience n'est pas configurée. */}
             <CookieSettingsButton
