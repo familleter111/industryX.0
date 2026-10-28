@@ -15,7 +15,6 @@ import { useCopy, useCurrentLocale } from '@/lib/i18n'
 import Footer from '@/components/layout/Footer'
 import heroStyles from '@/features/industries/hero.module.css'
 import { Link } from '@/i18n/navigation'
-import { MAILTO } from '@/lib/data/contact'
 import { ROUTES } from '@/lib/routes'
 
 const fadeInUp = {
@@ -357,12 +356,12 @@ export default function IndustryPage({ slug }: { slug: string }) {
               {t.ctaDemo}
               <ArrowRight size={15} className="text-dark transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
-            <a
-              href={MAILTO}
+            <Link
+              href={ROUTES.contact}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 px-7 py-4 text-sm font-semibold text-white transition-all duration-300"
             >
               {t.ctaAdvisor}
-            </a>
+            </Link>
           </div>
         </div>
       </section>
