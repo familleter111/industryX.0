@@ -151,7 +151,7 @@ export default function GuidePage({ params }: Params) {
                 aria-hidden="true"
                 className="transition-transform duration-300 group-hover:-translate-x-0.5"
               />
-              Guides & insights
+              {locale === 'en' ? 'Guides & analysis' : 'Guides & analyses'}
             </Link>
             <span className="mx-2" aria-hidden="true">/</span>
             <span>{categoryLabel(guide.category, locale)}</span>

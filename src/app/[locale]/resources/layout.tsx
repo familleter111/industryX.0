@@ -5,12 +5,12 @@ import { pageMetadata, type Locale } from '@/lib/i18n'
 
 const META = {
   fr: {
-    title: 'Guides & insights — Industry X.0',
+    title: 'Guides & analyses — Industry X.0',
     description:
       'Analyses sectorielles, guides pratiques et ressources pour digitaliser vos processus qualité, production et maintenance.',
   },
   en: {
-    title: 'Guides & insights — Industry X.0',
+    title: 'Guides & analysis — Industry X.0',
     description:
       'Industry analyses, practical guides and resources to digitize your quality, production and maintenance processes.',
   },

@@ -125,7 +125,7 @@ function sectionsFr(): LegalSection[] {
               ],
             ]}
           />
-          <Sub>Inscription aux guides &amp; insights</Sub>
+          <Sub>Inscription aux guides &amp; analyses</Sub>
           <Items
             locale={l}
             items={[
@@ -456,7 +456,7 @@ function sectionsEn(): LegalSection[] {
               ],
             ]}
           />
-          <Sub>Guides &amp; insights subscription</Sub>
+          <Sub>Guides &amp; analysis subscription</Sub>
           <Items
             locale={l}
             items={[

@@ -69,7 +69,8 @@ const COPY = {
     closeMenu: 'Fermer le menu',
     openChat: 'Ouvrir le chat',
     closeChat: 'Fermer le chat',
-    platform: 'Solution',
+    platform: 'Plateforme',
+    featuredTitle: 'CIPA — Plateforme d’intelligence opérationnelle',
     entiwin: ['Enti Win', 'Évaluation qualité pharmaceutique assistée par IA', 'Nouveau'],
     featured:
       'CIPA capte la donnée terrain, orchestre les processus critiques et met l’intelligence opérationnelle au service des opérations industrielles.',
@@ -85,7 +86,7 @@ const COPY = {
     resources: 'Ressources',
     resourceItems: [
       ['Cas clients', 'Voir comment les industriels utilisent CIPA.'],
-      ['Guides & insights', 'Analyses et excellence opérationnelle.'],
+      ['Guides & analyses', 'Analyses et excellence opérationnelle.'],
       ['FAQ', 'Questions fréquentes sur la plateforme.'],
     ],
     company: 'Société',
@@ -104,7 +105,8 @@ const COPY = {
     closeMenu: 'Close menu',
     openChat: 'Open chat',
     closeChat: 'Close chat',
-    platform: 'Solution',
+    platform: 'Platform',
+    featuredTitle: 'CIPA — Operational Intelligence Platform',
     entiwin: ['Enti Win', 'AI-assisted pharmaceutical quality assessment', 'New'],
     featured:
       'CIPA captures shop-floor data, orchestrates critical processes and puts operational intelligence to work for industrial operations.',
@@ -120,7 +122,7 @@ const COPY = {
     resources: 'Resources',
     resourceItems: [
       ['Customer stories', 'See how manufacturers use CIPA.'],
-      ['Guides & insights', 'Analysis and operational excellence.'],
+      ['Guides & analysis', 'Analysis and operational excellence.'],
       ['FAQ', 'Frequently asked questions about the platform.'],
     ],
     company: 'Company',
@@ -161,7 +163,7 @@ function buildNavGroups(locale: Locale): NavGroup[] {
       id: 'platform',
       label: t.platform,
       featured: {
-        title: 'CIPA — Industrial Intelligence Platform',
+        title: t.featuredTitle,
         description: t.featured,
         href: ROUTES.cipa,
       },
@@ -314,6 +316,13 @@ export default function Navbar() {
     event: React.KeyboardEvent<HTMLButtonElement>,
     label: string
   ) => {
+    // Panneau ouvert : Tab y entre. Il est monté ailleurs dans le DOM, la
+    // tabulation naturelle le sauterait (L1-13).
+    if (event.key === 'Tab' && !event.shiftKey && activeMenu === label && panelLinks().length > 0) {
+      event.preventDefault()
+      focusPanelLink(0)
+      return
+    }
     if (event.key !== 'ArrowDown') return
     event.preventDefault()
     if (activeMenu === label) {
@@ -328,6 +337,25 @@ export default function Navbar() {
     const links = panelLinks()
     if (links.length === 0) return
     const current = links.indexOf(document.activeElement as HTMLAnchorElement)
+
+    // Tab depuis le dernier lien (ou Maj+Tab depuis le premier) : retour aux
+    // déclencheurs, au suivant (ou au sien), panneau refermé.
+    if (event.key === 'Tab' && activeMenu) {
+      const ids = navGroups.map((group) => group.id)
+      const here = ids.indexOf(activeMenu)
+      if (!event.shiftKey && current === links.length - 1) {
+        const next = ids[here + 1]
+        if (next) {
+          event.preventDefault()
+          triggerRefs.current[next]?.focus()
+          setActiveMenu(null)
+        }
+      } else if (event.shiftKey && current === 0) {
+        event.preventDefault()
+        closeMenu(activeMenu)
+      }
+      return
+    }
 
     switch (event.key) {
       case 'ArrowDown':

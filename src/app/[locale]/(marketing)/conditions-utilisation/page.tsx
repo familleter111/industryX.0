@@ -153,7 +153,7 @@ function sectionsFr(): LegalSection[] {
         <>
           <p>
             Le Site propose un formulaire de demande de démonstration et une inscription aux guides
-            &amp; insights. En les utilisant, vous vous engagez à :
+            &amp; analyses. En les utilisant, vous vous engagez à :
           </p>
           <Items
             locale={l}
@@ -424,7 +424,7 @@ function sectionsEn(): LegalSection[] {
       title: 'Forms and requests',
       body: (
         <>
-          <p>The Website offers a demo request form and a guides &amp; insights subscription. By using them, you agree to:</p>
+          <p>The Website offers a demo request form and a guides &amp; analysis subscription. By using them, you agree to:</p>
           <Items
             locale={l}
             items={[
