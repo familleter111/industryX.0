@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   ChevronDown,
   MessageCircle,
@@ -201,13 +201,16 @@ function FaqAccordion() {
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="flex w-full items-center gap-4 px-5 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/50 sm:gap-5 sm:px-7 sm:py-[22px] lg:py-4"
                 >
+                  {/* Numéro décoratif : hors du nom accessible, et séparé de
+                      la question par une espace (texte extrait : « 01 Combien »). */}
                   <span
+                    aria-hidden="true"
                     className={`shrink-0 font-display text-[13px] font-black tabular-nums tracking-[0.02em] transition-colors duration-300 ${
                       isOpen ? 'text-gold' : 'text-[#C7C2B8]'
                     }`}
                   >
                     {String(index + 1).padStart(2, '0')}
-                  </span>
+                  </span>{' '}
 
                   <span className="min-w-0 flex-1 text-pretty text-[14.5px] font-bold leading-snug tracking-[-0.015em] text-[#111827] sm:text-[15.5px]">
                     {faq.question}
@@ -225,25 +228,23 @@ function FaqAccordion() {
                 </button>
               </h3>
 
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    key={panelId}
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={buttonId}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <p className="px-5 pb-6 pl-[46px] text-[13.5px] leading-[1.75] text-[#57534E] sm:px-7 sm:pb-7 sm:pl-[64px] sm:text-[14.5px] lg:pb-5">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Toutes les réponses sont dans le HTML (règle 5 : moteurs,
+                  lecteurs sans JavaScript, assistant) ; fermées, elles
+                  portent `hidden`. L'ouverture reste animée. */}
+              <motion.div
+                id={panelId}
+                role="region"
+                aria-labelledby={buttonId}
+                hidden={!isOpen}
+                initial={false}
+                animate={isOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="overflow-hidden"
+              >
+                <p className="px-5 pb-6 pl-[46px] text-[13.5px] leading-[1.75] text-[#57534E] sm:px-7 sm:pb-7 sm:pl-[64px] sm:text-[14.5px] lg:pb-5">
+                  {faq.answer}
+                </p>
+              </motion.div>
             </div>
           )
         })}

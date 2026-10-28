@@ -18,7 +18,7 @@ import { useCopy } from '@/lib/i18n'
 
 const COPY = {
   fr: {
-    live: 'Données live',
+    live: 'Données en temps réel',
     before: 'Avant CIPA',
     after: 'Avec CIPA',
     results: 'Résultats mesurés',
@@ -29,7 +29,7 @@ const COPY = {
     goTo: 'Aller à la carte',
   },
   en: {
-    live: 'Live data',
+    live: 'Real-time data',
     before: 'Before CIPA',
     after: 'With CIPA',
     results: 'Measured results',
