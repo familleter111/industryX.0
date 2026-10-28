@@ -2,9 +2,10 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import AutoplayTimer from '@/components/ui/AutoplayTimer'
 import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
 import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
 import { tokens } from '@/lib/tokens'
@@ -69,6 +70,9 @@ function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
   )
 }
 
+/** Temps d'affichage d'une page d'avis avant la suivante. */
+const AUTOPLAY_MS = 6000
+
 export default function TestimonialsSection() {
   const m = useMotion()
   const copy = useCopy(COPY)
@@ -112,6 +116,20 @@ export default function TestimonialsSection() {
   const prev = useCallback(() => goTo(page - 1), [goTo, page])
   const next = useCallback(() => goTo(page + 1), [goTo, page])
 
+  /* Défilement automatique : une page toutes les AUTOPLAY_MS, puis retour à
+     la première. En pause quand le visiteur survole, touche ou parcourt au
+     clavier les avis, et quand la section n'est pas à l'écran. La minuterie
+     est la pastille active elle-même (components/ui/AutoplayTimer). */
+  const inView = useInView(ref, { amount: 0.3 })
+  const [holding, setHolding] = useState(false)
+  const advance = useCallback(() => goTo(page >= pageCount - 1 ? 0 : page + 1), [goTo, page, pageCount])
+  const hold = {
+    onPointerEnter: () => setHolding(true),
+    onPointerLeave: () => setHolding(false),
+    onFocus: () => setHolding(true),
+    onBlur: () => setHolding(false),
+  }
+
   return (
     <Section
       variant="default"
@@ -136,6 +154,7 @@ export default function TestimonialsSection() {
             que les cartes atteignent a leur tour le seuil. */}
         <motion.div
           ref={ref}
+          {...hold}
           variants={m.stagger()}
           initial="hidden"
           whileInView="visible"
@@ -223,7 +242,7 @@ export default function TestimonialsSection() {
         </motion.div>
 
         {/* NAVIGATION — une pastille par page de défilement */}
-        <div className="mt-12 flex items-center justify-center gap-4">
+        <div className="mt-12 flex items-center justify-center gap-4" {...hold}>
           <motion.button
             type="button"
             onClick={prev}
@@ -243,11 +262,22 @@ export default function TestimonialsSection() {
                 type="button"
                 onClick={() => goTo(i)}
                 aria-label={`${copy.page} ${i + 1}`}
-                className={`rounded-full transition-all ${page === i
-                  ? 'h-2.5 w-8 bg-gold'
+                aria-current={page === i ? 'true' : undefined}
+                className={`overflow-hidden rounded-full transition-all ${page === i
+                  ? `h-2.5 w-8 ${m.reduce || pageCount < 2 ? 'bg-gold' : 'bg-gold/30'}`
                   : 'h-2.5 w-2.5 bg-black/20'
                   }`}
-              />
+              >
+                {page === i && pageCount > 1 && (
+                  <AutoplayTimer
+                    key={page}
+                    duration={AUTOPLAY_MS}
+                    paused={holding || !inView}
+                    onDone={advance}
+                    className="h-full w-full bg-gold"
+                  />
+                )}
+              </button>
             ))}
           </div>
 

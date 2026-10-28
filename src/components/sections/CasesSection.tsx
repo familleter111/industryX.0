@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { CheckCircle2, ChevronRight } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
+import AutoplayTimer from '@/components/ui/AutoplayTimer'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
@@ -40,6 +41,9 @@ const colors = {
   border: 'rgba(15,23,42,0.06)',
 }
 
+/** Temps d'affichage d'un usage avant le suivant. */
+const AUTOPLAY_MS = 7000
+
 /* ─────────────────────────── COMPONENT ─────────────────────────── */
 export default function CasesSection({
   availableScreenshots = [],
@@ -58,6 +62,22 @@ export default function CasesSection({
   // Filet de securite : une capture qui echoue malgre tout bascule elle aussi
   // sur le placeholder.
   const [failed, setFailed] = useState<Record<string, true>>({})
+
+  /* Défilement automatique des usages, en boucle. En pause quand le
+     visiteur survole ou parcourt au clavier les onglets ou la carte, et
+     quand la section n'est pas à l'écran. La minuterie est une barre au bas
+     de l'onglet actif (components/ui/AutoplayTimer) ; un clic sur un onglet
+     la fait repartir de zéro. */
+  const cardRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(cardRef, { amount: 0.4 })
+  const [holding, setHolding] = useState(false)
+  const hold = {
+    onPointerEnter: () => setHolding(true),
+    onPointerLeave: () => setHolding(false),
+    onFocus: () => setHolding(true),
+    onBlur: () => setHolding(false),
+  }
+  const advance = () => setActiveTab((current) => (current + 1) % FEATURE_TABS.length)
 
   const active = FEATURE_TABS[activeTab]
   const Icon = active.icon
@@ -122,6 +142,7 @@ export default function CasesSection({
           style={{ scrollbarWidth: 'none' }}
           role="group"
           aria-label={t.tabs}
+          {...hold}
         >
           {FEATURE_TABS.map((item, index) => {
             const TabIcon = item.icon
@@ -145,7 +166,7 @@ export default function CasesSection({
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                className="group flex shrink-0 items-center justify-center gap-2 rounded-xl border px-3 py-2 sm:px-4 text-sm font-semibold transition-colors duration-300"
+                className="group relative flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-xl border px-3 py-2 sm:px-4 text-sm font-semibold transition-colors duration-300"
                 style={{
                   background: isActive ? colors.gold : 'rgba(255,255,255,0.80)',
                   borderColor: isActive ? colors.gold : colors.border,
@@ -158,13 +179,22 @@ export default function CasesSection({
               >
                 <TabIcon size={16} className="shrink-0" />
                 <span className="hidden md:inline">{item.label}</span>
+                {isActive && (
+                  <AutoplayTimer
+                    key={activeTab}
+                    duration={AUTOPLAY_MS}
+                    paused={holding || !inView}
+                    onDone={advance}
+                    className="absolute inset-x-0 bottom-0 h-[3px] bg-dark/35"
+                  />
+                )}
               </motion.button>
             )
           })}
         </motion.div>
 
         {/* ─── CONTENT CARD ─── */}
-        <div className="mt-4 lg:mt-5">
+        <div ref={cardRef} className="mt-4 lg:mt-5" {...hold}>
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

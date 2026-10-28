@@ -100,6 +100,9 @@ const config: Config = {
         // La confier a Framer Motion la rendrait dependante de l'hydratation,
         // c'est-a-dire du poids du bundle — exactement ce qu'on veut eviter.
         'welcome-out': 'welcomeOut 460ms cubic-bezier(0.76, 0, 0.24, 1) forwards',
+        // Minuterie de defilement automatique (components/ui/AutoplayTimer) :
+        // la duree est fixee par element, la fin de l'animation fait avancer.
+        autoplay: 'autoplay linear forwards',
       },
       keyframes: {
         shimmer: {
@@ -130,6 +133,10 @@ const config: Config = {
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
+        },
+        autoplay: {
+          from: { transform: 'scaleX(0)' },
+          to: { transform: 'scaleX(1)' },
         },
         orbit: {
           '0%': { transform: 'rotate(0deg)' },

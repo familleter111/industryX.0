@@ -8,5 +8,3 @@
 
 export const LINKEDIN_URL =
   'https://www.linkedin.com/company/industryx0/posts/?feedView=all'
-
-export const FACEBOOK_URL = 'https://www.facebook.com/industryx.0'

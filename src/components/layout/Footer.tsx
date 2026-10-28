@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import {
-  Facebook,
   Linkedin,
   Mail,
   MapPin,
@@ -9,7 +8,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { CONTACT, MAILTO, TEL } from '@/lib/data/contact'
-import { FACEBOOK_URL, LINKEDIN_URL } from '@/lib/data/socials'
+import { LINKEDIN_URL } from '@/lib/data/socials'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import CookieSettingsButton from '@/components/analytics/CookieSettingsButton'
 import { useCopy } from '@/lib/i18n'
@@ -45,7 +44,6 @@ const COPY = {
     phone: 'Téléphone',
     email: 'Email',
     follow: 'Suivez-nous',
-    facebook: 'Industry X.0 sur Facebook',
     linkedin: 'Industry X.0 sur LinkedIn',
     rights: 'Tous droits réservés',
     cookies: 'Gérer les cookies',
@@ -62,7 +60,6 @@ const COPY = {
     phone: 'Phone',
     email: 'Email',
     follow: 'Follow us',
-    facebook: 'Industry X.0 on Facebook',
     linkedin: 'Industry X.0 on LinkedIn',
     rights: 'All rights reserved',
     cookies: 'Cookie settings',
@@ -299,26 +296,6 @@ export default function Footer({ variant = 'full' }: FooterProps) {
               </p>
 
               <div className="flex gap-3">
-                <a
-                  href={FACEBOOK_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={t.facebook}
-                  className="
-                  flex h-12 w-12 items-center justify-center
-                  rounded-2xl
-                  border border-white/10
-                  bg-black/40
-                  text-white/60
-                  transition-all duration-300
-                  hover:border-yellow-500/40
-                  hover:bg-yellow-500/10
-                  hover:text-yellow-400
-                  "
-                >
-                  <Facebook size={18} />
-                </a>
-
                 <a
                   href={LINKEDIN_URL}
                   target="_blank"
