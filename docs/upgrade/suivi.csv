@@ -1,0 +1,15 @@
+ID;Statut proposé;Preuve / lien de recette;Commentaire
+L1-01;En revue;docs/upgrade/inventaire-urls.md ; npm run check:links (55 pages, 1497 liens, 0 cassé) ; tag pre-lot-1;Inventaire + constat des 17 défauts de l'audit (§ 7)
+L1-02;En revue;curl -I /solutions/audits → 308 vers /plateforme/remontee-terrain#audits ; ancre présente;Déjà en place depuis 909d8df ; marqué provisoire jusqu'à L2-06
+L1-03;En revue;/privacy (date 28/10/2026, stockage navigateur) ; /mentions-legales (noindex) ; commit e9d94c3;Relecture référent données requise : loi, durées, hébergement, délai, réclamations (a-confirmer.md)
+L1-04;En revue;Footer complet sur /, /plateforme/gestion-ecarts, /industries/food, /industries/automotive, /entreprise, /contact ; check:links 0 lien vers /;Variante compact supprimée ; colonnes adaptées aux 7 pages Solution réelles ; Mentions légales ajoutées à la publication
+L1-05;En revue;src/lib/routes.ts ; « Voir la plateforme » → /#solutions ; 0 « Planifier une démo »;Libellé unique « Demander une démo » (règle 7)
+L1-06;En revue;tests/cases-tabs.test.tsx (4 tests) ; captures 1440/390;ARIA tabs, 6 panneaux dans le HTML, mention Illustration
+L1-07;En revue;288 images HTTP 200 avec alt (8 pages) ; captures 1440 et 390 px onglet Déviations;Réalisé dans le commit de L1-06 (973fd59)
+L1-08;En revue;npm run check:i18n → 0 texte français sur /en ; /en/industries/packaging traduite;Pas de désactivation nécessaire ; hreflang définitifs en L4-06
+L1-09;En revue;tests/contact.test.ts (12 tests) ; docs/upgrade/recette-formulaire.md;Envoi réel en préproduction à faire par l'équipe (preuve : réception chez le bon destinataire)
+L1-10;En revue;Test Chrome : Entrée sur la bulle → champ ; Échap → focus rendu à la bulle;« Réponse sous 24 h » retirée (chat et /contact) en attendant L2-15
+L1-11;En revue;src/content/site-facts.ts ; 0 contact@industryx0.com ; « Contacter un conseiller » → /contact;À confirmer : sort de l'ancienne adresse en .com
+L1-12;En revue;0 « Bilal » ; tableau des identités dans LOT-1-rapport.md;Identités et fonctions à vérifier par l'équipe
+L1-13;En revue;Test Chrome des 4 sous-menus (Entrée, Tab, Échap) ; contrôle 360/390 px;Bandeau cookies à tester en préproduction (P14)
+L1-14;En revue;docs/upgrade/recette-lot-1.md (build, lint, 269 tests, liens, i18n au vert) ;14 parcours à rejouer en préproduction puis en public
