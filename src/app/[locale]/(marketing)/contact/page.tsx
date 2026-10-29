@@ -1262,6 +1262,7 @@ function TrustStrip() {
                 /* contenu inscrit dans 70×34 — cadre max ≈ 81 px, sous les
                    96 px utiles de la pastille */
                 style={{ width: logoFrameWidth(logo, 70, 34) }}
+                sizes="70px"
                 className="h-auto max-w-full shrink-0 object-contain"
               />
             </motion.span>

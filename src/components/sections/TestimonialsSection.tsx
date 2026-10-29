@@ -55,6 +55,7 @@ function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
           height={512}
           /* contenu inscrit dans 44×34 */
           style={{ width: logoFrameWidth(logo, 44, 34) }}
+          sizes="44px"
           className="h-auto max-w-full shrink-0 object-contain"
         />
       ) : (

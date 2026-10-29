@@ -36,6 +36,7 @@ function OrbitChip({ logo, ring }: { logo: LogoAsset; ring: Ring }) {
         width={512}
         height={512}
         style={{ width: `${(frame / ring.chip) * 100}%` }}
+        sizes="96px"
         className="h-auto shrink-0 object-contain"
       />
       </span>
@@ -186,6 +187,7 @@ function OrbitCore() {
           alt="Industry X.0"
           width={8625}
           height={3202}
+          sizes="200px"
           className="h-auto w-[74%] object-contain"
         />
       </motion.div>

@@ -315,6 +315,7 @@ export default function Hero() {
               width={1448}
               height={1086}
               priority
+              sizes="(min-width: 1024px) 62vw, 100vw"
               className="h-auto w-full mix-blend-multiply"
             />
           </div>

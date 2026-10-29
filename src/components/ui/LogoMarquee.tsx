@@ -89,6 +89,7 @@ export default function LogoMarquee({
                   width={512}
                   height={512}
                   style={{ width: logoFrameWidth(logo, box.w, box.h) }}
+                  sizes={`${box.w}px`}
                   // `opacity-60 grayscale` effacait les logos au point de les
                   // rendre indechiffrables : un logo qu'on ne reconnait pas ne
                   // fait pas la preuve qu'on cherchait a faire. On garde le

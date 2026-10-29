@@ -95,6 +95,7 @@ export default function WelcomeIntro() {
             alt=""
             width={640}
             height={237}
+            sizes="(min-width: 1024px) 520px, (min-width: 640px) 420px, 280px"
             className="w-[280px] sm:w-[420px] lg:w-[520px] h-auto"
           />
         </div>

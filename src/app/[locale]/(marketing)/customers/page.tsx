@@ -183,6 +183,7 @@ function TestimonialLogo({ testimonial }: { testimonial: Testimonial }) {
       height={512}
       /* contenu inscrit dans 26×20 (vignette de 44 px) */
       style={{ width: logoFrameWidth(logo, 26, 20) }}
+      sizes="26px"
       className="h-auto max-w-full shrink-0 object-contain"
     />
   )

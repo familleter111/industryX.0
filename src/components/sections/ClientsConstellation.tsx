@@ -517,6 +517,7 @@ function ConstellationCanvas({ layout }: { layout: Layout }) {
             alt="Industry X.0"
             width={8625}
             height={3202}
+            sizes="200px"
             className="h-auto w-[74%] object-contain"
           />
         </motion.div>

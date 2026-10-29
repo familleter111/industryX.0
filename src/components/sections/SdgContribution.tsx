@@ -202,6 +202,7 @@ export default function SdgContribution({ className = '' }: { className?: string
                     alt={`${t.short} ${goal.num} — ${goal.title}`}
                     width={512}
                     height={512}
+                    sizes="96px"
                     className="h-20 w-20 object-contain sm:h-[88px] sm:w-[88px] lg:h-24 lg:w-24"
                   />
                 </button>

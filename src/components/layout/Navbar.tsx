@@ -421,7 +421,7 @@ export default function Navbar() {
                 alt="Industry X.0"
                 width={250}
                 height={60}
-                priority
+                loading="eager"
                 className="h-[48px] w-auto object-contain xl:h-[56px]"
               />
             </Link>
@@ -529,7 +529,7 @@ export default function Navbar() {
                     className="group flex items-center gap-2.5 rounded-full border border-stone-200 bg-white px-3.5 py-2 shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-300 hover:border-gold/35 hover:bg-white"
                   >
                     <div className="relative h-4 w-4 overflow-hidden rounded-full">
-                      <Image src={language.flag} alt="" fill className="object-cover" />
+                      <Image src={language.flag} alt="" fill sizes="16px" className="object-cover" />
                     </div>
                     <span className="text-[13px] font-semibold tracking-[-0.01em] text-stone-700">
                       {language.short}
@@ -566,7 +566,7 @@ export default function Navbar() {
                             }`}
                           >
                             <div className="relative h-5 w-5 overflow-hidden rounded-full">
-                              <Image src={option.flag} alt="" fill className="object-cover" />
+                              <Image src={option.flag} alt="" fill sizes="20px" className="object-cover" />
                             </div>
                             <span className="text-sm font-medium text-stone-700">
                               {option.name}
@@ -800,7 +800,7 @@ export default function Navbar() {
                       }`}
                     >
                       <span className="relative h-5 w-5 overflow-hidden rounded-full border border-black/5">
-                        <Image src={option.flag} alt="" fill className="object-cover" />
+                        <Image src={option.flag} alt="" fill sizes="20px" className="object-cover" />
                       </span>
                       {option.name}
                     </button>
