@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { localizedPath, type Locale } from '@/lib/i18n'
+import { OG_SIZE, ogImagePath } from '@/lib/seo/og'
 import { pageSeo } from '@/lib/seo/pages'
 import { BRAND } from '@/lib/site'
 
@@ -29,11 +30,15 @@ export function pageMetadata({
   openGraph?: Metadata['openGraph']
 }): Metadata {
   const fullTitle = `${title} | ${brand}`
+  const url = localizedPath(path, locale)
+  // Image de partage générée pour cette page (app/og) ; son texte alternatif
+  // est le titre qu'elle affiche.
+  const image = { url: ogImagePath(path, locale), ...OG_SIZE, alt: fullTitle }
   return {
     title: fullTitle,
     description,
     alternates: {
-      canonical: localizedPath(path, locale),
+      canonical: url,
       languages: {
         fr: localizedPath(path, 'fr'),
         en: localizedPath(path, 'en'),
@@ -43,9 +48,21 @@ export function pageMetadata({
     openGraph: {
       title: fullTitle,
       description,
+      url,
+      siteName: BRAND.siteName,
       type: 'website',
+      images: [image],
       ...openGraph,
       locale: OG_LOCALE[locale],
+      alternateLocale: Object.entries(OG_LOCALE)
+        .filter(([other]) => other !== locale)
+        .map(([, value]) => value),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: fullTitle,
+      description,
+      images: [image],
     },
   }
 }

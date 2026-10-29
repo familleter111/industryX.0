@@ -12,6 +12,7 @@ import {
   softwareApplicationSchema,
 } from '@/lib/seo/schema'
 import { pageMetadata, seoMetadata } from '@/lib/seo/metadata'
+import { ogImageKey } from '@/lib/seo/og'
 import { pageSeo } from '@/lib/seo/pages'
 import { SITE_URL, publicPaths } from '@/lib/site'
 
@@ -49,6 +50,25 @@ describe('titres et descriptions', () => {
       expect(description.length, `${locale} ${path}`).toBeGreaterThanOrEqual(140)
       expect(description.length, `${locale} ${path}`).toBeLessThanOrEqual(160)
     }
+  })
+
+  it('pose Open Graph et Twitter complets, image de partage comprise', () => {
+    const meta = seoMetadata('/plateforme/gestion-ecarts', 'en')
+    expect(meta.openGraph).toMatchObject({
+      url: '/en/plateforme/gestion-ecarts',
+      locale: 'en_US',
+      alternateLocale: ['fr_FR'],
+      images: [
+        expect.objectContaining({ url: '/og/en__plateforme__gestion-ecarts.png', width: 1200, height: 630 }),
+      ],
+    })
+    expect(meta.twitter).toMatchObject({ card: 'summary_large_image' })
+  })
+
+  it('donne à chaque page sa propre image de partage', () => {
+    const keys = publicPaths().flatMap((path) => LOCALES.map((locale) => ogImageKey(path, locale)))
+    expect(new Set(keys).size).toBe(keys.length)
+    expect(ogImageKey('/', 'fr')).toBe('fr.png')
   })
 
   it('suffixe la marque une seule fois', () => {
