@@ -27,6 +27,8 @@ const COPY = {
   fr: {
     breadcrumb: 'Fil d’Ariane',
     readingTime: 'min de lecture',
+    published: 'Publié le',
+    updated: 'Mis à jour le',
     asideTitle: 'Voir CIPA appliqué à votre contexte',
     asideText: '45 minutes avec un expert, centrées sur vos enjeux et vos processus.',
     demo: 'Planifier une démo',
@@ -35,6 +37,8 @@ const COPY = {
   en: {
     breadcrumb: 'Breadcrumb',
     readingTime: 'min read',
+    published: 'Published',
+    updated: 'Updated',
     asideTitle: 'See CIPA applied to your context',
     asideText: '45 minutes with an expert, focused on your challenges and your processes.',
     demo: 'Book a demo',
@@ -200,7 +204,15 @@ export default function GuidePage({ params }: Params) {
 
           <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-subtle">
             <span className="font-semibold text-stone-800">{guide.author}</span>
-            <time dateTime={guide.date}>{formatGuideDate(guide.date, locale)}</time>
+            <span>
+              {t.published} <time dateTime={guide.date}>{formatGuideDate(guide.date, locale)}</time>
+            </span>
+            {guide.updated && guide.updated !== guide.date && (
+              <span>
+                {t.updated}{' '}
+                <time dateTime={guide.updated}>{formatGuideDate(guide.updated, locale)}</time>
+              </span>
+            )}
             <span className="flex items-center gap-1.5">
               <Clock size={13} aria-hidden="true" />
               {guide.readingMinutes} {t.readingTime}

@@ -33,6 +33,10 @@ import { useCopy } from '@/lib/i18n'
  * (alerte), jamais une mise en valeur.
  */
 const STAT_SHAPES = [
+  // TODO(seo): chiffres attribués aux seuls « retours d'expérience
+  // Industry X.0 ». Fournir la méthode (périmètre, nombre de sites, période,
+  // mode de calcul) ou une source publiable avant de les mettre en avant ;
+  // à défaut, les présenter comme des ordres de grandeur.
   { icon: Clock, count: { to: 30, prefix: '+', suffix: '%' } },
   { icon: Shield, count: { to: 2.5, decimals: 1, suffix: 'x' } },
   { icon: Crosshair, count: { to: 25, prefix: '-', suffix: '%' } },
