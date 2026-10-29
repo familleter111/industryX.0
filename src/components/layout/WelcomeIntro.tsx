@@ -96,6 +96,8 @@ export default function WelcomeIntro() {
             width={640}
             height={237}
             sizes="(min-width: 1024px) 520px, (min-width: 640px) 420px, 280px"
+            // Premier élément affiché, souvent le LCP : jamais en différé.
+            loading="eager"
             className="w-[280px] sm:w-[420px] lg:w-[520px] h-auto"
           />
         </div>
