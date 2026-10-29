@@ -17,6 +17,7 @@ import {
   guideBySlug,
   guidesFor,
   type GuideBlock,
+  type GuideLink,
 } from '@/lib/data/guides'
 import { useCopy, type Locale } from '@/lib/i18n'
 import { seoMetadata } from '@/lib/seo/metadata'
@@ -71,6 +72,29 @@ export function generateMetadata({ params }: Params): Metadata {
    CORPS — un rendu par type de bloc (voir lib/data/guides.ts)
    ============================================================ */
 
+/** Texte d'un paragraphe, ses passages `links` rendus en liens. */
+function withLinks(text: string, links: GuideLink[] = []) {
+  const parts: React.ReactNode[] = []
+  let rest = text
+  for (const link of links) {
+    const at = rest.indexOf(link.text)
+    if (at < 0) continue
+    parts.push(
+      rest.slice(0, at),
+      <Link
+        key={link.href}
+        href={link.href}
+        className="font-semibold text-gold-ink underline decoration-gold/40 underline-offset-[3px] transition-colors hover:decoration-gold"
+      >
+        {link.text}
+      </Link>,
+    )
+    rest = rest.slice(at + link.text.length)
+  }
+  parts.push(rest)
+  return parts
+}
+
 function Block({ block }: { block: GuideBlock }) {
   switch (block.type) {
     case 'h2':
@@ -82,7 +106,7 @@ function Block({ block }: { block: GuideBlock }) {
     case 'p':
       return (
         <p className="mt-5 text-[15.5px] leading-[1.85] text-stone-700 sm:text-[16.5px]">
-          {block.text}
+          {withLinks(block.text, block.links)}
         </p>
       )
     case 'list':

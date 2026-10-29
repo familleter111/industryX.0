@@ -9,3 +9,13 @@ import { routing } from './routing'
  */
 export const { Link, redirect, usePathname, useRouter, getPathname } =
   createNavigation(routing)
+
+/**
+ * Lien vers une ancre de l'accueil (`/#faq`) : passé tel quel, le préfixe de
+ * langue donne `/en/#faq`, une URL en double de `/en`. En objet, next-intl
+ * produit `/en#faq`. Les autres liens sont rendus inchangés.
+ */
+export function homeAnchorHref(href: string) {
+  const [pathname, hash] = href.split('#')
+  return pathname === '/' && hash ? { pathname: '/', hash } : href
+}

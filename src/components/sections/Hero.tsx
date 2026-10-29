@@ -242,12 +242,14 @@ export default function Hero() {
               />
             </Link>
 
-            {/* SECONDARY BUTTON — découverte, pas formulaire : mène au bloc
-                CIPA de l'accueil (#solutions) en attendant la page produit
-                dédiée (lot 2, L2-05). */}
+            {/* SECONDARY BUTTON — découverte, pas formulaire : mène à la
+                première page Solution (Remontée terrain, ancienne
+                /plateforme/terrain), une vraie page plutôt qu'une ancre de
+                l'accueil. A repointer vers la page produit dédiée quand
+                elle existera (lot 2, L2-05). */}
 
             <Link
-              href="/#solutions"
+              href="/plateforme/remontee-terrain"
               className="
                 inline-flex items-center justify-center gap-2
                 rounded-full border

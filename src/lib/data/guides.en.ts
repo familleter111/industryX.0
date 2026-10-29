@@ -50,6 +50,7 @@ export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
       { text: '3. Turn every finding into an action' },
       {
         text: 'An audit is only worth what it triggers. Every non-conformity raised must be able to become an action, with an owner and a due date, tracked until it is closed. This direct link between the shop floor and quality handling is what stops the same findings from coming back audit after audit.',
+        links: [{ text: 'quality handling' }],
       },
       { text: '4. Generate the report without writing it' },
       {
@@ -113,6 +114,7 @@ export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
       { text: '6. Make use of the history' },
       {
         text: 'When every deviation follows the same process, deviations become comparable. Recurring ones stand out, action plans can be prioritized and lessons learned are shared across teams and sites. That is where non-conformity handling becomes a driver of continuous improvement.',
+        links: [{ text: 'driver of continuous improvement' }],
       },
     ],
   },
@@ -153,10 +155,12 @@ export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
       { text: 'Watch trends, not just values' },
       {
         text: 'A single value can wrongly reassure or alarm. Track trends by site, line and team: a slow drift is often more telling than a one-off spike. This is also where operational AI comes in, spotting weak signals and inconsistencies before they become incidents.',
+        links: [{ text: 'operational AI' }],
       },
       { text: 'Connect rather than duplicate' },
       {
         text: 'Quality data takes on its full meaning when it joins the rest of the information system: ERP, MES, CMMS or BI tool. Defining these exchanges during scoping avoids manual exports and guarantees a single source of truth.',
+        links: [{ text: 'ERP, MES, CMMS or BI tool' }],
       },
     ],
   },
@@ -177,6 +181,7 @@ export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
       { text: '1. Choose a high-value, well-bounded process' },
       {
         text: 'The right candidate is a frequent process that is painful today and whose result can be measured: audits, inspections, non-conformity management or production checks. Avoid rare processes or ones that depend too much on other ongoing projects.',
+        links: [{ text: 'audits, inspections' }, { text: 'non-conformity management' }],
       },
       { text: '2. Set success criteria before you start' },
       {

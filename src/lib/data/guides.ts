@@ -20,10 +20,18 @@ export type GuideCategory = 'Terrain' | 'Qualité' | 'Pilotage' | 'Méthode'
 
 export type GuideBlock =
   | { type: 'h2'; text: string }
-  | { type: 'p'; text: string }
+  /**
+   * Paragraphe. `links` transforme en lien un passage du texte, recopié à
+   * l'identique dans `text` (et dans la version anglaise, qui ne traduit
+   * que `text`) ; un passage introuvable reste du texte simple.
+   */
+  | { type: 'p'; text: string; links?: GuideLink[] }
   | { type: 'list'; items: string[] }
   /** Encadre dore : l'idee a retenir de la section. */
   | { type: 'callout'; text: string }
+
+/** Lien contextuel vers une page Solution ou sectorielle. */
+export type GuideLink = { text: string; href: string }
 
 export type Guide = {
   slug: string
@@ -120,6 +128,7 @@ export const GUIDES: Guide[] = [
       {
         type: 'p',
         text: 'Un audit n’a de valeur que par ce qu’il déclenche. Chaque non-conformité relevée doit pouvoir devenir une action, avec un responsable et une échéance, suivie jusqu’à sa clôture. C’est ce lien direct entre le terrain et le traitement qualité qui évite que les mêmes constats reviennent d’un audit à l’autre.',
+        links: [{ text: 'traitement qualité', href: '/plateforme/gestion-ecarts' }],
       },
       { type: 'h2', text: '4. Générer le rapport sans le rédiger' },
       {
@@ -201,6 +210,9 @@ export const GUIDES: Guide[] = [
       {
         type: 'p',
         text: 'Quand tous les écarts suivent le même circuit, ils deviennent comparables. Les écarts récurrents ressortent, les plans d’actions peuvent être priorisés et le retour d’expérience circule entre les équipes et les sites. C’est là que le traitement des non-conformités devient un levier d’amélioration continue.',
+        links: [
+          { text: 'levier d’amélioration continue', href: '/plateforme/pilotage-performance#amelioration' },
+        ],
       },
     ],
   },
@@ -254,11 +266,13 @@ export const GUIDES: Guide[] = [
       {
         type: 'p',
         text: 'Une valeur isolée rassure ou inquiète à tort. Suivez les tendances par site, ligne et équipe : une dérive lente est souvent plus instructive qu’un pic ponctuel. C’est aussi le terrain de l’IA opérationnelle, qui peut repérer des signaux faibles et des incohérences avant qu’ils ne deviennent des incidents.',
+        links: [{ text: 'IA opérationnelle', href: '/plateforme/intelligence-operationnelle' }],
       },
       { type: 'h2', text: 'Connecter plutôt que dupliquer' },
       {
         type: 'p',
         text: 'Les données qualité prennent tout leur sens lorsqu’elles rejoignent le reste du système d’information : ERP, MES, GMAO ou outil de BI. Définir ces échanges dès le cadrage évite les exports manuels et garantit une source de vérité unique.',
+        links: [{ text: 'ERP, MES, GMAO ou outil de BI', href: '/plateforme/integrations' }],
       },
     ],
   },
@@ -288,6 +302,10 @@ export const GUIDES: Guide[] = [
       {
         type: 'p',
         text: 'Le bon candidat est un processus fréquent, aujourd’hui pénible, et dont le résultat se mesure : audits, inspections, gestion des non-conformités ou contrôles de production. Évitez les processus rares ou trop dépendants d’autres chantiers en cours.',
+        links: [
+          { text: 'audits, inspections', href: '/plateforme/remontee-terrain' },
+          { text: 'gestion des non-conformités', href: '/plateforme/gestion-ecarts' },
+        ],
       },
       { type: 'h2', text: '2. Fixer les critères de succès avant de démarrer' },
       {

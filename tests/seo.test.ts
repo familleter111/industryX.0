@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { FAQ_ENTRIES } from '@/lib/data/faq'
-import { GUIDES } from '@/lib/data/guides'
+import { GUIDES, guidesFor } from '@/lib/data/guides'
 import {
   ORGANIZATION_ID,
   articleSchema,
@@ -20,6 +20,23 @@ const LOCALES = ['fr', 'en'] as const
 
 /** Titre imposé par le brief SEO, plus long que la cible : exception assumée. */
 const LONG_TITLE_EXCEPTIONS = ['Logiciel qualité, audits & non-conformités pour l’industrie | CIPA']
+
+describe('liens contextuels des guides', () => {
+  it('chaque passage lié existe dans le texte, en français et en anglais, vers une page publique', () => {
+    const paths = publicPaths()
+    let count = 0
+    for (const locale of LOCALES)
+      for (const guide of guidesFor(locale))
+        for (const block of guide.body)
+          if (block.type === 'p')
+            for (const link of block.links ?? []) {
+              count++
+              expect(block.text, `${locale} ${guide.slug}`).toContain(link.text)
+              expect(paths).toContain(link.href.split('#')[0])
+            }
+    expect(count).toBeGreaterThanOrEqual(GUIDES.length * 2)
+  })
+})
 
 describe('titres et descriptions', () => {
   const pages = publicPaths().flatMap((path) =>

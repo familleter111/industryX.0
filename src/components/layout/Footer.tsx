@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
+import { Link, homeAnchorHref } from '@/i18n/navigation'
 import {
   Linkedin,
   Mail,
@@ -11,7 +11,8 @@ import { CONTACT, MAILTO, TEL } from '@/lib/data/contact'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import CookieSettingsButton from '@/components/analytics/CookieSettingsButton'
-import { useCopy } from '@/lib/i18n'
+import { INDUSTRY_NAMES, industryHref } from '@/lib/data/industries/labels'
+import { useCopy, useCurrentLocale } from '@/lib/i18n'
 
 // Chaque lien mene a une page existante. Les anciens libelles sans page
 // (Mises a jour, Blog, Conditions, Cookies) pointaient tous vers l'accueil.
@@ -27,7 +28,7 @@ const FOOTER_HREFS = [
     '/resources#securite',
     '/plateforme/entiwin',
   ],
-  ['/entreprise', '/partners', '/resources', '/contact'],
+  ['/entreprise', '/customers', '/partners', '/resources', '/contact'],
   ['/privacy', '/conditions-utilisation', '/#faq'],
 ]
 
@@ -35,7 +36,7 @@ const COPY = {
   fr: {
     sections: [
       ['Solution', ['Remontée terrain', 'Planification', 'Gestion des écarts', 'Conformité', 'Pilotage', 'Intelligence opérationnelle', 'Intégrations', 'Sécurité', 'Enti Win']],
-      ['Entreprise', ['À propos', 'Partenaires', 'Guides & insights', 'Contact']],
+      ['Entreprise', ['À propos', 'Cas clients', 'Partenaires', 'Guides & insights', 'Contact']],
       ['Légal', ['Politique de confidentialité', 'Conditions d’utilisation', 'FAQ']],
     ] as [string, string[]][],
     about:
@@ -43,6 +44,7 @@ const COPY = {
     address: 'Adresse',
     phone: 'Téléphone',
     email: 'Email',
+    industries: 'Industries',
     follow: 'Suivez-nous',
     linkedin: 'Industry X.0 sur LinkedIn',
     rights: 'Tous droits réservés',
@@ -51,7 +53,7 @@ const COPY = {
   en: {
     sections: [
       ['Solution', ['Shop-floor capture', 'Planning', 'Deviation management', 'Compliance', 'Performance', 'Operational intelligence', 'Integrations', 'Security', 'Enti Win']],
-      ['Company', ['About us', 'Partners', 'Guides & insights', 'Contact']],
+      ['Company', ['About us', 'Customer stories', 'Partners', 'Guides & insights', 'Contact']],
       ['Legal', ['Privacy policy', 'Terms of use', 'FAQ']],
     ] as [string, string[]][],
     about:
@@ -59,6 +61,7 @@ const COPY = {
     address: 'Address',
     phone: 'Phone',
     email: 'Email',
+    industries: 'Industries',
     follow: 'Follow us',
     linkedin: 'Industry X.0 on LinkedIn',
     rights: 'All rights reserved',
@@ -74,10 +77,16 @@ type FooterProps = {
 export default function Footer({ variant = 'full' }: FooterProps) {
   const isCompact = variant === 'compact'
   const t = useCopy(COPY)
+  const locale = useCurrentLocale()
   const footerLinks = t.sections.map(([title, labels], s) => ({
     title,
     items: labels.map((label, i) => ({ label, href: FOOTER_HREFS[s][i] })),
   }))
+  // Les six pages sectorielles, après la colonne Solution.
+  footerLinks.splice(1, 0, {
+    title: t.industries,
+    items: INDUSTRY_NAMES.map(({ slug, name }) => ({ label: name[locale], href: industryHref(slug) })),
+  })
 
   return (
     <footer
@@ -104,7 +113,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           className={
             isCompact
               ? 'grid gap-10'
-              : 'grid gap-10 lg:grid-cols-[1.2fr_0.8fr]'
+              : 'grid gap-10 lg:grid-cols-[0.85fr_1.6fr]'
           }
         >
           {/* LEFT SIDE */}
@@ -135,7 +144,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
           {/* RIGHT SIDE */}
 
           {!isCompact && (
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 sm:gap-8">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-8">
             {footerLinks.map((section) => (
               <div key={section.title}>
                 <div className="mb-5">
@@ -150,7 +159,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                   {section.items.map((item) => (
                     <li key={item.label}>
                       <Link
-                        href={item.href}
+                        href={homeAnchorHref(item.href)}
                         className="
                         group flex items-center gap-2
                         text-sm
@@ -162,7 +171,7 @@ export default function Footer({ variant = 'full' }: FooterProps) {
                         <ChevronRight
                           size={13}
                           className="
-                          text-yellow-500
+                          shrink-0 text-yellow-500
                           transition-transform
                           duration-300
                           group-hover:translate-x-1

@@ -33,7 +33,7 @@ import ChatWidget from '@/components/layout/ChatWidget'
 import { CHAT_OPEN_EVENT, type OpenChatDetail } from '@/lib/chat/open'
 import { platformHref, platformPages } from '@/lib/data/platform'
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
-import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { Link, homeAnchorHref, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
 
@@ -62,7 +62,7 @@ const COPY = {
   fr: {
     home: 'Accueil',
     cta: 'Demander une démo',
-    explore: 'Explorer',
+    explore: 'Explorer la plateforme',
     language: 'Langue',
     openMenu: 'Ouvrir le menu',
     closeMenu: 'Fermer le menu',
@@ -97,7 +97,7 @@ const COPY = {
   en: {
     home: 'Home',
     cta: 'Book a demo',
-    explore: 'Explore',
+    explore: 'Explore the platform',
     language: 'Language',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
@@ -482,6 +482,22 @@ export default function Navbar() {
                     />
                   </button>
                 ))}
+
+                {/* Les entrées des sous-menus n'existent dans le DOM qu'une
+                    fois le menu ouvert. Cette liste les pose dès le HTML
+                    serveur, pour que les robots suivent les liens du menu.
+                    `hidden` : jamais affichée, hors de l'arbre
+                    d'accessibilité et du parcours au clavier — les visiteurs
+                    passent par les menus ci-dessus. */}
+                <ul hidden>
+                  {navGroups.flatMap((group) =>
+                    group.items.map((item) => (
+                      <li key={item.href}>
+                        <Link href={homeAnchorHref(item.href)}>{item.title}</Link>
+                      </li>
+                    )),
+                  )}
+                </ul>
               </div>
             </div>
 
@@ -622,7 +638,7 @@ export default function Navbar() {
                         return (
                           <Link
                             key={item.href}
-                            href={item.href}
+                            href={homeAnchorHref(item.href)}
                             onClick={() => setActiveMenu(null)}
                             className="group flex gap-4 rounded-2xl p-4 transition-all duration-300 hover:bg-stone-100"
                           >
@@ -672,7 +688,7 @@ export default function Navbar() {
                             {activeGroup.featured.description}
                           </p>
                           <Link
-                            href={activeGroup.featured.href}
+                            href={homeAnchorHref(activeGroup.featured.href)}
                             onClick={() => setActiveMenu(null)}
                             className="mt-8 inline-flex items-center gap-2 text-[13px] font-semibold text-gold-300"
                           >
@@ -729,7 +745,7 @@ export default function Navbar() {
                         return (
                           <Link
                             key={item.href}
-                            href={item.href}
+                            href={homeAnchorHref(item.href)}
                             onClick={() => setMobileOpen(false)} // Ferme le menu au clic
                             className="flex items-center gap-4 rounded-xl p-2 transition hover:bg-stone-100"
                           >

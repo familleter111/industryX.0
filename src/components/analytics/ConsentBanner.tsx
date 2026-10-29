@@ -12,14 +12,14 @@ const COPY = {
   fr: {
     label: 'Mesure d’audience',
     text: 'Nous mesurons la fréquentation du site et l’efficacité de nos campagnes avec PostHog, hébergé dans l’Union européenne, et Google Analytics. Sans votre accord, aucun cookie de mesure n’est déposé.',
-    more: 'En savoir plus',
+    more: 'Politique de confidentialité',
     accept: 'Accepter',
     refuse: 'Refuser',
   },
   en: {
     label: 'Audience measurement',
     text: 'We measure site traffic and campaign performance with PostHog, hosted in the European Union, and Google Analytics. Without your consent, no measurement cookie is set.',
-    more: 'Learn more',
+    more: 'Privacy policy',
     accept: 'Accept',
     refuse: 'Decline',
   },

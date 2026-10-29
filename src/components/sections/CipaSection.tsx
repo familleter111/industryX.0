@@ -15,6 +15,7 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
+import { industryHref } from '@/lib/data/industries/labels'
 import { useCopy } from '@/lib/i18n'
 
 const colors = {
@@ -32,16 +33,26 @@ const PILLAR_STYLES = [
   { icon: Activity, iconColor: colors.bronze },
 ]
 
-// Cartes secteurs — déplacées depuis le Hero (#2)
-const SECTOR_LOGOS = [
-  '/Secteur/Pharmaceutique.png',
-  '/Secteur/Nutraceutical.png',
-  '/Secteur/Agroalimentaire.png',
-  '/Secteur/Chimie.png',
-  '/Secteur/Dispositifs.png',
-  '/Secteur/Manufacture.png',
-  '/Secteur/Distribution.png',
-  '/Secteur/Autres.png',
+/*
+ * Cartes secteurs — déplacées depuis le Hero (#2). Une carte dont le secteur
+ * a sa page y mène ; les autres restent de simples étiquettes.
+ *
+ * TODO(seo): la liste ne correspond pas aux pages sectorielles. Sans page :
+ * Nutraceutique & santé, Chimie & matières premières, Industrie
+ * manufacturière, Distribution & logistique, Autres secteurs. Sans carte :
+ * automobile, électronique, packaging (la cosmétique n'apparaît que via
+ * « Dispositifs médicaux »). Au propriétaire de choisir : créer les pages
+ * manquantes, ou aligner les cartes sur les six pages existantes.
+ */
+const SECTOR_LOGOS: { logo: string; href?: string }[] = [
+  { logo: '/Secteur/Pharmaceutique.png', href: industryHref('pharma') },
+  { logo: '/Secteur/Nutraceutical.png' },
+  { logo: '/Secteur/Agroalimentaire.png', href: industryHref('food') },
+  { logo: '/Secteur/Chimie.png' },
+  { logo: '/Secteur/Dispositifs.png', href: industryHref('cosmetics') },
+  { logo: '/Secteur/Manufacture.png' },
+  { logo: '/Secteur/Distribution.png' },
+  { logo: '/Secteur/Autres.png' },
 ]
 
 const COPY = {
@@ -99,8 +110,8 @@ const COPY = {
   },
 }
 
-function SectorLogoCard({ logo, label }: { logo: string; label: string }) {
-  return (
+function SectorLogoCard({ logo, label, href }: { logo: string; label: string; href?: string }) {
+  const card = (
     <figure className="flex w-full flex-col items-center gap-2">
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-black/[0.06] bg-white p-3 shadow-[0_4px_16px_rgba(0,0,0,0.03)] transition-shadow duration-base ease-smooth hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -112,6 +123,18 @@ function SectorLogoCard({ logo, label }: { logo: string; label: string }) {
         {label}
       </figcaption>
     </figure>
+  )
+  // Le pictogramme reste `alt=""` : la légende nomme déjà le secteur, et
+  // c'est elle qui donne son nom au lien.
+  return href ? (
+    <Link
+      href={href}
+      className="block w-full rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2"
+    >
+      {card}
+    </Link>
+  ) : (
+    card
   )
 }
 
@@ -286,8 +309,8 @@ export default function CipaSection() {
           </div>
 
           <div className="grid grid-cols-4 items-start justify-items-center gap-x-1.5 gap-y-4 py-1 sm:gap-4 lg:grid-cols-8">
-            {SECTOR_LOGOS.map((logo, i) => (
-              <SectorLogoCard key={logo} logo={logo} label={t.sectors[i]} />
+            {SECTOR_LOGOS.map((sector, i) => (
+              <SectorLogoCard key={sector.logo} {...sector} label={t.sectors[i]} />
             ))}
           </div>
         </motion.div>
