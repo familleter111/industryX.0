@@ -12,6 +12,7 @@ import LegalDocument, {
   Sub,
   type LegalSection,
 } from '@/features/legal/LegalDocument'
+import { gaEnabled } from '@/lib/analytics/ga'
 import { chatAiEnabled } from '@/lib/chat/config'
 import { pageMetadata, type Locale } from '@/lib/i18n'
 
@@ -184,6 +185,9 @@ function sectionsFr(): LegalSection[] {
                 'un service d’envoi utilisé pour alerter notre équipe si une transmission échoue',
               ],
               ['Mesure d’audience', 'PostHog, hébergé dans l’Union européenne, si vous l’acceptez'],
+              ...(gaEnabled
+                ? [['Mesure d’audience', 'Google Analytics (Google, États-Unis), si vous l’acceptez'] as [string, string]]
+                : []),
               ...(chatAiEnabled()
                 ? [['Assistant de chat', 'Microsoft (service Azure OpenAI), qui génère les réponses de l’assistant à partir de vos messages'] as [string, string]]
                 : []),
@@ -285,12 +289,17 @@ function sectionsFr(): LegalSection[] {
             Nous mesurons la fréquentation du site avec PostHog, hébergé dans l’Union européenne
             (Francfort). Tant que vous n’avez pas répondu au bandeau, la mesure reste anonyme et
             rien n’est enregistré sur votre appareil.
+            {gaEnabled &&
+              ' Si vous l’acceptez, nous utilisons aussi Google Analytics (Google, États-Unis) ; il n’est chargé qu’après votre accord.'}
           </p>
           <Sub>Cookies déposés avec votre accord</Sub>
           <Items
             locale={l}
             items={[
               ['Mesure d’audience', 'cookie PostHog, 6 mois'],
+              ...(gaEnabled
+                ? [['Statistiques de fréquentation', 'cookies Google Analytics _ga et _ga_*, 6 mois'] as [string, string]]
+                : []),
               ['Source de la visite', 'cookie ix0_ft : campagne, QR code ou site d’origine de votre première visite, 90 jours'],
             ]}
           />
@@ -493,6 +502,9 @@ function sectionsEn(): LegalSection[] {
               ['Automation tools', 'that pass your request on to our team (notification, tracking sheet)'],
               ['Email delivery', 'a sending service used to alert our team if a transfer fails'],
               ['Audience measurement', 'PostHog, hosted in the European Union, if you accept it'],
+              ...(gaEnabled
+                ? [['Audience measurement', 'Google Analytics (Google, United States), if you accept it'] as [string, string]]
+                : []),
               ...(chatAiEnabled()
                 ? [['Chat assistant', 'Microsoft (Azure OpenAI Service), which generates the assistant’s answers from your messages'] as [string, string]]
                 : []),
@@ -589,12 +601,17 @@ function sectionsEn(): LegalSection[] {
           <p>
             We measure website traffic with PostHog, hosted in the European Union (Frankfurt). Until
             you answer the banner, measurement stays anonymous and nothing is stored on your device.
+            {gaEnabled &&
+              ' If you accept, we also use Google Analytics (Google, United States); it only loads after your consent.'}
           </p>
           <Sub>Cookies set with your consent</Sub>
           <Items
             locale={l}
             items={[
               ['Audience measurement', 'PostHog cookie, 6 months'],
+              ...(gaEnabled
+                ? [['Traffic statistics', 'Google Analytics _ga and _ga_* cookies, 6 months'] as [string, string]]
+                : []),
               ['Visit source', 'ix0_ft cookie: campaign, QR code or referring site of your first visit, 90 days'],
             ]}
           />

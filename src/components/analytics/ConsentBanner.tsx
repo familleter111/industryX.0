@@ -4,20 +4,21 @@ import { useEffect, useState } from 'react'
 
 import { Link } from '@/i18n/navigation'
 import { OPEN_CONSENT_EVENT, readConsent, writeConsent, type Consent } from '@/lib/analytics/consent'
+import { gaEnabled } from '@/lib/analytics/ga'
 import { analyticsEnabled } from '@/lib/analytics/posthog'
 import { useCopy, type Bilingual } from '@/lib/i18n'
 
 const COPY = {
   fr: {
     label: 'Mesure d’audience',
-    text: 'Nous mesurons la fréquentation du site et l’efficacité de nos campagnes avec PostHog, hébergé dans l’Union européenne. Sans votre accord, aucun cookie de mesure n’est déposé.',
+    text: 'Nous mesurons la fréquentation du site et l’efficacité de nos campagnes avec PostHog, hébergé dans l’Union européenne, et Google Analytics. Sans votre accord, aucun cookie de mesure n’est déposé.',
     more: 'En savoir plus',
     accept: 'Accepter',
     refuse: 'Refuser',
   },
   en: {
     label: 'Audience measurement',
-    text: 'We measure site traffic and campaign performance with PostHog, hosted in the European Union. Without your consent, no measurement cookie is set.',
+    text: 'We measure site traffic and campaign performance with PostHog, hosted in the European Union, and Google Analytics. Without your consent, no measurement cookie is set.',
     more: 'Learn more',
     accept: 'Accept',
     refuse: 'Decline',
@@ -26,7 +27,8 @@ const COPY = {
 
 /**
  * Bandeau de consentement. N'apparaît que si la mesure est configurée
- * (clé PostHog présente) et que le visiteur n'a pas encore répondu — ou
+ * (clé PostHog ou identifiant Google Analytics) et que le visiteur n'a pas
+ * encore répondu — ou
  * qu'il a cliqué sur « Gérer les cookies » dans le pied de page.
  * Accepter et Refuser ont le même poids visuel, comme l'exige la CNIL.
  */
@@ -35,7 +37,7 @@ export default function ConsentBanner() {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    if (!analyticsEnabled) return
+    if (!analyticsEnabled && !gaEnabled) return
     if (readConsent() === null) setOpen(true)
     const reopen = () => setOpen(true)
     window.addEventListener(OPEN_CONSENT_EVENT, reopen)

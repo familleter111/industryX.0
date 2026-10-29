@@ -12,6 +12,7 @@ import {
 } from '@/lib/analytics/attribution'
 import { CONSENT_EVENT, readConsent, type Consent } from '@/lib/analytics/consent'
 import { ctaFromClick } from '@/lib/analytics/cta'
+import { applyGaConsent } from '@/lib/analytics/ga'
 import {
   applyConsent,
   capturePageview,
@@ -37,6 +38,7 @@ function boot(locale: string) {
   const consent = readConsent()
   captureAttribution(consent === 'granted')
   initPostHog(consent, locale)
+  applyGaConsent(consent)
   const ref = getAttribution().last?.ref
   if (ref) registerProperties({ ref })
 }
@@ -65,6 +67,7 @@ export default function AnalyticsProvider({ locale }: { locale: string }) {
     const onConsent = (event: Event) => {
       const consent = (event as CustomEvent<Consent>).detail
       applyConsent(consent, locale)
+      applyGaConsent(consent)
       if (consent === 'granted') persistAttribution()
       else clearStoredAttribution()
     }

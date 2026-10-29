@@ -49,6 +49,8 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+          # Identifiant public (pas un secret) : figé ici plutôt qu'en variable.
+          NEXT_PUBLIC_GA_ID: G-RK1F1BBPJ2
 
       - name: Prune dev dependencies
         run: npm prune --omit=dev
