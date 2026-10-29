@@ -2,11 +2,13 @@ import type { MetadataRoute } from 'next'
 
 import { SITE_URL } from '@/lib/site'
 
-/** robots.txt : tout est indexable sauf les routes de formulaire. */
+/**
+ * robots.txt : tout est indexable sauf les routes de formulaire. Pas de
+ * directive `Host` : non standard, Google l'ignore.
+ */
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: '*', allow: '/', disallow: '/api/' },
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
   }
 }

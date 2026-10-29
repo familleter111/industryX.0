@@ -59,20 +59,29 @@ describe('sitemap', () => {
     )
   })
 
-  it('relie les deux langues par hreflang', () => {
+  it('relie les deux langues par hreflang, x-default vers le français', () => {
     const contact = entries.find((e) => e.url === SITE_URL + '/en/contact')
     expect(contact?.alternates?.languages).toEqual({
       fr: SITE_URL + '/contact',
       en: SITE_URL + '/en/contact',
+      'x-default': SITE_URL + '/contact',
     })
+  })
+
+  it('date les guides par leur contenu, pas par le build', () => {
+    const guide = entries.find((e) => e.url === SITE_URL + '/resources/digitaliser-audits-terrain')
+    expect(guide?.lastModified).toEqual(new Date('2026-09-15T00:00:00Z'))
+    const dates = new Set(entries.map((e) => String(e.lastModified)))
+    expect(dates.size).toBeGreaterThan(1)
   })
 })
 
 describe('robots', () => {
-  it('pointe vers le sitemap et ferme /api', () => {
+  it('pointe vers le sitemap et ferme /api, sans directive Host', () => {
     const result = robots()
     expect(result.sitemap).toBe(`${SITE_URL}/sitemap.xml`)
     expect(result.rules).toMatchObject({ disallow: '/api/' })
+    expect(result).not.toHaveProperty('host')
   })
 })
 

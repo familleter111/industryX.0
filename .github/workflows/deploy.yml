@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          # Historique complet : le sitemap date chaque page par le dernier
+          # commit de ses fichiers (src/lib/seo/lastModified.ts). Un clone
+          # superficiel ne donnerait aucune date.
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
