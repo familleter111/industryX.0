@@ -7,8 +7,28 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 const POSTHOG_HOST = process.env.POSTHOG_INGEST_HOST || 'https://eu.i.posthog.com'
 const POSTHOG_ASSETS = process.env.POSTHOG_ASSETS_HOST || 'https://eu-assets.i.posthog.com'
 
+/**
+ * En-têtes de sécurité de toutes les réponses. Pas de Content-Security-Policy
+ * ici : les scripts en ligne de Next, GA4 et PostHog demandent une politique à
+ * construire et tester à part (voir SEO-REPORT.md).
+ */
+const SECURITY_HEADERS = [
+  // HTTPS seulement, un an ; sans includeSubDomains, qui engagerait des
+  // sous-domaines que ce dépôt ne connaît pas.
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+]
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ne pas annoncer la pile technique dans chaque réponse.
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: '/:path*', headers: SECURITY_HEADERS }]
+  },
   // Les événements partent vers /ingest sur notre domaine, que Next relaie à
   // PostHog : les bloqueurs de publicité ne coupent pas un appel au site.
   async rewrites() {

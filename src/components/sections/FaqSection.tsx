@@ -7,7 +7,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   ChevronDown,
   MessageCircle,
@@ -230,25 +230,26 @@ function FaqAccordion() {
                 </button>
               </h3>
 
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    key={panelId}
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={buttonId}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <p className="px-5 pb-6 pl-[46px] text-[13.5px] leading-[1.75] text-[#57534E] sm:px-7 sm:pb-7 sm:pl-[64px] sm:text-[14.5px] lg:pb-5">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Chaque réponse est dans le HTML, ouverte ou non : les
+                  moteurs la lisent (elle est aussi dans le JSON-LD FAQPage,
+                  qui doit refléter la page). Fermée, elle est repliée en CSS
+                  (grille 0fr → 1fr, même courbe que l'ancienne animation) et
+                  sortie de l'arbre d'accessibilité. */}
+              <div
+                id={panelId}
+                role="region"
+                aria-labelledby={buttonId}
+                aria-hidden={!isOpen}
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                  isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <p className="px-5 pb-6 pl-[46px] text-[13.5px] leading-[1.75] text-[#57534E] sm:px-7 sm:pb-7 sm:pl-[64px] sm:text-[14.5px] lg:pb-5">
+                    {faq.answer}
+                  </p>
+                </div>
+              </div>
             </div>
           )
         })}
