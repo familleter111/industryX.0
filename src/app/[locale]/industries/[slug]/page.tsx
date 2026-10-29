@@ -2,9 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
 
+import JsonLd from '@/components/seo/JsonLd'
 import IndustryPage from '@/features/industries/IndustryPage'
 import { industryData, industrySlugs } from '@/lib/data/industries'
+import { industryHref, industryName } from '@/lib/data/industries/labels'
 import { pageMetadata, type Locale } from '@/lib/i18n'
+import { HOME_CRUMB, breadcrumbSchema } from '@/lib/seo/schema'
 
 /**
  * Route unique des pages sectorielles.
@@ -40,5 +43,18 @@ export default function Page({ params }: Params) {
   // des icones Lucide, donc des fonctions, et une fonction ne peut pas etre
   // serialisee vers un composant client : c'est le composant client qui va
   // chercher sa donnee dans le registre.
-  return <IndustryPage slug={params.slug} />
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema(params.locale, [
+          HOME_CRUMB[params.locale],
+          {
+            name: industryName(params.slug, params.locale) ?? params.slug,
+            path: industryHref(params.slug),
+          },
+        ])}
+      />
+      <IndustryPage slug={params.slug} />
+    </>
+  )
 }

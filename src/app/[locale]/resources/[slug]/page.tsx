@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, CalendarCheck, Clock, Lightbulb } from 'lucide-r
 
 import TrackOnMount from '@/components/analytics/TrackOnMount'
 import Footer from '@/components/layout/Footer'
+import JsonLd from '@/components/seo/JsonLd'
 import GuideCard from '@/features/resources/GuideCard'
 import SubscribeBand from '@/features/resources/SubscribeBand'
 import {
@@ -18,6 +19,7 @@ import {
   type GuideBlock,
 } from '@/lib/data/guides'
 import { pageMetadata, useCopy, type Locale } from '@/lib/i18n'
+import { HOME_CRUMB, articleSchema, breadcrumbSchema } from '@/lib/seo/schema'
 
 const COPY = {
   fr: {
@@ -136,6 +138,16 @@ export default function GuidePage({ params }: Params) {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
+      <JsonLd
+        data={[
+          articleSchema(guide, locale),
+          breadcrumbSchema(locale, [
+            HOME_CRUMB[locale],
+            { name: 'Guides & insights', path: '/resources' },
+            { name: guide.title, path: `/resources/${guide.slug}` },
+          ]),
+        ]}
+      />
       <TrackOnMount event="guide_viewed" properties={{ slug: guide.slug, category: guide.category }} />
       <article>
         {/* ==================== EN-TÊTE ==================== */}

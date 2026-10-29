@@ -7,8 +7,10 @@ import '@/styles/globals.css'
 
 import AnalyticsProvider from '@/components/analytics/AnalyticsProvider'
 import Navbar from '@/components/layout/Navbar'
+import JsonLd from '@/components/seo/JsonLd'
 import { isLocale, routing } from '@/i18n/routing'
 import { pageMetadata, type Locale } from '@/lib/i18n'
+import { organizationSchema } from '@/lib/seo/schema'
 import { SITE_URL } from '@/lib/site'
 
 const syne = Syne({
@@ -109,6 +111,9 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="font-body antialiased">
+        {/* L'organisation, une fois par page : les autres blocs JSON-LD y
+            renvoient par son @id (lib/seo/schema.ts). */}
+        <JsonLd data={organizationSchema()} />
         {/* La Navbar etait importee et rendue a la main dans les quatorze
             pages : elle vit ici, une seule fois.
 

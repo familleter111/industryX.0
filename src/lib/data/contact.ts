@@ -14,6 +14,10 @@ export const CONTACT = {
     street: 'Cité les pins',
     city: 'Tunis 1053',
     country: { fr: 'Tunisie', en: 'Tunisia' },
+    /** Champs séparés de l'adresse postale (données structurées). */
+    postalCode: '1053',
+    locality: 'Tunis',
+    countryCode: 'TN',
   },
   maps: 'https://www.google.com/maps/search/?api=1&query=Cit%C3%A9+les+pins+Tunis+1053+Tunisie',
 } as const

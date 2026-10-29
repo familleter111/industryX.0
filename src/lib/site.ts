@@ -16,6 +16,24 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.indust
 )
 
 /**
+ * Identité de marque, pour les moteurs de recherche.
+ *
+ * « Industry X.0 » est aussi un terme générique du secteur : seul, il ne
+ * désigne pas l'entreprise de façon univoque. CIPA, le produit, porte donc le
+ * signal de marque (suffixe des titres, nom du site) et l'organisation le
+ * déclare comme nom alternatif (lib/seo/schema.ts).
+ */
+export const BRAND = {
+  organization: 'Industry X.0',
+  product: 'CIPA',
+  /** og:site_name et nom du WebSite. */
+  siteName: 'CIPA by Industry X.0',
+  alternateNames: ['CIPA', 'CIPA by Industry X.0'],
+  /** Logo de l'organisation (public/). */
+  logo: '/logo.png',
+} as const
+
+/**
  * Industries servies par un dossier de page dédié, pas encore migrées vers
  * la route [slug] (voir lib/data/industries/index.ts).
  */

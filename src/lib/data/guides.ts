@@ -35,6 +35,12 @@ export type Guide = {
   readingMinutes: number
   /** Date de publication, ISO (AAAA-MM-JJ). */
   date: string
+  /**
+   * Derniere mise a jour significative, ISO. A ne renseigner que si le
+   * contenu a change apres publication : la page affiche alors « Mis a jour
+   * le … », et l'article et le sitemap s'en servent comme date de modification.
+   */
+  updated?: string
   author: string
   image: { src: string; alt: string }
   /** Mis en avant en tete de /resources. Un seul a la fois. */
