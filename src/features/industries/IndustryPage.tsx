@@ -119,9 +119,9 @@ export default function IndustryPage({ slug }: { slug: string }) {
                     transition={{ duration: 0.6, delay: 0.1 }}
                     className={`${heroStyles.title} ${heroStyles.statementTitle} mt-6 font-display text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-dark sm:text-[44px] lg:text-[clamp(34px,3.85vw_-_4px,50px)]`}
                   >
-                    {statement.title[0]}
+                    {statement.title[0]}{' '}
                     <br />
-                    {statement.title[1]} <span className="text-[#DAA250]">{statement.title[2]}</span>
+                    {statement.title[1]} <span className="text-[#DAA250]">{statement.title[2]}</span>{' '}
                     <br />
                     {statement.title[3]}
                   </motion.h1>
@@ -357,7 +357,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
                   <div className="w-[52px] h-[52px] rounded-2xl bg-white border border-[#ECE7DD] shadow-md text-gold flex items-center justify-center mb-4">
                     <Icon size={22} />
                   </div>
-                  <h4 className="text-sm font-black text-dark mb-1.5">{step.title}</h4>
+                  <h3 className="text-sm font-black text-dark mb-1.5">{step.title}</h3>
                   <p className="text-[11px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
                 </motion.div>
               )

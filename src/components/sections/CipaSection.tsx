@@ -194,7 +194,7 @@ export default function CipaSection() {
               className="mt-3 text-3xl lg:text-5xl font-extrabold leading-[1.05] tracking-[-0.04em]"
               style={{ color: colors.text }}
             >
-              {t.title}
+              {t.title}{' '}
               <span
                 className="block mt-1"
               >

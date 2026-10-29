@@ -166,7 +166,7 @@ export default function TestimonialsSection() {
           className="mb-16 text-center"
         >
           <h2 className="text-4xl font-bold text-dark sm:text-5xl">
-            {copy.title}
+            {copy.title}{' '}
             <span className="block">{copy.titleEnd}</span>
           </h2>
         </motion.div>

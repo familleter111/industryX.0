@@ -115,9 +115,9 @@ export default function PartnersOrbit({
             <motion.div {...reveal}>
 
               <h2 className="mt-6 font-display text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-gray-900 sm:text-[40px] lg:text-[46px]">
-                {t.title[0]}
+                {t.title[0]}{' '}
                 <br />
-                {t.title[1]}
+                {t.title[1]}{' '}
                 <br />
                 {t.title[2]}
               </h2>

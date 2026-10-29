@@ -341,7 +341,7 @@ function UseCasesScreen() {
               transition={{ duration: 0.55, delay: 0.06, ease }}
               className="mt-[clamp(1rem,2vh,1.6rem)] font-display font-black leading-[1.05] tracking-[-0.04em] text-[#111827] text-[clamp(30px,7vw,40px)] lg:text-[clamp(30px,min(3vw,5.4vh),50px)]"
             >
-              {t.title[0]}
+              {t.title[0]}{' '}
               <br />
               {t.title[1]}{' '}
               <span className="text-gold-deep">
@@ -375,7 +375,7 @@ function UseCasesScreen() {
               </Link>
 
               <Link
-                href="/#faq"
+                href={{ pathname: '/', hash: 'faq' }}
                 className="group inline-flex items-center gap-2.5 rounded-full border border-cream-border bg-white px-6 py-3.5 text-[14px] font-semibold text-stone-800 transition-all duration-300 hover:-translate-y-[1px] hover:border-gold/45"
               >
                 {t.faq}
@@ -463,7 +463,7 @@ function UseCasesScreen() {
         >
           <div>
             <h2 className="font-display font-black leading-[1.14] tracking-[-0.035em] text-[#111827] text-[clamp(22px,4.6vw,26px)] lg:text-[clamp(21px,min(1.8vw,3.1vh),29px)]">
-              {t.platformTitle}
+              {t.platformTitle}{' '}
               <br />
               <span className="text-gold-deep">{t.platformAccent}</span>
             </h2>

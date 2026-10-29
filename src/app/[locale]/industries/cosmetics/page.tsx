@@ -1321,7 +1321,7 @@ export default function CosmeticsPage() {
                   <div className="w-[52px] h-[52px] rounded-2xl bg-white border border-[#ECE7DD] shadow-md text-gold flex items-center justify-center mb-4">
                     <Icon size={22} />
                   </div>
-                  <h4 className="text-sm font-black text-dark mb-1.5">{step.title}</h4>
+                  <h3 className="text-sm font-black text-dark mb-1.5">{step.title}</h3>
                   <p className="text-[11px] text-slate-500 leading-relaxed max-w-[190px]">{step.desc}</p>
                 </motion.div>
               )

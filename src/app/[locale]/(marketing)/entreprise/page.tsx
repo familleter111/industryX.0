@@ -933,7 +933,7 @@ function ValuesSection() {
             />
 
             <p className="mt-[clamp(0.9rem,2.4vh,1.5rem)] text-[10.5px] font-medium uppercase leading-[1.9] tracking-[0.2em] text-muted sm:text-[12px] lg:text-[clamp(11px,min(0.92vw,1.7vh),15px)]">
-              {t.valuesLead[0]}
+              {t.valuesLead[0]}{' '}
               <br />
               {t.valuesLead[1]}
             </p>
@@ -1116,7 +1116,7 @@ function ExpertiseSection() {
 
             <div className="mt-[clamp(1rem,2.6vh,1.75rem)] flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-8">
               <h2 className="font-display font-black leading-[1.08] tracking-[-0.04em] text-[#111827] text-[clamp(28px,6.6vw,38px)] lg:text-[clamp(30px,min(3.1vw,5.8vh),52px)]">
-                {t.expertiseTitle}
+                {t.expertiseTitle}{' '}
                 <br />
                 <span className="text-gold">{t.expertiseAccent}</span>
               </h2>
@@ -1296,7 +1296,7 @@ function HorizonSection() {
               className="mt-[clamp(1.75rem,4vh,3rem)] flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             >
               <Link
-                href="/#solutions"
+                href={{ pathname: '/', hash: 'solutions' }}
                 className="group inline-flex items-center justify-center gap-3 rounded-[6px] bg-gold px-7 py-4 text-[14px] font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 sm:text-[15px]"
               >
                 {t.discover}

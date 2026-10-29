@@ -87,7 +87,7 @@ export default function CTASection() {
               {/* TITLE */}
               <h2 className="max-w-3xl text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.02] text-white mb-7">
 
-                {t.title}
+                {t.title}{' '}
                 <span className="block mt-2 text-gradient-gold">
                   {t.accent}
                 </span>

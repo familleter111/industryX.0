@@ -152,9 +152,9 @@ export default function SdgContribution({ className = '' }: { className?: string
     >
       {/* EN-TETE — recentre, 640 px, 48 px de respiration avant la grille. */}
       <motion.div variants={m.fadeUp} className="mx-auto mb-12 max-w-[640px] text-center">
-        <h4 className="mb-2 text-[15px] font-bold text-dark">
+        <h3 className="mb-2 text-[15px] font-bold text-dark">
           {t.title}
-        </h4>
+        </h3>
         <p className="text-sm leading-relaxed text-stone-600">
           {t.lead}
         </p>
@@ -194,9 +194,12 @@ export default function SdgContribution({ className = '' }: { className?: string
                   } ${!m.reduce && isActive ? 'scale-[1.06]' : 'scale-100'}`}
                   style={isActive ? { boxShadow: `0 10px 26px ${goal.color}59` } : undefined}
                 >
+                  {/* Le bouton porte déjà ce nom (aria-label, prioritaire) :
+                      l'alt ne sera pas lu deux fois, il sert à l'indexation
+                      de l'image. */}
                   <Image
                     src={`/ODD/ODD${goal.num}.png`}
-                    alt=""
+                    alt={`${t.short} ${goal.num} — ${goal.title}`}
                     width={512}
                     height={512}
                     className="h-20 w-20 object-contain sm:h-[88px] sm:w-[88px] lg:h-24 lg:w-24"

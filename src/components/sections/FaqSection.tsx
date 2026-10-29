@@ -206,12 +206,13 @@ function FaqAccordion() {
                   className="flex w-full items-center gap-4 px-5 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/50 sm:gap-5 sm:px-7 sm:py-[22px] lg:py-4"
                 >
                   <span
+                    aria-hidden="true"
                     className={`shrink-0 font-display text-[13px] font-black tabular-nums tracking-[0.02em] transition-colors duration-300 ${
                       isOpen ? 'text-gold' : 'text-[#C7C2B8]'
                     }`}
                   >
                     {String(index + 1).padStart(2, '0')}
-                  </span>
+                  </span>{' '}
 
                   <span className="min-w-0 flex-1 text-pretty text-[14.5px] font-bold leading-snug tracking-[-0.015em] text-[#111827] sm:text-[15.5px]">
                     {faq.question}

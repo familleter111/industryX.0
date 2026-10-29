@@ -76,7 +76,7 @@ export default function PlatformHero({ slug }: { slug: string }) {
             className="font-black leading-[1.04] tracking-[-0.06em] text-gray-900"
             style={{ fontSize: 'clamp(2rem,3.6vw,3.25rem)' }}
           >
-            <span className="block">{page.title}</span>
+            <span className="block">{page.title}</span>{' '}
             {/* `gold.deep` : l'or de marque tombe a 2,04:1 sur le creme, sous
                 le seuil de 3:1 du texte large (voir lib/tokens.ts). */}
             <span

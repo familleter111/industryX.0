@@ -1307,7 +1307,7 @@ export default function ContactPage() {
 
               {/* TITRE */}
               <h1 className="mt-4 font-display text-[32px] font-black leading-[1.03] tracking-[-0.04em] text-[#111827] sm:text-[44px] lg:mt-4 lg:text-[40px] xl:text-[48px]">
-                {t.heroTitle}
+                {t.heroTitle}{' '}
                 <br />
                 <span className="text-gold-deep">{t.heroAccent}</span>
               </h1>

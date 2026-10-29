@@ -114,13 +114,16 @@ export default function Hero() {
           {/* TITLE */}
 
           <h1 className="font-black leading-[1.04] tracking-[-0.06em] text-gray-900">
+            {/* Les lignes sont des blocs : sans espace entre elles, le texte
+                extrait par les moteurs et les lecteurs d'écran soude les mots
+                (« opérationssont »). L'espace ne se voit pas. */}
             {/* LIGNE 1 */}
             <span
               className="block sm:whitespace-nowrap"
               style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               {t.lines[0]}
-            </span>
+            </span>{' '}
 
             {/* LIGNE 2 */}
             <span
@@ -128,7 +131,7 @@ export default function Hero() {
               style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               {t.lines[1]}
-            </span>
+            </span>{' '}
 
             {/* LIGNE 3 */}
             <span
@@ -136,7 +139,7 @@ export default function Hero() {
               style={{ fontSize: 'clamp(1.5rem,2.7vw,2.5rem)' }}
             >
               {t.lines[2]}
-            </span>
+            </span>{' '}
 
             {/* LIGNE 4 */}
             <span
