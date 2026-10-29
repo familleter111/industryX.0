@@ -43,8 +43,8 @@ Depuis un PNG :
     cwebp -q 82 -resize 432 918 source.png -o audits.webp
 
 Éviter le PNG : les captures d'interface plein écran y pèsent facilement dix
-fois plus. À titre de comparaison, `public/audit.png`, l'ancien visuel de cette
-section, fait 1,6 Mo.
+fois plus. À titre de comparaison, l’ancien visuel PNG de cette
+section (supprimé depuis) faisait 1,6 Mo.
 
 ## Points d'attention
 

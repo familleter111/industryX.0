@@ -24,11 +24,11 @@ const FOOTER_HREFS = [
     '/plateforme/pilotage-performance',
     '/plateforme/intelligence-operationnelle',
     '/plateforme/integrations',
-    '/plateforme/integrations#securite',
+    '/resources#securite',
     '/plateforme/entiwin',
   ],
   ['/entreprise', '/partners', '/resources', '/contact'],
-  ['/privacy', '/conditions-utilisation', '/faq'],
+  ['/privacy', '/conditions-utilisation', '/#faq'],
 ]
 
 const COPY = {

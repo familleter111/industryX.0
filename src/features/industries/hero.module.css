@@ -91,6 +91,20 @@
     flex-shrink: 0;
     padding-right: max(96px, 3.5vw);
   }
+
+  /* Hero « manifeste » (heroStatement) : titre plus court, donc plus grand,
+     et visuel un peu plus large. */
+  .statementTitle {
+    font-size: clamp(34px, min(3.3vw, 6.4svh), 62px);
+  }
+
+  .statementCopy .intro > p {
+    max-width: 42rem;
+  }
+
+  .statementVisual {
+    width: 57%;
+  }
 }
 
 /* Wide windows can also be short: tighten spacing before content overflows. */

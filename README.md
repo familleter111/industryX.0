@@ -67,6 +67,10 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
   « Refuser » coupe tout. Le lien « Gérer les cookies » du pied de page rouvre le bandeau.
 - **Proxy** : les appels passent par `/ingest` sur notre domaine (rewrites de
   `next.config.mjs`), sinon les bloqueurs de publicité les coupent.
+- **Google Analytics 4** (`ga.ts`) : actif si `NEXT_PUBLIC_GA_ID` est défini (fixé à
+  `G-RK1F1BBPJ2` dans `deploy.yml`). gtag.js n'est chargé qu'après « Accepter » : avant
+  réponse ou après « Refuser », aucune requête ne part vers Google. Les pages vues de
+  l'App Router sont comptées par la mesure améliorée de GA4.
 - **Attribution** : UTM et `ref` sont captés à l'arrivée, puis joints aux demandes de
   démo et aux inscriptions (colonnes `utm_*`, `ref`, `Première visite`, `ID PostHog` du
   fichier Excel).
@@ -101,7 +105,7 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 │   │   │   ├── page.tsx        # Accueil
 │   │   │   ├── (marketing)/    # Route group (n'apparaît pas dans l'URL)
 │   │   │   │   ├── contact/  customers/  entreprise/
-│   │   │   │   └── faq/  partners/  privacy/
+│   │   │   │   └── partners/  privacy/
 │   │   │   ├── industries/     # Pages sectorielles + [slug]
 │   │   │   ├── plateforme/[slug]/
 │   │   │   └── resources/      # Bibliothèque de guides + [slug]

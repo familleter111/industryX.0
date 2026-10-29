@@ -19,7 +19,7 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.indust
  * Industries servies par un dossier de page dédié, pas encore migrées vers
  * la route [slug] (voir lib/data/industries/index.ts).
  */
-const STATIC_INDUSTRIES = ['pharma', 'food', 'cosmetics', 'electronics', 'packaging']
+const STATIC_INDUSTRIES = ['cosmetics']
 
 /**
  * Toutes les pages publiques, en chemin français (sans préfixe de langue).
@@ -32,7 +32,6 @@ export function publicPaths(): string[] {
     '/entreprise',
     '/customers',
     '/partners',
-    '/faq',
     '/contact',
     '/privacy',
     '/conditions-utilisation',

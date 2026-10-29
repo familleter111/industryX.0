@@ -1,7 +1,8 @@
 /**
  * Base de connaissances de l'assistant IA, construite à partir des données
  * du site : pages Solution (lib/data/platform.ts), FAQ (lib/data/faq.ts),
- * secteurs et coordonnées. Le modèle ne répond que depuis ces faits : le
+ * secteurs et coordonnées, plus les réponses de prospection validées par
+ * l'équipe (lib/data/chatbotBase.ts). Le modèle ne répond que depuis ces faits : le
  * jour où une page change, l'assistant suit sans réécriture du prompt.
  *
  * Le texte est déterministe (même ordre, aucune date) : il sert de préfixe
@@ -12,6 +13,7 @@
  * devient trop grande pour un seul prompt.
  */
 
+import { CHATBOT_BASE } from '@/lib/data/chatbotBase'
 import { CONTACT, postalAddress } from '@/lib/data/contact'
 import { FAQ_ENTRIES } from '@/lib/data/faq'
 import { platformHref, platformPages } from '@/lib/data/platform'
@@ -52,10 +54,38 @@ function faq(locale: ChatLocale): string {
   return FAQ_ENTRIES[locale].map((entry) => `Q : ${entry.question}\nR : ${entry.answer}`).join('\n\n')
 }
 
+/**
+ * Réponses de prospection validées (lib/data/chatbotBase.ts), groupées par
+ * thème. Rédigées en français : le modèle les traduit. Sur la version
+ * anglaise, les liens pointent vers les pages /en.
+ */
+function referenceAnswers(locale: ChatLocale): string {
+  const themes = new Map<string, string[]>()
+  for (const entry of CHATBOT_BASE) {
+    const answer = locale === 'en' ? entry.answer.replaceAll(`${SITE}/`, `${SITE}/en/`) : entry.answer
+    const block = themes.get(entry.theme) ?? []
+    block.push(`Q : ${entry.question}\nR : ${answer}`)
+    themes.set(entry.theme, block)
+  }
+  return Array.from(themes).map(([theme, block]) => `### ${theme}\n${block.join('\n\n')}`).join('\n\n')
+}
+
 /** Texte complet de la base, dans la langue demandée. */
 export function chatKnowledge(locale: ChatLocale): string {
   const heading = locale === 'en'
-    ? { solutions: '## CIPA solutions', faq: '## Frequently asked questions' }
-    : { solutions: '## Solutions CIPA', faq: '## Questions fréquentes' }
-  return [FACTS[locale], heading.solutions, solutions(locale), heading.faq, faq(locale)].join('\n\n')
+    ? {
+        solutions: '## CIPA solutions',
+        faq: '## Frequently asked questions',
+        reference: '## Approved reference answers (written in French, reply in the visitor\'s language)',
+      }
+    : { solutions: '## Solutions CIPA', faq: '## Questions fréquentes', reference: '## Réponses de référence validées' }
+  return [
+    FACTS[locale],
+    heading.solutions,
+    solutions(locale),
+    heading.faq,
+    faq(locale),
+    heading.reference,
+    referenceAnswers(locale),
+  ].join('\n\n')
 }

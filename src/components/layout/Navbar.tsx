@@ -142,7 +142,7 @@ const INDUSTRY_LINKS = [
 const RESOURCE_LINKS = [
   { href: '/customers', icon: Users },
   { href: '/resources', icon: FileText },
-  { href: '/faq', icon: HelpCircle },
+  { href: '/#faq', icon: HelpCircle },
 ]
 const COMPANY_LINKS = [
   { href: '/entreprise', icon: Building2 },

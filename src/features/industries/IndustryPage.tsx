@@ -74,6 +74,8 @@ export default function IndustryPage({ slug }: { slug: string }) {
   const data = industryData(slug, useCurrentLocale())
   if (!data) return null
   const HeroIcon = data.heroIcon
+  const BadgeIcon = data.badgeIcon ?? Zap
+  const statement = data.heroStatement
   return (
     <main className="min-h-screen bg-[#F7F7F6] text-dark overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold-900">
 
@@ -82,29 +84,59 @@ export default function IndustryPage({ slug }: { slug: string }) {
         <div className={`${heroStyles.content} relative lg:min-h-[calc(min(40.5vw,570px,100svh_-_150px)_-_2.5rem)]`}>
           <div className={`${heroStyles.grid} mx-auto grid w-full max-w-[1400px] grid-cols-1 items-start gap-8 px-5 sm:px-7 lg:grid-cols-12 lg:gap-6 lg:px-10`}>
             {/* ---------- Colonne texte ---------- */}
-            <div className={`${heroStyles.copy} ${slug === 'automotive' ? heroStyles.automotiveCopy : ''} relative z-10 pt-10 lg:col-span-6 lg:pt-[clamp(2rem,3vw,3rem)] lg:pb-4`}>
+            <div className={`${heroStyles.copy} ${slug === 'automotive' ? heroStyles.automotiveCopy : ''} ${statement ? heroStyles.statementCopy : ''} relative z-10 pt-10 lg:col-span-6 lg:pt-[clamp(2rem,3vw,3rem)] lg:pb-4`}>
               <div className={heroStyles.intro}>
-                <motion.div
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-flex items-center gap-2.5 rounded-full border border-[#EFDFC4] bg-[#FDF7EC] py-2 pl-3.5 pr-5"
-                >
-                  <Zap size={14} aria-hidden="true" className="text-[#DAA250]" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B6842B] sm:text-[11px]">
-                    {t.badge}
-                  </span>
-                </motion.div>
+                {statement ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="inline-flex items-center gap-3 rounded-full border border-[#EDE3D2] bg-white/80 py-1.5 pl-1.5 pr-5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] backdrop-blur"
+                  >
+                    <span className="h-5 w-1.5 rounded-full bg-[#DAA250]" />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#57534E] sm:text-[11px]">
+                      {statement.eyebrow}
+                    </span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="inline-flex items-center gap-2.5 rounded-full border border-[#EFDFC4] bg-[#FDF7EC] py-2 pl-3.5 pr-5"
+                  >
+                    <BadgeIcon size={14} aria-hidden="true" className="text-[#DAA250]" />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B6842B] sm:text-[11px]">
+                      {t.badge}
+                    </span>
+                  </motion.div>
+                )}
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className={`${heroStyles.title} mt-6 font-display text-[32px] font-black leading-[1.08] tracking-[-0.02em] text-dark sm:text-[40px] lg:text-[clamp(32px,3.5vw_-_4px,46px)]`}
-                >
-                  {t.title}
-                  <span className="text-[#DAA250]">{data.headline}</span>
-                </motion.h1>
+                {statement ? (
+                  <motion.h1
+                    initial={{ opacity: 0, y: 22 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className={`${heroStyles.title} ${heroStyles.statementTitle} mt-6 font-display text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-dark sm:text-[44px] lg:text-[clamp(34px,3.85vw_-_4px,50px)]`}
+                  >
+                    {statement.title[0]}
+                    <br />
+                    {statement.title[1]} <span className="text-[#DAA250]">{statement.title[2]}</span>
+                    <br />
+                    {statement.title[3]}
+                  </motion.h1>
+                ) : (
+                  <motion.h1
+                    initial={{ opacity: 0, y: 22 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className={`${heroStyles.title} mt-6 font-display text-[32px] font-black leading-[1.08] tracking-[-0.02em] text-dark sm:text-[40px] lg:text-[clamp(32px,3.5vw_-_4px,46px)]`}
+                  >
+                    {t.title}
+                    {data.headlinePrefix}
+                    <span className="text-[#DAA250]">{data.headline}</span>
+                  </motion.h1>
+                )}
 
                 <motion.p
                   initial={{ opacity: 0, y: 22 }}
@@ -138,12 +170,11 @@ export default function IndustryPage({ slug }: { slug: string }) {
                 </motion.div>
               </div>
 
-              {/* Les trois indicateurs reprennent les libelles des resultats mesures. */}
               <ul className={`${heroStyles.indicators} mt-10 grid grid-cols-3 gap-x-3 sm:gap-x-6`}>
-                {data.results.slice(0, 3).map((stat) => (
-                  <li key={stat.label} className="flex items-start gap-2 sm:items-center">
+                {data.indicators.slice(0, 3).map((label) => (
+                  <li key={label} className="flex items-start gap-2 sm:items-center">
                     <CheckCircle2 size={15} aria-hidden="true" className="shrink-0 text-[#22C55E]" />
-                    <span className="text-[13px] font-medium text-[#57534E]">{stat.label}</span>
+                    <span className="text-[13px] font-medium text-[#57534E]">{label}</span>
                   </li>
                 ))}
               </ul>
@@ -154,7 +185,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className={`${heroStyles.visual} relative -mx-5 sm:-mx-7 lg:absolute lg:right-0 lg:top-0 lg:m-0 lg:w-[54%] lg:max-w-[min(760px,calc((100svh_-_150px)*4/3))]`}
+              className={`${heroStyles.visual} ${statement ? heroStyles.statementVisual : ''} relative -mx-5 sm:-mx-7 lg:absolute lg:right-0 lg:top-0 lg:m-0 lg:w-[54%] lg:max-w-[min(760px,calc((100svh_-_150px)*4/3))]`}
             >
               <div className={`${heroStyles.imageFrame} relative w-full`}>
                 <Image
@@ -243,7 +274,7 @@ export default function IndustryPage({ slug }: { slug: string }) {
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
               <span className="md:block">{t.perfTitle}</span>
               <span className="text-gold-deep md:block">
-                {t.perfAccent}
+                {data.performanceTitle ?? t.perfAccent}
               </span>
             </h2>
             <p className="text-[15px] sm:text-[16px] text-subtle leading-relaxed">

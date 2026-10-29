@@ -1,5 +1,5 @@
 /**
- * Logo de l'assistant Industriooo, dérivé du logo Industry X.0 : la roue
+ * Logo de l'assistant OmniduX, dérivé du logo Industry X.0 : la roue
  * dentée de la marque, et dedans un visage de robot dont l'antenne et les
  * joues reprennent les pastilles de circuit du « X ».
  *

@@ -1,5 +1,10 @@
 'use client'
 
+/**
+ * Questions fréquentes, en section de l'accueil (ancre #faq, visée par le
+ * menu et le pied de page) : l'ancienne page /faq redirige ici.
+ */
+
 import { useState } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -14,7 +19,6 @@ import {
 
 import SectionHeading from '@/components/ui/SectionHeading'
 import { viewport } from '@/lib/motion'
-import Footer from '@/components/layout/Footer'
 import { useCopy } from '@/lib/i18n'
 import { openChat } from '@/lib/chat/open'
 import { FAQ_ENTRIES } from '@/lib/data/faq'
@@ -275,40 +279,35 @@ function FaqAccordion() {
 }
 
 /* ============================================================
-   PAGE
+   SECTION
    ============================================================ */
 
-export default function FaqPage() {
+export default function FaqSection() {
   const t = useCopy(COPY)
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#FDFBF6] font-body text-dark selection:bg-gold/30">
+    <section
+      id="faq"
+      className="relative scroll-mt-[82px] overflow-hidden bg-[#FDFBF6] py-20 font-body text-dark sm:py-24"
+    >
+      <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-gold/[0.06] blur-[120px]" />
+      <div className="pointer-events-none absolute -left-32 top-1/3 h-72 w-72 rounded-full bg-gold/[0.04] blur-[120px]" />
 
-      {/* Sur desktop, titre et colonnes tiennent dans un ecran de ~1080 px :
-          navbar 82 + marge 30, titre ~155, ecart 40, colonnes ~520. */}
-      <section className="relative overflow-hidden pb-20 pt-28 sm:pt-32 lg:pb-20 lg:pt-[112px]">
-        <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-gold/[0.06] blur-[120px]" />
-        <div className="pointer-events-none absolute -left-32 top-1/3 h-72 w-72 rounded-full bg-gold/[0.04] blur-[120px]" />
+      <div className="relative z-10 mx-auto max-w-[1280px] px-5 sm:px-7 lg:px-8">
+        <SectionHeading
+          title={t.title}
+          accent={t.accent}
+          subtitle={t.subtitle}
+        />
 
-        <div className="relative z-10 mx-auto max-w-[1280px] px-5 sm:px-7 lg:px-8">
-          <SectionHeading
-            title={t.title}
-            accent={t.accent}
-            subtitle={t.subtitle}
-          />
-
-          {/* `items-stretch` (défaut) + `h-full` sur les deux enfants : les
-              colonnes font exactement la même hauteur, la photo à gauche et le
-              pied de carte à droite absorbant chacun leur écart. Sur mobile
-              l'accordéon passe en premier — c'est l'objet de la page. */}
-          <div className="mt-12 grid gap-5 lg:mt-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-6">
-            <HighlightsPanel />
-            <FaqAccordion />
-          </div>
+        {/* `items-stretch` (défaut) + `h-full` sur les deux enfants : les
+            colonnes font exactement la même hauteur, la photo à gauche et le
+            pied de carte à droite absorbant chacun leur écart. Sur mobile
+            l'accordéon passe en premier — c'est l'objet de la section. */}
+        <div className="mt-12 grid gap-5 lg:mt-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-6">
+          <HighlightsPanel />
+          <FaqAccordion />
         </div>
-      </section>
-
-      <Footer />
-
-    </main>
+      </div>
+    </section>
   )
 }

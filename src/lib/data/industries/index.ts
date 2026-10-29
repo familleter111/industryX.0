@@ -4,6 +4,14 @@ import { overlay, type TextOverlay } from '@/lib/i18n'
 
 import { automotive } from '@/lib/data/industries/automotive'
 import { automotiveEn } from '@/lib/data/industries/automotive.en'
+import { electronics } from '@/lib/data/industries/electronics'
+import { electronicsEn } from '@/lib/data/industries/electronics.en'
+import { food } from '@/lib/data/industries/food'
+import { foodEn } from '@/lib/data/industries/food.en'
+import { packaging } from '@/lib/data/industries/packaging'
+import { packagingEn } from '@/lib/data/industries/packaging.en'
+import { pharma } from '@/lib/data/industries/pharma'
+import { pharmaEn } from '@/lib/data/industries/pharma.en'
 
 /**
  * Registre des pages sectorielles.
@@ -14,11 +22,19 @@ import { automotiveEn } from '@/lib/data/industries/automotive.en'
  */
 export const INDUSTRIES: Record<string, IndustryPageData> = {
   automotive,
+  electronics,
+  food,
+  packaging,
+  pharma,
 }
 
 /** Textes anglais de chaque industrie, poses sur la version francaise. */
 const INDUSTRIES_EN: Record<string, TextOverlay<IndustryPageData>> = {
   automotive: automotiveEn,
+  electronics: electronicsEn,
+  food: foodEn,
+  packaging: packagingEn,
+  pharma: pharmaEn,
 }
 
 export const industrySlugs = () => Object.keys(INDUSTRIES)

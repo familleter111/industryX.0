@@ -1,5 +1,5 @@
 /**
- * Questions fréquentes, partagées par la page /faq et l'assistant de chat
+ * Questions fréquentes, partagées par la section FAQ de l'accueil (components/sections/FaqSection.tsx) et l'assistant de chat
  * (lib/chat/knowledge.ts) : une réponse corrigée ici l'est partout.
  */
 

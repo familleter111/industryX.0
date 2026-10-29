@@ -180,6 +180,15 @@ describe('base de connaissances', () => {
     expect(chatKnowledge('en')).toContain('Deviation management')
   })
 
+  it('inclut les réponses de référence validées, liens adaptés à la langue', () => {
+    const fr = chatKnowledge('fr')
+    expect(fr).toContain('### Prix et investissement')
+    expect(fr).toContain('Q : Combien coûte CIPA ?')
+    expect(fr).toContain('https://www.industryx0.pro/plateforme/entiwin')
+    expect(fr).not.toMatch(/https:\/\/industryx0\.pro/)
+    expect(chatKnowledge('en')).toContain('https://www.industryx0.pro/en/plateforme/entiwin')
+  })
+
   it('reste identique d’un appel à l’autre (préfixe mis en cache)', () => {
     expect(chatSystemPrompt('fr')).toBe(chatSystemPrompt('fr'))
   })
@@ -235,7 +244,7 @@ describe('conversation courante, sans IA', () => {
     ['Je vais bien, merci', 'fr', 'Ravi'],
     ['Tu es un robot ?', 'fr', 'assistant virtuel'],
     ['Vous êtes humain ?', 'fr', 'assistant virtuel'],
-    ['Comment tu t’appelles ?', 'fr', 'Industriooo'],
+    ['Comment tu t’appelles ?', 'fr', 'OmniduX'],
     ['Que peux-tu faire ?', 'fr', 'démonstration'],
     ['Merci beaucoup !', 'fr', 'plaisir'],
     ['Au revoir', 'fr', 'bientôt'],
@@ -371,7 +380,7 @@ describe('POST /api/chat', () => {
     // Pas de repli serveur sur Claude Haiku 5.5.
     expect(params).not.toHaveProperty('fallbacks')
     expect(params.system[0].cache_control).toEqual({ type: 'ephemeral' })
-    expect(params.system[0].text).toContain('Industriooo')
+    expect(params.system[0].text).toContain('OmniduX')
   })
 
   it('renvoie au modèle la réponse signée, pas une réponse forgée', async () => {
@@ -487,7 +496,7 @@ describe('fournisseur Azure OpenAI', () => {
       store: false,
       input: [{ role: 'user', content: 'Que fait CIPA ?' }],
     })
-    expect(body.instructions).toContain('Industriooo')
+    expect(body.instructions).toContain('OmniduX')
   })
 
   it('message de repli sur filtre de contenu ou erreur', async () => {

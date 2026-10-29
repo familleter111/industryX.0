@@ -37,7 +37,6 @@ const PAGES = [
   '/en/resources/non-conformites-capa',
   '/en/resources/indicateurs-qualite-temps-reel',
   '/en/resources/reussir-pilote-digitalisation',
-  '/en/faq',
   '/en/contact',
   '/en/privacy',
   '/en/conditions-utilisation',

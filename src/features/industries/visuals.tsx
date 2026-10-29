@@ -2,14 +2,14 @@
 
 import { useId, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Eye, ShieldCheck, Workflow } from 'lucide-react'
+import { CheckCircle2, Eye, ShieldCheck, Workflow } from 'lucide-react'
 
 import { viewport } from '@/lib/motion'
 import { useCopy } from '@/lib/i18n'
 
 const COPY = {
-  fr: { inProgress: 'En cours', before: 'Avant CIPA', after: 'Avec CIPA' },
-  en: { inProgress: 'In progress', before: 'Before CIPA', after: 'With CIPA' },
+  fr: { inProgress: 'En cours', before: 'Avant CIPA', after: 'Avec CIPA', lineActive: 'Ligne active' },
+  en: { inProgress: 'In progress', before: 'Before CIPA', after: 'With CIPA', lineActive: 'Line active' },
 }
 import type {
   FlowStep,
@@ -26,8 +26,15 @@ import type {
  * donnee de `IndustryVisuals`.
  */
 
-export function ComplianceFlowVisual({ steps }: { steps: FlowStep[] }) {
+export function ComplianceFlowVisual({
+  steps,
+  icons = { done: ShieldCheck, todo: Workflow },
+}: {
+  steps: FlowStep[]
+  icons?: IndustryVisuals['complianceFlowIcons']
+}) {
   const t = useCopy(COPY)
+  const { done: DoneIcon, todo: TodoIcon } = icons ?? { done: ShieldCheck, todo: Workflow }
   return (
     <div className="w-full flex flex-col gap-4 py-2">
       {steps.map((s, i) => (
@@ -51,11 +58,11 @@ export function ComplianceFlowVisual({ steps }: { steps: FlowStep[] }) {
               <h4 className={`text-xs font-bold ${s.state === 'todo' ? 'text-subtle' : 'text-dark'}`}>{s.title}</h4>
               <p className="text-[10px] text-subtle truncate">{s.sub}</p>
             </div>
-            {s.state === 'done' && <ShieldCheck size={16} className="text-emerald-500 shrink-0" />}
+            {s.state === 'done' && <DoneIcon size={16} className="text-emerald-500 shrink-0" />}
             {s.state === 'active' && (
               <span className="text-[9px] font-bold text-gold-ink px-2 py-0.5 bg-gold/10 rounded-full shrink-0">{t.inProgress}</span>
             )}
-            {s.state === 'todo' && <Workflow size={16} className="text-slate-300 shrink-0" />}
+            {s.state === 'todo' && <TodoIcon size={16} className="text-slate-300 shrink-0" />}
           </motion.div>
           {i < steps.length - 1 && (
             <div className="flex justify-center py-1">
@@ -69,6 +76,7 @@ export function ComplianceFlowVisual({ steps }: { steps: FlowStep[] }) {
 }
 
 export function TabletVisual({ data }: { data: IndustryVisuals['tablet'] }) {
+  const t = useCopy(COPY)
   return (
     <div className="w-full bg-[#141520] rounded-2xl p-4 border border-white/5 text-white flex flex-col gap-3">
       <div className="flex justify-between items-center bg-[#1a1b24] p-3 rounded-xl">
@@ -78,17 +86,32 @@ export function TabletVisual({ data }: { data: IndustryVisuals['tablet'] }) {
         </div>
         <div className="flex items-center gap-2 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full text-[9px] font-bold">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-          Ligne active
+          {t.lineActive}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-3">
         <div className="col-span-7 bg-[#1a1b24] p-3 rounded-xl">
           <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2">{data.instructionsLabel}</div>
-          <ol className="text-[10px] text-slate-300 list-decimal list-inside space-y-1.5 leading-tight">
-            {data.instructions.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
+          {data.checks ? (
+            <ul className="text-[10px] text-slate-300 space-y-1.5 leading-tight">
+              {data.checks.map((check) => (
+                <li key={check.label} className="flex items-center gap-1.5">
+                  {check.done ? (
+                    <CheckCircle2 size={11} className="text-emerald-400 shrink-0" />
+                  ) : (
+                    <span className="w-2.5 h-2.5 rounded-full border-2 border-gold shrink-0 animate-pulse" />
+                  )}{' '}
+                  {check.label}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ol className="text-[10px] text-slate-300 list-decimal list-inside space-y-1.5 leading-tight">
+              {data.instructions?.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          )}
         </div>
         <div className="col-span-5 bg-[#1a1b24] p-3 rounded-xl flex flex-col justify-between">
           <div>
@@ -109,10 +132,12 @@ export function TabletVisual({ data }: { data: IndustryVisuals['tablet'] }) {
 
 export function SupplyChainVisual({ data }: { data: IndustryVisuals['supplyChain'] }) {
   const { steps } = data
+  // Quatre etapes ou plus : marges resserrees pour garder les libelles lisibles.
+  const compact = steps.length > 3
   return (
     <div className="w-full py-4">
-      <div className="flex justify-between items-start relative px-6">
-        <div className="absolute left-10 right-10 top-[22px] h-0.5 border-t border-dashed border-slate-200 z-0" />
+      <div className={`flex justify-between items-start relative ${compact ? 'px-2' : 'px-6'}`}>
+        <div className={`absolute ${compact ? 'left-6 right-6' : 'left-10 right-10'} top-[22px] h-0.5 border-t border-dashed border-slate-200 z-0`} />
         {steps.map((step, i) => {
           const Icon = step.icon
           return (
@@ -144,7 +169,7 @@ export function SupplyChainVisual({ data }: { data: IndustryVisuals['supplyChain
   )
 }
 
-export function LaunchTimelineVisual({ phases }: { phases: IndustryVisuals['launchTimeline'] }) {
+export function LaunchTimelineVisual({ phases, note }: { phases: IndustryVisuals['launchTimeline']; note?: string }) {
   const t = useCopy(COPY)
   return (
     <div className="w-full py-2 flex flex-col gap-3">
@@ -175,6 +200,7 @@ export function LaunchTimelineVisual({ phases }: { phases: IndustryVisuals['laun
           </div>
         </div>
       ))}
+      {note && <div className="text-[9px] text-subtle text-right font-bold">{note}</div>}
     </div>
   )
 }
@@ -194,10 +220,38 @@ export function DashboardVisual({ data }: { data: IndustryVisuals['dashboard'] }
           </div>
         ))}
       </div>
-      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-[9px] text-subtle">
-        <span className="font-bold text-dark block mb-1">{data.auditLabel}</span>
-        {data.auditText}
-      </div>
+      {data.activity ? (
+        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[9px] text-subtle font-bold uppercase tracking-wide">{data.activity.label}</span>
+            {data.activity.note && <span className="text-[9px] font-bold text-gold">{data.activity.note}</span>}
+          </div>
+          <div className="flex items-end gap-1.5 h-14">
+            {data.activity.bars.map((b, i) => (
+              <motion.div
+                key={i}
+                initial={{ height: 0 }}
+                whileInView={{ height: `${b}%` }}
+                viewport={viewport}
+                transition={{ duration: 0.6, delay: i * 0.06 }}
+                className="flex-1 bg-gold/80 hover:bg-gold rounded-t-md transition-colors"
+              />
+            ))}
+          </div>
+          {data.activity.days && (
+            <div className="flex justify-between text-[8px] font-bold text-subtle mt-1">
+              {data.activity.days.map((day) => (
+                <span key={day}>{day}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-[9px] text-subtle">
+          <span className="font-bold text-dark block mb-1">{data.auditLabel}</span>
+          {data.auditText}
+        </div>
+      )}
     </div>
   )
 }
@@ -259,6 +313,12 @@ export function PredictiveChartVisual({ data }: { data: IndustryVisuals['predict
           )}
         </g>
       ))}
+      {data.axisLabels && (
+        <>
+          <text x="30" y="152" className="fill-slate-400 font-bold text-[8px]">{data.axisLabels[0]}</text>
+          <text x="355" y="152" className="fill-slate-400 font-bold text-[8px]">{data.axisLabels[1]}</text>
+        </>
+      )}
     </svg>
   )
 }
@@ -308,7 +368,7 @@ export function SlideVisualRenderer({
 }) {
   switch (visual) {
     case 'compliance-flow':
-      return <ComplianceFlowVisual steps={visuals.complianceFlow} />
+      return <ComplianceFlowVisual steps={visuals.complianceFlow} icons={visuals.complianceFlowIcons} />
     case 'tablet':
       return <TabletVisual data={visuals.tablet} />
     case 'predictive-chart':
@@ -316,7 +376,7 @@ export function SlideVisualRenderer({
     case 'supply-chain':
       return <SupplyChainVisual data={visuals.supplyChain} />
     case 'launch-timeline':
-      return <LaunchTimelineVisual phases={visuals.launchTimeline} />
+      return <LaunchTimelineVisual phases={visuals.launchTimeline} note={visuals.launchTimelineNote} />
     case 'dashboard':
       return <DashboardVisual data={visuals.dashboard} />
     case 'energy-chart':

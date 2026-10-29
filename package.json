@@ -9,6 +9,7 @@
     "lint": "next lint",
     "check:hex": "node scripts/check-hex.mjs",
     "gen:countries": "node scripts/gen-countries.mjs",
+    "gen:chatbot-base": "node scripts/gen-chatbot-base.mjs",
     "check:i18n": "node scripts/check-i18n.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

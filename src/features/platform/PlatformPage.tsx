@@ -4,7 +4,6 @@ import { ArrowRight, ChevronRight } from 'lucide-react'
 import Section from '@/components/ui/Section'
 import SectionHeading from '@/components/ui/SectionHeading'
 import Reveal, { RevealGroup, RevealItem } from '@/components/ui/Reveal'
-import ArchitectureSection from '@/components/sections/ArchitectureSection'
 import Footer from '@/components/layout/Footer'
 import PlatformHero from '@/features/platform/PlatformHero'
 import {
@@ -56,12 +55,10 @@ const COPY = {
  * que des donnees serialisables.
  *
  * Ordre : hero, preuves (si renseignees), usages, trois etapes et elements
- * inclus (si renseignes), architecture (Integrations), solutions, appel final.
+ * inclus (si renseignes), solutions, appel final.
  * Les usages portent les ancres visees par le menu et les cartes de
- * l'accueil ; `scroll-mt` compense la barre de navigation fixe (82 px).
+ * l'accueil.
  */
-
-const ANCHOR_OFFSET = 'scroll-mt-[82px]'
 
 /** Les sept solutions, la page courante signalee. */
 function PillarLinks({ current }: { current: string }) {
@@ -196,10 +193,6 @@ export default function PlatformPage({ page }: { page: PlatformPageData }) {
       <UseCases page={page} />
       {page.steps && <HowItWorks steps={page.steps} />}
       {page.included && <IncludedFeatures items={page.included} />}
-
-      {page.architecture && (
-        <ArchitectureSection id="securite" className={ANCHOR_OFFSET} />
-      )}
 
       <PillarLinks current={page.slug} />
       <ClosingCta page={page} />

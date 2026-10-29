@@ -8,6 +8,7 @@ import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import PartnersOrbit from '@/components/sections/PartnersOrbit'
 import CTASection from '@/components/sections/CTASection'
 import CasesSection from '@/components/sections/CasesSection'
+import FaqSection from '@/components/sections/FaqSection'
 import WelcomeIntro from '@/components/layout/WelcomeIntro'
 import Footer from '@/components/layout/Footer'
 import { FEATURE_TABS } from '@/lib/data/features'
@@ -31,6 +32,7 @@ export default function HomePage() {
       <CasesSection availableScreenshots={AVAILABLE_SCREENSHOTS} />
       <TestimonialsSection />
       <PartnersOrbit />
+      <FaqSection />
       <CTASection />
       <Footer />
     </main>

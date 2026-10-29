@@ -42,12 +42,17 @@ export type FlowStep = {
 
 export type IndustryVisuals = {
   complianceFlow: FlowStep[]
+  /** Icones des etapes terminee et a venir (par defaut ShieldCheck et Workflow). */
+  complianceFlowIcons?: { done: LucideIcon; todo: LucideIcon }
 
   tablet: {
     orderLabel: string
     orderId: string
     instructionsLabel: string
-    instructions: string[]
+    /** Liste numerotee d'instructions… */
+    instructions?: string[]
+    /** …ou liste de controles, coches ou en cours. */
+    checks?: { label: string; done: boolean }[]
     progressLabel: string
     /** Pourcentage d'avancement, 0-100. */
     progress: number
@@ -65,6 +70,8 @@ export type IndustryVisuals = {
     thresholdLabel: string
     /** Annotation verte, ancree sur le point d'inflexion. */
     annotation: { label: string; x: number; y: number; boxX: number; boxWidth: number }
+    /** Etiquettes de debut et de fin de l'axe horizontal. */
+    axisLabels?: [string, string]
   }
 
   supplyChain: {
@@ -74,11 +81,16 @@ export type IndustryVisuals = {
   }
 
   launchTimeline: { name: string; before: number; after: number }[]
+  /** Note sous la timeline. */
+  launchTimelineNote?: string
 
   dashboard: {
     tiles: { label: string; value: string; trend: string; good: boolean }[]
-    auditLabel: string
-    auditText: string
+    /** Encart du bas : note d'audit… */
+    auditLabel?: string
+    auditText?: string
+    /** …ou histogramme d'activite. */
+    activity?: { label: string; note?: string; bars: number[]; days?: string[] }
   }
 
   energyChart: {
@@ -100,14 +112,27 @@ export type IndustryPageData = {
   metaTitle: string
   metaDescription: string
 
-  /** Fin du H1, apres « Comment CIPA transforme l'industrie ». */
-  headline: string
+  /**
+   * Fin du H1, apres « Comment CIPA transforme l'industrie ». Ignore quand
+   * `heroStatement` est renseigne.
+   */
+  headline?: string
+  /** Mots non colores entre le debut du H1 et `headline` (« de »). */
+  headlinePrefix?: string
+  /**
+   * Hero « manifeste » : un bandeau de secteur et un titre propre sur trois
+   * lignes, a la place du badge et du H1 par defaut. Le titre est en quatre
+   * segments : ligne 1, debut de ligne 2, mot en couleur, ligne 3.
+   */
+  heroStatement?: { eyebrow: string; title: [string, string, string, string] }
   intro: string
   hero: { src: string; alt: string }
   heroIcon: LucideIcon
-  heroBadge: { label: string; value: string }
+  /** Icone du badge « Secteur d'activite » (par defaut Zap). */
+  badgeIcon?: LucideIcon
 
-  results: { icon: LucideIcon; value: string; label: string; desc: string }[]
+  /** Les trois points coches sous le hero. */
+  indicators: string[]
 
   /** Paragraphe de presentation, sous l'icone du secteur. */
   overview: string
@@ -118,6 +143,8 @@ export type IndustryPageData = {
   coreAccentLabel: string
   performanceSlides: CarouselSlide[]
   performanceAccentLabel: string
+  /** Fin du titre du second carrousel, si elle differe du texte commun. */
+  performanceTitle?: string
 
   platform: {
     title: string

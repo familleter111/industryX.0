@@ -1,11 +1,9 @@
 import {
-  BadgeCheck,
   Car,
   Cpu,
   Database,
   Eye,
   FlaskConical,
-  Gauge,
   Leaf,
   Network,
   Rocket,
@@ -30,27 +28,10 @@ export const automotive: IndustryPageData = {
     alt: 'Production automobile Industry X.0',
   },
   heroIcon: Car,
-  heroBadge: { label: 'Normes Qualité', value: 'IATF 16949 Standardisé' },
-
-  results: [
-    {
-      icon: Gauge,
-      value: '35%',
-      label: 'Efficacité opérationnelle améliorée',
-      desc: 'Digitalisation de la production et de la supply chain pour une coordination optimale.',
-    },
-    {
-      icon: ShieldCheck,
-      value: '85%',
-      label: 'Réduction des erreurs de conformité',
-      desc: 'Automatisation de la documentation et du suivi réglementaire terrain.',
-    },
-    {
-      icon: BadgeCheck,
-      value: '50%',
-      label: 'Réduction des taux de défauts',
-      desc: 'Contrôle qualité continu et reporting automatisé sur les lignes.',
-    },
+  indicators: [
+    'Efficacité opérationnelle améliorée',
+    'Réduction des erreurs de conformité',
+    'Réduction des taux de défauts',
   ],
 
   overview:

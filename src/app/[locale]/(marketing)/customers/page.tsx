@@ -375,7 +375,7 @@ function UseCasesScreen() {
               </Link>
 
               <Link
-                href="/faq"
+                href="/#faq"
                 className="group inline-flex items-center gap-2.5 rounded-full border border-cream-border bg-white px-6 py-3.5 text-[14px] font-semibold text-stone-800 transition-all duration-300 hover:-translate-y-[1px] hover:border-gold/45"
               >
                 {t.faq}

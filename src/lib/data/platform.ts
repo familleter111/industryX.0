@@ -120,11 +120,6 @@ export type PlatformPageData = {
   /** « Inclus dans chaque usage ». Absent : section non affichee. */
   included?: PlatformItem[]
   proof?: PlatformProof
-  /**
-   * Ajoute en fin de page le schema « Architecture & securite » (flux de la
-   * donnee, stack, securite). Seule la page Integrations l'affiche.
-   */
-  architecture?: boolean
 }
 
 /* Les trois visuels existants, partages entre les pages d'un meme pilier. */
@@ -658,8 +653,7 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
       'CIPA se connecte à votre ERP, votre MES, votre GMAO et vos outils de BI, et partage un référentiel commun d’utilisateurs, de rôles, de zones et d’équipements. Une seule source de vérité, sécurisée.',
     metaTitle: 'Intégrations ERP, MES, BI & organisation — CIPA',
     metaDescription:
-      'Intégrations ERP, MES, GMAO et BI, API, gestion des utilisateurs, rôles, zones et équipements, architecture et sécurité : CIPA s’insère dans votre SI.',
-    architecture: true,
+      'Intégrations ERP, MES, GMAO et BI, API, gestion des utilisateurs, rôles, zones et équipements : CIPA s’insère dans votre SI.',
     image: {
       src: IMAGE_PILOTAGE,
       alt: 'Tableau de bord CIPA relié aux intégrations ERP, BI et MES',
@@ -1190,7 +1184,7 @@ const EN: Record<string, PageText> = {
       'CIPA connects to your ERP, MES, CMMS and BI tools, and shares common master data for users, roles, areas and equipment. A single, secure source of truth.',
     metaTitle: 'ERP, MES & BI integrations and organization — CIPA',
     metaDescription:
-      'ERP, MES, CMMS and BI integrations, APIs, management of users, roles, areas and equipment, architecture and security: CIPA fits into your IT system.',
+      'ERP, MES, CMMS and BI integrations, APIs, management of users, roles, areas and equipment: CIPA fits into your IT system.',
     imageAlt: 'CIPA dashboard linked to ERP, BI and MES integrations',
     highlights: ['ERP · MES · CMMS', 'BI tools', 'API'],
     usesIntro: {

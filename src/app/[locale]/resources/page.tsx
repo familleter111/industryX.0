@@ -14,6 +14,7 @@ import {
 import Footer from '@/components/layout/Footer'
 import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import SectionHeading from '@/components/ui/SectionHeading'
+import ArchitectureSection from '@/components/sections/ArchitectureSection'
 import SectorsShowcase from '@/components/sections/SectorsShowcase'
 import GuideCard from '@/features/resources/GuideCard'
 import GuidesLibrary from '@/features/resources/GuidesLibrary'
@@ -266,6 +267,10 @@ export default function ResourcesPage() {
           <SubscribeBand source="/resources" />
         </div>
       </section>
+
+      {/* ==================== ARCHITECTURE & SÉCURITÉ ==================== */}
+      {/* À propos de CIPA : flux de la donnée, stack et sécurité (ancre du pied de page). */}
+      <ArchitectureSection id="securite" className="scroll-mt-[82px] border-t border-[#EDEBE5]" />
 
       {/* ==================== ANALYSES SECTORIELLES ==================== */}
       <section className="border-t border-[#EDEBE5] bg-[#F2F1EC] py-16 sm:py-20">

@@ -15,22 +15,7 @@ export const automotiveEn: TextOverlay<IndustryPageData> = {
   intro:
     'The automotive industry operates in an environment where safety, emissions and quality are scrutinized at every step. CIPA provides a complete digital platform to manage compliance, production performance and component traceability, from supplier to finished vehicle.',
   hero: { alt: 'Industry X.0 automotive production' },
-  heroBadge: { label: 'Quality standards', value: 'IATF 16949 standardized' },
-
-  results: [
-    {
-      label: 'Improved operational efficiency',
-      desc: 'Digitized production and supply chain for optimal coordination.',
-    },
-    {
-      label: 'Fewer compliance errors',
-      desc: 'Automated documentation and shop-floor regulatory tracking.',
-    },
-    {
-      label: 'Lower defect rates',
-      desc: 'Continuous quality control and automated reporting on the lines.',
-    },
-  ],
+  indicators: ['Improved operational efficiency', 'Fewer compliance errors', 'Lower defect rates'],
 
   overview:
     'From critical components to final vehicle assembly, CIPA helps suppliers and manufacturers secure regulatory compliance, make production more reliable and speed up parts traceability.',

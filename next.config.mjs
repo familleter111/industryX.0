@@ -24,6 +24,9 @@ const nextConfig = {
     return [
       { source: '/about', destination: '/entreprise', permanent: true },
       { source: '/en/about', destination: '/en/entreprise', permanent: true },
+      // La FAQ est devenue une section de l'accueil.
+      { source: '/faq', destination: '/#faq', permanent: true },
+      { source: '/en/faq', destination: '/en#faq', permanent: true },
       // Les trois anciennes pages Plateforme, eclatees en sept pages Solution
       // (lib/data/platform.ts) : chacune renvoie vers la page qui reprend
       // l'essentiel de son contenu.

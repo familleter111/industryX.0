@@ -20,7 +20,7 @@ export function chatAiEnabled(): boolean {
 }
 
 /** Nom de l'assistant, affiché dans le widget et donné au modèle. */
-export const CHAT_NAME = 'Industriooo'
+export const CHAT_NAME = 'OmniduX'
 
 /**
  * Limites partagées par le widget et la route. Le contexte envoyé au modèle

@@ -1,6 +1,6 @@
-# Assistant de chat Industriooo (chatbot IA)
+# Assistant de chat OmniduX (chatbot IA)
 
-L'assistant s'appelle **Industriooo** (`CHAT_NAME` dans `src/lib/chat/config.ts`, repris par le widget, les réponses locales et les consignes du modèle). Il s'ouvre avec la bulle en bas à droite de chaque page, ou avec le bouton « Poser votre question » de la FAQ, dans un panneau unique.
+L'assistant s'appelle **OmniduX** (`CHAT_NAME` dans `src/lib/chat/config.ts`, repris par le widget, les réponses locales et les consignes du modèle). Il s'ouvre avec la bulle en bas à droite de chaque page, ou avec le bouton « Poser votre question » de la FAQ, dans un panneau unique.
 
 **Trois tailles** : à partir de 640 px de large, trois boutons de l'en-tête (carrés de plus en plus grands) règlent le panneau : petite (340 × 460), moyenne (420 × 600, par défaut) ou grande (600 × 780). Chaque taille est bornée par la fenêtre : le panneau ne passe ni sous la barre de navigation ni hors de l'écran. Le choix est gardé dans le navigateur (`features/chat/usePanelSize.ts`). Sur téléphone, la taille reste calée sur l'écran.
 
@@ -37,9 +37,11 @@ src/lib/chat/
 src/app/api/chat/route.ts   route serveur : appel de Claude, réponse en flux texte
 src/components/layout/ChatWidget.tsx   le widget
 src/features/chat/usePanelSize.ts      trois tailles standard du panneau
-src/features/chat/AssistantLogo.tsx    logo d'Industriooo (SVG), en-tête et accueil de chaque conversation
+src/features/chat/AssistantLogo.tsx    logo d'OmniduX (SVG), en-tête et accueil de chaque conversation
 src/lib/chat/azure.ts                  fournisseur Azure OpenAI (API Responses en flux)
-src/lib/data/faq.ts         FAQ partagée par la page /faq et l'assistant
+src/lib/data/faq.ts         FAQ partagée par la section #faq de l'accueil et l'assistant
+src/lib/data/chatbotBase.ts réponses de prospection validées, générées depuis
+                            Industry_X0_Base_Chatbot_Prospection.xlsx (npm run gen:chatbot-base)
 ```
 
 **Flux d'une question en mode IA** :
@@ -81,7 +83,7 @@ Le modèle ne reçoit que peu de texte libre, nettoyé, et ne peut pas être tro
 
 C'est une défense en profondeur, pas une garantie : un modèle peut toujours être poussé à dire une bêtise. Son pouvoir reste nul (pas d'outil, pas d'accès aux données), et ce qu'il sait est public (`knowledge.ts`).
 
-**Ce que le modèle sait** : uniquement `knowledge.ts`, c'est-à-dire les 7 pages Solution, la FAQ, les secteurs, le parcours après contact et les coordonnées. Les consignes (`prompt.ts`) lui interdisent d'inventer des prix ou des fonctionnalités, et lui demandent de renvoyer vers le formulaire de contact quand il ne sait pas. Une page du site corrigée est donc prise en compte sans toucher au prompt.
+**Ce que le modèle sait** : uniquement `knowledge.ts`, c'est-à-dire les 7 pages Solution, la FAQ, les secteurs, le parcours après contact, les coordonnées, et les 136 réponses de prospection validées par l'équipe (12 thèmes : positionnement, prix, objections, IT et conformité…). Quand une question s'en approche, le modèle s'appuie sur la réponse validée et en garde les réserves ; elle prime sur le reste de la base quand elle est plus prudente. Pour corriger une réponse : modifier le classeur `Industry_X0_Base_Chatbot_Prospection.xlsx` (colonnes `key` « NN · Thème | Question » et `detail`), lancer `npm run gen:chatbot-base`, relire le diff de `chatbotBase.ts`. Les consignes (`prompt.ts`) lui interdisent d'inventer des prix ou des fonctionnalités, et lui demandent de renvoyer vers le formulaire de contact quand il ne sait pas. Une page du site corrigée est donc prise en compte sans toucher au prompt.
 
 ## Activer l'IA
 
@@ -101,7 +103,7 @@ Pour couper l'IA : vider `NEXT_PUBLIC_CHAT_AI`, puis reconstruire.
 
 **Il n'existe pas de quota gratuit permanent sur l'API Claude** : chaque question envoyée à l'IA est facturée. Le dispositif garde la facture très basse et plafonnée.
 
-- **Estimation, non mesurée** : une question à Claude Haiku 5.5 envoie environ 3 500 tokens (consignes, base de connaissances, historique) et en reçoit quelques centaines. Tarif : 0,10 $ par million de tokens en entrée, 0,50 $ en sortie. Cela fait environ 0,06 centime de dollar par question, et moins d'un dollar par mois si le plafond de 50 questions est atteint chaque jour.
+- **Estimation, non mesurée** : une question à Claude Haiku 5.5 envoie environ 13 000 tokens (consignes, base de connaissances dont les réponses validées, historique) et en reçoit quelques centaines. Tarif : 0,10 $ par million de tokens en entrée, 0,50 $ en sortie. Cela fait environ 0,15 centime de dollar par question, et environ 2 $ par mois si le plafond de 50 questions est atteint chaque jour (moins grâce au cache du prompt).
 - **Les questions de la FAQ ne coûtent rien** : elles ne quittent pas le navigateur.
 - **Plafond applicatif** `CHAT_DAILY_LIMIT` : il est compté en mémoire et repart de zéro au redémarrage du serveur. C'est un garde-fou, pas une garantie.
 - **La garantie, c'est la limite de dépense** de la console Anthropic (Settings > Limits). Fixez-la à quelques dollars par mois : au-delà, l'API refuse et le chat repasse automatiquement en réponses locales.
@@ -111,7 +113,7 @@ Pour des réponses plus fines, et plus chères, il suffit de changer `CHAT_MODEL
 ## Feuille de route
 
 1. **Enrichir la base** : ajouter les guides (`src/lib/data/guides.ts`), les pages secteurs et Enti Win à `knowledge.ts`.
-2. **Jeu de questions de référence** : une trentaine de vraies questions de prospects avec la réponse attendue, pour mesurer la qualité avant chaque changement de prompt ou de modèle.
+2. **Jeu de questions de référence** : les questions du classeur de prospection (`chatbotBase.ts`) donnent déjà les réponses attendues ; reste à les rejouer contre le modèle pour mesurer la qualité avant chaque changement de prompt ou de modèle.
 3. **Prise de rendez-vous dans le chat** : un outil (tool use) qui collecte nom, email et société avec consentement, puis passe par la même livraison que le formulaire (`src/lib/leads/deliver.ts` : tableur, CRM, webhook).
 4. **Relais humain** : transmettre la conversation à l'équipe (Slack ou email) quand le visiteur le demande.
 5. **Base trop grande pour un prompt** : passer à une recherche documentaire, qui ne sélectionne que les passages utiles à chaque question.
