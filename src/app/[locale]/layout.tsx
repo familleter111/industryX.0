@@ -9,9 +9,8 @@ import AnalyticsProvider from '@/components/analytics/AnalyticsProvider'
 import Navbar from '@/components/layout/Navbar'
 import JsonLd from '@/components/seo/JsonLd'
 import { isLocale, routing } from '@/i18n/routing'
-import { pageMetadata, type Locale } from '@/lib/i18n'
 import { organizationSchema } from '@/lib/seo/schema'
-import { SITE_URL } from '@/lib/site'
+import { BRAND, SITE_URL } from '@/lib/site'
 
 const syne = Syne({
   subsets: ['latin'],
@@ -34,39 +33,21 @@ const inter = Inter({
   display: 'swap',
 })
 
-const META = {
-  fr: {
-    title: 'CIPA par Industry X.0',
-    description:
-      'CIPA est l’application Industry X.0 pour piloter la production, la qualité et la maintenance industrielle sur mobile, tablette et desktop.',
-    keywords: ['industrie 4.0', 'digitalisation', 'IA industrielle', 'CIPA', 'plateforme SaaS', 'qualité', 'production', 'maintenance'],
-  },
-  en: {
-    title: 'CIPA by Industry X.0',
-    description:
-      'CIPA is the Industry X.0 application for running industrial production, quality and maintenance on mobile, tablet and desktop.',
-    keywords: ['industry 4.0', 'digitalization', 'industrial AI', 'CIPA', 'SaaS platform', 'quality', 'production', 'maintenance'],
-  },
-}
-
 /** Les deux langues sont construites à l'avance, comme l'était le site. */
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-export function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: Locale }
-}): Metadata {
-  const { keywords, ...meta } = META[isLocale(locale) ? locale : routing.defaultLocale]
-  return {
-    // Base des URL relatives (canonical, hreflang, Open Graph) de toutes les pages.
-    metadataBase: new URL(SITE_URL),
-    ...pageMetadata({ locale, path: '/', ...meta }),
-    keywords,
-    authors: [{ name: 'Industry X.0' }],
-  }
+/**
+ * Base commune. Chaque page pose ses propres titre, description, canonical et
+ * hreflang (lib/seo/metadata.ts) : rien ici qu'une page puisse hériter à tort.
+ * Plus de meta keywords : Google l'ignore, et elle était identique partout.
+ */
+export const metadata: Metadata = {
+  // Base des URL relatives (canonical, hreflang, Open Graph) de toutes les pages.
+  metadataBase: new URL(SITE_URL),
+  title: BRAND.siteName,
+  authors: [{ name: BRAND.organization }],
 }
 
 export default function RootLayout({

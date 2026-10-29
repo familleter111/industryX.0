@@ -7,9 +7,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
  * L'ordre des éléments de chaque liste doit suivre celui du français.
  */
 export const automotiveEn: TextOverlay<IndustryPageData> = {
-  metaTitle: 'CIPA for the automotive & components industry | Industry X.0',
+  metaTitle: 'Automotive quality: IATF 16949 and traceability',
   metaDescription:
-    'IATF 16949 compliance, component-to-VIN traceability, predictive maintenance on the lines: CIPA digitizes quality and production for automotive suppliers and manufacturers.',
+    'IATF 16949 compliance, component-to-VIN traceability and predictive line maintenance: CIPA digitizes quality for automotive suppliers. Book a demo today.',
 
   headline: 'automotive & components',
   intro:

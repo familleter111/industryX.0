@@ -19,9 +19,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
 
 export const food: IndustryPageData = {
   slug: "food",
-  metaTitle: "CIPA pour l’agroalimentaire & les boissons | Industry X.0",
+  metaTitle: "Qualité agroalimentaire : HACCP et traçabilité",
   metaDescription:
-    "HACCP, sécurité alimentaire, contrôles qualité en ligne et traçabilité de la ferme à la fourchette : CIPA digitalise les opérations agroalimentaires.",
+    "HACCP, sécurité alimentaire, contrôles qualité en ligne et traçabilité de la ferme à la fourchette : CIPA digitalise l’agroalimentaire. Voir la démo.",
 
   headline: "agroalimentaire & des boissons",
   intro:

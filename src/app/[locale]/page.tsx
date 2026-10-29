@@ -16,6 +16,7 @@ import { FAQ_ENTRIES } from '@/lib/data/faq'
 import { FEATURE_TABS } from '@/lib/data/features'
 import { platformPages } from '@/lib/data/platform'
 import type { Locale } from '@/lib/i18n'
+import { seoMetadata } from '@/lib/seo/metadata'
 import { faqSchema, softwareApplicationSchema, websiteSchema } from '@/lib/seo/schema'
 
 /**
@@ -26,6 +27,10 @@ import { faqSchema, softwareApplicationSchema, websiteSchema } from '@/lib/seo/s
 const AVAILABLE_SCREENSHOTS = FEATURE_TABS.filter((tab) =>
   existsSync(path.join(process.cwd(), 'public', tab.screenshot.src)),
 ).map((tab) => tab.id)
+
+export function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
+  return seoMetadata('/', locale)
+}
 
 export default function HomePage({ params: { locale } }: { params: { locale: Locale } }) {
   return (

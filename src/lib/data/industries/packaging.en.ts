@@ -7,9 +7,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
  * L'ordre des éléments de chaque liste doit suivre celui du français.
  */
 export const packagingEn: TextOverlay<IndustryPageData> = {
-  metaTitle: "CIPA for packaging & plastics | Industry X.0",
+  metaTitle: "Packaging and plastics quality: resin traceability",
   metaDescription:
-    "Food-contact compliance, injection and extrusion lines, resin traceability and predictive maintenance: CIPA digitizes packaging and plastics.",
+    "Food-contact compliance, injection and extrusion lines, resin traceability and predictive maintenance: CIPA digitizes packaging and plastics. Book a demo.",
 
   headline: "packaging & plastics industry",
   intro:

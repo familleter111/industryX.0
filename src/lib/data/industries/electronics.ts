@@ -15,9 +15,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
 
 export const electronics: IndustryPageData = {
   slug: "electronics",
-  metaTitle: "CIPA pour l’électronique & le câblage | Industry X.0",
+  metaTitle: "Qualité électronique et câblage : IPC-A-610, SMT",
   metaDescription:
-    "Conformité IPC-A-610, traçabilité SMT des bobines aux cartes, contrôles de câblage et TRS : CIPA digitalise les ateliers d’électronique.",
+    "Conformité IPC-A-610, traçabilité SMT des bobines aux cartes, contrôles de câblage et TRS : CIPA digitalise vos ateliers d’électronique. Demandez une démo.",
 
   headlinePrefix: "de ",
   headline: "l'électronique & du câblage",

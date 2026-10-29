@@ -7,9 +7,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
  * L'ordre des éléments de chaque liste doit suivre celui du français.
  */
 export const electronicsEn: TextOverlay<IndustryPageData> = {
-  metaTitle: "CIPA for electronics & wiring | Industry X.0",
+  metaTitle: "Electronics and wiring quality: IPC-A-610, SMT",
   metaDescription:
-    "IPC-A-610 compliance, SMT traceability from reels to boards, wiring checks and OEE: CIPA digitizes electronics workshops.",
+    "IPC-A-610 compliance, SMT traceability from reels to boards, wiring checks and OEE: CIPA digitizes your electronics and wiring workshops. Book a demo today.",
 
   headlinePrefix: '',
   headline: "electronics & wiring industry",

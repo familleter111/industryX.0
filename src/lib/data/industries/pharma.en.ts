@@ -7,9 +7,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
  * L'ordre des éléments de chaque liste doit suivre celui du français.
  */
 export const pharmaEn: TextOverlay<IndustryPageData> = {
-  metaTitle: 'CIPA for the pharmaceutical industry | Industry X.0',
+  metaTitle: 'Pharma quality software: GMP, deviations and CAPA',
   metaDescription:
-    'FDA 21 CFR Part 11 and GMP compliance, electronic batch records, deviations and API traceability: CIPA digitizes pharmaceutical quality and production.',
+    'GMP and FDA 21 CFR Part 11 compliance, electronic batch records, deviations and API traceability: CIPA digitizes pharmaceutical quality. Book a demo today.',
 
   heroStatement: {
     title: ['CIPA turns', '', 'shop-floor data', 'into lasting performance'],

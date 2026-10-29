@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
-import { pageMetadata } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo/metadata'
 import { SITE_URL, publicPaths } from '@/lib/site'
 
 const APP = path.resolve(__dirname, '../src/app/[locale]')

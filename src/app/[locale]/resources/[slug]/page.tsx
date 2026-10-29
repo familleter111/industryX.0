@@ -18,7 +18,8 @@ import {
   guidesFor,
   type GuideBlock,
 } from '@/lib/data/guides'
-import { pageMetadata, useCopy, type Locale } from '@/lib/i18n'
+import { useCopy, type Locale } from '@/lib/i18n'
+import { seoMetadata } from '@/lib/seo/metadata'
 import { HOME_CRUMB, articleSchema, breadcrumbSchema } from '@/lib/seo/schema'
 
 const COPY = {
@@ -56,15 +57,12 @@ export function generateMetadata({ params }: Params): Metadata {
   const guide = guideBySlug(params.slug, params.locale)
   if (!guide) return {}
 
-  return pageMetadata({
-    locale: params.locale,
-    path: `/resources/${guide.slug}`,
-    title: `${guide.title} — Industry X.0`,
-    description: guide.excerpt,
+  return seoMetadata(`/resources/${guide.slug}`, params.locale, {
     openGraph: {
       type: 'article',
       publishedTime: guide.date,
-      images: [{ url: guide.image.src, alt: guide.image.alt }],
+      modifiedTime: guide.updated ?? guide.date,
+      authors: [guide.author],
     },
   })
 }

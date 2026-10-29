@@ -16,9 +16,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
 
 export const automotive: IndustryPageData = {
   slug: 'automotive',
-  metaTitle: 'CIPA pour l’industrie automobile & des composants | Industry X.0',
+  metaTitle: 'Qualité automobile : IATF 16949 et traçabilité',
   metaDescription:
-    'Conformité IATF 16949, traçabilité du composant au VIN, maintenance prédictive des lignes : CIPA digitalise la qualité et la production des équipementiers et constructeurs automobiles.',
+    'Conformité IATF 16949, traçabilité du composant au VIN et maintenance prédictive des lignes : CIPA digitalise la qualité des équipementiers. Demandez une démo.',
 
   headline: 'automobile & des composants',
   intro:

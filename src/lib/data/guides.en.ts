@@ -9,6 +9,9 @@ import type { Guide } from '@/lib/data/guides'
 export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
   'digitaliser-audits-terrain': {
     title: 'Digitizing shop-floor audits: a guide to moving from paper to mobile',
+    metaTitle: 'Digitizing shop-floor audits: from paper to mobile',
+    metaDescription:
+      'Inconsistent grids, retyping, late reports: how to structure mobile audits that produce usable data as soon as the visit ends. A practical step-by-step guide.',
     excerpt:
       'Inconsistent grids, retyping, late reports: how to structure mobile audits that produce usable data as soon as the visit ends.',
     author: 'Industry X.0 team',
@@ -65,6 +68,9 @@ export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
   },
   'non-conformites-capa': {
     title: 'Non-conformities and CAPA: structuring deviation handling through to closure',
+    metaTitle: 'Non-conformities and CAPA: structuring the process',
+    metaDescription:
+      'Reporting, criticality, escalation, root-cause analysis and effectiveness checks: the steps of a deviation process that drives lasting progress. Read the guide.',
     excerpt:
       'Reporting, criticality, escalation, root-cause analysis and effectiveness checks: the steps of a deviation process that turns incidents into lasting progress.',
     author: 'Industry X.0 team',
@@ -112,6 +118,9 @@ export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
   },
   'indicateurs-qualite-temps-reel': {
     title: 'Managing quality in real time: which indicators, and how to make them reliable',
+    metaTitle: 'Real-time quality KPIs: which ones to track and why',
+    metaDescription:
+      'From KPIs consolidated by hand in Excel to dashboards fed by the shop floor: how to choose the right quality indicators and make sure they tell the truth.',
     excerpt:
       'From KPIs consolidated by hand in Excel to dashboards fed by the shop floor: choosing the right indicators and making sure they tell the truth.',
     author: 'Industry X.0 team',
@@ -153,6 +162,9 @@ export const GUIDES_EN: Record<string, TextOverlay<Guide>> = {
   },
   'reussir-pilote-digitalisation': {
     title: 'Running a successful industrial digitization pilot in a few weeks',
+    metaTitle: 'Running a successful industrial digitization pilot',
+    metaDescription:
+      'Start small, prove the value, then extend: how to choose the right pilot scope, bring shop-floor teams on board and decide what comes next based on facts.',
     excerpt:
       'Start small, prove the value, then extend: how to choose the right pilot scope, bring shop-floor teams on board and decide what comes next based on facts.',
     author: 'Industry X.0 team',

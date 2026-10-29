@@ -16,9 +16,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
 
 export const packaging: IndustryPageData = {
   slug: "packaging",
-  metaTitle: "CIPA pour le packaging & la plasturgie | Industry X.0",
+  metaTitle: "Qualité packaging et plasturgie : traçabilité résine",
   metaDescription:
-    "Conformité contact alimentaire, lignes d’injection et d’extrusion, traçabilité résine et maintenance prédictive : CIPA digitalise le packaging et la plasturgie.",
+    "Conformité contact alimentaire, lignes d’injection et d’extrusion, traçabilité résine et maintenance prédictive : CIPA digitalise le packaging. Voir la démo.",
 
   headline: "du packaging & de la plasturgie",
   intro:

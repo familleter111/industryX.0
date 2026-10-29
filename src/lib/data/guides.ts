@@ -28,7 +28,10 @@ export type GuideBlock =
 export type Guide = {
   slug: string
   title: string
-  /** Resume des cartes et de la meta description. */
+  /** Sujet pour la balise <title>, sans la marque (ajoutée par pageMetadata). */
+  metaTitle: string
+  metaDescription: string
+  /** Resume des cartes. */
   excerpt: string
   category: GuideCategory
   /** Minutes de lecture, arrondies. */
@@ -61,6 +64,9 @@ export const GUIDES: Guide[] = [
   {
     slug: 'digitaliser-audits-terrain',
     title: 'Digitaliser ses audits terrain : le guide pour passer du papier au mobile',
+    metaTitle: 'Digitaliser ses audits terrain : du papier au mobile',
+    metaDescription:
+      'Grilles hétérogènes, ressaisies, rapports tardifs : comment structurer des audits sur mobile qui livrent une donnée exploitable dès la fin de la visite.',
     excerpt:
       'Grilles hétérogènes, ressaisies, rapports envoyés tard : comment structurer des audits sur mobile qui produisent une donnée exploitable dès la fin de la visite.',
     category: 'Terrain',
@@ -135,6 +141,9 @@ export const GUIDES: Guide[] = [
   {
     slug: 'non-conformites-capa',
     title: 'Non-conformités et CAPA : structurer le traitement des écarts jusqu’à la clôture',
+    metaTitle: 'Non-conformités et CAPA : structurer le traitement',
+    metaDescription:
+      'Signalement, criticité, escalade, analyse des causes, vérification de l’efficacité : les étapes d’un circuit d’écarts qui fait progresser. Lisez le guide.',
     excerpt:
       'Signalement, criticité, escalade, analyse des causes et vérification de l’efficacité : les étapes d’un circuit d’écarts qui transforme les incidents en progrès durables.',
     category: 'Qualité',
@@ -198,6 +207,9 @@ export const GUIDES: Guide[] = [
   {
     slug: 'indicateurs-qualite-temps-reel',
     title: 'Piloter la qualité en temps réel : quels indicateurs, et comment les fiabiliser',
+    metaTitle: 'Indicateurs qualité en temps réel : lesquels suivre',
+    metaDescription:
+      'Des KPI consolidés à la main dans Excel aux tableaux de bord alimentés par le terrain : choisir les bons indicateurs qualité et garantir qu’ils disent vrai.',
     excerpt:
       'Des KPI consolidés à la main dans Excel aux tableaux de bord alimentés par le terrain : choisir les bons indicateurs et garantir qu’ils disent vrai.',
     category: 'Pilotage',
@@ -253,6 +265,9 @@ export const GUIDES: Guide[] = [
   {
     slug: 'reussir-pilote-digitalisation',
     title: 'Réussir un pilote de digitalisation industrielle en quelques semaines',
+    metaTitle: 'Réussir un pilote de digitalisation industrielle',
+    metaDescription:
+      'Démarrer petit, prouver la valeur, puis étendre : choisir le bon périmètre pilote, embarquer les équipes terrain et décider de la suite sur des faits. Le guide.',
     excerpt:
       'Démarrer petit, prouver la valeur, puis étendre : comment choisir le bon périmètre pilote, embarquer les équipes terrain et décider de la suite sur des faits.',
     category: 'Méthode',

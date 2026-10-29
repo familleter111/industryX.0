@@ -5,7 +5,8 @@ import { setRequestLocale } from 'next-intl/server'
 import JsonLd from '@/components/seo/JsonLd'
 import PlatformPage from '@/features/platform/PlatformPage'
 import { PLATFORM_PAGES, platformHref, platformPage } from '@/lib/data/platform'
-import { pageMetadata, type Locale } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
+import { seoMetadata } from '@/lib/seo/metadata'
 import { HOME_CRUMB, breadcrumbSchema, softwareApplicationSchema } from '@/lib/seo/schema'
 
 /**
@@ -23,14 +24,7 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: Params): Metadata {
-  const page = platformPage(params.slug, params.locale)
-  if (!page) return {}
-  return pageMetadata({
-    locale: params.locale,
-    path: platformHref(page.slug),
-    title: page.metaTitle,
-    description: page.metaDescription,
-  })
+  return seoMetadata(platformHref(params.slug), params.locale)
 }
 
 export default function Page({ params }: Params) {

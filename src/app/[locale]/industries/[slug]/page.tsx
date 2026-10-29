@@ -6,7 +6,8 @@ import JsonLd from '@/components/seo/JsonLd'
 import IndustryPage from '@/features/industries/IndustryPage'
 import { industryData, industrySlugs } from '@/lib/data/industries'
 import { industryHref, industryName } from '@/lib/data/industries/labels'
-import { pageMetadata, type Locale } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
+import { seoMetadata } from '@/lib/seo/metadata'
 import { HOME_CRUMB, breadcrumbSchema } from '@/lib/seo/schema'
 
 /**
@@ -26,14 +27,7 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: Params): Metadata {
-  const data = industryData(params.slug, params.locale)
-  if (!data) return {}
-  return pageMetadata({
-    locale: params.locale,
-    path: `/industries/${params.slug}`,
-    title: data.metaTitle,
-    description: data.metaDescription,
-  })
+  return seoMetadata(industryHref(params.slug), params.locale)
 }
 
 export default function Page({ params }: Params) {

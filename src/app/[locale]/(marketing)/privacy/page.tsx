@@ -14,7 +14,8 @@ import LegalDocument, {
 } from '@/features/legal/LegalDocument'
 import { gaEnabled } from '@/lib/analytics/ga'
 import { chatAiEnabled } from '@/lib/chat/config'
-import { pageMetadata, type Locale } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
+import { seoMetadata } from '@/lib/seo/metadata'
 
 /**
  * Politique de confidentialité.
@@ -35,21 +36,8 @@ import { pageMetadata, type Locale } from '@/lib/i18n'
 
 const PRIVACY_UPDATED = { fr: '19 octobre 2026', en: 'October 19, 2026' }
 
-const META = {
-  fr: {
-    title: 'Politique de confidentialité — Industry X.0',
-    description:
-      'Quelles données Industry X.0 collecte via son site, pourquoi, avec qui elles sont partagées, combien de temps elles sont conservées et comment exercer vos droits.',
-  },
-  en: {
-    title: 'Privacy policy — Industry X.0',
-    description:
-      'What data Industry X.0 collects through its website, why, who it is shared with, how long it is kept and how to exercise your rights.',
-  },
-}
-
 export function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Metadata {
-  return pageMetadata({ locale, path: '/privacy', ...META[locale] })
+  return seoMetadata('/privacy', locale)
 }
 
 const A = ({ href, children }: { href: string; children: React.ReactNode }) => (

@@ -12,7 +12,8 @@ import LegalDocument, {
   type LegalSection,
 } from '@/features/legal/LegalDocument'
 import { chatAiEnabled } from '@/lib/chat/config'
-import { pageMetadata, type Locale } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
+import { seoMetadata } from '@/lib/seo/metadata'
 
 /**
  * Conditions générales d'utilisation du site vitrine.
@@ -29,21 +30,8 @@ import { pageMetadata, type Locale } from '@/lib/i18n'
 
 const UPDATED = { fr: '19 octobre 2026', en: 'October 19, 2026' }
 
-const META = {
-  fr: {
-    title: 'Conditions générales d’utilisation — Industry X.0',
-    description:
-      'Les règles d’utilisation du site Industry X.0 : accès, formulaires, propriété intellectuelle, responsabilité et droit applicable.',
-  },
-  en: {
-    title: 'Terms of use — Industry X.0',
-    description:
-      'The rules for using the Industry X.0 website: access, forms, intellectual property, liability and governing law.',
-  },
-}
-
 export function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Metadata {
-  return pageMetadata({ locale, path: '/conditions-utilisation', ...META[locale] })
+  return seoMetadata('/conditions-utilisation', locale)
 }
 
 const A = ({ href, children }: { href: string; children: React.ReactNode }) => (

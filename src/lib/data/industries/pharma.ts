@@ -15,9 +15,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
 
 export const pharma: IndustryPageData = {
   slug: 'pharma',
-  metaTitle: 'CIPA pour l’industrie pharmaceutique | Industry X.0',
+  metaTitle: 'Logiciel qualité pharma : BPF, déviations et CAPA',
   metaDescription:
-    'Conformité FDA 21 CFR Part 11 et BPF, dossier de lot électronique, déviations et traçabilité API : CIPA digitalise la qualité et la production pharmaceutiques.',
+    'Conformité BPF et FDA 21 CFR Part 11, dossier de lot électronique, déviations et traçabilité : CIPA digitalise la qualité pharmaceutique. Demandez une démo.',
 
   heroStatement: {
     eyebrow: 'Pharma / Biotech / Life Sciences',

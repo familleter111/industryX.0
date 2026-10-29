@@ -106,6 +106,7 @@ export type PlatformPageData = {
   /** Fin du titre, rendue en dore. */
   accent: string
   description: string
+  /** Sujet de la page pour la balise <title>, sans la marque (ajoutée par pageMetadata). */
   metaTitle: string
   metaDescription: string
   /** Visuel du hero (public/), 3200 × 2000, fond creme. */
@@ -141,9 +142,9 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     accent: 'la donnée terrain',
     description:
       'Audits internes, tournées qualité, checklists et suivi de production : CIPA capte la donnée sur mobile, au poste, et la range dans un référentiel unique organisé par zone, équipe et équipement.',
-    metaTitle: 'Remontée terrain : audits, inspections & production — CIPA',
+    metaTitle: 'Logiciel d’audit terrain, inspections et checklists',
     metaDescription:
-      'Digitalisez audits internes, tournées qualité, checklists, formulaires et suivi de production par étape avec CIPA : une saisie mobile, une donnée fiable.',
+      'Digitalisez audits internes, tournées qualité, checklists et suivi de production par étape avec CIPA : saisie mobile, donnée horodatée et fiable. Voir la démo.',
     image: {
       src: IMAGE_TERRAIN,
       alt: 'Écrans CIPA d’audit interne sur mobile, de tournée de sécurité et de traçabilité horodatée',
@@ -255,9 +256,9 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     accent: 'audits et maintenance',
     description:
       'Programme d’audit, contrôles de maintenance, suivi des équipements et planning des équipes : CIPA organise qui contrôle quoi, où et quand, et garde l’historique de chaque intervention.',
-    metaTitle: 'Planification des audits & maintenance — CIPA',
+    metaTitle: 'Planification des audits et de la maintenance',
     metaDescription:
-      'Planifiez vos audits au mois, à la semaine ou en liste, assignez les plans d’audit, suivez contrôles de maintenance et équipements par zone avec CIPA.',
+      'Planifiez vos audits au mois, à la semaine ou en liste, assignez les plans d’audit et suivez contrôles de maintenance et équipements par zone avec CIPA.',
     image: {
       src: IMAGE_TERRAIN,
       alt: 'Écrans CIPA de tournée planifiée sur mobile et de traçabilité horodatée',
@@ -324,9 +325,9 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     accent: 'chaque écart',
     description:
       'Déviations, non-conformités, actions correctives et réclamations clients : CIPA trace chaque écart depuis son origine et orchestre son traitement jusqu’à la clôture.',
-    metaTitle: 'Gestion des écarts : déviations, CAPA & réclamations — CIPA',
+    metaTitle: 'Logiciel de gestion des non-conformités et CAPA',
     metaDescription:
-      'Gérez déviations, non-conformités, CAPA et réclamations clients jusqu’à la clôture avec CIPA : origine tracée, pilotes, échéances et validation.',
+      'Gérez déviations, non-conformités, CAPA et réclamations clients jusqu’à la clôture avec CIPA : origine tracée, pilotes, échéances et validation. Voir la démo.',
     image: {
       src: IMAGE_QUALITE,
       alt: 'Écrans CIPA d’un workflow de non-conformité, du signalement au plan CAPA',
@@ -410,9 +411,9 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     accent: 'la conformité',
     description:
       'Workflows de validation, maîtrise des changements et journal d’audit : CIPA exécute vos processus tels que définis et garde la preuve de qui a fait quoi, quand, et selon quelle version.',
-    metaTitle: 'Conformité & traçabilité : workflows, change control, audit trail — CIPA',
+    metaTitle: 'Traçabilité, change control et audit trail qualité',
     metaDescription:
-      'Modélisez vos workflows de validation, maîtrisez les changements et disposez d’un audit trail complet, web et mobile, avec CIPA.',
+      'Modélisez vos workflows de validation, maîtrisez les changements et gardez un audit trail complet, sur web et mobile, avec CIPA. Chaque décision reste traçable.',
     image: {
       src: IMAGE_QUALITE,
       alt: 'Écrans CIPA d’un workflow de validation tracé étape par étape',
@@ -498,9 +499,9 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     accent: 'la performance',
     description:
       'Indicateurs en temps réel sur les audits, les tournées, les déviations et les actions, rapports envoyés automatiquement et analyse Pareto des problèmes : CIPA transforme la donnée terrain en décisions.',
-    metaTitle: 'Pilotage de la performance : tableaux de bord & KPI — CIPA',
+    metaTitle: 'Tableaux de bord qualité et KPI en temps réel',
     metaDescription:
-      'Tableaux de bord et KPI en temps réel, rapports automatiques et amélioration continue par Pareto : pilotez vos opérations avec CIPA.',
+      'Tableaux de bord et KPI en temps réel, rapports automatiques et amélioration continue par Pareto : pilotez qualité et production avec CIPA. Voir les tableaux.',
     image: {
       src: IMAGE_PILOTAGE,
       alt: 'Tableau de bord qualité CIPA avec indicateurs, signal faible détecté et intégrations',
@@ -584,9 +585,9 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     accent: 'les dérives',
     description:
       'CIPA exploite les données déjà saisies sur le terrain pour repérer les écarts et les signaux faibles avant qu’ils ne deviennent des incidents, et prépare vos checklists à partir de vos procédures.',
-    metaTitle: 'Intelligence opérationnelle : signaux faibles & checklists — CIPA',
+    metaTitle: 'Intelligence opérationnelle et détection des dérives',
     metaDescription:
-      'Détection des écarts, contrôles de cohérence, signaux faibles et checklists générées depuis vos procédures : l’intelligence opérationnelle de CIPA.',
+      'Détection des écarts, contrôles de cohérence, signaux faibles et checklists issues de vos procédures : l’intelligence opérationnelle de CIPA. Voyez comment.',
     image: {
       src: IMAGE_PILOTAGE,
       alt: 'Tableau de bord CIPA signalant un signal faible détecté sur les données terrain',
@@ -651,9 +652,9 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     accent: 'votre écosystème',
     description:
       'CIPA se connecte à votre ERP, votre MES, votre GMAO et vos outils de BI, et partage un référentiel commun d’utilisateurs, de rôles, de zones et d’équipements. Une seule source de vérité, sécurisée.',
-    metaTitle: 'Intégrations ERP, MES, BI & organisation — CIPA',
+    metaTitle: 'Intégrations ERP, MES, GMAO et BI pour la qualité',
     metaDescription:
-      'Intégrations ERP, MES, GMAO et BI, API, gestion des utilisateurs, rôles, zones et équipements : CIPA s’insère dans votre SI.',
+      'Intégrations ERP, MES, GMAO et BI, API, gestion des utilisateurs, rôles, zones et équipements : CIPA s’insère dans votre système d’information. Parlons-en.',
     image: {
       src: IMAGE_PILOTAGE,
       alt: 'Tableau de bord CIPA relié aux intégrations ERP, BI et MES',
@@ -750,9 +751,9 @@ const EN: Record<string, PageText> = {
     accent: 'shop-floor data',
     description:
       'Internal audits, quality tours, checklists and production tracking: CIPA captures data on mobile, at the workstation, and files it in a single repository organized by area, team and equipment.',
-    metaTitle: 'Shop-floor capture: audits, inspections & production — CIPA',
+    metaTitle: 'Shop-floor audit, inspection and checklist software',
     metaDescription:
-      'Digitize internal audits, quality tours, checklists, forms and step-by-step production tracking with CIPA: mobile capture, reliable data.',
+      'Digitize internal audits, quality tours, checklists and step-by-step production tracking with CIPA: mobile capture, time-stamped and reliable data. See a demo.',
     imageAlt: 'CIPA screens for a mobile internal audit, a safety tour and time-stamped traceability',
     highlights: ['Mobile capture', 'Standard checklists', 'Full traceability'],
     usesIntro: {
@@ -846,9 +847,9 @@ const EN: Record<string, PageText> = {
     accent: 'audits and maintenance',
     description:
       'Audit programme, maintenance checks, equipment monitoring and team schedules: CIPA organizes who checks what, where and when, and keeps the history of every intervention.',
-    metaTitle: 'Audit planning & maintenance — CIPA',
+    metaTitle: 'Audit planning and maintenance scheduling software',
     metaDescription:
-      'Plan your audits by month, week or list, assign audit plans, and track maintenance checks and equipment by area with CIPA.',
+      'Plan audits by month, week or list, assign audit plans, and track maintenance checks and equipment by area with CIPA. See how planning works in practice.',
     imageAlt: 'CIPA screens of a planned mobile tour and time-stamped traceability',
     highlights: ['Shared calendar', 'Assigned audit plans', 'Intervention history'],
     usesIntro: {
@@ -903,9 +904,9 @@ const EN: Record<string, PageText> = {
     accent: 'every deviation',
     description:
       'Deviations, non-conformities, corrective actions and customer complaints: CIPA traces every deviation from its origin and drives its handling through to closure.',
-    metaTitle: 'Deviation management: deviations, CAPA & complaints — CIPA',
+    metaTitle: 'Non-conformity and CAPA management software',
     metaDescription:
-      'Manage deviations, non-conformities, CAPA and customer complaints through to closure with CIPA: traced origin, owners, due dates and approval.',
+      'Manage deviations, non-conformities, CAPA and customer complaints through to closure with CIPA: traced origin, owners, due dates and approval. See it live.',
     imageAlt: 'CIPA screens of a non-conformity workflow, from report to CAPA plan',
     highlights: ['Classified deviations', 'Tracked CAPA', 'Traced complaints'],
     usesIntro: {
@@ -977,9 +978,9 @@ const EN: Record<string, PageText> = {
     accent: 'compliance',
     description:
       'Approval workflows, change control and audit trail: CIPA runs your processes as defined and keeps proof of who did what, when, and under which version.',
-    metaTitle: 'Compliance & traceability: workflows, change control, audit trail — CIPA',
+    metaTitle: 'Compliance software: change control and audit trail',
     metaDescription:
-      'Model your approval workflows, control changes and get a complete audit trail, on web and mobile, with CIPA.',
+      'Model your approval workflows, control changes and keep a complete audit trail on web and mobile with CIPA, so every decision is traceable. See how it works.',
     imageAlt: 'CIPA screens of an approval workflow traced step by step',
     highlights: ['Versioned workflows', 'Change control', 'Audit trail'],
     usesIntro: {
@@ -1051,9 +1052,9 @@ const EN: Record<string, PageText> = {
     accent: 'performance',
     description:
       'Real-time indicators on audits, tours, deviations and actions, reports sent automatically and Pareto analysis of problems: CIPA turns shop-floor data into decisions.',
-    metaTitle: 'Performance management: dashboards & KPIs — CIPA',
+    metaTitle: 'Real-time quality dashboards and manufacturing KPIs',
     metaDescription:
-      'Real-time dashboards and KPIs, automatic reports and Pareto-based continuous improvement: run your operations with CIPA.',
+      'Real-time dashboards and KPIs, automatic reports and Pareto-based continuous improvement: run quality and production with CIPA. See the dashboards live.',
     imageAlt: 'CIPA quality dashboard with indicators, a detected weak signal and integrations',
     highlights: ['Real time', 'Automatic reports', 'Problem Pareto'],
     usesIntro: {
@@ -1125,9 +1126,9 @@ const EN: Record<string, PageText> = {
     accent: 'drifts',
     description:
       'CIPA uses the data already captured on the shop floor to spot deviations and weak signals before they turn into incidents, and prepares your checklists from your procedures.',
-    metaTitle: 'Operational intelligence: weak signals & checklists — CIPA',
+    metaTitle: 'Operational intelligence and drift detection',
     metaDescription:
-      'Deviation detection, consistency checks, weak signals and checklists generated from your procedures: CIPA’s operational intelligence.',
+      'Deviation detection, consistency checks, weak signals and checklists generated from your procedures: operational intelligence built into CIPA. See how.',
     imageAlt: 'CIPA dashboard flagging a weak signal detected in shop-floor data',
     highlights: ['Weak signals', 'Consistency checks', 'Generated checklists'],
     usesIntro: {
@@ -1182,9 +1183,9 @@ const EN: Record<string, PageText> = {
     accent: 'your ecosystem',
     description:
       'CIPA connects to your ERP, MES, CMMS and BI tools, and shares common master data for users, roles, areas and equipment. A single, secure source of truth.',
-    metaTitle: 'ERP, MES & BI integrations and organization — CIPA',
+    metaTitle: 'ERP, MES, CMMS and BI integrations for quality',
     metaDescription:
-      'ERP, MES, CMMS and BI integrations, APIs, management of users, roles, areas and equipment: CIPA fits into your IT system.',
+      'ERP, MES, CMMS and BI integrations, APIs, and one place to manage users, roles, areas and equipment: CIPA fits into your IT system. Talk to our team.',
     imageAlt: 'CIPA dashboard linked to ERP, BI and MES integrations',
     highlights: ['ERP · MES · CMMS', 'BI tools', 'API'],
     usesIntro: {

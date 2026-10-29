@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { useLocale } from 'next-intl'
 
 import { routing, type Locale } from '@/i18n/routing'
@@ -89,44 +88,4 @@ export function overlay<T>(base: T, patch: TextOverlay<T> | undefined): T {
 export function localizedPath(path: string, locale: Locale): string {
   if (locale === routing.defaultLocale) return path
   return path === '/' ? `/${locale}` : `/${locale}${path}`
-}
-
-const OG_LOCALE: Record<Locale, string> = { fr: 'fr_FR', en: 'en_US' }
-
-/**
- * Métadonnées d'une page, avec les liens `hreflang` vers ses deux versions :
- * les moteurs de recherche indexent chaque langue et proposent la bonne.
- */
-export function pageMetadata({
-  locale,
-  path,
-  title,
-  description,
-  openGraph,
-}: {
-  locale: Locale
-  path: string
-  title: string
-  description: string
-  openGraph?: Metadata['openGraph']
-}): Metadata {
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: localizedPath(path, locale),
-      languages: {
-        fr: localizedPath(path, 'fr'),
-        en: localizedPath(path, 'en'),
-        'x-default': localizedPath(path, 'fr'),
-      },
-    },
-    openGraph: {
-      title,
-      description,
-      type: 'website',
-      ...openGraph,
-      locale: OG_LOCALE[locale],
-    },
-  }
 }

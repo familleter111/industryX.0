@@ -3,29 +3,16 @@ import { setRequestLocale } from 'next-intl/server'
 
 import JsonLd from '@/components/seo/JsonLd'
 import { industryHref, industryName } from '@/lib/data/industries/labels'
-import { pageMetadata, type Locale } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
+import { seoMetadata } from '@/lib/seo/metadata'
 import { HOME_CRUMB, breadcrumbSchema } from '@/lib/seo/schema'
-
-// La page est un composant client : ses métadonnées vivent ici.
-const META = {
-  fr: {
-    title: 'CIPA pour la cosmétique & les dispositifs médicaux | Industry X.0',
-    description:
-      'Conformité ISO 13485 et ISO 22716, salle blanche, traçabilité UDI et contrôles qualité : CIPA digitalise la production cosmétique et des dispositifs médicaux.',
-  },
-  en: {
-    title: 'CIPA for cosmetics & medical devices | Industry X.0',
-    description:
-      'ISO 13485 and ISO 22716 compliance, cleanroom operations, UDI traceability and quality checks: CIPA digitizes cosmetics and medical device production.',
-  },
-}
 
 export function generateMetadata({
   params: { locale },
 }: {
   params: { locale: Locale }
 }): Metadata {
-  return pageMetadata({ locale, path: '/industries/cosmetics', ...META[locale] })
+  return seoMetadata('/industries/cosmetics', locale)
 }
 
 export default function CosmeticsLayout({

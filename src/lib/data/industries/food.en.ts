@@ -7,9 +7,9 @@ import type { IndustryPageData } from '@/lib/data/industries/types'
  * L'ordre des éléments de chaque liste doit suivre celui du français.
  */
 export const foodEn: TextOverlay<IndustryPageData> = {
-  metaTitle: "CIPA for food & beverage | Industry X.0",
+  metaTitle: "Food & beverage quality: HACCP and traceability",
   metaDescription:
-    "HACCP, food safety, in-line quality checks and farm-to-fork traceability: CIPA digitizes food and beverage operations.",
+    "HACCP, food safety, in-line quality checks and farm-to-fork traceability: CIPA digitizes food and beverage operations on the shop floor. Book a demo today.",
 
   headline: "food & beverage industry",
   intro:

@@ -11,7 +11,52 @@ import {
   serializeJsonLd,
   softwareApplicationSchema,
 } from '@/lib/seo/schema'
-import { SITE_URL } from '@/lib/site'
+import { pageMetadata, seoMetadata } from '@/lib/seo/metadata'
+import { pageSeo } from '@/lib/seo/pages'
+import { SITE_URL, publicPaths } from '@/lib/site'
+
+const LOCALES = ['fr', 'en'] as const
+
+/** Titre imposé par le brief SEO, plus long que la cible : exception assumée. */
+const LONG_TITLE_EXCEPTIONS = ['Logiciel qualité, audits & non-conformités pour l’industrie | CIPA']
+
+describe('titres et descriptions', () => {
+  const pages = publicPaths().flatMap((path) =>
+    LOCALES.map((locale) => {
+      const meta = seoMetadata(path, locale)
+      return { path, locale, title: meta.title as string, description: meta.description as string }
+    }),
+  )
+
+  it('chaque page publique en a, dans les deux langues', () => {
+    for (const path of publicPaths())
+      for (const locale of LOCALES) expect(pageSeo(path, locale), `${locale} ${path}`).toBeDefined()
+  })
+
+  it('aucun titre ni aucune description ne se répète', () => {
+    const titles = pages.map((p) => p.title)
+    const descriptions = pages.map((p) => p.description)
+    expect(new Set(titles).size).toBe(titles.length)
+    expect(new Set(descriptions).size).toBe(descriptions.length)
+  })
+
+  it('titre de 50 à 60 caractères, description de 140 à 160', () => {
+    for (const { path, locale, title, description } of pages) {
+      if (!LONG_TITLE_EXCEPTIONS.includes(title))
+        expect(title.length, `${locale} ${path} : ${title}`).toBeGreaterThanOrEqual(50)
+      if (!LONG_TITLE_EXCEPTIONS.includes(title))
+        expect(title.length, `${locale} ${path} : ${title}`).toBeLessThanOrEqual(60)
+      expect(description.length, `${locale} ${path}`).toBeGreaterThanOrEqual(140)
+      expect(description.length, `${locale} ${path}`).toBeLessThanOrEqual(160)
+    }
+  })
+
+  it('suffixe la marque une seule fois', () => {
+    const meta = pageMetadata({ locale: 'fr', path: '/x', title: 'Sujet', description: '…' })
+    expect(meta.title).toBe('Sujet | CIPA')
+    for (const { title } of pages) expect(title.match(/\| (CIPA|Industry X\.0)$/)).not.toBeNull()
+  })
+})
 
 describe('serializeJsonLd', () => {
   it('ne laisse sortir aucune balise du <script>', () => {

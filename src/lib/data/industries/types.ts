@@ -108,7 +108,7 @@ export type IndustryVisuals = {
 
 export type IndustryPageData = {
   slug: string
-  /** Titre de l'onglet et balise <title>. */
+  /** Sujet de la page pour la balise <title>, sans la marque (ajoutée par pageMetadata). */
   metaTitle: string
   metaDescription: string
 
