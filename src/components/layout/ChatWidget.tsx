@@ -62,9 +62,9 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
   const locale = useCurrentLocale() === 'en' ? 'en' : 'fr'
   // Les textes du widget sont indexes FR / EN : on les aligne sur la langue de la page.
   const language = locale === 'en' ? 'EN' : 'FR'
-  // Conversation gardée le temps de l'onglet (lib/chat/store.ts). Pas de
-  // message de bienvenue : l'accueil (logo, nom) attend que le visiteur
-  // écrive le premier.
+  // Conversation gardée le temps de l'onglet (lib/chat/store.ts). L'accueil
+  // (logo, nom, « Comment puis-je vous aider ? ») n'est pas un message : il
+  // occupe la zone vide et disparaît au premier envoi.
   const chat = useChatState()
   const [input, setInput] = useState('')
   const [notice, setNotice] = useState<keyof typeof NOTICE | null>(null)
@@ -221,19 +221,36 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
           </div>
 
           {/* MESSAGES */}
-          <div className="flex-1 overflow-y-auto bg-white px-4 pb-4 space-y-2.5">
-            {/* Accueil de chaque conversation : le logo de l'assistant, en
-                grand, se présente avant le premier message. */}
-            <div className="flex flex-col items-center px-4 pb-3 pt-6 text-center select-none">
-              <AssistantLogo size={72} className="drop-shadow-[0_8px_18px_rgba(12,13,18,0.18)]" />
-              <p className="mt-3 text-base font-semibold font-display text-dark">{CHAT_NAME}</p>
-              <p className="mt-0.5 text-xs text-stone-500">
-                {language === 'FR' ? 'L’assistant virtuel d’Industry X.0' : 'Industry X.0’s virtual assistant'}
-              </p>
-              <span className="mt-3 rounded-full bg-stone-100 px-2.5 py-0.5 text-[10px] font-medium text-stone-600">
+          <div className="relative flex flex-1 flex-col overflow-y-auto bg-white px-4 pb-4 space-y-2.5">
+            {/* Accueil, centré dans la zone vide tant que la conversation n'a
+                pas commencé ; il s'efface au premier message envoyé. */}
+            <AnimatePresence initial={false} mode="popLayout">
+              {messages.length === 0 && (
+                <motion.div
+                  key="welcome"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.25 }}
+                  className="m-auto flex flex-col items-center px-4 text-center select-none"
+                >
+                  <AssistantLogo size={72} className="drop-shadow-[0_8px_18px_rgba(12,13,18,0.18)]" />
+                  <p className="mt-3 text-base font-semibold font-display text-dark">{CHAT_NAME}</p>
+                  <p className="mt-0.5 text-xs text-stone-500">
+                    {language === 'FR' ? 'L’assistant virtuel d’Industry X.0' : 'Industry X.0’s virtual assistant'}
+                  </p>
+                  <p className="mt-5 text-lg font-semibold font-display text-dark">
+                    {language === 'FR' ? 'Comment puis-je vous aider ?' : 'How can I help you?'}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {messages.length > 0 && (
+              <span className="mx-auto !mt-3 rounded-full bg-stone-100 px-2.5 py-0.5 text-[10px] font-medium text-stone-600 select-none">
                 {language === 'FR' ? "Aujourd'hui" : 'Today'}
               </span>
-            </div>
+            )}
 
             {messages.map((msg) => (
               <div
