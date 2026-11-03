@@ -2,6 +2,10 @@
 
 Site vitrine d'Industry X.0 construit avec Next.js 14, Tailwind CSS et Framer Motion.
 
+**Documentation** : [architecture](docs/architecture.md) · [reprise du projet](docs/reprise.md) ·
+[backlog](docs/backlog.md) · [CMS](docs/cms.md) · [chatbot](docs/chatbot.md) ·
+[leads et CRM](docs/leads-integration.md) · [préversion](docs/preview.md) · [SEO](SEO-REPORT.md)
+
 ## Stack
 
 - **Framework** : Next.js 14 (App Router)
