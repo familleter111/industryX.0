@@ -11,9 +11,9 @@ Projet Sanity : `tudyxwtm`, dataset `production` (organisation `opAnMgqO5`). San
 | Témoignages clients | `testimonial` | `src/lib/cms/testimonials.ts` | accueil, `/customers` | `src/lib/data/testimonials.ts` |
 | Questions fréquentes | `faq` | `src/lib/cms/faq.ts` | accueil (section `#faq` et données FAQPage), assistant de chat | `src/lib/data/faq.ts` |
 | Guides | `guide` | `src/lib/cms/guides.ts` | `/resources`, `/resources/<slug>`, sitemap, images de partage | `src/lib/data/guides.ts`, `guides.en.ts` |
-| Textes des pages secteurs | `industry` | `src/lib/cms/industries.ts` | `/industries/<slug>` (5 pages), titre et description Google | `src/lib/data/industries/` |
+| Textes des pages secteurs | `industry` | `src/lib/cms/industries.ts` | `/industries/<slug>` (les 6 secteurs), titre et description Google | `src/lib/data/industries/` |
 
-Restent dans le code : les pages Solution (`platform.ts`), la page `/industries/cosmetics` (pas encore migrée vers le gabarit commun), les textes d'interface (boutons, titres de section) et le reste de la base de l'assistant de chat (faits, réponses de prospection validées).
+Restent dans le code : les pages Solution (`platform.ts`), les textes d'interface (boutons, titres de section) et le reste de la base de l'assistant de chat (faits, réponses de prospection validées).
 
 ## Architecture
 
@@ -69,7 +69,7 @@ Une page secteur mêle texte et dessin : icônes, nombre de diapositives, visuel
 
 - Les listes ont la taille de la page : le Studio n'y permet ni ajout ni suppression. Ajouter une diapositive ou une étape demande un développeur (structure, icône, visuel dans `src/lib/data/industries/<secteur>.ts`, puis le texte dans le Studio).
 - Un texte vidé laisse celui du code, dans la même langue : le code a toujours le français et l'anglais, et certains textes anglais sont vides exprès (le « de » du titre).
-- Les cinq documents viennent de l'import ; le Studio ne permet ni d'en créer ni d'en supprimer. Les champs propres à certaines pages (titre « manifeste », fin de titre du second carrousel) sont masqués là où la page ne les a pas.
+- Les six documents viennent de l'import ; le Studio ne permet ni d'en créer ni d'en supprimer. Les champs propres à certaines pages (titre « manifeste », fin de titre du second carrousel) sont masqués là où la page ne les a pas.
 - Les textes des visuels (maquettes d'écran, courbes) restent dans le code.
 - Un chiffre clé publié doit pouvoir être justifié (voir SEO-REPORT.md).
 
@@ -103,7 +103,7 @@ npm run cms:seed               # liste ce qui serait envoyé, sans rien écrire
 npm run cms:seed -- --write    # crée dans Sanity les documents absents
 ```
 
-23 documents : 9 témoignages, 5 questions, 4 guides, 5 secteurs. Il faut un jeton **Editor** dans `.env.local` (`SANITY_WRITE_TOKEN`, sanity.io/manage > API > Tokens). Le script n'écrase jamais un document existant : on peut le relancer sans perdre les modifications faites dans le Studio. Supprimer le jeton dans Sanity une fois les imports finis ; il ne sert jamais en production.
+24 documents : 9 témoignages, 5 questions, 4 guides, 6 secteurs. Il faut un jeton **Editor** dans `.env.local` (`SANITY_WRITE_TOKEN`, sanity.io/manage > API > Tokens). Le script n'écrase jamais un document existant : on peut le relancer sans perdre les modifications faites dans le Studio. Supprimer le jeton dans Sanity une fois les imports finis ; il ne sert jamais en production.
 
 ### 5. Déployer le Studio
 

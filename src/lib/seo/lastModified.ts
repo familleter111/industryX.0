@@ -32,7 +32,6 @@ function sources(path: string): string[] | undefined {
     ]
   if (path === ENTIWIN_PATH) return [`${APP}/plateforme/entiwin`]
   if (section === 'plateforme') return ['src/lib/data/platform.ts', 'src/features/platform']
-  if (path === '/industries/cosmetics') return [`${APP}/industries/cosmetics`]
   if (section === 'industries')
     return [`src/lib/data/industries/${slug}.ts`, `src/lib/data/industries/${slug}.en.ts`, 'src/features/industries']
   if (path === '/resources')

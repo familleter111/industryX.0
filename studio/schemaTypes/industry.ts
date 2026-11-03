@@ -16,6 +16,7 @@ import { defineField, defineType } from 'sanity'
 const NAMES: Record<string, string> = {
   pharma: 'Pharmaceutique',
   food: 'Agroalimentaire & boissons',
+  cosmetics: 'Cosmétique & dispositifs médicaux',
   automotive: 'Automobile & composants',
   electronics: 'Électronique & câblage',
   packaging: 'Packaging & plasturgie',

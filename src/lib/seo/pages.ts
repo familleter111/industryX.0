@@ -125,18 +125,6 @@ const STATIC_PAGES: Record<string, Bilingual<PageSeo>> = {
     },
   },
   // Page encore servie par son propre dossier (voir lib/site.ts).
-  '/industries/cosmetics': {
-    fr: {
-      title: 'Logiciel qualité cosmétique et dispositifs médicaux',
-      description:
-        'ISO 22716, ISO 13485, salle blanche, traçabilité UDI et contrôles qualité : CIPA digitalise la production cosmétique et des dispositifs médicaux. Voir la démo.',
-    },
-    en: {
-      title: 'Quality software for cosmetics and medical devices',
-      description:
-        'ISO 22716 and ISO 13485 compliance, cleanroom work, UDI traceability and quality checks: CIPA digitizes cosmetics and medical device production. Book a demo.',
-    },
-  },
   // Enti Win est un autre produit : la marque du titre est l'éditeur.
   [ENTIWIN_PATH]: {
     fr: {

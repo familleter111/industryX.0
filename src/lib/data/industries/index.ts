@@ -4,6 +4,8 @@ import { overlay, type TextOverlay } from '@/lib/i18n'
 
 import { automotive } from '@/lib/data/industries/automotive'
 import { automotiveEn } from '@/lib/data/industries/automotive.en'
+import { cosmetics } from '@/lib/data/industries/cosmetics'
+import { cosmeticsEn } from '@/lib/data/industries/cosmetics.en'
 import { electronics } from '@/lib/data/industries/electronics'
 import { electronicsEn } from '@/lib/data/industries/electronics.en'
 import { food } from '@/lib/data/industries/food'
@@ -14,14 +16,12 @@ import { pharma } from '@/lib/data/industries/pharma'
 import { pharmaEn } from '@/lib/data/industries/pharma.en'
 
 /**
- * Registre des pages sectorielles.
- *
- * Les industries encore servies par un fichier de page dedie sous
- * app/[locale]/industries/<slug> n'apparaissent pas ici tant qu'elles n'ont
- * pas ete migrees : elles y sont ajoutees une a une.
+ * Registre des pages sectorielles : les six secteurs, tous servis par la
+ * route [slug] et le gabarit commun (features/industries/IndustryPage).
  */
 export const INDUSTRIES: Record<string, IndustryPageData> = {
   automotive,
+  cosmetics,
   electronics,
   food,
   packaging,
@@ -31,6 +31,7 @@ export const INDUSTRIES: Record<string, IndustryPageData> = {
 /** Textes anglais de chaque industrie, poses sur la version francaise. */
 const INDUSTRIES_EN: Record<string, TextOverlay<IndustryPageData>> = {
   automotive: automotiveEn,
+  cosmetics: cosmeticsEn,
   electronics: electronicsEn,
   food: foodEn,
   packaging: packagingEn,

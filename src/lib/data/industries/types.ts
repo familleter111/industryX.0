@@ -126,7 +126,8 @@ export type IndustryPageData = {
    */
   heroStatement?: { eyebrow: string; title: [string, string, string, string] }
   intro: string
-  hero: { src: string; alt: string }
+  /** `width` / `height` : dimensions du fichier, s'il n'est pas au format commun 1448 × 1086. */
+  hero: { src: string; alt: string; width?: number; height?: number }
   heroIcon: LucideIcon
   /** Icone du badge « Secteur d'activite » (par defaut Zap). */
   badgeIcon?: LucideIcon

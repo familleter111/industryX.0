@@ -194,8 +194,8 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
                 <Image
                   src={data.hero.src}
                   alt={data.hero.alt}
-                  width={1448}
-                  height={1086}
+                  width={data.hero.width ?? 1448}
+                  height={data.hero.height ?? 1086}
                   priority
                   sizes="(max-width: 1023px) 100vw, (max-width: 1439px) 54vw, 57vw"
                   className={`${heroStyles.image} block h-auto w-full select-none object-contain`}

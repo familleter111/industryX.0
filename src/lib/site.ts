@@ -34,12 +34,6 @@ export const BRAND = {
 } as const
 
 /**
- * Industries servies par un dossier de page dédié, pas encore migrées vers
- * la route [slug] (voir lib/data/industries/index.ts).
- */
-const STATIC_INDUSTRIES = ['cosmetics']
-
-/**
  * Pages servies mais volontairement hors sitemap (`noindex`) : leur contenu
  * attend une validation (voir l'en-tête de chaque page).
  */
@@ -66,6 +60,6 @@ export function publicPaths(guideSlugs: string[] = GUIDES.map(({ slug }) => slug
     ...guideSlugs.map((slug) => `/resources/${slug}`),
     ...PLATFORM_PAGES.map(({ slug }) => `/plateforme/${slug}`),
     ENTIWIN_PATH,
-    ...[...STATIC_INDUSTRIES, ...industrySlugs()].map((slug) => `/industries/${slug}`),
+    ...industrySlugs().map((slug) => `/industries/${slug}`),
   ]
 }
