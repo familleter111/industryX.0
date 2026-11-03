@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process'
 
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
-import { guideBySlug } from '@/lib/data/guides'
+import { guideBySlug, type Guide } from '@/lib/data/guides'
 
 /**
  * Date de dernière modification d'une page, pour le `lastmod` du sitemap.
@@ -58,21 +58,23 @@ const hasFullHistory = () =>
 
 const cache = new Map<string, Date | undefined>()
 
-export function lastModified(path: string): Date | undefined {
-  if (cache.has(path)) return cache.get(path)
-
-  let date: Date | undefined
+/**
+ * `guide` : le guide de la page quand il vient du CMS (sitemap) ; sinon, le
+ * guide du fichier local. Sa date n'est pas mise en cache : elle peut changer
+ * dans le Studio sans redémarrage.
+ */
+export function lastModified(path: string, guide?: Pick<Guide, 'date' | 'updated'>): Date | undefined {
   const [, section, slug] = path.split('/')
-  const guide = section === 'resources' && slug ? guideBySlug(slug) : undefined
-  if (guide) {
-    date = new Date(`${guide.updated ?? guide.date}T00:00:00Z`)
-  } else {
-    const files = sources(path)
-    if (files && hasFullHistory()) {
-      // `:(literal)` : sans lui, git lirait « [locale] » comme un motif.
-      const iso = git(['log', '-1', '--format=%cI', '--', ...files.map((file) => `:(literal)${file}`)])
-      if (iso) date = new Date(iso)
-    }
+  const content = guide ?? (section === 'resources' && slug ? guideBySlug(slug) : undefined)
+  if (content) return new Date(`${content.updated ?? content.date}T00:00:00Z`)
+
+  if (cache.has(path)) return cache.get(path)
+  let date: Date | undefined
+  const files = sources(path)
+  if (files && hasFullHistory()) {
+    // `:(literal)` : sans lui, git lirait « [locale] » comme un motif.
+    const iso = git(['log', '-1', '--format=%cI', '--', ...files.map((file) => `:(literal)${file}`)])
+    if (iso) date = new Date(iso)
   }
   cache.set(path, date)
   return date

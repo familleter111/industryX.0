@@ -1,5 +1,6 @@
 /**
- * Importe dans Sanity les contenus encore écrits dans le code (voir docs/cms.md).
+ * Importe dans Sanity les contenus encore écrits dans le code (voir docs/cms.md) :
+ * témoignages, FAQ, guides et textes des pages sectorielles.
  *
  *   npm run cms:seed               # affiche ce qui serait envoyé, sans rien écrire
  *   npm run cms:seed -- --write    # crée dans Sanity les documents absents
@@ -11,9 +12,13 @@
  * `createIfNotExists` : un document déjà présent n'est jamais écrasé. Relancer
  * le script après des modifications faites dans le Studio ne les perd pas.
  *
- * Node 22.18 ou plus : le script lit directement src/lib/data/testimonials.ts
- * (types TypeScript retirés par Node).
+ * Node 22.18 ou plus : le script lit directement les fichiers TypeScript du
+ * site (types retirés par Node, alias `@/` résolu par cms-alias.mjs). Les
+ * guides et les secteurs sont convertis par les fonctions du site
+ * (src/lib/cms) : tests/cms.test.ts vérifie que le site les relit à l'identique.
  */
+
+import './cms-alias.mjs'
 
 const API_VERSION = '2025-02-19'
 
@@ -35,7 +40,7 @@ const localeString = (fr, en) => ({ _type: 'localeString', fr, en })
 const localeText = (fr, en) => ({ _type: 'localeText', fr, en })
 
 async function testimonials() {
-  const { getTestimonials } = await import('../src/lib/data/testimonials.ts')
+  const { getTestimonials } = await import('@/lib/data/testimonials')
   const fr = getTestimonials(true, 'fr')
   const en = getTestimonials(true, 'en')
   return fr.map((t, i) => ({
@@ -52,15 +57,45 @@ async function testimonials() {
   }))
 }
 
-async function main() {
-  const docs = await testimonials()
+async function faqs() {
+  const { FAQ_ENTRIES } = await import('@/lib/data/faq')
+  return FAQ_ENTRIES.fr.map((entry, i) => ({
+    _id: `faq-${slug(entry.question).slice(0, 60).replace(/-$/, '')}`,
+    _type: 'faq',
+    question: localeString(entry.question, FAQ_ENTRIES.en[i].question),
+    answer: localeText(entry.answer, FAQ_ENTRIES.en[i].answer),
+    order: (i + 1) * 10,
+  }))
+}
 
-  for (const doc of docs) {
-    console.log(`${doc._id.padEnd(36)} ${doc.clientApproved ? 'validé   ' : 'à valider'}  ${doc.company}`)
-  }
+async function guides() {
+  const { guidesFor } = await import('@/lib/data/guides')
+  const { guideDocument } = await import('@/lib/cms/guides')
+  const en = guidesFor('en')
+  return guidesFor('fr').map((guide, i) => guideDocument(guide, en[i]))
+}
+
+async function industries() {
+  const { industryData, industrySlugs } = await import('@/lib/data/industries')
+  const { industryDocument } = await import('@/lib/cms/industries')
+  return industrySlugs().map((page) => industryDocument(industryData(page, 'fr'), industryData(page, 'en')))
+}
+
+/** Une ligne par document, pour relire avant d'écrire. */
+function describe(doc) {
+  if (doc._type === 'testimonial') return `${doc.clientApproved ? 'validé   ' : 'à valider'}  ${doc.company}`
+  if (doc._type === 'faq') return doc.question.fr
+  if (doc._type === 'guide') return `${doc.date}  ${doc.title.fr}`
+  return `/industries/${doc.slug}`
+}
+
+async function main() {
+  const docs = [...(await testimonials()), ...(await faqs()), ...(await guides()), ...(await industries())]
+
+  for (const doc of docs) console.log(`${doc._id.padEnd(66)} ${describe(doc)}`)
 
   if (!write) {
-    console.log(`\n${docs.length} documents. Rien n'est envoyé : relancer avec --write pour les créer.`)
+    console.log(`\n${docs.length} documents. Rien n'est envoyé : relancer avec --write pour créer ceux qui manquent.`)
     return
   }
 
@@ -85,7 +120,8 @@ async function main() {
     console.error(`Sanity a refusé l'import (HTTP ${response.status}) : ${body?.error?.description ?? body?.message ?? ''}`)
     process.exit(1)
   }
-  console.log(`\nImport terminé dans ${projectId}/${dataset} (transaction ${body?.transactionId}).`)
+  const created = (body?.results ?? []).filter((result) => result.operation === 'create').length
+  console.log(`\nImport terminé dans ${projectId}/${dataset} (transaction ${body?.transactionId}) : ${created} document(s) créé(s).`)
   console.log('Les documents qui existaient déjà n’ont pas été modifiés.')
 }
 

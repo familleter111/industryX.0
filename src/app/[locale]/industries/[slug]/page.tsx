@@ -4,10 +4,11 @@ import { setRequestLocale } from 'next-intl/server'
 
 import JsonLd from '@/components/seo/JsonLd'
 import IndustryPage from '@/features/industries/IndustryPage'
+import { loadIndustryText } from '@/lib/cms/industries'
+import { cmsSeoMetadata } from '@/lib/cms/seo'
 import { industryData, industrySlugs } from '@/lib/data/industries'
 import { industryHref, industryName } from '@/lib/data/industries/labels'
 import type { Locale } from '@/lib/i18n'
-import { seoMetadata } from '@/lib/seo/metadata'
 import { HOME_CRUMB, breadcrumbSchema } from '@/lib/seo/schema'
 
 /**
@@ -26,17 +27,19 @@ export function generateStaticParams() {
   return industrySlugs().map((slug) => ({ slug }))
 }
 
-export function generateMetadata({ params }: Params): Metadata {
-  return seoMetadata(industryHref(params.slug), params.locale)
+export function generateMetadata({ params }: Params): Promise<Metadata> {
+  return cmsSeoMetadata(industryHref(params.slug), params.locale)
 }
 
-export default function Page({ params }: Params) {
+export default async function Page({ params }: Params) {
   setRequestLocale(params.locale)
   if (!industryData(params.slug, params.locale)) notFound()
-  // Seul le slug traverse la frontiere serveur / client. La donnee contient
-  // des icones Lucide, donc des fonctions, et une fonction ne peut pas etre
-  // serialisee vers un composant client : c'est le composant client qui va
-  // chercher sa donnee dans le registre.
+  // Seuls le slug et les textes du CMS traversent la frontiere serveur /
+  // client. La donnee contient des icones Lucide, donc des fonctions, et une
+  // fonction ne peut pas etre serialisee vers un composant client : c'est le
+  // composant client qui va chercher sa donnee dans le registre, puis y pose
+  // les textes (lib/cms/industries.ts).
+  const text = await loadIndustryText(params.slug, params.locale)
   return (
     <>
       <JsonLd
@@ -48,7 +51,7 @@ export default function Page({ params }: Params) {
           },
         ])}
       />
-      <IndustryPage slug={params.slug} />
+      <IndustryPage slug={params.slug} text={text} />
     </>
   )
 }

@@ -19,8 +19,9 @@ import SectorsShowcase from '@/components/sections/SectorsShowcase'
 import GuideCard from '@/features/resources/GuideCard'
 import GuidesLibrary from '@/features/resources/GuidesLibrary'
 import SubscribeBand from '@/features/resources/SubscribeBand'
-import { categoryLabel, formatGuideDate, guidesFor } from '@/lib/data/guides'
-import { useCopy, useCurrentLocale } from '@/lib/i18n'
+import { loadGuides } from '@/lib/cms/guides'
+import { categoryLabel, formatGuideDate, type Guide } from '@/lib/data/guides'
+import { useCopy, useCurrentLocale, type Locale } from '@/lib/i18n'
 
 /* ============================================================
    DONNÉES
@@ -97,10 +98,9 @@ const COPY = {
    page est la lecture.
    ============================================================ */
 
-function ResourcesHero() {
+function ResourcesHero({ guides: GUIDES }: { guides: Guide[] }) {
   const locale = useCurrentLocale()
   const t = useCopy(COPY)
-  const GUIDES = guidesFor(locale)
   const featured = GUIDES.find((guide) => guide.featured) ?? GUIDES[0]
   const themes = new Set(GUIDES.map((guide) => guide.category)).size
 
@@ -228,8 +228,10 @@ function ResourcesHero() {
    PAGE
    ============================================================ */
 
-export default function ResourcesPage() {
-  const t = useCopy(COPY)
+export default async function ResourcesPage({ params: { locale } }: { params: { locale: Locale } }) {
+  // Composant asynchrone : pas de hook (useCopy), la langue vient des paramètres.
+  const t = COPY[locale]
+  const guides = await loadGuides(locale)
   const SECTOR_BRIEFS = SECTOR_LINKS.map((link, i) => ({
     ...link,
     title: t.sectors[i][0],
@@ -237,7 +239,7 @@ export default function ResourcesPage() {
   }))
   // Cartes rendues ici, sur le serveur : le filtre client ne recoit que des
   // elements deja resolus.
-  const cards = guidesFor(useCurrentLocale()).map((guide) => ({
+  const cards = guides.map((guide) => ({
     key: guide.slug,
     category: guide.category,
     node: <GuideCard guide={guide} />,
@@ -246,7 +248,7 @@ export default function ResourcesPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F6] font-body text-dark selection:bg-gold/30">
 
-      <ResourcesHero />
+      <ResourcesHero guides={guides} />
 
       {/* ==================== BIBLIOTHÈQUE ==================== */}
       <section id="guides" className="scroll-mt-20 bg-[#F7F7F6] py-16 sm:py-20">

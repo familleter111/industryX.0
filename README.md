@@ -87,14 +87,17 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 
 ## CMS (Sanity)
 
-Les témoignages clients s'éditent dans Sanity, les autres contenus suivront
-(détail, mise en route et webhook : [`docs/cms.md`](docs/cms.md)).
+Témoignages, FAQ, guides et textes des pages secteurs s'éditent dans Sanity
+(projet `tudyxwtm` ; détail, mise en route et webhook : [`docs/cms.md`](docs/cms.md)).
 
-- `studio/` : le Sanity Studio, projet séparé (`cd studio && npm install && npm run dev`).
+- `studio/` : le Sanity Studio, projet séparé (`cd studio && npm install && npm run dev`),
+  en ligne sur https://industryx0.sanity.studio (`npm run deploy`).
 - `src/lib/cms/` : lecture des documents publiés par `fetch`, avec repli sur
-  `src/lib/data/` si Sanity ne répond pas.
+  `src/lib/data/` si Sanity ne répond pas. Les secteurs gardent leur structure
+  (icônes, visuels) dans le code ; le CMS n'en porte que les textes.
 - Sans `SANITY_PROJECT_ID`, rien n'est appelé : le site garde ses contenus locaux.
-- `npm run cms:seed` importe les contenus locaux dans Sanity.
+  En production, `deploy.yml` le fige au build.
+- `npm run cms:seed` importe les contenus locaux dans Sanity, sans écraser l'existant.
 
 ## SEO
 
@@ -137,7 +140,7 @@ Les témoignages clients s'éditent dans Sanity, les autres contenus suivront
 │   ├── lib/                    # Utilitaires et configuration
 │   │   ├── data/               # Contenus (fr + overlays en)
 │   │   ├── analytics/          # PostHog, taxonomie, consentement, UTM
-│   │   ├── cms/                # Lecture de Sanity (témoignages), repli local
+│   │   ├── cms/                # Lecture de Sanity (témoignages, FAQ, guides, secteurs), repli local
 │   │   ├── server/             # Helpers des routes API (messages, rateLimit)
 │   │   ├── tokens.ts  motion.ts  i18n.ts  phone.ts  orbit-geometry.ts
 │   ├── hooks/                  # useMotion

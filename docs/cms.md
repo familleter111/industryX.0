@@ -1,91 +1,125 @@
 # CMS headless (Sanity)
 
-Les contenus éditoriaux passent progressivement du code à **Sanity**, le CMS headless recommandé par le brief. L'équipe les modifie dans le **Studio** (une interface web), sans développeur ni redéploiement.
+Les contenus éditoriaux du site sont dans **Sanity**, le CMS headless recommandé par le brief. L'équipe les modifie dans le **Studio** (une interface web), sans développeur ni redéploiement.
 
-Sans configuration, rien ne change : le site garde ses contenus locaux (`src/lib/data/`) et n'appelle jamais Sanity.
+Projet Sanity : `tudyxwtm`, dataset `production` (organisation `opAnMgqO5`). Sans configuration, rien ne change : le site garde ses contenus locaux (`src/lib/data/`) et n'appelle jamais Sanity.
 
 ## Ce qui est dans le CMS
 
-| Contenu | Type Sanity | Lu par | Affiché sur | Fichier local (repli) |
+| Contenu | Type Sanity | Lu par | Affiché sur | Fichier local (repli et import) |
 |---|---|---|---|---|
 | Témoignages clients | `testimonial` | `src/lib/cms/testimonials.ts` | accueil, `/customers` | `src/lib/data/testimonials.ts` |
+| Questions fréquentes | `faq` | `src/lib/cms/faq.ts` | accueil (section `#faq` et données FAQPage) | `src/lib/data/faq.ts` |
+| Guides | `guide` | `src/lib/cms/guides.ts` | `/resources`, `/resources/<slug>`, sitemap, images de partage | `src/lib/data/guides.ts`, `guides.en.ts` |
+| Textes des pages secteurs | `industry` | `src/lib/cms/industries.ts` | `/industries/<slug>` (5 pages), titre et description Google | `src/lib/data/industries/` |
 
-Prochains candidats, dans l'ordre : FAQ, guides, pages secteurs (voir « Ajouter un contenu »).
+Restent dans le code : les pages Solution (`platform.ts`), la page `/industries/cosmetics` (pas encore migrée vers le gabarit commun), les textes d'interface (boutons, titres de section) et la base de l'assistant de chat (voir « Limites »).
 
 ## Architecture
 
 ```
 studio/                       Sanity Studio : projet séparé (React 19), déployé chez Sanity
-  sanity.config.ts            projet, dataset, outils (structure, console GROQ)
-  schemaTypes/                types de contenu : locale.ts (textes FR / EN), testimonial.ts
+  sanity.config.ts            projet, dataset, outils ; secteurs ni créés ni supprimés ici
+  sanity.cli.ts               adresse du Studio en ligne (studioHost)
+  schemaTypes/                locale.ts (textes FR / EN), testimonial.ts, faq.ts, guide.ts, industry.ts
 src/lib/cms/
   client.ts                   configuration, requête GROQ par fetch, textes bilingues
-  testimonials.ts             requête, conversion vers le type du site, repli
+  testimonials.ts, faq.ts     requête, conversion vers le type du site, repli
+  guides.ts                   idem, plus Portable Text ⇄ blocs de la page
+  industries.ts               textes d'un secteur, posés sur la page du code
+  seo.ts                      titres, descriptions et liste des pages, CMS compris
 src/app/api/revalidate/route.ts   webhook de publication : rafraîchit les pages
 scripts/cms-seed.mjs          import initial des contenus locaux (npm run cms:seed)
+scripts/cms-alias.mjs         alias @/ pour les scripts Node qui lisent le code du site
 ```
 
-**Pourquoi un Studio séparé.** Les paquets Sanity actuels (`sanity` 6, `next-sanity` 13) exigent React 19 et Next 16 ; le site est en Next 14 et React 18. Le Studio vit donc dans `studio/`, avec ses propres dépendances, et se déploie chez Sanity (`https://<nom>.sanity.studio`). Le site, lui, n'ajoute aucune dépendance : il lit l'API HTTP de Sanity avec `fetch`.
+**Pourquoi un Studio séparé.** Les paquets Sanity actuels (`sanity` 6, `next-sanity` 13) exigent React 19 et Next 16 ; le site est en Next 14 et React 18. Le Studio vit donc dans `studio/`, avec ses propres dépendances, et se déploie chez Sanity (`https://industryx0.sanity.studio`). Le site, lui, n'ajoute aucune dépendance : il lit l'API HTTP de Sanity avec `fetch`.
 
 **Lecture.** `cmsQuery` interroge le CDN de Sanity (`<projet>.apicdn.sanity.io`), uniquement les documents **publiés** : un brouillon en cours dans le Studio n'apparaît jamais sur le site. La requête passe par le cache de Next (`revalidate` d'une heure, étiquettes `cms` et `cms:<type>`). Les pages restent statiques et se régénèrent en arrière-plan (ISR).
 
-**Bilingue.** Chaque texte est un objet `{ fr, en }` (types `localeString` et `localeText`). Le français est obligatoire. Sans anglais, la version anglaise du site affiche le français, et le Studio prévient l'éditeur.
+**Configuration figée au build.** `SANITY_PROJECT_ID` et `SANITY_DATASET` sont publics. `deploy.yml` les donne à la build, et `next.config.mjs` (`env`) les écrit dans le code serveur : une page régénérée en production lit le même projet, sans variable à déclarer dans Azure. Seul le secret du webhook se déclare dans Azure.
 
-**Repli.** Si Sanity ne répond pas (panne, délai de 5 s, réponse inattendue), la page s'affiche quand même avec le fichier local, **réduit aux verbatims validés** : une panne ne doit pas faire réapparaître une proposition de rédaction retirée dans le CMS. Un avertissement `[cms]` est écrit dans les logs.
+**Bilingue.** Chaque texte est un objet `{ fr, en }` (types `localeString` et `localeText`). Le français est obligatoire. Sans anglais, la version anglaise affiche le français, et le Studio prévient l'éditeur. Exception, les secteurs : un texte vide laisse celui du code, dans la même langue (voir plus bas).
 
-**Témoignages.** La case « Verbatim validé par le client » remplace `status` : non cochée, le texte est une proposition de rédaction (`draft`). L'accueil et `/customers` affichent aujourd'hui les deux, comme avant la migration ; pour ne garder que les verbatims validés, retirer `includeDrafts: true` dans `src/app/[locale]/page.tsx` et `src/app/[locale]/(marketing)/customers/page.tsx`. Les couleurs des cartes tournent automatiquement (or, vert, bleu). Le logo reste celui de la bibliothèque du site (`clientLogos.ts`), désigné par son nom.
+**Repli.** Si Sanity ne répond pas (panne, délai de 5 s, réponse inattendue), la page s'affiche quand même avec le fichier local, et un avertissement `[cms]` est écrit dans les logs. Pour les témoignages, la liste locale est **réduite aux verbatims validés** : une panne ne doit pas faire réapparaître une proposition de rédaction retirée dans le CMS.
+
+### Témoignages
+
+La case « Verbatim validé par le client » remplace `status` : non cochée, le texte est une proposition de rédaction (`draft`). L'accueil et `/customers` affichent aujourd'hui les deux ; pour ne garder que les verbatims validés, retirer `includeDrafts: true` dans `src/app/[locale]/page.tsx` et `src/app/[locale]/(marketing)/customers/page.tsx`. Les couleurs des cartes tournent automatiquement (or, vert, bleu). Le logo reste celui de la bibliothèque du site (`clientLogos.ts`), désigné par son nom.
+
+### FAQ
+
+Ordre au choix (champ « Ordre d'affichage ») ; la première question s'ouvre par défaut. Les questions affichées sont aussi celles des données structurées FAQPage de l'accueil.
+
+### Guides
+
+- **Corps** en texte riche, une version par langue (vide en anglais : la page anglaise affiche le français). Styles : paragraphe, intertitre, encadré « idée à retenir », liste à puces, lien vers une page du site (chemin en français, `/plateforme/gestion-ecarts` : le site le traduit). Ni gras ni italique : la page ne les affiche pas.
+- **Image** : envoyée dans le Studio (servie par `cdn.sanity.io`, autorisé dans `next.config.mjs`) ou chemin d'un fichier de `public/`.
+- **Nouveau guide** : publié dans le Studio, il apparaît dans `/resources`, a sa page (rendue à la première visite), son entrée dans le sitemap et son image de partage, sans redéploiement.
+- **Adresse** (`slug`) : à ne plus changer une fois publiée (liens, référencement).
+- **Minutes de lecture** : vides, elles sont estimées (200 mots par minute).
+- Le Portable Text est converti vers les blocs que la page affiche déjà (`portableTextToBlocks`) ; l'import fait l'inverse (`blocksToPortableText`), et les tests vérifient que l'aller-retour ne perd rien.
+
+### Pages secteurs
+
+Une page secteur mêle texte et dessin : icônes, nombre de diapositives, visuels animés tracés à la main. Le CMS n'en porte que **le texte** (titres, introduction, points, diapositives, chiffres clés, étapes, appel à l'action, titre et description Google), posé sur la page du code par `overlay`, position par position — le même mécanisme que la traduction anglaise.
+
+- Les listes ont la taille de la page : le Studio n'y permet ni ajout ni suppression. Ajouter une diapositive ou une étape demande un développeur (structure, icône, visuel dans `src/lib/data/industries/<secteur>.ts`, puis le texte dans le Studio).
+- Un texte vidé laisse celui du code, dans la même langue : le code a toujours le français et l'anglais, et certains textes anglais sont vides exprès (le « de » du titre).
+- Les cinq documents viennent de l'import ; le Studio ne permet ni d'en créer ni d'en supprimer. Les champs propres à certaines pages (titre « manifeste », fin de titre du second carrousel) sont masqués là où la page ne les a pas.
+- Les textes des visuels (maquettes d'écran, courbes) restent dans le code.
+- Un chiffre clé publié doit pouvoir être justifié (voir SEO-REPORT.md).
 
 ## Mise en route
 
-### 1. Créer le projet Sanity
+État au 3 novembre 2026 : étapes 1, 3 et 4 faites ; 2 en local ; 5 et 6 à faire.
 
-Sur [sanity.io/manage](https://www.sanity.io/manage) : créer un projet (offre gratuite), garder le dataset `production` en **public** (lecture sans jeton des documents publiés). Noter le **Project ID**.
+### 1. Projet Sanity — fait
 
-### 2. Lancer le Studio
+Projet `tudyxwtm`, dataset `production` **public** (lecture sans jeton des documents publiés).
+
+### 2. Studio en local
 
 ```bash
 cd studio
-cp .env.example .env          # puis renseigner SANITY_STUDIO_PROJECT_ID
+cp .env.example .env          # SANITY_STUDIO_PROJECT_ID=tudyxwtm
 npm install
 npm run dev                   # http://localhost:3333
 ```
 
-Au premier lancement, le Studio demande de se connecter et propose d'autoriser `http://localhost:3333` (CORS) : accepter.
+Au premier lancement, le Studio demande de se connecter et propose d'autoriser `http://localhost:3333` (CORS) : accepter. Sur ce poste, rollup est remplacé par sa version WebAssembly (`overrides` de `studio/package.json`), comme pour le site : le contrôle d'applications Windows bloque le binaire natif.
 
-> Sur ce poste, le contrôle d'applications Windows bloque déjà le binaire natif de rollup (voir README). Si `npm run dev` échoue pour la même raison sur l'outil de build du Studio, lancer le Studio depuis un autre poste, ou directement sa version déployée (étape 5).
+### 3. Brancher le site — fait
 
-### 3. Brancher le site
+En local, `.env.local` : `SANITY_PROJECT_ID=tudyxwtm`, `SANITY_DATASET=production`. En production, `deploy.yml` les donne à la build (voir « Configuration figée au build ») : rien à déclarer dans GitHub ni dans Azure.
 
-Dans `.env.local` (dev) et dans Azure App Service (prod) :
-
-```
-SANITY_PROJECT_ID=<project id>
-SANITY_DATASET=production
-```
-
-**Aussi en variable GitHub Actions** (Settings > Secrets and variables > Actions > Variables) : les pages sont construites au build, et sans projet à ce moment-là elles restent figées sur les contenus locaux. `deploy.yml` les transmet déjà au build.
-
-### 4. Importer les contenus existants
+### 4. Importer les contenus existants — fait
 
 ```bash
 npm run cms:seed               # liste ce qui serait envoyé, sans rien écrire
-npm run cms:seed -- --write    # crée les documents dans Sanity
+npm run cms:seed -- --write    # crée dans Sanity les documents absents
 ```
 
-Il faut un jeton **Editor** dans `.env.local` : `SANITY_WRITE_TOKEN` (sanity.io/manage > API > Tokens). Le script n'écrase jamais un document existant : on peut le relancer sans perdre les modifications faites dans le Studio. Supprimer le jeton une fois l'import fait ; il ne sert jamais en production.
+23 documents : 9 témoignages, 5 questions, 4 guides, 5 secteurs. Il faut un jeton **Editor** dans `.env.local` (`SANITY_WRITE_TOKEN`, sanity.io/manage > API > Tokens). Le script n'écrase jamais un document existant : on peut le relancer sans perdre les modifications faites dans le Studio. Supprimer le jeton dans Sanity une fois les imports finis ; il ne sert jamais en production.
 
 ### 5. Déployer le Studio
 
+Il faut un compte du projet (ou un jeton « Deploy Studio ») : le jeton Editor de l'import n'en a pas le droit.
+
 ```bash
 cd studio
-npm run deploy                 # choisir un nom : https://<nom>.sanity.studio
+npx sanity login               # une fois, ouvre le navigateur
+npm run deploy                 # https://industryx0.sanity.studio
 ```
 
-Puis inviter l'équipe (sanity.io/manage > Members), avec le rôle **Editor**.
+Ou, sans connexion : `SANITY_AUTH_TOKEN=<jeton Deploy Studio> npm run deploy`. Puis inviter l'équipe (sanity.io/manage > Members), avec le rôle **Editor**.
 
 ### 6. Publication immédiate (webhook)
 
-Sans webhook, une modification publiée apparaît sur le site en une heure au plus. Pour qu'elle apparaisse en quelques secondes : sanity.io/manage > API > Webhooks > Create webhook :
+Sans webhook, une modification publiée apparaît sur le site en une heure au plus. Pour qu'elle apparaisse en quelques secondes :
+
+1. Dans Azure (App Service `industryx0` > Variables d'environnement) : `SANITY_REVALIDATE_SECRET`, même valeur que dans `.env.local`. Sans secret, la route répond 404 ; un mauvais secret reçoit 401.
+2. sanity.io/manage > API > Webhooks > Create webhook :
 
 | Champ | Valeur |
 |---|---|
@@ -97,23 +131,29 @@ Sans webhook, une modification publiée apparaît sur le site en une heure au pl
 | HTTP method | POST |
 | HTTP headers | `Authorization` : `Bearer <SANITY_REVALIDATE_SECRET>` |
 
-Et `SANITY_REVALIDATE_SECRET` (même valeur) dans Azure. Sans secret configuré, la route répond 404 ; un mauvais secret reçoit 401.
+La route rafraîchit les pages du type publié (`cms:testimonial`, `cms:faq`, `cms:guide`, `cms:industry`). Elle n'existe en ligne qu'une fois cette version du site déployée.
 
 ## Ajouter un contenu
 
 1. **Schéma** : un fichier dans `studio/schemaTypes/`, ajouté à `index.ts`. Textes visibles : `localeString` ou `localeText`.
-2. **Lecteur** : un fichier dans `src/lib/cms/` sur le modèle de `testimonials.ts` : requête GROQ, conversion vers le type que les composants utilisent déjà, repli sur le fichier local.
-3. **Page** : le composant serveur appelle le lecteur et passe le résultat en props aux composants client.
-4. **Import** : une fonction de plus dans `scripts/cms-seed.mjs`.
-5. **Tests** : sur le modèle de `tests/cms.test.ts` (conversion, repli, aucun appel sans configuration).
+2. **Lecteur** : un fichier dans `src/lib/cms/` sur le modèle de `faq.ts` (liste simple) ou de `industries.ts` (textes posés sur une structure du code) : requête GROQ, conversion vers le type que les composants utilisent déjà, repli sur le fichier local.
+3. **Page** : le composant serveur appelle le lecteur et passe le résultat en props aux composants client. Un composant serveur `async` n'appelle pas de hook (`useCopy`) : il prend la langue dans `params`.
+4. **Import** : une fonction de plus dans `scripts/cms-seed.mjs`, qui réutilise de préférence une fonction de conversion de `src/lib/cms/`.
+5. **Tests** : sur le modèle de `tests/cms-content.test.ts` — surtout l'aller-retour : le contenu importé, relu par le site, doit redonner le contenu du code.
 
-Garder la forme des données du site (le type `Testimonial`, par exemple) : les composants n'ont pas à savoir d'où vient le contenu.
+Garder la forme des données du site (les types `Testimonial`, `Guide`, `IndustryPageData`) : les composants n'ont pas à savoir d'où vient le contenu.
 
 ## Limites actuelles
 
-- Les logos clients restent dans le code : un nouveau client sans logo dans `clientLogos.ts` s'affiche avec ses initiales. Étape suivante possible : un champ image dans le Studio.
-- Pas encore d'aperçu des brouillons sur le site (mode « draft ») : on voit le résultat après publication.
+- **Assistant de chat** : il garde la FAQ et les textes du code (`src/lib/chat/`), car sa reconnaissance des questions suit l'ordre du fichier. Une réponse corrigée dans le Studio ne change pas celle du chat : la reporter dans `src/lib/data/faq.ts`.
+- **Logos clients** : dans le code ; un nouveau client sans logo dans `clientLogos.ts` s'affiche avec ses initiales.
+- **Aperçu des brouillons** : pas encore de mode « draft » sur le site ; on voit le résultat après publication.
+- **Dates du sitemap** : les guides sont datés par leur contenu ; les autres pages, par le dernier commit de leurs fichiers, pas par une modification dans le Studio.
 
 ## Tests
 
-`npm test` couvre (`tests/cms.test.ts`) : la configuration, le choix de langue, la conversion des documents, le repli en cas de panne, l'absence d'appel sans configuration, et la route `/api/revalidate` (secret, type de document).
+`npm test` couvre `tests/cms.test.ts` (configuration, choix de langue, témoignages, repli, route `/api/revalidate`) et `tests/cms-content.test.ts` (FAQ, guides, secteurs) :
+- aller-retour Portable Text et import → lecture, identiques au code, en français et en anglais ;
+- repli en cas de panne, et aucun appel sans configuration ;
+- textes modifiés ou vidés d'un secteur, avec icônes et visuels intacts ;
+- un guide créé dans le Studio, présent dans les pages publiques avec son titre.

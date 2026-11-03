@@ -10,8 +10,9 @@ import {
 
 import SmartCarousel from '@/features/industries/SmartCarousel'
 import { viewport } from '@/lib/motion'
+import type { IndustryText } from '@/lib/cms/industries'
 import { industryData } from '@/lib/data/industries'
-import { useCopy, useCurrentLocale } from '@/lib/i18n'
+import { overlay, useCopy, useCurrentLocale } from '@/lib/i18n'
 import Footer from '@/components/layout/Footer'
 import heroStyles from '@/features/industries/hero.module.css'
 import { Link } from '@/i18n/navigation'
@@ -69,10 +70,12 @@ const COPY = {
   },
 }
 
-export default function IndustryPage({ slug }: { slug: string }) {
+/** `text` : les textes du CMS, posés sur la page du code (lib/cms/industries.ts). */
+export default function IndustryPage({ slug, text }: { slug: string; text?: IndustryText }) {
   const t = useCopy(COPY)
-  const data = industryData(slug, useCurrentLocale())
-  if (!data) return null
+  const base = industryData(slug, useCurrentLocale())
+  if (!base) return null
+  const data = overlay(base, text)
   const HeroIcon = data.heroIcon
   const BadgeIcon = data.badgeIcon ?? Zap
   const statement = data.heroStatement

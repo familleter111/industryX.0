@@ -43,8 +43,11 @@ const STATIC_INDUSTRIES = ['cosmetics']
  * Toutes les pages publiques, en chemin français (sans préfixe de langue).
  * Une page ajoutée sans être listée ici n'entre pas dans le sitemap : le test
  * tests/site.test.ts compare cette liste aux dossiers de src/app.
+ *
+ * `guideSlugs` : les guides publiés, ceux du fichier local par défaut
+ * (lib/cms/seo.ts passe ceux du CMS).
  */
-export function publicPaths(): string[] {
+export function publicPaths(guideSlugs: string[] = GUIDES.map(({ slug }) => slug)): string[] {
   return [
     '/',
     '/entreprise',
@@ -54,7 +57,7 @@ export function publicPaths(): string[] {
     '/privacy',
     '/conditions-utilisation',
     '/resources',
-    ...GUIDES.map(({ slug }) => `/resources/${slug}`),
+    ...guideSlugs.map((slug) => `/resources/${slug}`),
     ...PLATFORM_PAGES.map(({ slug }) => `/plateforme/${slug}`),
     ENTIWIN_PATH,
     ...[...STATIC_INDUSTRIES, ...industrySlugs()].map((slug) => `/industries/${slug}`),

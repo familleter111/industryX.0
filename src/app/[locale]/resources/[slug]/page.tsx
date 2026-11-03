@@ -10,17 +10,10 @@ import Footer from '@/components/layout/Footer'
 import JsonLd from '@/components/seo/JsonLd'
 import GuideCard from '@/features/resources/GuideCard'
 import SubscribeBand from '@/features/resources/SubscribeBand'
-import {
-  GUIDES,
-  categoryLabel,
-  formatGuideDate,
-  guideBySlug,
-  guidesFor,
-  type GuideBlock,
-  type GuideLink,
-} from '@/lib/data/guides'
-import { useCopy, type Locale } from '@/lib/i18n'
-import { seoMetadata } from '@/lib/seo/metadata'
+import { loadGuides } from '@/lib/cms/guides'
+import { categoryLabel, formatGuideDate, type GuideBlock, type GuideLink } from '@/lib/data/guides'
+import type { Locale } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo/metadata'
 import { HOME_CRUMB, articleSchema, breadcrumbSchema } from '@/lib/seo/schema'
 
 const COPY = {
@@ -49,20 +42,24 @@ const COPY = {
 type Params = { params: { slug: string; locale: Locale } }
 
 /* ============================================================
-   ROUTAGE — pages generees au build, rien a la volee
+   ROUTAGE — guides connus générés au build ; un guide publié
+   ensuite dans le CMS est rendu à sa première visite, un slug
+   inconnu répond 404 (notFound)
    ============================================================ */
 
-export const dynamicParams = false
-
-export function generateStaticParams() {
-  return GUIDES.map((guide) => ({ slug: guide.slug }))
+export async function generateStaticParams() {
+  return (await loadGuides('fr')).map((guide) => ({ slug: guide.slug }))
 }
 
-export function generateMetadata({ params }: Params): Metadata {
-  const guide = guideBySlug(params.slug, params.locale)
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const guide = (await loadGuides(params.locale)).find((candidate) => candidate.slug === params.slug)
   if (!guide) return {}
 
-  return seoMetadata(`/resources/${guide.slug}`, params.locale, {
+  return pageMetadata({
+    locale: params.locale,
+    path: `/resources/${guide.slug}`,
+    title: guide.metaTitle,
+    description: guide.metaDescription,
     openGraph: {
       type: 'article',
       publishedTime: guide.date,
@@ -146,15 +143,17 @@ function Block({ block }: { block: GuideBlock }) {
    PAGE
    ============================================================ */
 
-export default function GuidePage({ params }: Params) {
+export default async function GuidePage({ params }: Params) {
   setRequestLocale(params.locale)
   const { locale } = params
-  const t = useCopy(COPY)
-  const guide = guideBySlug(params.slug, locale)
+  // Composant asynchrone : pas de hook (useCopy), la langue vient des paramètres.
+  const t = COPY[locale]
+  const guides = await loadGuides(locale)
+  const guide = guides.find((candidate) => candidate.slug === params.slug)
   if (!guide) notFound()
 
   // Guides de la meme categorie d'abord, puis les plus recents.
-  const others = guidesFor(locale).filter((other) => other.slug !== guide.slug)
+  const others = guides.filter((other) => other.slug !== guide.slug)
     .sort(
       (a, b) =>
         Number(b.category === guide.category) - Number(a.category === guide.category) ||

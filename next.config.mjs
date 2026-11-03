@@ -26,6 +26,13 @@ const SECURITY_HEADERS = [
 const nextConfig = {
   // Ne pas annoncer la pile technique dans chaque réponse.
   poweredByHeader: false,
+  // Projet Sanity (public, pas un secret) figé au build, côté serveur aussi :
+  // une page régénérée en production lit le même projet que la build, même si
+  // le serveur ne déclare pas ces variables. Voir src/lib/cms/client.ts.
+  env: {
+    SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID ?? '',
+    SANITY_DATASET: process.env.SANITY_DATASET ?? '',
+  },
   async headers() {
     return [{ source: '/:path*', headers: SECURITY_HEADERS }]
   },
@@ -75,7 +82,8 @@ const nextConfig = {
     ]
   },
   images: {
-    remotePatterns: [],
+    // Images des guides envoyées dans le Studio Sanity (voir docs/cms.md).
+    remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/images/**' }],
   },
   experimental: {
     // exceljs lit le disque et charge ses propres binaires : le laisser

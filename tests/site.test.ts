@@ -1,7 +1,7 @@
 import { readdirSync, statSync } from 'node:fs'
 import path from 'node:path'
 
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
@@ -44,7 +44,11 @@ describe('publicPaths', () => {
 })
 
 describe('sitemap', () => {
-  const entries = sitemap()
+  // Sans SANITY_PROJECT_ID (tests) : les guides du fichier local.
+  let entries: Awaited<ReturnType<typeof sitemap>>
+  beforeAll(async () => {
+    entries = await sitemap()
+  })
 
   it('donne chaque page en français et en anglais, en URL absolue', () => {
     expect(entries).toHaveLength(publicPaths().length * 2)

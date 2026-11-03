@@ -20,6 +20,9 @@
     "@types/node": "^22.10.0",
     "typescript": "^5.4.5"
   },
+  "overrides": {
+    "rollup": "npm:@rollup/wasm-node@^4.64.5"
+  },
   "engines": {
     "node": ">=22.12"
   }

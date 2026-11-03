@@ -1,9 +1,8 @@
 import { ImageResponse } from 'next/og'
 
 import { routing } from '@/i18n/routing'
+import { cmsPageSeo, cmsPublicPaths } from '@/lib/cms/seo'
 import { OG_SIZE, ogEyebrow, ogImageKey } from '@/lib/seo/og'
-import { pageSeo } from '@/lib/seo/pages'
-import { publicPaths } from '@/lib/site'
 import { tokens } from '@/lib/tokens'
 
 /**
@@ -34,8 +33,9 @@ const logo = load(new URL('../../../../public/logoCIPA.png', import.meta.url)).t
   return `data:image/png;base64,${btoa(binary)}`
 })
 
-function findPage(key: string) {
-  for (const path of publicPaths())
+/** La page de l'image, guides du CMS compris ; son titre est celui du CMS. */
+async function findPage(key: string) {
+  for (const path of await cmsPublicPaths())
     for (const locale of routing.locales)
       if (ogImageKey(path, locale) === key) return { path, locale }
   return undefined
@@ -45,8 +45,8 @@ function findPage(key: string) {
 const titleSize = (title: string) => (title.length <= 40 ? 72 : title.length <= 48 ? 62 : 56)
 
 export async function GET(_request: Request, { params }: { params: { image: string } }) {
-  const page = findPage(params.image)
-  const seo = page && pageSeo(page.path, page.locale)
+  const page = await findPage(params.image)
+  const seo = page && (await cmsPageSeo(page.path, page.locale))
   if (!page || !seo) return new Response('Not found', { status: 404 })
 
   const [logoSrc, syneData, outfitData] = await Promise.all([logo, syne, outfit])

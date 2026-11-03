@@ -12,8 +12,8 @@ import FaqSection from '@/components/sections/FaqSection'
 import JsonLd from '@/components/seo/JsonLd'
 import WelcomeIntro from '@/components/layout/WelcomeIntro'
 import Footer from '@/components/layout/Footer'
+import { loadFaq } from '@/lib/cms/faq'
 import { loadTestimonials } from '@/lib/cms/testimonials'
-import { FAQ_ENTRIES } from '@/lib/data/faq'
 import { FEATURE_TABS } from '@/lib/data/features'
 import { platformPages } from '@/lib/data/platform'
 import type { Locale } from '@/lib/i18n'
@@ -34,8 +34,11 @@ export function generateMetadata({ params: { locale } }: { params: { locale: Loc
 }
 
 export default async function HomePage({ params: { locale } }: { params: { locale: Locale } }) {
-  // Propositions de rédaction comprises : voir lib/data/testimonials.ts.
-  const testimonials = await loadTestimonials(locale, { includeDrafts: true })
+  const [testimonials, faqs] = await Promise.all([
+    // Propositions de rédaction comprises : voir lib/data/testimonials.ts.
+    loadTestimonials(locale, { includeDrafts: true }),
+    loadFaq(locale),
+  ])
   return (
     <main className="min-h-screen overflow-x-hidden">
       <JsonLd
@@ -46,7 +49,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
             featureList: platformPages(locale).map((page) => page.menuTitle),
           }),
           // Les questions de la section #faq, telles qu'elles s'affichent.
-          faqSchema(FAQ_ENTRIES[locale], locale),
+          faqSchema(faqs, locale),
         ]}
       />
       <WelcomeIntro />
@@ -56,7 +59,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
       <CasesSection availableScreenshots={AVAILABLE_SCREENSHOTS} />
       <TestimonialsSection testimonials={testimonials} />
       <PartnersOrbit />
-      <FaqSection />
+      <FaqSection faqs={faqs} />
       <CTASection />
       <Footer />
     </main>

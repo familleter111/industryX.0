@@ -32,8 +32,18 @@ export function cmsTag(type: string): string {
   return `${CMS_TAG}:${type}`
 }
 
+/**
+ * Variables du CMS. Accès littéraux à `process.env` : next.config.mjs (`env`)
+ * y écrit leur valeur au build, si bien que le serveur en production n'a pas
+ * à les redéclarer — et ne peut pas, en les oubliant, revenir aux contenus
+ * locaux à la première régénération d'une page.
+ */
+function buildEnv(): CmsEnv {
+  return { SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID, SANITY_DATASET: process.env.SANITY_DATASET }
+}
+
 /** Le projet Sanity configuré, ou `null` : le site garde alors ses contenus locaux. */
-export function cmsConfig(env: CmsEnv = process.env): CmsConfig | null {
+export function cmsConfig(env: CmsEnv = buildEnv()): CmsConfig | null {
   const projectId = env.SANITY_PROJECT_ID?.trim()
   if (!projectId) return null
   return { projectId, dataset: env.SANITY_DATASET?.trim() || 'production' }
@@ -65,8 +75,12 @@ export async function cmsQuery<T>(config: CmsConfig, type: string, query: string
 /** Texte bilingue du CMS (types `localeString` et `localeText` du Studio). */
 export type Localized = { fr?: string | null; en?: string | null }
 
-/** Texte dans la langue demandée, sinon en français. */
+/**
+ * Texte dans la langue demandée, sinon en français. Un texte fait seulement
+ * d'espaces compte comme vide ; un autre est rendu tel quel, espaces
+ * comprises (« de » suivi d'une espace, avant le nom d'un secteur dans un titre).
+ */
 export function localized(text: Localized | null | undefined, locale: Locale): string {
-  const translated = locale === 'en' ? text?.en?.trim() : ''
-  return translated || text?.fr?.trim() || ''
+  const filled = (value: string | null | undefined) => (value?.trim() ? value : '')
+  return (locale === 'en' ? filled(text?.en) : '') || filled(text?.fr)
 }

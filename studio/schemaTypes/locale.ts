@@ -16,6 +16,8 @@ export const localeString = defineType({
     defineField({ name: 'fr', title: 'Français', type: 'string', validation: (rule) => rule.required() }),
     defineField({ name: 'en', title: 'English', type: 'string', validation: (rule) => rule.required().warning(MISSING_EN) }),
   ],
+  // Éléments de liste (points, constats…) : le texte plutôt que « Sans titre ».
+  preview: { select: { title: 'fr', subtitle: 'en' } },
 })
 
 export const localeText = defineType({
@@ -32,4 +34,5 @@ export const localeText = defineType({
       validation: (rule) => rule.required().warning(MISSING_EN),
     }),
   ],
+  preview: { select: { title: 'fr', subtitle: 'en' } },
 })

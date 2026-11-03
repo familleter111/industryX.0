@@ -11,7 +11,7 @@ import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 
-import { schemaTypes } from './schemaTypes'
+import { FIXED_DOCUMENT_TYPES, schemaTypes } from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
@@ -20,5 +20,15 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   // Vision : console GROQ, pour tester une requête avant de la mettre dans le site.
   plugins: [structureTool(), visionTool()],
-  schema: { types: schemaTypes },
+  schema: {
+    types: schemaTypes,
+    // Une page secteur dépend de sa structure dans le code : pas de création ici.
+    templates: (templates) => templates.filter((template) => !FIXED_DOCUMENT_TYPES.includes(template.schemaType)),
+  },
+  document: {
+    actions: (actions, { schemaType }) =>
+      FIXED_DOCUMENT_TYPES.includes(schemaType)
+        ? actions.filter((action) => action.action !== 'delete' && action.action !== 'duplicate')
+        : actions,
+  },
 })

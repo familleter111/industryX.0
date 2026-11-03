@@ -3,6 +3,9 @@
 /**
  * Questions fréquentes, en section de l'accueil (ancre #faq, visée par le
  * menu et le pied de page) : l'ancienne page /faq redirige ici.
+ *
+ * Les questions viennent de la page (lib/cms/faq.ts : Sanity, sinon
+ * lib/data/faq.ts), qui les reprend dans ses données structurées FAQPage.
  */
 
 import { useState } from 'react'
@@ -21,7 +24,7 @@ import SectionHeading from '@/components/ui/SectionHeading'
 import { viewport } from '@/lib/motion'
 import { useCopy } from '@/lib/i18n'
 import { openChat } from '@/lib/chat/open'
-import { FAQ_ENTRIES } from '@/lib/data/faq'
+import type { FaqEntry } from '@/lib/data/faq'
 
 /* ============================================================
    DONNÉES
@@ -36,7 +39,6 @@ const COPY = {
       ['Accompagnement au déploiement', 'Un expert dédié vous accompagne à chaque étape, du cadrage au passage à l’échelle.'],
       ['Approche progressive par pilote', 'Démarrer petit, prouver la valeur rapidement et industrialiser avec confiance.'],
     ],
-    faqs: FAQ_ENTRIES.fr,
     photoAlt: 'Équipes terrain utilisant CIPA sur tablette',
     panelEyebrow: 'Avant votre démo',
     panelTitle: 'Ce que vous pouvez attendre de nous.',
@@ -53,7 +55,6 @@ const COPY = {
       ['Deployment support', 'A dedicated expert supports you at every step, from scoping to scale-up.'],
       ['A step-by-step pilot approach', 'Start small, prove the value quickly and scale with confidence.'],
     ],
-    faqs: FAQ_ENTRIES.en,
     photoAlt: 'Shop-floor teams using CIPA on a tablet',
     panelEyebrow: 'Before your demo',
     panelTitle: 'What you can expect from us.',
@@ -163,10 +164,9 @@ function HighlightsPanel() {
    panneau de gauche, c'est lui qui absorbe la différence.
    ============================================================ */
 
-function FaqAccordion() {
+function FaqAccordion({ faqs: FAQS }: { faqs: FaqEntry[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
   const t = useCopy(COPY)
-  const FAQS = t.faqs
 
   return (
     <motion.div
@@ -284,7 +284,7 @@ function FaqAccordion() {
    SECTION
    ============================================================ */
 
-export default function FaqSection() {
+export default function FaqSection({ faqs }: { faqs: FaqEntry[] }) {
   const t = useCopy(COPY)
   return (
     <section
@@ -307,7 +307,7 @@ export default function FaqSection() {
             l'accordéon passe en premier — c'est l'objet de la section. */}
         <div className="mt-12 grid gap-5 lg:mt-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-6">
           <HighlightsPanel />
-          <FaqAccordion />
+          <FaqAccordion faqs={faqs} />
         </div>
       </div>
     </section>

@@ -63,7 +63,7 @@ export function testimonialsFromCms(docs: CmsTestimonial[], locale: Locale): Tes
 export async function loadTestimonials(
   locale: Locale,
   { includeDrafts = false }: { includeDrafts?: boolean } = {},
-  env: CmsEnv = process.env,
+  env?: CmsEnv,
 ): Promise<Testimonial[]> {
   const config = cmsConfig(env)
   if (!config) return getTestimonials(includeDrafts, locale)
