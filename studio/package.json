@@ -1,0 +1,26 @@
+{
+  "name": "industryx0-studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sanity Studio d'Industry X.0 : l'interface d'édition des contenus du site (voir ../docs/cms.md)",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/vision": "^6.21.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "sanity": "^6.21.0",
+    "styled-components": "^6.1.15"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

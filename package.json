@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "gen:tablet": "node scripts/tablet-screens/run.cjs",
-    "leads:check": "node --env-file-if-exists=.env.local scripts/leads-check.mjs"
+    "leads:check": "node --env-file-if-exists=.env.local scripts/leads-check.mjs",
+    "cms:seed": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/cms-seed.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",

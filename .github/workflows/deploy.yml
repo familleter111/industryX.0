@@ -54,6 +54,10 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+          # CMS (docs/cms.md) : sans le projet au build, les pages sont
+          # figées sur les contenus locaux et ne relisent jamais Sanity.
+          SANITY_PROJECT_ID: ${{ vars.SANITY_PROJECT_ID }}
+          SANITY_DATASET: ${{ vars.SANITY_DATASET }}
           # Identifiant public (pas un secret) : figé ici plutôt qu'en variable.
           NEXT_PUBLIC_GA_ID: G-RK1F1BBPJ2
 

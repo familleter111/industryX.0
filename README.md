@@ -85,6 +85,17 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 | `guide_viewed` | page guide |
 | `language_switched`, `entiwin_clicked` | sélecteur de langue, liens Enti Win |
 
+## CMS (Sanity)
+
+Les témoignages clients s'éditent dans Sanity, les autres contenus suivront
+(détail, mise en route et webhook : [`docs/cms.md`](docs/cms.md)).
+
+- `studio/` : le Sanity Studio, projet séparé (`cd studio && npm install && npm run dev`).
+- `src/lib/cms/` : lecture des documents publiés par `fetch`, avec repli sur
+  `src/lib/data/` si Sanity ne répond pas.
+- Sans `SANITY_PROJECT_ID`, rien n'est appelé : le site garde ses contenus locaux.
+- `npm run cms:seed` importe les contenus locaux dans Sanity.
+
 ## SEO
 
 - `src/app/sitemap.ts` et `src/app/robots.ts` servent `/sitemap.xml` et `/robots.txt`.
@@ -112,6 +123,7 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 │   │   ├── sitemap.ts, robots.ts  # SEO (liste des pages : lib/site.ts)
 │   │   └── api/
 │   │       ├── contact/route.ts
+│   │       ├── revalidate/route.ts  # webhook de publication Sanity
 │   │       └── subscribe/route.ts
 │   ├── components/             # Composants réutilisables
 │   │   ├── ui/                 # Briques d'interface (Section, Reveal, PhoneField…)
@@ -125,6 +137,7 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 │   ├── lib/                    # Utilitaires et configuration
 │   │   ├── data/               # Contenus (fr + overlays en)
 │   │   ├── analytics/          # PostHog, taxonomie, consentement, UTM
+│   │   ├── cms/                # Lecture de Sanity (témoignages), repli local
 │   │   ├── server/             # Helpers des routes API (messages, rateLimit)
 │   │   ├── tokens.ts  motion.ts  i18n.ts  phone.ts  orbit-geometry.ts
 │   ├── hooks/                  # useMotion
@@ -133,7 +146,8 @@ Fonctionnement (`src/lib/analytics/`, `src/components/analytics/`) :
 │   ├── types/                  # Déclarations TypeScript
 │   ├── styles/                 # globals.css
 │   └── middleware.ts           # Redirection de langue
-├── scripts/                    # check-hex, check-i18n, gen-countries
+├── studio/                     # Sanity Studio (projet séparé, voir docs/cms.md)
+├── scripts/                    # check-hex, check-i18n, gen-countries, cms-seed
 ├── tests/                      # Tests Vitest (npm test)
 ├── tailwind.config.ts
 ├── next.config.mjs

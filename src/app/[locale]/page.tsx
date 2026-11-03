@@ -12,6 +12,7 @@ import FaqSection from '@/components/sections/FaqSection'
 import JsonLd from '@/components/seo/JsonLd'
 import WelcomeIntro from '@/components/layout/WelcomeIntro'
 import Footer from '@/components/layout/Footer'
+import { loadTestimonials } from '@/lib/cms/testimonials'
 import { FAQ_ENTRIES } from '@/lib/data/faq'
 import { FEATURE_TABS } from '@/lib/data/features'
 import { platformPages } from '@/lib/data/platform'
@@ -32,7 +33,9 @@ export function generateMetadata({ params: { locale } }: { params: { locale: Loc
   return seoMetadata('/', locale)
 }
 
-export default function HomePage({ params: { locale } }: { params: { locale: Locale } }) {
+export default async function HomePage({ params: { locale } }: { params: { locale: Locale } }) {
+  // Propositions de rédaction comprises : voir lib/data/testimonials.ts.
+  const testimonials = await loadTestimonials(locale, { includeDrafts: true })
   return (
     <main className="min-h-screen overflow-x-hidden">
       <JsonLd
@@ -51,7 +54,7 @@ export default function HomePage({ params: { locale } }: { params: { locale: Loc
       <HowItWorks />
       <CipaSection />
       <CasesSection availableScreenshots={AVAILABLE_SCREENSHOTS} />
-      <TestimonialsSection />
+      <TestimonialsSection testimonials={testimonials} />
       <PartnersOrbit />
       <FaqSection />
       <CTASection />

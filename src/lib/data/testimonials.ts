@@ -1,5 +1,8 @@
 /**
- * Source unique des témoignages clients (page d'accueil + /customers).
+ * Témoignages clients (page d'accueil + /customers). Quand Sanity est
+ * configuré, ils viennent du CMS (lib/cms/testimonials.ts) : ce fichier ne
+ * sert plus qu'au repli et à l'import initial (`npm run cms:seed`).
+ * Voir docs/cms.md.
  *
  * ⚠️ RÈGLE : `status: 'published'` est réservé aux verbatims RÉELLEMENT
  * recueillis auprès du client, avec son accord. Les entrées `status: 'draft'`
@@ -8,8 +11,8 @@
  * ne l'a pas prononcée est un faux témoignage, avec le risque juridique et
  * réputationnel qui va avec.
  *
- * Les deux surfaces d'affichage appellent aujourd'hui `getTestimonials(true)`,
- * donc les propositions SONT visibles en ligne : chaque entrée `draft` doit
+ * Les deux surfaces d'affichage demandent aujourd'hui les propositions
+ * (`includeDrafts: true`), donc elles SONT visibles en ligne : chaque entrée `draft` doit
  * être relue et validée par le client, ou remplacée par son verbatim réel.
  * Une fois validée : remplacer le texte par le verbatim et passer `status` à
  * 'published'.
@@ -45,6 +48,9 @@ export type Testimonial = {
 const GOLD = '#DAA250'
 const GREEN = '#22C55E'
 const BLUE = '#3B82F6'
+
+/** Rotation des couleurs, reprise par les témoignages du CMS. */
+export const TESTIMONIAL_COLORS = [GOLD, GREEN, BLUE]
 
 export const TESTIMONIALS: Testimonial[] = [
   /* ---------- Verbatims réels, recueillis auprès du client ---------- */

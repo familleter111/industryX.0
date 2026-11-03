@@ -7,11 +7,11 @@ import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import AutoplayTimer from '@/components/ui/AutoplayTimer'
 import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
-import { getTestimonials, type Testimonial } from '@/lib/data/testimonials'
+import type { Testimonial } from '@/lib/data/testimonials'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
-import { useCopy, useCurrentLocale } from '@/lib/i18n'
+import { useCopy } from '@/lib/i18n'
 
 const COPY = {
   fr: {
@@ -31,9 +31,9 @@ const COPY = {
 }
 
 /**
- * Témoignages : source unique dans lib/data/testimonials.ts.
- * `true` inclut les propositions de rédaction (`status: 'draft'`), qui doivent
- * être validées par les entreprises citées — voir l'en-tête de ce fichier.
+ * Témoignages : chargés par la page d'accueil (lib/cms/testimonials.ts),
+ * propositions de rédaction comprises (`status: 'draft'`). Celles-ci doivent
+ * être validées par les entreprises citées — voir lib/data/testimonials.ts.
  */
 
 /* Vignette du client : logo de /public/logos, sinon le `fallbackLogo` du
@@ -74,10 +74,9 @@ function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
 /** Temps d'affichage d'une page d'avis avant la suivante. */
 const AUTOPLAY_MS = 6000
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
   const m = useMotion()
   const copy = useCopy(COPY)
-  const testimonials = getTestimonials(true, useCurrentLocale())
   const ref = useRef(null)
 
   /* Carrousel : les cartes défilent horizontalement (1 / 2 / 3 par écran
