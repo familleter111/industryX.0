@@ -4,6 +4,8 @@ L'assistant s'appelle **OmniduX** (`CHAT_NAME` dans `src/lib/chat/config.ts`, re
 
 **Trois tailles** : à partir de 640 px de large, trois boutons de l'en-tête (carrés de plus en plus grands) règlent le panneau : petite (340 × 460), moyenne (420 × 600, par défaut) ou grande (600 × 780). Chaque taille est bornée par la fenêtre : le panneau ne passe ni sous la barre de navigation ni hors de l'écran. Le choix est gardé dans le navigateur (`features/chat/usePanelSize.ts`). Sur téléphone, la taille reste calée sur l'écran.
 
+**Actions rapides** : sous la conversation, trois boutons restent toujours à portée : « Demander une démo » (/contact, le panneau se ferme), « Essayer Enti Win » (outil Enti Win dans un nouvel onglet, avec ses UTM) et « Nous écrire » (e-mail). Ils sont suivis comme les autres CTA du site, sans code dédié : `cta_clicked` avec la zone `chat` (et `entiwin_clicked` pour Enti Win, qui emporte l'identifiant du visiteur).
+
 La conversation est gardée en `sessionStorage` le temps de l'onglet (`lib/chat/store.ts`) ; le bouton « Nouvelle conversation » de l'en-tête l'efface. Il fonctionne en deux modes :
 
 **Fournisseur** (`CHAT_PROVIDER`) : `azure` (Azure OpenAI, API Responses : `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOYMENT`, et `AZURE_OPENAI_REASONING_EFFORT=low` pour un modèle à raisonnement) ou `anthropic` (Claude, décrit ci-dessous). Les contrôles, la signature et le repli local sont les mêmes pour les deux. Avec Azure, `store: false` : la conversation n'est pas gardée par Azure, et le préfixe des consignes est mis en cache automatiquement.
@@ -15,7 +17,7 @@ La conversation est gardée en `sessionStorage` le temps de l'onglet (`lib/chat/
 
 En mode IA, l'IA n'est appelée qu'en dernier recours, pour garder le coût au plus bas :
 
-1. **Questions de la FAQ** (durée d'une démo, intégrations, accompagnement, secteurs, délai d'un pilote) : reconnues dans le navigateur et répondues avec le texte de la FAQ. Gratuit, aucun appel.
+1. **Questions de la FAQ** (durée d'une démo, intégrations, accompagnement, secteurs, délai d'un pilote) : reconnues dans le navigateur et répondues avec le texte de la FAQ publiée dans le CMS (chargée à l'ouverture du widget, `lib/chat/faq.ts`), sinon celui de `lib/data/faq.ts`. Chaque question est reconnue par son identifiant, pas par sa place : voir docs/cms.md, « FAQ ». Gratuit, aucun appel à l'IA.
    **Réponses prêtes** (présentation d'Industry X.0, solutions, Enti Win, téléphone, e-mail, adresse, coordonnées, candidatures CV / stage / PFE) : texte fixe, servi sans IA (`infoReply` dans `local.ts`). Les coordonnées viennent de `CONTACT` dans `knowledge.ts`, partagé avec la base du modèle. Un message de plus de 16 mots, ou qui parle du produit (« le numéro de lot dans CIPA »), continue vers l'IA.
    **Conversation courante** (bonjour, comment vas-tu, qui es-tu, que peux-tu faire, merci, au revoir…) : même chose, réponse instantanée sans IA (`smallTalkReply` dans `local.ts`). Un message court qui parle d'affaires (« Bonjour, je voudrais une démo ») n'est pas pris pour une politesse et continue son chemin.
 2. **Autres questions** : envoyées à Claude Haiku 5.5, dans la limite de `CHAT_DAILY_LIMIT` questions par jour (50 par défaut).
@@ -28,6 +30,7 @@ src/lib/chat/
   config.ts      nom de l'assistant, interrupteur (NEXT_PUBLIC_CHAT_AI), limites partagées
   guard.ts       nettoyage du texte et détection de spam (navigateur et serveur)
   store.ts       conversation du widget, antispam côté navigateur
+  faq.ts         FAQ publiée (CMS), chargée par le widget pour ses réponses locales
   open.ts        openChat() : ouvre le chat depuis n'importe quel bouton du site
   local.ts       mode local : messages de bienvenue et réponses par mots-clés
   client.ts      appel de /api/chat et lecture de la réponse en flux (navigateur)
@@ -35,6 +38,7 @@ src/lib/chat/
   prompt.ts      consignes du modèle + base de connaissances
   server.ts      contrôles de la route (activation, origine, historique, signature, répétitions)
 src/app/api/chat/route.ts   route serveur : appel de Claude, réponse en flux texte
+src/app/api/chat/faq/[locale]/route.ts   FAQ publiée, pour les réponses locales (statique, en cache)
 src/components/layout/ChatWidget.tsx   le widget
 src/features/chat/usePanelSize.ts      trois tailles standard du panneau
 src/features/chat/AssistantLogo.tsx    logo d'OmniduX (SVG), en-tête et accueil de chaque conversation

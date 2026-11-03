@@ -10,38 +10,55 @@ import { CHAT_NAME, type ChatLocale } from '@/lib/chat/config'
 import { SITE } from '@/lib/chat/knowledge'
 import { CONTACT, postalAddress } from '@/lib/data/contact'
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
-import { FAQ_ENTRIES } from '@/lib/data/faq'
+import { FAQ_ENTRIES, type FaqEntry } from '@/lib/data/faq'
 import { platformPages } from '@/lib/data/platform'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import { deburr } from '@/lib/phone'
 
 /**
- * Reconnaissance des questions de la FAQ, dans l'ordre de lib/data/faq.ts.
- * Une entrée correspond quand chacun de ses groupes trouve un mot dans la
- * question (accents et majuscules ignorés). Volontairement prudent : mieux
- * vaut passer la main à l'IA qu'afficher une réponse hors sujet.
+ * Reconnaissance des questions de la FAQ, par identifiant (`id` de
+ * lib/data/faq.ts, champ « Identifiant pour l'assistant » du CMS) : l'ordre
+ * des questions dans le Studio n'y change rien. La première entrée qui
+ * correspond l'emporte. Une entrée correspond quand chacun de ses groupes
+ * trouve un mot dans la question (accents et majuscules ignorés).
+ * Volontairement prudent : mieux vaut passer la main à l'IA qu'afficher une
+ * réponse hors sujet.
  */
-const FAQ_PATTERNS: RegExp[][] = [
+const FAQ_PATTERNS: [id: string, groups: RegExp[]][] = [
   // Durée d'une démonstration
-  [/\bdemo|demonstration/, /\b(dure|duree|temps|long|minutes?)\b/],
+  ['demo-duration', [/\bdemo|demonstration/, /\b(dure|duree|temps|long|minutes?)\b/]],
   // Intégration aux outils existants (« mes » seul est exclu : « mes équipes »)
-  [/\b(integr\w*|erp|gmao|cmms|bi|api|connect\w*|sap)\b/],
+  ['integrations', [/\b(integr\w*|erp|gmao|cmms|bi|api|connect\w*|sap)\b/]],
   // Accompagnement au déploiement
-  [/\b(accompagn\w*|formation|former|support|training|onboarding)\b/],
+  ['support', [/\b(accompagn\w*|formation|former|support|training|onboarding)\b/]],
   // Secteurs couverts
-  [/\b(secteurs?|industries|sectors?|pharma\w*|agro\w*|cosmeti\w*|automobile|automotive|electroni\w*|packaging|plasturgie|plastics?)\b/],
+  [
+    'industries',
+    [/\b(secteurs?|industries|sectors?|pharma\w*|agro\w*|cosmeti\w*|automobile|automotive|electroni\w*|packaging|plasturgie|plastics?)\b/],
+  ],
   // Délai avant un pilote
   [
-    /\b(pilote?s?|delai|combien de temps|how long|how soon)\b/,
-    /\b(pilote?s?|deploi\w*|deploy\w*|demarr\w*|mise en (place|service)|start\w*|operationnel|up and running)\b/,
+    'pilot-delay',
+    [
+      /\b(pilote?s?|delai|combien de temps|how long|how soon)\b/,
+      /\b(pilote?s?|deploi\w*|deploy\w*|demarr\w*|mise en (place|service)|start\w*|operationnel|up and running)\b/,
+    ],
   ],
 ]
 
-/** Réponse de la FAQ si la question y correspond, sinon `undefined`. */
-export function faqReply(userText: string, locale: ChatLocale): string | undefined {
+/**
+ * Réponse de la FAQ si la question y correspond, sinon `undefined`. `faq` :
+ * la FAQ publiée (lib/chat/faq.ts), le fichier local par défaut ; une
+ * question retirée du CMS n'a plus de réponse locale.
+ */
+export function faqReply(
+  userText: string,
+  locale: ChatLocale,
+  faq: FaqEntry[] = FAQ_ENTRIES[locale],
+): string | undefined {
   const text = deburr(userText)
-  const index = FAQ_PATTERNS.findIndex((groups) => groups.every((pattern) => pattern.test(text)))
-  return index >= 0 ? FAQ_ENTRIES[locale][index]?.answer : undefined
+  const match = FAQ_PATTERNS.find(([, groups]) => groups.every((pattern) => pattern.test(text)))
+  return match && faq.find((entry) => entry.id === match[0])?.answer
 }
 
 /* ------------------------------------------------- conversation courante
@@ -340,13 +357,13 @@ export function smallTalkReply(userText: string, locale: ChatLocale): string | u
  * réponse prête ou conversation courante. Le widget l'utilise avant
  * d'appeler l'IA.
  */
-export function instantReply(userText: string, locale: ChatLocale): string | undefined {
-  return faqReply(userText, locale) ?? infoReply(userText, locale) ?? smallTalkReply(userText, locale)
+export function instantReply(userText: string, locale: ChatLocale, faq?: FaqEntry[]): string | undefined {
+  return faqReply(userText, locale, faq) ?? infoReply(userText, locale) ?? smallTalkReply(userText, locale)
 }
 
 /** Réponse sans IA : FAQ, conversation courante, puis réponses par mots-clés. */
-export function localReply(userText: string, locale: ChatLocale): string {
-  const instant = instantReply(userText, locale)
+export function localReply(userText: string, locale: ChatLocale, faq?: FaqEntry[]): string {
+  const instant = instantReply(userText, locale, faq)
   if (instant) return instant
   const t = userText.toLowerCase()
   if (locale === 'fr') {

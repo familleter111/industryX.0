@@ -20,6 +20,7 @@ import { track } from '@/lib/analytics/posthog'
 import { askAssistant } from '@/lib/chat/client'
 import { CHAT_LIMITS, chatAiEnabled, type ChatLocale } from '@/lib/chat/config'
 import { cleanText, spamReason } from '@/lib/chat/guard'
+import { chatFaq } from '@/lib/chat/faq'
 import { instantReply, localReply } from '@/lib/chat/local'
 
 /** `sig` : signature d'une réponse de l'IA, renvoyée avec elle (lib/chat/server.ts). */
@@ -169,7 +170,7 @@ export function sendMessage(input: string, locale: ChatLocale, now = Date.now())
 
   // Questions de la FAQ, réponses prêtes et politesse sont répondues sur
   // place : aucun appel à l'IA, rien de consommé sur le plafond quotidien.
-  if (AI && !instantReply(userText, locale)) {
+  if (AI && !instantReply(userText, locale, chatFaq(locale))) {
     void askAI(id, history, userText, locale, startReply, done)
     return 'sent'
   }
@@ -178,7 +179,7 @@ export function sendMessage(input: string, locale: ChatLocale, now = Date.now())
   timeouts.push(
     setTimeout(() => {
       startReply()
-      typeLocally(id, localReply(userText, locale))
+      typeLocally(id, localReply(userText, locale, chatFaq(locale)))
     }, 1000),
   )
   return 'sent'
@@ -220,7 +221,7 @@ async function askAI(
   // IA indisponible ou question refusée : réponse locale, pour ne jamais
   // laisser une question sans suite.
   startReply()
-  typeLocally(id, localReply(userText, locale))
+  typeLocally(id, localReply(userText, locale, chatFaq(locale)))
 }
 
 /** Interrompt la réponse en cours, en gardant ce qui est déjà écrit. */

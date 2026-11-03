@@ -3,8 +3,8 @@
  * dans ses données structurées (FAQPage, lues par Google).
  * Lu par src/lib/cms/faq.ts.
  *
- * L'assistant de chat garde sa propre liste dans le code : une réponse
- * corrigée ici n'y change pas (voir docs/cms.md).
+ * L'assistant de chat utilise aussi ces réponses, avec l'IA comme sans
+ * (src/lib/chat/faq.ts) : une réponse corrigée ici l'est partout.
  */
 
 import { defineField, defineType } from 'sanity'
@@ -16,6 +16,15 @@ export const faq = defineType({
   fields: [
     defineField({ name: 'question', title: 'Question', type: 'localeString', validation: (rule) => rule.required() }),
     defineField({ name: 'answer', title: 'Réponse', type: 'localeText', validation: (rule) => rule.required() }),
+    defineField({
+      name: 'key',
+      title: 'Identifiant pour l’assistant',
+      description:
+        'Relie la question aux mots-clés que l’assistant reconnaît sans IA. Fixé par l’import ; une nouvelle question n’en a pas, seule l’IA y répond.',
+      type: 'string',
+      readOnly: true,
+      hidden: ({ value }) => !value,
+    }),
     defineField({
       name: 'order',
       title: 'Ordre d’affichage',

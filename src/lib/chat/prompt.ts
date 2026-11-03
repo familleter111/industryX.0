@@ -5,6 +5,7 @@
 
 import { CHAT_NAME, type ChatLocale } from '@/lib/chat/config'
 import { chatKnowledge } from '@/lib/chat/knowledge'
+import type { FaqEntry } from '@/lib/data/faq'
 
 const INSTRUCTIONS = `You are ${CHAT_NAME}, the website assistant of Industry X.0, shown in a small chat window on industryx0.pro.
 
@@ -33,6 +34,7 @@ const PAGE_LANGUAGE: Record<ChatLocale, string> = {
   en: 'The visitor is on the English version of the site.',
 }
 
-export function chatSystemPrompt(locale: ChatLocale): string {
-  return `${INSTRUCTIONS}\n\n${PAGE_LANGUAGE[locale]}\n\n# Knowledge base\n\n${chatKnowledge(locale)}`
+/** `faq` : la FAQ publiée (lib/cms/faq.ts), le fichier local par défaut. */
+export function chatSystemPrompt(locale: ChatLocale, faq?: FaqEntry[]): string {
+  return `${INSTRUCTIONS}\n\n${PAGE_LANGUAGE[locale]}\n\n# Knowledge base\n\n${chatKnowledge(locale, faq)}`
 }

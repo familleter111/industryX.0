@@ -9,11 +9,11 @@ Projet Sanity : `tudyxwtm`, dataset `production` (organisation `opAnMgqO5`). San
 | Contenu | Type Sanity | Lu par | Affiché sur | Fichier local (repli et import) |
 |---|---|---|---|---|
 | Témoignages clients | `testimonial` | `src/lib/cms/testimonials.ts` | accueil, `/customers` | `src/lib/data/testimonials.ts` |
-| Questions fréquentes | `faq` | `src/lib/cms/faq.ts` | accueil (section `#faq` et données FAQPage) | `src/lib/data/faq.ts` |
+| Questions fréquentes | `faq` | `src/lib/cms/faq.ts` | accueil (section `#faq` et données FAQPage), assistant de chat | `src/lib/data/faq.ts` |
 | Guides | `guide` | `src/lib/cms/guides.ts` | `/resources`, `/resources/<slug>`, sitemap, images de partage | `src/lib/data/guides.ts`, `guides.en.ts` |
 | Textes des pages secteurs | `industry` | `src/lib/cms/industries.ts` | `/industries/<slug>` (5 pages), titre et description Google | `src/lib/data/industries/` |
 
-Restent dans le code : les pages Solution (`platform.ts`), la page `/industries/cosmetics` (pas encore migrée vers le gabarit commun), les textes d'interface (boutons, titres de section) et la base de l'assistant de chat (voir « Limites »).
+Restent dans le code : les pages Solution (`platform.ts`), la page `/industries/cosmetics` (pas encore migrée vers le gabarit commun), les textes d'interface (boutons, titres de section) et le reste de la base de l'assistant de chat (faits, réponses de prospection validées).
 
 ## Architecture
 
@@ -49,7 +49,10 @@ La case « Verbatim validé par le client » remplace `status` : non cochée, le
 
 ### FAQ
 
-Ordre au choix (champ « Ordre d'affichage ») ; la première question s'ouvre par défaut. Les questions affichées sont aussi celles des données structurées FAQPage de l'accueil.
+Ordre au choix (champ « Ordre d'affichage ») ; la première question s'ouvre par défaut. Les questions affichées sont aussi celles des données structurées FAQPage de l'accueil, et celles de l'assistant de chat :
+
+- **avec l'IA**, la FAQ publiée entre dans la base de connaissances (`/api/chat` la relit au plus toutes les 5 minutes) ;
+- **sans IA**, le widget charge la FAQ publiée à son ouverture (`/api/chat/faq/<langue>`, en cache et rafraîchie par le webhook) et reconnaît les questions par mots-clés. Le lien entre une question et ses mots-clés est l'« Identifiant pour l'assistant » (`key`, fixé par l'import, lu par `src/lib/chat/local.ts`) : l'ordre dans le Studio n'y change rien. Une question créée dans le Studio n'en a pas : seule l'IA y répond. Une question supprimée n'a plus de réponse locale.
 
 ### Guides
 
@@ -145,7 +148,7 @@ Garder la forme des données du site (les types `Testimonial`, `Guide`, `Industr
 
 ## Limites actuelles
 
-- **Assistant de chat** : il garde la FAQ et les textes du code (`src/lib/chat/`), car sa reconnaissance des questions suit l'ordre du fichier. Une réponse corrigée dans le Studio ne change pas celle du chat : la reporter dans `src/lib/data/faq.ts`.
+- **Assistant de chat** : la FAQ vient du CMS ; les faits de base et les 136 réponses de prospection validées restent dans le code (`src/lib/chat/knowledge.ts`, `src/lib/data/chatbotBase.ts`). Les mots-clés d'une nouvelle question pour les réponses sans IA s'ajoutent dans `src/lib/chat/local.ts`.
 - **Logos clients** : dans le code ; un nouveau client sans logo dans `clientLogos.ts` s'affiche avec ses initiales.
 - **Aperçu des brouillons** : pas encore de mode « draft » sur le site ; on voit le résultat après publication.
 - **Dates du sitemap** : les guides sont datés par leur contenu ; les autres pages, par le dernier commit de leurs fichiers, pas par une modification dans le Studio.

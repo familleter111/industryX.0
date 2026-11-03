@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { RotateCcw, Send, X } from 'lucide-react'
+import { CalendarCheck, ExternalLink, Mail, RotateCcw, Send, X } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 import { useCurrentLocale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
 import { CHAT_LIMITS, CHAT_NAME, chatAiEnabled } from '@/lib/chat/config'
+import { prefetchChatFaq } from '@/lib/chat/faq'
+import { MAILTO } from '@/lib/data/contact'
+import { entiwinHref } from '@/lib/data/entiwin'
 import {
   isBusy,
   resetChat,
@@ -50,6 +53,22 @@ const NOTICE: Record<Exclude<SendResult, 'sent' | 'ignored'>, { FR: string; EN: 
   },
 }
 
+/**
+ * Actions rapides, sous la conversation : les trois conversions du site,
+ * à portée de clic quelle que soit la réponse. Suivies sans code dédié par
+ * AnalyticsProvider (`data-cta`, zone `data-cta-location="chat"`).
+ */
+const ACTIONS = {
+  group: { FR: 'Actions rapides', EN: 'Quick actions' },
+  demo: { FR: 'Demander une démo', EN: 'Book a demo' },
+  entiwin: { FR: 'Essayer Enti Win', EN: 'Try Enti Win' },
+  newTab: { FR: ' (nouvel onglet)', EN: ' (new tab)' },
+  email: { FR: 'Nous écrire', EN: 'Email us' },
+}
+
+const ACTION_CLASS =
+  'inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-700 transition duration-200 hover:border-gold hover:text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep'
+
 /** Boutons des trois tailles standard du panneau. */
 const SIZE_LABEL = {
   group: { FR: 'Taille de la fenêtre', EN: 'Window size' },
@@ -82,6 +101,11 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
     const focus = setTimeout(() => inputRef.current?.focus(), 250)
     return () => clearTimeout(focus)
   }, [isOpen, source])
+
+  // Réponses de la FAQ telles que publiées dans le CMS (lib/chat/faq.ts).
+  useEffect(() => {
+    if (isOpen) prefetchChatFaq(locale)
+  }, [isOpen, locale])
 
   // Échap ferme le panneau, comme le menu de navigation.
   useEffect(() => {
@@ -290,6 +314,33 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
 
           {/* SAISIE ET MENTION */}
           <form onSubmit={handleSendMessage} className="bg-white px-3 pb-2.5 pt-2 flex flex-col gap-1.5">
+            <div
+              role="group"
+              aria-label={ACTIONS.group[language]}
+              data-cta-location="chat"
+              className="flex flex-wrap justify-center gap-1.5"
+            >
+              {/* Le panneau se ferme : il cacherait le formulaire sur téléphone. */}
+              <Link href="/contact" data-cta="chat_demo" onClick={onClose} className={ACTION_CLASS}>
+                <CalendarCheck size={13} aria-hidden="true" />
+                {ACTIONS.demo[language]}
+              </Link>
+              <a
+                href={entiwinHref('chat')}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cta="entiwin_chat"
+                className={ACTION_CLASS}
+              >
+                <ExternalLink size={13} aria-hidden="true" />
+                {ACTIONS.entiwin[language]}
+                <span className="sr-only">{ACTIONS.newTab[language]}</span>
+              </a>
+              <a href={MAILTO} data-cta="chat_email" className={ACTION_CLASS}>
+                <Mail size={13} aria-hidden="true" />
+                {ACTIONS.email[language]}
+              </a>
+            </div>
             {notice && (
               <p role="status" className="rounded-xl bg-amber-50 px-3 py-2 text-[11px] leading-snug text-amber-900">
                 {NOTICE[notice][language]}

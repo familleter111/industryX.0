@@ -1,6 +1,6 @@
 /**
  * Base de connaissances de l'assistant IA, construite à partir des données
- * du site : pages Solution (lib/data/platform.ts), FAQ (lib/data/faq.ts),
+ * du site : pages Solution (lib/data/platform.ts), FAQ (publiée dans le CMS, sinon lib/data/faq.ts),
  * secteurs et coordonnées, plus les réponses de prospection validées par
  * l'équipe (lib/data/chatbotBase.ts). Le modèle ne répond que depuis ces faits : le
  * jour où une page change, l'assistant suit sans réécriture du prompt.
@@ -15,7 +15,7 @@
 
 import { CHATBOT_BASE } from '@/lib/data/chatbotBase'
 import { CONTACT, postalAddress } from '@/lib/data/contact'
-import { FAQ_ENTRIES } from '@/lib/data/faq'
+import { FAQ_ENTRIES, type FaqEntry } from '@/lib/data/faq'
 import { platformHref, platformPages } from '@/lib/data/platform'
 import type { ChatLocale } from '@/lib/chat/config'
 
@@ -50,8 +50,8 @@ function solutions(locale: ChatLocale): string {
     .join('\n\n')
 }
 
-function faq(locale: ChatLocale): string {
-  return FAQ_ENTRIES[locale].map((entry) => `Q : ${entry.question}\nR : ${entry.answer}`).join('\n\n')
+function faqText(entries: FaqEntry[]): string {
+  return entries.map((entry) => `Q : ${entry.question}\nR : ${entry.answer}`).join('\n\n')
 }
 
 /**
@@ -70,8 +70,11 @@ function referenceAnswers(locale: ChatLocale): string {
   return Array.from(themes).map(([theme, block]) => `### ${theme}\n${block.join('\n\n')}`).join('\n\n')
 }
 
-/** Texte complet de la base, dans la langue demandée. */
-export function chatKnowledge(locale: ChatLocale): string {
+/**
+ * Texte complet de la base, dans la langue demandée. `faq` : la FAQ publiée
+ * (lib/cms/faq.ts), le fichier local par défaut.
+ */
+export function chatKnowledge(locale: ChatLocale, faq: FaqEntry[] = FAQ_ENTRIES[locale]): string {
   const heading = locale === 'en'
     ? {
         solutions: '## CIPA solutions',
@@ -84,7 +87,7 @@ export function chatKnowledge(locale: ChatLocale): string {
     heading.solutions,
     solutions(locale),
     heading.faq,
-    faq(locale),
+    faqText(faq),
     heading.reference,
     referenceAnswers(locale),
   ].join('\n\n')

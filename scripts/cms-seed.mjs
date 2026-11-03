@@ -10,7 +10,8 @@
  * (jeton « Editor » : sanity.io/manage > le projet > API > Tokens).
  *
  * `createIfNotExists` : un document déjà présent n'est jamais écrasé. Relancer
- * le script après des modifications faites dans le Studio ne les perd pas.
+ * le script après des modifications faites dans le Studio ne les perd pas. Seul
+ * complément : l'identifiant pour l'assistant d'une question qui n'en a pas.
  *
  * Node 22.18 ou plus : le script lit directement les fichiers TypeScript du
  * site (types retirés par Node, alias `@/` résolu par cms-alias.mjs). Les
@@ -62,6 +63,7 @@ async function faqs() {
   return FAQ_ENTRIES.fr.map((entry, i) => ({
     _id: `faq-${slug(entry.question).slice(0, 60).replace(/-$/, '')}`,
     _type: 'faq',
+    key: entry.id,
     question: localeString(entry.question, FAQ_ENTRIES.en[i].question),
     answer: localeText(entry.answer, FAQ_ENTRIES.en[i].answer),
     order: (i + 1) * 10,
@@ -112,7 +114,16 @@ async function main() {
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mutations: docs.map((doc) => ({ createIfNotExists: doc })) }),
+      body: JSON.stringify({
+        mutations: [
+          ...docs.map((doc) => ({ createIfNotExists: doc })),
+          // Questions importées avant l'identifiant pour l'assistant : on le
+          // complète, sans toucher au reste.
+          ...docs
+            .filter((doc) => doc._type === 'faq' && doc.key)
+            .map((doc) => ({ patch: { id: doc._id, setIfMissing: { key: doc.key } } })),
+        ],
+      }),
     },
   )
   const body = await response.json().catch(() => null)
@@ -122,7 +133,7 @@ async function main() {
   }
   const created = (body?.results ?? []).filter((result) => result.operation === 'create').length
   console.log(`\nImport terminé dans ${projectId}/${dataset} (transaction ${body?.transactionId}) : ${created} document(s) créé(s).`)
-  console.log('Les documents qui existaient déjà n’ont pas été modifiés.')
+  console.log('Les documents qui existaient déjà n’ont pas été écrasés (seul un identifiant pour l’assistant manquant est complété).')
 }
 
 main().catch((error) => {

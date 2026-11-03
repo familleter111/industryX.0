@@ -18,6 +18,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 
+import { loadFaq } from '@/lib/cms/faq'
 import { azureConfig, AzureError, streamAzure } from '@/lib/chat/azure'
 import type { ChatLocale } from '@/lib/chat/config'
 import { spamReason } from '@/lib/chat/guard'
@@ -34,6 +35,7 @@ import {
   signReply,
   supportsServerFallback,
 } from '@/lib/chat/server'
+import type { FaqEntry } from '@/lib/data/faq'
 import { clientIp, createRateLimiter } from '@/lib/server/rateLimit'
 
 export const runtime = 'nodejs'
@@ -66,6 +68,23 @@ const MAX_BODY_BYTES = 32 * 1024
 const FALLBACK_TEXT: Record<ChatLocale, string> = {
   fr: 'Je ne peux pas répondre à cette question. Notre équipe peut vous aider via le formulaire de contact.',
   en: 'I can’t answer that question. Our team can help you through the contact form.',
+}
+
+/**
+ * FAQ publiée dans le CMS, pour la base de connaissances (lib/cms/faq.ts ;
+ * repli : le fichier local). La route est dynamique, donc sans cache de
+ * fetch : la FAQ est gardée 5 minutes en mémoire plutôt que relue à chaque
+ * question.
+ */
+const FAQ_TTL_MS = 5 * 60 * 1000
+const faqCache = new Map<ChatLocale, { at: number; faq: Promise<FaqEntry[]> }>()
+
+function publishedFaq(locale: ChatLocale): Promise<FaqEntry[]> {
+  const cached = faqCache.get(locale)
+  if (cached && Date.now() - cached.at < FAQ_TTL_MS) return cached.faq
+  const faq = loadFaq(locale)
+  faqCache.set(locale, { at: Date.now(), faq })
+  return faq
 }
 
 const refuse = (error: string, status: number) => NextResponse.json({ ok: false, error }, { status })
@@ -103,7 +122,8 @@ export async function POST(request: Request) {
   // Compté après tous les contrôles : une requête refusée ne consomme rien.
   if (!quota.take()) return refuse('daily-quota', 429)
 
-  const reply = provider === 'azure' ? azureReply(messages, locale) : anthropicReply(messages, locale)
+  const system = chatSystemPrompt(locale, await publishedFaq(locale))
+  const reply = provider === 'azure' ? azureReply(messages, system) : anthropicReply(messages, system)
 
   const encoder = new TextEncoder()
   const body = new ReadableStream<Uint8Array>({
@@ -158,7 +178,7 @@ type Reply = { text: AsyncIterable<string>; refused: () => Promise<boolean>; abo
 /** Réponses courtes demandées par les consignes ; la marge couvre la réflexion du modèle. */
 const MAX_OUTPUT_TOKENS = 1500
 
-function anthropicReply(messages: Turn[], locale: ChatLocale): Reply {
+function anthropicReply(messages: Turn[], system: string): Reply {
   const model = process.env.CHAT_MODEL?.trim() || DEFAULT_MODEL
   const stream = new Anthropic().beta.messages.stream({
     model,
@@ -172,7 +192,7 @@ function anthropicReply(messages: Turn[], locale: ChatLocale): Reply {
       : {}),
     // Consignes + base de connaissances : identiques à chaque question,
     // donc mises en cache par l'API.
-    system: [{ type: 'text', text: chatSystemPrompt(locale), cache_control: { type: 'ephemeral' } }],
+    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
     messages,
   })
   return {
@@ -186,13 +206,13 @@ function anthropicReply(messages: Turn[], locale: ChatLocale): Reply {
   }
 }
 
-function azureReply(messages: Turn[], locale: ChatLocale): Reply {
+function azureReply(messages: Turn[], system: string): Reply {
   const controller = new AbortController()
   const outcome = { refused: false }
   // Consignes identiques à chaque question : Azure met le préfixe en cache seul.
   const text = streamAzure(
     azureConfig()!,
-    { system: chatSystemPrompt(locale), messages, maxTokens: MAX_OUTPUT_TOKENS, signal: controller.signal },
+    { system, messages, maxTokens: MAX_OUTPUT_TOKENS, signal: controller.signal },
     outcome,
   )
   return { text, refused: async () => outcome.refused, abort: () => controller.abort() }
