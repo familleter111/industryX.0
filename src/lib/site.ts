@@ -16,6 +16,16 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.indust
 )
 
 /**
+ * Préversion : déploiement d'une branche avant sa fusion dans main
+ * (.github/workflows/preview.yml, NEXT_PUBLIC_SITE_ENV=preview). Rien n'y est
+ * indexé (robots.txt, en-tête X-Robots-Tag de next.config.mjs) et un badge la
+ * signale (components/layout/PreviewBadge). Figé au build.
+ */
+export function isPreview(): boolean {
+  return process.env.NEXT_PUBLIC_SITE_ENV === 'preview'
+}
+
+/**
  * Identité de marque, pour les moteurs de recherche.
  *
  * « Industry X.0 » est aussi un terme générique du secteur : seul, il ne

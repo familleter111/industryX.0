@@ -22,6 +22,13 @@ const SECURITY_HEADERS = [
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
 ]
 
+// Préversion (.github/workflows/preview.yml) : aucune page indexée, même
+// liée depuis ailleurs ; robots.txt la ferme aussi (src/app/robots.ts).
+const PREVIEW = process.env.NEXT_PUBLIC_SITE_ENV === 'preview'
+const HEADERS = PREVIEW
+  ? [...SECURITY_HEADERS, { key: 'X-Robots-Tag', value: 'noindex, nofollow' }]
+  : SECURITY_HEADERS
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Ne pas annoncer la pile technique dans chaque réponse.
@@ -34,7 +41,7 @@ const nextConfig = {
     SANITY_DATASET: process.env.SANITY_DATASET ?? '',
   },
   async headers() {
-    return [{ source: '/:path*', headers: SECURITY_HEADERS }]
+    return [{ source: '/:path*', headers: HEADERS }]
   },
   // Les événements partent vers /ingest sur notre domaine, que Next relaie à
   // PostHog : les bloqueurs de publicité ne coupent pas un appel au site.

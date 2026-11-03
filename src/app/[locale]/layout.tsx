@@ -7,6 +7,7 @@ import '@/styles/globals.css'
 
 import AnalyticsProvider from '@/components/analytics/AnalyticsProvider'
 import Navbar from '@/components/layout/Navbar'
+import PreviewBadge from '@/components/layout/PreviewBadge'
 import JsonLd from '@/components/seo/JsonLd'
 import { isLocale, routing } from '@/i18n/routing'
 import { organizationSchema } from '@/lib/seo/schema'
@@ -96,13 +97,8 @@ export default function RootLayout({
             renvoient par son @id (lib/seo/schema.ts). */}
         <JsonLd data={organizationSchema()} />
         {/* La Navbar etait importee et rendue a la main dans les quatorze
-            pages : elle vit ici, une seule fois.
-
-            Le Footer, lui, reste au niveau des pages : huit d'entre elles le
-            veulent en version complete et six en version compacte. Le
-            remonter demanderait soit de le rendre client pour qu'il lise la
-            route, soit de reorganiser app/ en groupes de routes — deux prix
-            plus eleves que le gain. */}
+            pages : elle vit ici, une seule fois. Le Footer, lui, reste au
+            niveau des pages. */}
         {/* Le fournisseur transmet la langue aux composants clients
             (useLocale, Link localisé). Aucun message : les textes sont dans
             les composants. */}
@@ -110,6 +106,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <AnalyticsProvider locale={locale} />
+          <PreviewBadge locale={locale} />
         </NextIntlClientProvider>
       </body>
     </html>

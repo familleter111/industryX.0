@@ -39,6 +39,11 @@ npm run test:watch  # Vitest en continu
 Les trois tournent en CI (`.github/workflows/ci.yml`) sur chaque pull request
 et chaque push hors de `main`, suivis de `npm run build`.
 
+Déploiement : `main` part en production sur Azure (`deploy.yml`). Une pull
+request vers `main` part en **préversion** sur l'emplacement `staging`
+(`preview.yml`) : jamais indexée, signalée par un badge, sans CRM. Mise en
+route : [`docs/preview.md`](docs/preview.md).
+
 `rollup` est un alias de `@rollup/wasm-node` (voir package.json) : la version
 native est bloquée par le contrôle d'applications de Windows, la version
 WebAssembly tourne partout.
