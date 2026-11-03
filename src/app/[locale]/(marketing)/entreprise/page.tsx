@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
+import { Link, homeAnchorHref } from '@/i18n/navigation'
 import { motion } from 'framer-motion'
 import { ArrowRight, BarChart3, Database, Settings, Users } from 'lucide-react'
 
@@ -9,6 +9,7 @@ import { fadeUp, staggerContainer, viewport } from '@/lib/motion'
 import styles from './mission.module.css'
 import Footer from '@/components/layout/Footer'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 /* ============================================================
    DONNÉES
@@ -1296,7 +1297,7 @@ function HorizonSection() {
               className="mt-[clamp(1.75rem,4vh,3rem)] flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             >
               <Link
-                href={{ pathname: '/', hash: 'solutions' }}
+                href={homeAnchorHref(ROUTES.cipa)}
                 className="group inline-flex items-center justify-center gap-3 rounded-[6px] bg-gold px-7 py-4 text-[14px] font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 sm:text-[15px]"
               >
                 {t.discover}
@@ -1309,7 +1310,7 @@ function HorizonSection() {
               </Link>
 
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 className="group inline-flex items-center justify-center gap-3 rounded-[6px] border border-cream-deep bg-white px-7 py-4 text-[14px] font-semibold text-[#111827] transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 sm:text-[15px]"
               >
                 {t.talk}

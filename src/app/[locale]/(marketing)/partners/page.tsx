@@ -5,6 +5,7 @@ import PartnersOrbit from '@/components/sections/PartnersOrbit'
 import Footer from '@/components/layout/Footer'
 import Reveal from '@/components/ui/Reveal'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 /* ============================================================
    DONNÉES
@@ -92,7 +93,7 @@ export default function PartnersPage() {
               </div>
 
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 className="group mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-[#0C0D12] shadow-[0_14px_36px_rgba(218,162,80,0.25)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
               >
                 {t.cta}

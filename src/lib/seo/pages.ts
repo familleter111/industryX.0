@@ -80,12 +80,12 @@ const STATIC_PAGES: Record<string, Bilingual<PageSeo>> = {
     fr: {
       title: 'Demander une démo du logiciel qualité industriel',
       description:
-        'Parlons de vos opérations : un expert Industry X.0 vous présente CIPA lors d’une démo de 45 minutes adaptée à votre secteur. Réponse sous 24 h, sans engagement.',
+        'Parlons de vos opérations : un expert Industry X.0 vous présente CIPA lors d’une démo de 45 minutes adaptée à votre secteur. Sans engagement, demandez-la ici.',
     },
     en: {
       title: 'Book a demo of our industrial quality software',
       description:
-        'Let’s talk about your operations: an Industry X.0 expert walks you through CIPA in a 45-minute demo tailored to your industry. We reply within 24 hours.',
+        'Let’s talk about your operations: an Industry X.0 expert walks you through CIPA in a 45-minute demo tailored to your industry. No commitment: book it here.',
     },
   },
   '/privacy': {

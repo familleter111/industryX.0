@@ -47,7 +47,7 @@ const FUNCTION_WORDS =
   /\b(les|des|vos|nous|votre|pour|avec|dans|une|sur|est|sont|aux|du|au|et|ou|qui|que|pas|plus|chaque|notre|nos|vous|cette|ces|leur|leurs)\b/gi
 // Noms propres et adresses : français par nature, pas des oublis de traduction.
 const ALLOWED =
-  /^(Médis|Ministère de la Santé Publique.*|Municipalité|Neapolis Pharma|Rose Blanche Group|Kilani Groupe|Cité les pins,?( Tunis 1053, Tunisia)?|Tunis 1053|Français|Startup Act.*|© 2026.*|Industry X\.0, Cité les pins.*)$/
+  /^(Médis|Ministère de la Santé Publique.*|Municipalité|Neapolis Pharma|Rose Blanche Group|Kilani Groupe|Cité Les Pins,?( 1053 Tunis, Tunisia)?|1053 Tunis|Français|Startup Act.*|© 2026.*|Industry X\.0, Cité Les Pins.*)$/
 
 const decode = (s) =>
   s

@@ -12,6 +12,7 @@
     "gen:chatbot-base": "node scripts/gen-chatbot-base.mjs",
     "check:i18n": "node scripts/check-i18n.mjs",
     "audit:seo": "node scripts/seo-audit.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

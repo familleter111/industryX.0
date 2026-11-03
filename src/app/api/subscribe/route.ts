@@ -70,7 +70,7 @@ export async function POST(request: Request) {
       phone: '',
       company,
       industry: '',
-      message: 'Inscription aux guides & insights',
+      message: 'Inscription aux guides & analyses',
       consent,
       source,
       ...leadAttribution(payload),

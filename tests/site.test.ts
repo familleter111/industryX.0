@@ -6,7 +6,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
 import { pageMetadata } from '@/lib/seo/metadata'
-import { SITE_URL, publicPaths } from '@/lib/site'
+import { NOINDEX_PATHS, SITE_URL, publicPaths } from '@/lib/site'
 
 const APP = path.resolve(__dirname, '../src/app/[locale]')
 
@@ -28,8 +28,10 @@ function staticPagesOnDisk(dir = APP, prefix = ''): string[] {
 }
 
 describe('publicPaths', () => {
-  it('liste chaque page statique de src/app', () => {
-    expect(publicPaths()).toEqual(expect.arrayContaining(staticPagesOnDisk()))
+  it('liste chaque page statique de src/app, sauf les pages noindex', () => {
+    const indexable = staticPagesOnDisk().filter((p) => !NOINDEX_PATHS.includes(p))
+    expect(publicPaths()).toEqual(expect.arrayContaining(indexable))
+    for (const p of NOINDEX_PATHS) expect(publicPaths()).not.toContain(p)
   })
 
   it('ne contient ni doublon ni /about', () => {

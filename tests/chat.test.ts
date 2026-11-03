@@ -284,7 +284,7 @@ describe('réponses prêtes, sans IA', () => {
     ['Are you hiring?', 'en', 'resume'],
     ['Quel est votre numéro de téléphone ?', 'fr', '+216 51 006 104'],
     ['Votre adresse mail ?', 'fr', 'hello@industryx0.pro'],
-    ['Où êtes-vous situés ?', 'fr', 'Cité les pins'],
+    ['Où êtes-vous situés ?', 'fr', 'Cité Les Pins'],
     ['Where is your office?', 'en', 'Tunisia'],
     ['Vos coordonnées svp', 'fr', 'Téléphone'],
     ['Présentez-moi Industry X.0', 'fr', '2019'],

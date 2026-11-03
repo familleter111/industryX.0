@@ -14,6 +14,7 @@ import LegalDocument, {
 } from '@/features/legal/LegalDocument'
 import { gaEnabled } from '@/lib/analytics/ga'
 import { chatAiEnabled } from '@/lib/chat/config'
+import { postalAddress } from '@/lib/data/contact'
 import type { Locale } from '@/lib/i18n'
 import { seoMetadata } from '@/lib/seo/metadata'
 
@@ -24,7 +25,12 @@ import { seoMetadata } from '@/lib/seo/metadata'
  *   - formulaire de contact : champs et livraison de lib/leads/ (tableur,
  *     CRM, webhook d'automatisation, email de secours Resend) ;
  *   - inscription aux guides : app/api/subscribe ;
- *   - chat : réponses générées dans le navigateur, rien n'est envoyé ;
+ *   - chat : sans IA, réponses générées dans le navigateur ; avec IA
+ *     (NEXT_PUBLIC_CHAT_AI=on), messages relayés par /api/chat vers Azure
+ *     OpenAI, sans conservation (lib/chat/, docs/chatbot.md) ;
+ *   - stockage navigateur : sessionStorage (conversation du chat, source de
+ *     la visite en cours) et localStorage (taille de la fenêtre du chat,
+ *     PostHog après consentement) ;
  *   - mesure d'audience PostHog (lib/analytics/), soumise à consentement.
  * Toute évolution de ces traitements doit être reportée ici.
  *
@@ -34,7 +40,19 @@ import { seoMetadata } from '@/lib/seo/metadata'
  * fait foi.
  */
 
-const PRIVACY_UPDATED = { fr: '19 octobre 2026', en: 'October 19, 2026' }
+/*
+ * L1-03 — TODO(À CONFIRMER, relecture référent données) avant publication :
+ *   - loi applicable : loi organique n° 2004-63 (INPDP) et RGPD pour les
+ *     personnes situées dans l'UE — formulation en section « Vos droits » ;
+ *   - durée de conservation des demandes de contact (3 ans proposés) ;
+ *   - lieu d'hébergement du serveur et du tableur des demandes (non affiché :
+ *     « le serveur qui fait fonctionner le site ») ;
+ *   - région de la ressource Azure OpenAI du chat et rétention éventuelle de
+ *     Microsoft (surveillance des abus) — non affichées ;
+ *   - délai de réponse aux demandes d'exercice des droits (30 jours affichés) ;
+ *   - voies de réclamation (INPDP ; autorité du pays dans l'UE).
+ */
+const PRIVACY_UPDATED = { fr: '28 octobre 2026', en: 'October 28, 2026' }
 
 export function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Metadata {
   return seoMetadata('/privacy', locale)
@@ -71,7 +89,7 @@ function sectionsFr(): LegalSection[] {
             Le site est édité par <strong>Industry X.0</strong>.
           </p>
           <p>
-            <strong>Siège :</strong> Cité les pins, Tunis 1053, Tunisie
+            <strong>Siège :</strong> {postalAddress('fr')}
           </p>
         </>
       ),
@@ -96,7 +114,7 @@ function sectionsFr(): LegalSection[] {
               ],
             ]}
           />
-          <Sub>Inscription aux guides &amp; insights</Sub>
+          <Sub>Inscription aux guides &amp; analyses</Sub>
           <Items
             locale={l}
             items={[
@@ -299,6 +317,15 @@ function sectionsFr(): LegalSection[] {
               ['Consentement', 'cookie ix0_consent : votre réponse au bandeau, 6 mois'],
             ]}
           />
+          <Sub>Stockage dans votre navigateur</Sub>
+          <Items
+            locale={l}
+            items={[
+              ['Assistant de chat', 'la conversation en cours, effacée à la fermeture de l’onglet, et la taille de fenêtre choisie'],
+              ['Source de la visite en cours', 'si vous avez accepté la mesure d’audience, effacée à la fermeture de l’onglet'],
+              ['Mesure d’audience', 'identifiant PostHog, si vous l’avez acceptée'],
+            ]}
+          />
           <Callout tone="success">
             <strong>Aucun cookie publicitaire.</strong> Nous ne mesurons jamais le contenu de vos
             messages ni ce que vous saisissez dans les champs. Vous pouvez changer d’avis à tout
@@ -363,7 +390,7 @@ function sectionsFr(): LegalSection[] {
               ['E-mail', <MailLink key="m" />],
               ['Téléphone', LEGAL_PHONE],
               ['Site', LEGAL_SITE.replace('https://', '')],
-              ['Adresse', 'Cité les pins, Tunis 1053, Tunisie'],
+              ['Adresse', postalAddress('fr')],
             ]}
           />
           <Callout tone="info">
@@ -401,7 +428,7 @@ function sectionsEn(): LegalSection[] {
             The website is published by <strong>Industry X.0</strong>.
           </p>
           <p>
-            <strong>Head office:</strong> Cité les pins, Tunis 1053, Tunisia
+            <strong>Head office:</strong> {postalAddress('en')}
           </p>
         </>
       ),
@@ -426,7 +453,7 @@ function sectionsEn(): LegalSection[] {
               ],
             ]}
           />
-          <Sub>Guides &amp; insights subscription</Sub>
+          <Sub>Guides &amp; analysis subscription</Sub>
           <Items
             locale={l}
             items={[
@@ -611,6 +638,15 @@ function sectionsEn(): LegalSection[] {
               ['Consent', 'ix0_consent cookie: your answer to the banner, 6 months'],
             ]}
           />
+          <Sub>Storage in your browser</Sub>
+          <Items
+            locale={l}
+            items={[
+              ['Chat assistant', 'the current conversation, cleared when you close the tab, and the window size you chose'],
+              ['Source of the current visit', 'if you accepted audience measurement, cleared when you close the tab'],
+              ['Audience measurement', 'PostHog identifier, if you accepted it'],
+            ]}
+          />
           <Callout tone="success">
             <strong>No advertising cookies.</strong> We never measure the content of your messages
             or what you type into form fields. You can change your mind at any time through
@@ -673,7 +709,7 @@ function sectionsEn(): LegalSection[] {
               ['Email', <MailLink key="m" />],
               ['Phone', LEGAL_PHONE],
               ['Website', LEGAL_SITE.replace('https://', '')],
-              ['Address', 'Cité les pins, Tunis 1053, Tunisia'],
+              ['Address', postalAddress('en')],
             ]}
           />
           <Callout tone="info">

@@ -36,6 +36,7 @@ import { ENTIWIN_PATH } from '@/lib/data/entiwin'
 import { Link, homeAnchorHref, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
+import { ROUTES } from '@/lib/routes'
 
 type NavItem = {
   title: string
@@ -68,7 +69,8 @@ const COPY = {
     closeMenu: 'Fermer le menu',
     openChat: 'Ouvrir le chat',
     closeChat: 'Fermer le chat',
-    platform: 'Solution',
+    platform: 'Plateforme',
+    featuredTitle: 'CIPA — Plateforme d’intelligence opérationnelle',
     entiwin: ['Enti Win', 'Évaluation qualité pharmaceutique assistée par IA', 'Nouveau'],
     featured:
       'CIPA capte la donnée terrain, orchestre les processus critiques et met l’intelligence opérationnelle au service des opérations industrielles.',
@@ -84,7 +86,7 @@ const COPY = {
     resources: 'Ressources',
     resourceItems: [
       ['Cas clients', 'Voir comment les industriels utilisent CIPA.'],
-      ['Guides & insights', 'Analyses et excellence opérationnelle.'],
+      ['Guides & analyses', 'Analyses et excellence opérationnelle.'],
       ['FAQ', 'Questions fréquentes sur la plateforme.'],
     ],
     company: 'Société',
@@ -103,7 +105,8 @@ const COPY = {
     closeMenu: 'Close menu',
     openChat: 'Open chat',
     closeChat: 'Close chat',
-    platform: 'Solution',
+    platform: 'Platform',
+    featuredTitle: 'CIPA — Operational Intelligence Platform',
     entiwin: ['Enti Win', 'AI-assisted pharmaceutical quality assessment', 'New'],
     featured:
       'CIPA captures shop-floor data, orchestrates critical processes and puts operational intelligence to work for industrial operations.',
@@ -119,7 +122,7 @@ const COPY = {
     resources: 'Resources',
     resourceItems: [
       ['Customer stories', 'See how manufacturers use CIPA.'],
-      ['Guides & insights', 'Analysis and operational excellence.'],
+      ['Guides & analysis', 'Analysis and operational excellence.'],
       ['FAQ', 'Frequently asked questions about the platform.'],
     ],
     company: 'Company',
@@ -160,9 +163,9 @@ function buildNavGroups(locale: Locale): NavGroup[] {
       id: 'platform',
       label: t.platform,
       featured: {
-        title: 'CIPA — Industrial Intelligence Platform',
+        title: t.featuredTitle,
         description: t.featured,
-        href: '/#solutions',
+        href: ROUTES.cipa,
       },
       // Une entree par page Solution, generee depuis lib/data/platform.ts : le menu
       // et les sept pages ne peuvent pas diverger.
@@ -313,6 +316,13 @@ export default function Navbar() {
     event: React.KeyboardEvent<HTMLButtonElement>,
     label: string
   ) => {
+    // Panneau ouvert : Tab y entre. Il est monté ailleurs dans le DOM, la
+    // tabulation naturelle le sauterait (L1-13).
+    if (event.key === 'Tab' && !event.shiftKey && activeMenu === label && panelLinks().length > 0) {
+      event.preventDefault()
+      focusPanelLink(0)
+      return
+    }
     if (event.key !== 'ArrowDown') return
     event.preventDefault()
     if (activeMenu === label) {
@@ -327,6 +337,25 @@ export default function Navbar() {
     const links = panelLinks()
     if (links.length === 0) return
     const current = links.indexOf(document.activeElement as HTMLAnchorElement)
+
+    // Tab depuis le dernier lien (ou Maj+Tab depuis le premier) : retour aux
+    // déclencheurs, au suivant (ou au sien), panneau refermé.
+    if (event.key === 'Tab' && activeMenu) {
+      const ids = navGroups.map((group) => group.id)
+      const here = ids.indexOf(activeMenu)
+      if (!event.shiftKey && current === links.length - 1) {
+        const next = ids[here + 1]
+        if (next) {
+          event.preventDefault()
+          triggerRefs.current[next]?.focus()
+          setActiveMenu(null)
+        }
+      } else if (event.shiftKey && current === 0) {
+        event.preventDefault()
+        closeMenu(activeMenu)
+      }
+      return
+    }
 
     switch (event.key) {
       case 'ArrowDown':
@@ -505,7 +534,7 @@ export default function Navbar() {
             <div className="hidden items-center gap-3 lg:flex xl:gap-4">
               {/* CTA */}
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 className="group inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gray-900 px-4 py-2.5 text-[13px] xl:px-5 font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.12)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
               >
                 {t.cta}
@@ -529,7 +558,7 @@ export default function Navbar() {
                     className="group flex items-center gap-2.5 rounded-full border border-stone-200 bg-white px-3.5 py-2 shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-300 hover:border-gold/35 hover:bg-white"
                   >
                     <div className="relative h-4 w-4 overflow-hidden rounded-full">
-                      <Image src={language.flag} alt="" fill sizes="16px" className="object-cover" />
+                      <Image src={language.flag} alt={language.name} fill sizes="16px" className="object-cover" />
                     </div>
                     <span className="text-[13px] font-semibold tracking-[-0.01em] text-stone-700">
                       {language.short}
@@ -773,7 +802,7 @@ export default function Navbar() {
 
               {/* BOUTON D'APPEL À L'ACTION MOBILE (AJOUTÉ) */}
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 onClick={() => setMobileOpen(false)}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-3.5 text-[14px] font-semibold text-white shadow-md transition-all hover:bg-black"
               >

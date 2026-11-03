@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { useRef, useState, type KeyboardEvent } from 'react'
+import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { CheckCircle2, ChevronRight } from 'lucide-react'
@@ -11,7 +11,7 @@ import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
 import AppScreenPlaceholder from '@/components/ui/AppScreenPlaceholder'
-import { featureTabs } from '@/lib/data/features'
+import { featureTabs, type FeatureTab } from '@/lib/data/features'
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
 
 const COPY = {
@@ -20,12 +20,14 @@ const COPY = {
     lead: 'Une plateforme unique pour piloter vos audits, inspections, contrôles et actions d’amélioration.',
     tabs: 'Usages de la plateforme',
     more: 'Découvrir la fonctionnalité',
+    illustration: 'Illustration — valeurs d’exemple',
   },
   en: {
     title: 'Everything you need to run your industrial operations',
     lead: 'One platform to manage your audits, inspections, checks and improvement actions.',
     tabs: 'Platform use cases',
     more: 'Explore the feature',
+    illustration: 'Illustration — sample values',
   },
 }
 
@@ -44,14 +46,31 @@ const colors = {
 /** Temps d'affichage d'un usage avant le suivant. */
 const AUTOPLAY_MS = 7000
 
+const tabId = (id: string) => `usage-tab-${id}`
+const panelId = (id: string) => `usage-panel-${id}`
+
 /* ─────────────────────────── COMPONENT ─────────────────────────── */
+
+/**
+ * Onglets des usages de CIPA (L1-06).
+ *
+ * Une seule source par onglet : l'objet `FeatureTab` (lib/data/features.ts)
+ * porte titre, texte, puces, capture, alt et lien. L'état se réduit à
+ * l'index actif ; tout l'affichage en découle, sans copie de contenu.
+ *
+ * Motif ARIA tablist / tab / tabpanel : flèches gauche-droite, Début et Fin
+ * déplacent le focus et activent l'onglet ; un seul onglet est dans l'ordre
+ * de tabulation. Les six panneaux sont rendus côté serveur (règle 5), les
+ * inactifs portent `hidden` : leur texte est dans le HTML, leur image ne se
+ * charge qu'à l'affichage.
+ */
 export default function CasesSection({
   availableScreenshots = [],
 }: {
   /**
-   * Onglets dont la capture existe dans public/screenshots, releves par la
-   * page cote serveur. Les autres affichent directement l'ecran schematique :
-   * on ne demande pas au navigateur un fichier dont on sait qu'il manque.
+   * Onglets dont la capture existe dans public/, relevés par la page côté
+   * serveur. Les autres affichent directement l'écran schématique : on ne
+   * demande pas au navigateur un fichier dont on sait qu'il manque.
    */
   availableScreenshots?: string[]
 }) {
@@ -59,9 +78,10 @@ export default function CasesSection({
   const t = useCopy(COPY)
   const FEATURE_TABS = featureTabs(useCurrentLocale())
   const [activeTab, setActiveTab] = useState(0)
-  // Filet de securite : une capture qui echoue malgre tout bascule elle aussi
+  // Filet de sécurité : une capture qui échoue malgré tout bascule elle aussi
   // sur le placeholder.
   const [failed, setFailed] = useState<Record<string, true>>({})
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   /* Défilement automatique des usages, en boucle. En pause quand le
      visiteur survole ou parcourt au clavier les onglets ou la carte, et
@@ -79,10 +99,23 @@ export default function CasesSection({
   }
   const advance = () => setActiveTab((current) => (current + 1) % FEATURE_TABS.length)
 
-  const active = FEATURE_TABS[activeTab]
-  const Icon = active.icon
-  const showPlaceholder =
-    !availableScreenshots.includes(active.id) || failed[active.id] === true
+  const select = (index: number, focus = false) => {
+    setActiveTab(index)
+    if (focus) tabRefs.current[index]?.focus()
+  }
+
+  const onTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const last = FEATURE_TABS.length - 1
+    const target = {
+      ArrowRight: activeTab === last ? 0 : activeTab + 1,
+      ArrowLeft: activeTab === 0 ? last : activeTab - 1,
+      Home: 0,
+      End: last,
+    }[event.key]
+    if (target === undefined) return
+    event.preventDefault()
+    select(target, true)
+  }
 
   return (
     <Section
@@ -99,9 +132,6 @@ export default function CasesSection({
         />
       }
     >
-      {/* ─── BACKGROUND — mesh animé (identique au Hero) ─── */}
-
-
         {/* ─── HEADER ─── */}
         <motion.div
           variants={m.fadeUp}
@@ -140,7 +170,7 @@ export default function CasesSection({
           viewport={m.viewport}
           className="mt-4 flex w-full justify-between gap-2 overflow-x-auto pb-1 md:flex-wrap md:justify-center lg:mt-5 lg:flex-nowrap lg:justify-between"
           style={{ scrollbarWidth: 'none' }}
-          role="group"
+          role="tablist"
           aria-label={t.tabs}
           {...hold}
         >
@@ -149,24 +179,29 @@ export default function CasesSection({
             const isActive = activeTab === index
             return (
               <motion.button
-                key={index}
+                key={item.id}
+                ref={(el) => {
+                  tabRefs.current[index] = el
+                }}
                 type="button"
-                onClick={() => setActiveTab(index)}
+                role="tab"
+                id={tabId(item.id)}
+                aria-controls={panelId(item.id)}
+                aria-selected={isActive}
+                tabIndex={isActive ? 0 : -1}
+                onClick={() => select(index)}
+                onKeyDown={onTabKeyDown}
                 /*
-                 * Sous 768 px le libelle passe en `hidden` : il ne reste que
-                 * l'icone, et six pastilles identiques sans nom. `title` ne
-                 * remplace pas un nom accessible — il n'apparait pas au toucher
-                 * et les lecteurs d'ecran ne le lisent pas tous. `aria-label`
-                 * porte le nom a toutes les tailles, `aria-pressed` dit lequel
-                 * des six est actif, ce que la seule couleur disait jusqu'ici.
+                 * Sous 768 px le libellé passe en `hidden` : il ne reste que
+                 * l'icône. `aria-label` porte le nom à toutes les tailles,
+                 * `title` le montre au survol.
                  */
                 aria-label={item.label}
-                aria-pressed={isActive}
                 title={item.label}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                className="group relative flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-xl border px-3 py-2 sm:px-4 text-sm font-semibold transition-colors duration-300"
+                className="group relative flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-xl border px-3 py-2 sm:px-4 text-sm font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
                 style={{
                   background: isActive ? colors.gold : 'rgba(255,255,255,0.80)',
                   borderColor: isActive ? colors.gold : colors.border,
@@ -177,7 +212,7 @@ export default function CasesSection({
                   backdropFilter: 'blur(10px)',
                 }}
               >
-                <TabIcon size={16} className="shrink-0" />
+                <TabIcon size={16} className="shrink-0" aria-hidden="true" />
                 <span className="hidden md:inline">{item.label}</span>
                 {isActive && (
                   <AutoplayTimer
@@ -193,147 +228,184 @@ export default function CasesSection({
           })}
         </motion.div>
 
-        {/* ─── CONTENT CARD ─── */}
+        {/* ─── PANNEAUX — tous dans le HTML, un seul visible ─── */}
         <div ref={cardRef} className="mt-4 lg:mt-5" {...hold}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="overflow-hidden rounded-[2rem]"
-              style={{
-                background: colors.surface,
-                border: `1px solid ${colors.border}`,
-              }}
-            >
-              <div className="grid lg:grid-cols-2">
-
-                {/* LEFT — Texte */}
-                <div className="p-5 lg:p-6">
-                  {/* Icon badge */}
-                  <div
-                    className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl"
-                    style={{ background: colors.goldBg, border: `1px solid ${colors.goldBdr}` }}
-                  >
-                    <Icon size={22} style={{ color: colors.gold }} />
-                  </div>
-
-                  <h3
-                    className="text-xl font-extrabold tracking-[-0.03em]"
-                    style={{ color: colors.text }}
-                  >
-                    {active.title}
-                  </h3>
-
-                  <p
-                    className="mt-2 text-sm leading-relaxed"
-                    style={{ color: colors.muted }}
-                  >
-                    {active.description}
-                  </p>
-
-                  {/* Badge, optionnel : porte par la donnee de l'onglet */}
-                  {active.badge && (
-                  <div
-                    className="mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-semibold"
-                    style={{
-                      background: 'rgba(34,197,94,0.08)',
-                      border: '1px solid rgba(34,197,94,0.18)',
-                      color: 'rgb(22 163 74)', // green-600
-                    }}
-                  >
-                    <CheckCircle2 size={16} />
-                    {active.badge}
-                  </div>
-                  )}
-
-                  {/* Benefits grid */}
-                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                    {active.bullets.map((benefit, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2.5 rounded-xl p-2"
-                        style={{
-                          background: 'rgba(15,23,42,0.03)',
-                          border: `1px solid ${colors.border}`,
-                        }}
-                      >
-                        <CheckCircle2
-                          size={18}
-                          style={{ color: colors.gold }}
-                        />
-                        <span
-                          className="text-sm font-medium"
-                          style={{ color: colors.text }}
-                        >
-                          {benefit}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA link */}
-                  <Link
-                    href={active.href}
-                    className="mt-4 flex items-center gap-2 text-sm font-semibold transition-all duration-300 hover:gap-3"
-                    style={{ color: colors.gold }}
-                  >
-                    {t.more}
-                    <ChevronRight size={18} />
-                  </Link>
-                </div>
-
-                {/* RIGHT — Mockup tablette (paysage, ratio iPad 4:3) */}
-                <div
-                  className="relative flex items-center justify-center overflow-hidden px-4 py-6 lg:p-6"
-                  style={{
-                    borderLeft: `1px solid ${colors.border}`,
-                    background:
-                      `radial-gradient(circle at 50% 28%, ${colors.goldBg}, transparent 60%), linear-gradient(160deg, ${colors.bg} 0%, ${tokens.color.cream.border} 100%)`,
-                  }}
-                >
-                  {/* Cadre tablette : bordure fine et régulière, comme un iPad récent */}
-                  <div className="relative aspect-[4/3] w-full max-w-[440px] rounded-[1.75rem] border border-black/10 bg-gray-900 p-2.5 shadow-[0_30px_80px_rgba(15,23,42,0.30)]">
-                    {/* Boutons : veille et volume sur la tranche du haut */}
-                    <div className="absolute -top-[3px] left-10 h-[3px] w-10 rounded-t-sm bg-gray-900" />
-                    <div className="absolute -top-[3px] right-12 h-[3px] w-8 rounded-t-sm bg-gray-900" />
-                    <div className="absolute -top-[3px] right-[92px] h-[3px] w-8 rounded-t-sm bg-gray-900" />
-
-                    {/* Caméra frontale, dans la bordure */}
-                    <div className="absolute left-1/2 top-[3px] z-20 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-gray-700" />
-
-                    {/* Écran */}
-                    <div className="relative h-full w-full overflow-hidden rounded-[1.2rem] bg-white">
-                      {/* Capture de l'onglet actif, ou l'ecran schematique tant
-                          que le fichier n'existe pas : la page ne montre jamais
-                          d'image cassee. Chaque onglet a sa version tablette
-                          (`tablet` dans features.ts) ; a defaut, la capture
-                          telephone est montree par le haut. */}
-                      {showPlaceholder ? (
-                        <AppScreenPlaceholder className="h-full w-full" />
-                      ) : (
-                        <Image
-                          key={active.id}
-                          src={(active.tablet ?? active.screenshot).src}
-                          alt={active.screenshot.alt}
-                          width={(active.tablet ?? active.screenshot).width}
-                          height={(active.tablet ?? active.screenshot).height}
-                          sizes="(min-width: 640px) 420px, 90vw"
-                          className="h-full w-full object-cover object-top"
-                          onError={() =>
-                            setFailed((prev) => ({ ...prev, [active.id]: true }))
-                          }
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+          {FEATURE_TABS.map((tab, index) => (
+            <UsagePanel
+              key={tab.id}
+              tab={tab}
+              active={index === activeTab}
+              priority={index === 0}
+              reduce={m.reduce}
+              more={t.more}
+              illustration={t.illustration}
+              showPlaceholder={!availableScreenshots.includes(tab.id) || failed[tab.id] === true}
+              onImageError={() => setFailed((prev) => ({ ...prev, [tab.id]: true }))}
+            />
+          ))}
         </div>
     </Section>
+  )
+}
+
+function UsagePanel({
+  tab,
+  active,
+  priority,
+  reduce,
+  more,
+  illustration,
+  showPlaceholder,
+  onImageError,
+}: {
+  tab: FeatureTab
+  active: boolean
+  /** Premier onglet : capture préchargée (visible au premier affichage). */
+  priority: boolean
+  reduce: boolean
+  more: string
+  illustration: string
+  showPlaceholder: boolean
+  onImageError: () => void
+}) {
+  const Icon = tab.icon
+  const image = tab.tablet ?? tab.screenshot
+  return (
+    <motion.div
+      role="tabpanel"
+      id={panelId(tab.id)}
+      aria-labelledby={tabId(tab.id)}
+      hidden={!active}
+      // Apparition à l'activation ; un panneau caché n'a rien à animer.
+      initial={false}
+      animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: reduce ? 0 : 30 }}
+      transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="overflow-hidden rounded-[2rem]"
+      style={{
+        background: colors.surface,
+        border: `1px solid ${colors.border}`,
+      }}
+    >
+      <div className="grid lg:grid-cols-2">
+
+        {/* LEFT — Texte */}
+        <div className="p-5 lg:p-6">
+          {/* Icon badge */}
+          <div
+            className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl"
+            style={{ background: colors.goldBg, border: `1px solid ${colors.goldBdr}` }}
+          >
+            <Icon size={22} style={{ color: colors.gold }} aria-hidden="true" />
+          </div>
+
+          <h3
+            className="text-xl font-extrabold tracking-[-0.03em]"
+            style={{ color: colors.text }}
+          >
+            {tab.title}
+          </h3>
+
+          <p
+            className="mt-2 text-sm leading-relaxed"
+            style={{ color: colors.muted }}
+          >
+            {tab.description}
+          </p>
+
+          {/* Badge, optionnel : porté par la donnée de l'onglet */}
+          {tab.badge && (
+          <div
+            className="mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-semibold"
+            style={{
+              background: 'rgba(34,197,94,0.08)',
+              border: '1px solid rgba(34,197,94,0.18)',
+              color: 'rgb(22 163 74)', // green-600
+            }}
+          >
+            <CheckCircle2 size={16} aria-hidden="true" />
+            {tab.badge}
+          </div>
+          )}
+
+          {/* Benefits grid */}
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {tab.bullets.map((benefit) => (
+              <li
+                key={benefit}
+                className="flex items-center gap-2.5 rounded-xl p-2"
+                style={{
+                  background: 'rgba(15,23,42,0.03)',
+                  border: `1px solid ${colors.border}`,
+                }}
+              >
+                <CheckCircle2
+                  size={18}
+                  style={{ color: colors.gold }}
+                  aria-hidden="true"
+                />
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: colors.text }}
+                >
+                  {benefit}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA link */}
+          <Link
+            href={tab.href}
+            className="mt-4 flex items-center gap-2 text-sm font-semibold transition-all duration-300 hover:gap-3"
+            style={{ color: colors.gold }}
+          >
+            {more}
+            <ChevronRight size={18} aria-hidden="true" />
+          </Link>
+        </div>
+
+        {/* RIGHT — Mockup tablette (paysage, ratio iPad 4:3) */}
+        <figure
+          className="relative m-0 flex flex-col items-center justify-center overflow-hidden px-4 py-6 lg:p-6"
+          style={{
+            borderLeft: `1px solid ${colors.border}`,
+            background:
+              `radial-gradient(circle at 50% 28%, ${colors.goldBg}, transparent 60%), linear-gradient(160deg, ${colors.bg} 0%, ${tokens.color.cream.border} 100%)`,
+          }}
+        >
+          {/* Cadre tablette : bordure fine et régulière, comme un iPad récent */}
+          <div className="relative aspect-[4/3] w-full max-w-[440px] rounded-[1.75rem] border border-black/10 bg-gray-900 p-2.5 shadow-[0_30px_80px_rgba(15,23,42,0.30)]">
+            {/* Boutons : veille et volume sur la tranche du haut */}
+            <div className="absolute -top-[3px] left-10 h-[3px] w-10 rounded-t-sm bg-gray-900" />
+            <div className="absolute -top-[3px] right-12 h-[3px] w-8 rounded-t-sm bg-gray-900" />
+            <div className="absolute -top-[3px] right-[92px] h-[3px] w-8 rounded-t-sm bg-gray-900" />
+
+            {/* Caméra frontale, dans la bordure */}
+            <div className="absolute left-1/2 top-[3px] z-20 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-gray-700" />
+
+            {/* Écran : dimensions réservées par le ratio 4:3 du cadre, donc
+                pas de saut de mise en page pendant le chargement (L1-07). */}
+            <div className="relative h-full w-full overflow-hidden rounded-[1.2rem] bg-white">
+              {showPlaceholder ? (
+                <AppScreenPlaceholder className="h-full w-full" />
+              ) : (
+                <Image
+                  src={image.src}
+                  alt={tab.screenshot.alt}
+                  width={image.width}
+                  height={image.height}
+                  sizes="(min-width: 640px) 420px, 90vw"
+                  priority={priority}
+                  className="h-full w-full object-cover object-top"
+                  onError={onImageError}
+                />
+              )}
+            </div>
+          </div>
+          {/* Règle 3 : maquette aux valeurs inventées, signalée comme telle. */}
+          <figcaption className="mt-3 text-center text-[11px] text-stone-500">{illustration}</figcaption>
+        </figure>
+      </div>
+    </motion.div>
   )
 }

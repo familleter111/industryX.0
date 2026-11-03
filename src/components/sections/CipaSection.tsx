@@ -17,6 +17,7 @@ import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
 import { industryHref } from '@/lib/data/industries/labels'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 const colors = {
   gold: tokens.color.gold.DEFAULT,
@@ -79,7 +80,7 @@ const COPY = {
     bridgeStrong: 'Trois pouvoirs pour reprendre le contrôle.',
     sectorsTitle: 'Conçu pour vos secteurs industriels',
     sectorsLead: 'CIPA s’adapte aux exigences réglementaires et opérationnelles de chaque secteur.',
-    cta: 'Planifier une démo',
+    cta: 'Demander une démo',
     close: 'Fermer',
   },
   en: {
@@ -319,7 +320,7 @@ export default function CipaSection() {
         <div className="mt-6 flex justify-center lg:mt-7">
           <div className="relative">
             <Link
-              href="/contact"
+              href={ROUTES.demo}
               className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-3.5 font-bold transition-all duration-500 hover:-translate-y-0.5"
               style={{
                 background: tokens.color.dark.DEFAULT,

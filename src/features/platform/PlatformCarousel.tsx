@@ -326,6 +326,27 @@ export default function PlatformCarousel({ slug }: { slug: string }) {
           </motion.div>
         </AnimatePresence>
 
+        {/* Texte des autres usages, présent dans le HTML (règle 5) ; `hidden` :
+            ni affiché ni lu en double. */}
+        <div hidden>
+          {slides.map((s, i) =>
+            i === index ? null : (
+              <section key={s.id}>
+                <h3>{s.title}</h3>
+                <p>{s.lead}</p>
+                <ul>
+                  {s.before.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                  {s.points.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            ),
+          )}
+        </div>
+
         <button
           type="button"
           onClick={prev}

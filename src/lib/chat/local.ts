@@ -205,8 +205,8 @@ const contactCard = (locale: ChatLocale) =>
 const demoLine = (locale: ChatLocale) =>
   lang(
     locale,
-    `Pour une démonstration de CIPA : ${site(locale, '/contact')} (réponse sous 24 h ouvrées).`,
-    `To book a CIPA demo: ${site(locale, '/contact')} (reply within one business day).`,
+    `Pour une démonstration de CIPA : ${site(locale, '/contact')}`,
+    `To book a CIPA demo: ${site(locale, '/contact')}`,
   )
 
 /** Dans l'ordre : la première intention reconnue répond. */
@@ -238,8 +238,8 @@ const INFOS: Info[] = [
     reply: (locale) =>
       lang(
         locale,
-        `Vous pouvez nous écrire à ${CONTACT.email} : notre équipe répond sous 24 h ouvrées. Le formulaire de contact est aussi là : ${site(locale, '/contact')}`,
-        `You can email us at ${CONTACT.email}: our team replies within one business day. The contact form is also available: ${site(locale, '/contact')}`,
+        `Vous pouvez nous écrire à ${CONTACT.email}. Le formulaire de contact est aussi là : ${site(locale, '/contact')}`,
+        `You can email us at ${CONTACT.email}. The contact form is also available: ${site(locale, '/contact')}`,
       ),
   },
   {
@@ -368,7 +368,7 @@ export function localReply(userText: string, locale: ChatLocale, faq?: FaqEntry[
   const t = userText.toLowerCase()
   if (locale === 'fr') {
     if (/(demo|démo|rdv|rendez|contact|tester)/.test(t))
-      return "C'est une excellente idée ! Pour réserver une démonstration personnalisée de CIPA, cliquez sur « Demander une démo » dans le menu : notre équipe vous recontacte sous 24 h ouvrées."
+      return "C'est une excellente idée ! Pour réserver une démonstration personnalisée de CIPA, cliquez sur « Demander une démo » dans le menu : notre équipe vous recontacte pour l’organiser."
     if (/(prix|tarif|coût|cout|abonnement)/.test(t))
       return "Nos tarifs s'adaptent à la taille de votre usine et aux modules choisis. Le plus simple est d'en parler lors d'un court échange : demandez une démo depuis le menu."
     if (/(cipa|produit|logiciel|app|solution|fonctionne)/.test(t))
@@ -378,7 +378,7 @@ export function localReply(userText: string, locale: ChatLocale, faq?: FaqEntry[
     return "Merci pour votre message ! Pour une réponse précise, notre équipe vous répond via le formulaire de contact. Puis-je vous aider sur CIPA ou sur une démonstration ?"
   }
   if (/(demo|book|schedule|meeting|contact|test)/.test(t))
-    return 'Great idea! To book a personalized CIPA demo, click “Book a demo” in the menu: our team gets back to you within one business day.'
+    return 'Great idea! To book a personalized CIPA demo, click “Book a demo” in the menu: our team gets back to you to arrange it.'
   if (/(price|pricing|cost|license|subscription)/.test(t))
     return 'Our pricing depends on your plant size and the modules you choose. The easiest way is a short call: book a demo from the menu.'
   if (/(cipa|product|software|app|solution|works|platform)/.test(t))

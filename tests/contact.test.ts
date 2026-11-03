@@ -21,9 +21,9 @@ const VALID = {
 }
 
 let ip = 0
-function post(body: unknown) {
+function post(body: unknown, from?: string) {
   // Une IP par requête : le limiteur (5 envois par IP) ne gêne pas les tests.
-  const headers = { 'content-type': 'application/json', 'x-forwarded-for': `10.0.0.${++ip}` }
+  const headers = { 'content-type': 'application/json', 'x-forwarded-for': from ?? `10.0.0.${++ip}` }
   return POST(
     new Request('http://localhost/api/contact', { method: 'POST', headers, body: JSON.stringify(body) }),
   )
@@ -98,5 +98,37 @@ describe('POST /api/contact', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
     const res = await post(VALID)
     expect(res.status).toBe(500)
+  })
+})
+
+describe('double envoi (L1-09)', () => {
+  it('ne livre qu’une fois la même demande renvoyée, et répond « ok » aux deux', async () => {
+    const body = { ...VALID, email: 'double@usine.tn' }
+    const first = await post(body, '10.9.0.1')
+    const second = await post(body, '10.9.0.1')
+    expect([first.status, second.status]).toEqual([200, 200])
+    expect(appendLead).toHaveBeenCalledOnce()
+  })
+
+  it('ne livre qu’une fois deux envois simultanés (double clic)', async () => {
+    const body = { ...VALID, email: 'clic@usine.tn' }
+    const responses = await Promise.all([post(body, '10.9.0.2'), post(body, '10.9.0.2')])
+    expect(responses.map((r) => r.status)).toEqual([200, 200])
+    expect(appendLead).toHaveBeenCalledOnce()
+  })
+
+  it('laisse renvoyer après un échec', async () => {
+    appendLead.mockRejectedValueOnce(new Error('disque plein'))
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const body = { ...VALID, email: 'retry@usine.tn' }
+    expect((await post(body, '10.9.0.3')).status).toBe(500)
+    expect((await post(body, '10.9.0.3')).status).toBe(200)
+    expect(appendLead).toHaveBeenCalledTimes(2)
+  })
+
+  it('livre deux demandes différentes du même visiteur', async () => {
+    await post({ ...VALID, email: 'deux@usine.tn' }, '10.9.0.4')
+    await post({ ...VALID, email: 'deux@usine.tn', message: 'Autre besoin : formation des équipes' }, '10.9.0.4')
+    expect(appendLead).toHaveBeenCalledTimes(2)
   })
 })

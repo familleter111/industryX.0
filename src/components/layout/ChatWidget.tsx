@@ -11,6 +11,7 @@ import { CHAT_LIMITS, CHAT_NAME, chatAiEnabled } from '@/lib/chat/config'
 import { prefetchChatFaq } from '@/lib/chat/faq'
 import { MAILTO } from '@/lib/data/contact'
 import { entiwinHref } from '@/lib/data/entiwin'
+import { ROUTES } from '@/lib/routes'
 import {
   isBusy,
   resetChat,
@@ -91,11 +92,15 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const wasOpen = useRef(isOpen)
+  /** Élément qui a ouvert le chat (bulle, bouton de la FAQ…) : le focus y revient à la fermeture. */
+  const opener = useRef<HTMLElement | null>(null)
 
   const { messages, typing: isTyping, streamingId } = chat
 
   useEffect(() => {
     if (!isOpen) return
+    // Relevé avant que le focus passe au champ de saisie.
+    opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     track('chat_opened', { page: window.location.pathname, source })
     // Le visiteur peut écrire tout de suite, sans cliquer dans le champ.
     const focus = setTimeout(() => inputRef.current?.focus(), 250)
@@ -117,10 +122,15 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [isOpen, onClose])
 
-  // Fermeture du widget : la réponse en cours n'a plus de lecteur. Seulement
-  // au passage ouvert → fermé, pas au premier rendu.
+  // Fermeture du widget : la réponse en cours n'a plus de lecteur, et le
+  // focus revient à l'élément qui l'avait ouvert (Échap, croix ou bulle).
+  // Seulement au passage ouvert → fermé, pas au premier rendu.
   useEffect(() => {
-    if (wasOpen.current && !isOpen) stopReply()
+    if (wasOpen.current && !isOpen) {
+      stopReply()
+      if (opener.current?.isConnected && opener.current !== document.body) opener.current.focus()
+      opener.current = null
+    }
     wasOpen.current = isOpen
   }, [isOpen])
 
@@ -321,7 +331,7 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
               className="flex flex-wrap justify-center gap-1.5"
             >
               {/* Le panneau se ferme : il cacherait le formulaire sur téléphone. */}
-              <Link href="/contact" data-cta="chat_demo" onClick={onClose} className={ACTION_CLASS}>
+              <Link href={ROUTES.demo} data-cta="chat_demo" onClick={onClose} className={ACTION_CLASS}>
                 <CalendarCheck size={13} aria-hidden="true" />
                 {ACTIONS.demo[language]}
               </Link>

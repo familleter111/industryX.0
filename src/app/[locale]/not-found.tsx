@@ -67,7 +67,7 @@ export default function NotFound() {
           ))}
         </ul>
       </section>
-      <Footer variant="compact" />
+      <Footer />
     </main>
   )
 }

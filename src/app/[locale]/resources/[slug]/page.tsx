@@ -13,6 +13,7 @@ import SubscribeBand from '@/features/resources/SubscribeBand'
 import { loadGuides } from '@/lib/cms/guides'
 import { categoryLabel, formatGuideDate, type GuideBlock, type GuideLink } from '@/lib/data/guides'
 import type { Locale } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 import { pageMetadata } from '@/lib/seo/metadata'
 import { HOME_CRUMB, articleSchema, breadcrumbSchema } from '@/lib/seo/schema'
 
@@ -24,7 +25,7 @@ const COPY = {
     updated: 'Mis à jour le',
     asideTitle: 'Voir CIPA appliqué à votre contexte',
     asideText: '45 minutes avec un expert, centrées sur vos enjeux et vos processus.',
-    demo: 'Planifier une démo',
+    demo: 'Demander une démo',
     next: ['À lire', 'ensuite'],
   },
   en: {
@@ -187,7 +188,7 @@ export default async function GuidePage({ params }: Params) {
                 aria-hidden="true"
                 className="transition-transform duration-300 group-hover:-translate-x-0.5"
               />
-              Guides & insights
+              {locale === 'en' ? 'Guides & analysis' : 'Guides & analyses'}
             </Link>
             <span className="mx-2" aria-hidden="true">/</span>
             <span>{categoryLabel(guide.category, locale)}</span>
@@ -254,7 +255,7 @@ export default async function GuidePage({ params }: Params) {
               </p>
 
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-[13.5px] font-bold text-[#0C0D12] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
               >
                 {t.demo}

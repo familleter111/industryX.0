@@ -32,6 +32,7 @@ import type { Testimonial } from '@/lib/data/testimonials'
 import { viewport } from '@/lib/motion'
 import Footer from '@/components/layout/Footer'
 import { useCopy } from '@/lib/i18n'
+import { ROUTES } from '@/lib/routes'
 
 /* ============================================================
    DONNÉES
@@ -105,7 +106,7 @@ const COPY = {
     ctaAccent: 'suivante',
     ctaEnd: ' ?',
     ctaText: 'Un expert analyse votre contexte et vous montre concrètement ce que CIPA changerait dans vos opérations.',
-    ctaButton: 'Planifier une démonstration',
+    ctaButton: 'Demander une démo',
   },
   en: {
     reach: ['industrial use cases', 'countries covered', 'industries'],
@@ -360,7 +361,7 @@ function UseCasesScreen() {
               className="mt-[clamp(1.1rem,2.4vh,1.9rem)] flex flex-wrap items-center gap-3.5"
             >
               <Link
-                href="/contact"
+                href={ROUTES.demo}
                 className="group inline-flex items-center gap-2.5 rounded-full bg-[#111827] px-6 py-3.5 text-[14px] font-semibold text-white shadow-[0_14px_36px_rgba(17,24,39,0.18)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
               >
                 {t.demo}
@@ -582,7 +583,7 @@ export default function CustomersView({ testimonials }: { testimonials: Testimon
           </p>
 
           <Link
-            href="/contact"
+            href={ROUTES.demo}
             className="group mt-8 inline-flex items-center gap-2 rounded-full bg-[#111827] px-6 py-3.5 text-[14px] font-semibold text-white shadow-[0_14px_36px_rgba(17,24,39,0.18)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
           >
             {t.ctaButton}
