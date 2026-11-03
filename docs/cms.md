@@ -11,6 +11,7 @@ Projet Sanity : `tudyxwtm`, dataset `production` (organisation `opAnMgqO5`). San
 | Témoignages clients | `testimonial` | `src/lib/cms/testimonials.ts` | accueil, `/customers` | `src/lib/data/testimonials.ts` |
 | Questions fréquentes | `faq` | `src/lib/cms/faq.ts` | accueil (section `#faq` et données FAQPage), assistant de chat | `src/lib/data/faq.ts` |
 | Guides | `guide` | `src/lib/cms/guides.ts` | `/resources`, `/resources/<slug>`, sitemap, images de partage | `src/lib/data/guides.ts`, `guides.en.ts` |
+| Pages d'atterrissage par canal | `landing` | `src/lib/cms/landings.ts` | `/lp/<slug>` (noindex, hors sitemap), image de partage | `src/lib/data/landings.ts` |
 | Textes des pages secteurs | `industry` | `src/lib/cms/industries.ts` | `/industries/<slug>` (les 6 secteurs), titre et description Google | `src/lib/data/industries/` |
 
 Restent dans le code : les pages Solution (`platform.ts`), les textes d'interface (boutons, titres de section) et le reste de la base de l'assistant de chat (faits, réponses de prospection validées).
@@ -21,12 +22,13 @@ Restent dans le code : les pages Solution (`platform.ts`), les textes d'interfac
 studio/                       Sanity Studio : projet séparé (React 19), déployé chez Sanity
   sanity.config.ts            projet, dataset, outils ; secteurs ni créés ni supprimés ici
   sanity.cli.ts               adresse du Studio en ligne (studioHost)
-  schemaTypes/                locale.ts (textes FR / EN), testimonial.ts, faq.ts, guide.ts, industry.ts
+  schemaTypes/                locale.ts (textes FR / EN), testimonial.ts, faq.ts, guide.ts, industry.ts, landing.ts
 src/lib/cms/
   client.ts                   configuration, requête GROQ par fetch, textes bilingues
   testimonials.ts, faq.ts     requête, conversion vers le type du site, repli
   guides.ts                   idem, plus Portable Text ⇄ blocs de la page
   industries.ts               textes d'un secteur, posés sur la page du code
+  landings.ts                 pages d'atterrissage par canal
   seo.ts                      titres, descriptions et liste des pages, CMS compris
 src/app/api/revalidate/route.ts   webhook de publication : rafraîchit les pages
 scripts/cms-seed.mjs          import initial des contenus locaux (npm run cms:seed)
@@ -62,6 +64,15 @@ Ordre au choix (champ « Ordre d'affichage ») ; la première question s'ouvre p
 - **Adresse** (`slug`) : à ne plus changer une fois publiée (liens, référencement).
 - **Minutes de lecture** : vides, elles sont estimées (200 mots par minute).
 - Le Portable Text est converti vers les blocs que la page affiche déjà (`portableTextToBlocks`) ; l'import fait l'inverse (`blocksToPortableText`), et les tests vérifient que l'aller-retour ne perd rien.
+
+### Pages d'atterrissage par canal
+
+Une page par campagne (publication LinkedIn, QR code de salon, spot radio, e-mailing) : `/lp/<adresse>`, avec un message, trois bénéfices, les verbatims **validés** seulement, et un seul bouton (démo, Enti Win ou contact), répété en bas de page. Une page publiée dans le Studio est en ligne sans redéploiement.
+
+- **Lien de campagne** : l'aperçu de la page dans le Studio donne le lien à diffuser, UTM compris (`https://www.industryx0.pro/lp/<adresse>?utm_source=…&utm_medium=…&utm_campaign=…`). Pour un QR code, ce lien ; pour l'anglais, ajouter `/en` avant `/lp`.
+- **Mesure** : la source (UTM, `ref`) et la page d'arrivée sont jointes au lead (`lib/analytics/attribution.ts`) ; les clics du bouton sont suivis (`cta_clicked`, identifiant `landing_<adresse>`, zones `landing_hero` et `landing_closing` ; `entiwin_clicked` vers Enti Win, qui reçoit `utm_content=lp_<adresse>`).
+- **Référencement** : pages en `noindex` et hors sitemap (elles reprennent des contenus du site), mais avec leur titre, leur description et leur image de partage, que LinkedIn ou un e-mail affichent.
+- Deux exemples viennent de l'import : `demo-linkedin` (démo) et `entiwin-salon` (Enti Win). Leurs textes reprennent ce que le site affirme déjà ; à adapter à chaque campagne.
 
 ### Pages secteurs
 
@@ -103,7 +114,7 @@ npm run cms:seed               # liste ce qui serait envoyé, sans rien écrire
 npm run cms:seed -- --write    # crée dans Sanity les documents absents
 ```
 
-24 documents : 9 témoignages, 5 questions, 4 guides, 6 secteurs. Il faut un jeton **Editor** dans `.env.local` (`SANITY_WRITE_TOKEN`, sanity.io/manage > API > Tokens). Le script n'écrase jamais un document existant : on peut le relancer sans perdre les modifications faites dans le Studio. Supprimer le jeton dans Sanity une fois les imports finis ; il ne sert jamais en production.
+26 documents : 9 témoignages, 5 questions, 4 guides, 6 secteurs, 2 pages d'atterrissage. Il faut un jeton **Editor** dans `.env.local` (`SANITY_WRITE_TOKEN`, sanity.io/manage > API > Tokens). Le script n'écrase jamais un document existant : on peut le relancer sans perdre les modifications faites dans le Studio. Supprimer le jeton dans Sanity une fois les imports finis ; il ne sert jamais en production.
 
 ### 5. Déployer le Studio
 
@@ -134,7 +145,7 @@ Sans webhook, une modification publiée apparaît sur le site en une heure au pl
 | HTTP method | POST |
 | HTTP headers | `Authorization` : `Bearer <SANITY_REVALIDATE_SECRET>` |
 
-La route rafraîchit les pages du type publié (`cms:testimonial`, `cms:faq`, `cms:guide`, `cms:industry`). Elle n'existe en ligne qu'une fois cette version du site déployée.
+La route rafraîchit les pages du type publié (`cms:testimonial`, `cms:faq`, `cms:guide`, `cms:industry`, `cms:landing`). Elle n'existe en ligne qu'une fois cette version du site déployée.
 
 ## Ajouter un contenu
 

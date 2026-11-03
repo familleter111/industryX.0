@@ -1,8 +1,8 @@
 /**
  * Titres, descriptions et liste des pages quand une partie du contenu vient
- * du CMS : les guides (tous leurs textes, et les guides créés dans le Studio)
- * et les secteurs (titre et description). Les autres pages gardent la table
- * de lib/seo/pages.ts.
+ * du CMS : les guides (tous leurs textes, et les guides créés dans le Studio),
+ * les secteurs (titre et description) et les pages d'atterrissage. Les autres
+ * pages gardent la table de lib/seo/pages.ts.
  *
  * Utilisé par les métadonnées des pages guides et secteurs, et par les images
  * de partage (app/og).
@@ -12,6 +12,7 @@ import type { Metadata } from 'next'
 
 import { loadGuides } from '@/lib/cms/guides'
 import { loadIndustryText } from '@/lib/cms/industries'
+import { loadLandings } from '@/lib/cms/landings'
 import type { CmsEnv } from '@/lib/cms/client'
 import type { Locale } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo/metadata'
@@ -23,6 +24,11 @@ export async function cmsPageSeo(path: string, locale: Locale, env?: CmsEnv): Pr
   if (section === 'resources' && slug) {
     const guide = (await loadGuides(locale, env)).find((candidate) => candidate.slug === slug)
     return guide && { title: guide.metaTitle, description: guide.metaDescription }
+  }
+
+  if (section === 'lp' && slug) {
+    const page = (await loadLandings(locale, env)).find((candidate) => candidate.slug === slug)
+    return page && { title: page.metaTitle, description: page.metaDescription }
   }
 
   const seo = pageSeo(path, locale)
@@ -41,6 +47,14 @@ export async function cmsSeoMetadata(
 ): Promise<Metadata> {
   const seo = await cmsPageSeo(path, locale)
   return seo ? pageMetadata({ locale, path, ...seo, ...extra }) : {}
+}
+
+/**
+ * Pages d'atterrissage (/lp/<slug>) : hors sitemap (noindex), mais avec leur
+ * image de partage, que les campagnes affichent.
+ */
+export async function cmsLandingPaths(env?: CmsEnv): Promise<string[]> {
+  return (await loadLandings('fr', env)).map((page) => `/lp/${page.slug}`)
 }
 
 /** Toutes les pages publiques, guides du CMS compris (voir publicPaths). */

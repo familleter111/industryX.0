@@ -1,6 +1,6 @@
 /**
  * Importe dans Sanity les contenus encore écrits dans le code (voir docs/cms.md) :
- * témoignages, FAQ, guides et textes des pages sectorielles.
+ * témoignages, FAQ, guides, textes des pages sectorielles et pages d'atterrissage.
  *
  *   npm run cms:seed               # affiche ce qui serait envoyé, sans rien écrire
  *   npm run cms:seed -- --write    # crée dans Sanity les documents absents
@@ -83,16 +83,24 @@ async function industries() {
   return industrySlugs().map((page) => industryDocument(industryData(page, 'fr'), industryData(page, 'en')))
 }
 
+async function landings() {
+  const { landingsFor } = await import('@/lib/data/landings')
+  const { landingDocument } = await import('@/lib/cms/landings')
+  const en = landingsFor('en')
+  return landingsFor('fr').map((page, i) => landingDocument(page, en[i]))
+}
+
 /** Une ligne par document, pour relire avant d'écrire. */
 function describe(doc) {
   if (doc._type === 'testimonial') return `${doc.clientApproved ? 'validé   ' : 'à valider'}  ${doc.company}`
   if (doc._type === 'faq') return doc.question.fr
   if (doc._type === 'guide') return `${doc.date}  ${doc.title.fr}`
+  if (doc._type === 'landing') return `/lp/${doc.slug.current}  (${doc.channel} → ${doc.target})`
   return `/industries/${doc.slug}`
 }
 
 async function main() {
-  const docs = [...(await testimonials()), ...(await faqs()), ...(await guides()), ...(await industries())]
+  const docs = [...(await testimonials()), ...(await faqs()), ...(await guides()), ...(await industries()), ...(await landings())]
 
   for (const doc of docs) console.log(`${doc._id.padEnd(66)} ${describe(doc)}`)
 

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 import { routing } from '@/i18n/routing'
-import { cmsPageSeo, cmsPublicPaths } from '@/lib/cms/seo'
+import { cmsLandingPaths, cmsPageSeo, cmsPublicPaths } from '@/lib/cms/seo'
 import { OG_SIZE, ogEyebrow, ogImageKey } from '@/lib/seo/og'
 import { tokens } from '@/lib/tokens'
 
@@ -33,9 +33,10 @@ const logo = load(new URL('../../../../public/logoCIPA.png', import.meta.url)).t
   return `data:image/png;base64,${btoa(binary)}`
 })
 
-/** La page de l'image, guides du CMS compris ; son titre est celui du CMS. */
+/** La page de l'image, guides et pages d'atterrissage du CMS compris ; son titre est celui du CMS. */
 async function findPage(key: string) {
-  for (const path of await cmsPublicPaths())
+  const paths = [...(await cmsPublicPaths()), ...(await cmsLandingPaths())]
+  for (const path of paths)
     for (const locale of routing.locales)
       if (ogImageKey(path, locale) === key) return { path, locale }
   return undefined
