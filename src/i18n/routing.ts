@@ -23,6 +23,12 @@ export const routing = defineRouting({
   defaultLocale: 'fr',
   localePrefix: 'as-needed',
   localeDetection: false,
+  // Pas d'en-tête HTTP `Link` hreflang : le middleware le construit avec
+  // l'hôte de la requête (localhost, domaine Azure de préversion…), en
+  // contradiction avec la canonical et les hreflang du HTML, posés page par
+  // page sur SITE_URL (lib/seo/metadata.ts) et repris dans le sitemap.
+  // Lighthouse y voyait une canonical « vers une autre version ».
+  alternateLinks: false,
 })
 
 export type Locale = (typeof routing.locales)[number]
