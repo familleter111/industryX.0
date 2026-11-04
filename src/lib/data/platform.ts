@@ -2,7 +2,6 @@ import {
   Activity,
   BarChart3,
   Bell,
-  BrainCircuit,
   CalendarDays,
   Camera,
   ClipboardCheck,
@@ -19,7 +18,6 @@ import {
   PenLine,
   Plug,
   SearchCheck,
-  ShieldCheck,
   TrendingUp,
   Users,
   WifiOff,
@@ -29,6 +27,7 @@ import {
 } from 'lucide-react'
 
 import type { Locale } from '@/i18n/routing'
+import { platformHref, platformMenuEntry } from '@/lib/data/platform-menu'
 
 /**
  * Les sept pages Solution, rangees sous les trois piliers de l'accueil
@@ -128,16 +127,26 @@ const IMAGE_TERRAIN = '/cipa-1-digitalisation-audits-terrain.png'
 const IMAGE_QUALITE = '/cipa-2-gestion-ecarts-qualite.png'
 const IMAGE_PILOTAGE = '/cipa-3-pilotage-performance-ia.png'
 
-export const PLATFORM_PAGES: PlatformPageData[] = [
+/** Une page sans ses champs de menu, repris de platform-menu.ts. */
+type PlatformPageSource = Omit<PlatformPageData, 'menuTitle' | 'menuDescription' | 'icon'>
+
+function withMenu<T extends { slug: string }>(page: T, locale: Locale) {
+  const entry = platformMenuEntry(page.slug)
+  return {
+    ...page,
+    icon: entry.icon,
+    menuTitle: entry.title[locale],
+    menuDescription: entry.description[locale],
+  }
+}
+
+const PAGES_FR: PlatformPageSource[] = [
   /* ---------- Structurer ---------- */
   {
     slug: 'remontee-terrain',
     pillar: 'Structurer',
     name: 'Remontée terrain',
     summary: 'Audits, inspections & contrôles de production',
-    menuTitle: 'Remontée terrain',
-    menuDescription: 'Audits, inspections, checklists et contrôles de production',
-    icon: ClipboardCheck,
     title: 'Capter',
     accent: 'la donnée terrain',
     description:
@@ -249,9 +258,6 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     pillar: 'Structurer',
     name: 'Planification',
     summary: 'Programme d’audit, maintenance & équipements',
-    menuTitle: 'Planification & maintenance',
-    menuDescription: 'Programme d’audit, contrôles de maintenance et équipements',
-    icon: CalendarDays,
     title: 'Planifier',
     accent: 'audits et maintenance',
     description:
@@ -318,9 +324,6 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     pillar: 'Orchestrer',
     name: 'Gestion des écarts',
     summary: 'Déviations, CAPA & réclamations',
-    menuTitle: 'Gestion des écarts',
-    menuDescription: 'Déviations, non-conformités, CAPA et réclamations',
-    icon: Bell,
     title: 'Maîtriser',
     accent: 'chaque écart',
     description:
@@ -404,9 +407,6 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     pillar: 'Orchestrer',
     name: 'Conformité',
     summary: 'Workflows, change control & audit trail',
-    menuTitle: 'Conformité & traçabilité',
-    menuDescription: 'Workflows de validation, change control et audit trail',
-    icon: ShieldCheck,
     title: 'Prouver',
     accent: 'la conformité',
     description:
@@ -492,9 +492,6 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     pillar: 'Piloter',
     name: 'Pilotage',
     summary: 'Tableaux de bord, rapports & amélioration continue',
-    menuTitle: 'Pilotage de la performance',
-    menuDescription: 'Tableaux de bord, rapports automatiques et Pareto',
-    icon: LayoutDashboard,
     title: 'Piloter',
     accent: 'la performance',
     description:
@@ -578,9 +575,6 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     pillar: 'Piloter',
     name: 'Intelligence opérationnelle',
     summary: 'Signaux faibles, cohérence & checklists générées',
-    menuTitle: 'Intelligence opérationnelle',
-    menuDescription: 'Détection des écarts, signaux faibles et checklists générées',
-    icon: BrainCircuit,
     title: 'Anticiper',
     accent: 'les dérives',
     description:
@@ -645,9 +639,6 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
     pillar: 'Piloter',
     name: 'Intégrations',
     summary: 'ERP, MES, BI, organisation & sécurité',
-    menuTitle: 'Intégrations & organisation',
-    menuDescription: 'ERP, MES, GMAO, BI, utilisateurs et sécurité',
-    icon: Plug,
     title: 'Connecter',
     accent: 'votre écosystème',
     description:
@@ -709,6 +700,8 @@ export const PLATFORM_PAGES: PlatformPageData[] = [
   },
 ]
 
+export const PLATFORM_PAGES: PlatformPageData[] = PAGES_FR.map((page) => withMenu(page, 'fr'))
+
 /* ============================================================
    VERSION ANGLAISE
 
@@ -725,8 +718,6 @@ type PageText = Pick<
   PlatformPageData,
   | 'name'
   | 'summary'
-  | 'menuTitle'
-  | 'menuDescription'
   | 'title'
   | 'accent'
   | 'description'
@@ -745,8 +736,6 @@ const EN: Record<string, PageText> = {
   'remontee-terrain': {
     name: 'Shop-floor capture',
     summary: 'Audits, inspections & production checks',
-    menuTitle: 'Shop-floor data capture',
-    menuDescription: 'Audits, inspections, checklists and production checks',
     title: 'Capture',
     accent: 'shop-floor data',
     description:
@@ -841,8 +830,6 @@ const EN: Record<string, PageText> = {
   'planification-maintenance': {
     name: 'Planning',
     summary: 'Audit programme, maintenance & equipment',
-    menuTitle: 'Planning & maintenance',
-    menuDescription: 'Audit programme, maintenance checks and equipment',
     title: 'Plan',
     accent: 'audits and maintenance',
     description:
@@ -898,8 +885,6 @@ const EN: Record<string, PageText> = {
   'gestion-ecarts': {
     name: 'Deviation management',
     summary: 'Deviations, CAPA & complaints',
-    menuTitle: 'Deviation management',
-    menuDescription: 'Deviations, non-conformities, CAPA and complaints',
     title: 'Control',
     accent: 'every deviation',
     description:
@@ -972,8 +957,6 @@ const EN: Record<string, PageText> = {
   'conformite-tracabilite': {
     name: 'Compliance',
     summary: 'Workflows, change control & audit trail',
-    menuTitle: 'Compliance & traceability',
-    menuDescription: 'Approval workflows, change control and audit trail',
     title: 'Prove',
     accent: 'compliance',
     description:
@@ -1046,8 +1029,6 @@ const EN: Record<string, PageText> = {
   'pilotage-performance': {
     name: 'Performance',
     summary: 'Dashboards, reports & continuous improvement',
-    menuTitle: 'Performance management',
-    menuDescription: 'Dashboards, automatic reports and Pareto',
     title: 'Drive',
     accent: 'performance',
     description:
@@ -1120,8 +1101,6 @@ const EN: Record<string, PageText> = {
   'intelligence-operationnelle': {
     name: 'Operational intelligence',
     summary: 'Weak signals, consistency & generated checklists',
-    menuTitle: 'Operational intelligence',
-    menuDescription: 'Deviation detection, weak signals and generated checklists',
     title: 'Anticipate',
     accent: 'drifts',
     description:
@@ -1177,8 +1156,6 @@ const EN: Record<string, PageText> = {
   integrations: {
     name: 'Integrations',
     summary: 'ERP, MES, BI, organization & security',
-    menuTitle: 'Integrations & organization',
-    menuDescription: 'ERP, MES, CMMS, BI, users and security',
     title: 'Connect',
     accent: 'your ecosystem',
     description:
@@ -1232,7 +1209,7 @@ function translate(page: PlatformPageData): PlatformPageData {
   const text = EN[page.slug]
   const { imageAlt, sections, steps, included, ...fields } = text
   return {
-    ...page,
+    ...withMenu(page, 'en'),
     ...fields,
     image: { ...page.image, alt: imageAlt },
     sections: page.sections.map((section) => ({ ...section, ...sections[section.id] })),
@@ -1252,7 +1229,5 @@ export function platformPage(slug: string, locale: Locale = 'fr') {
   return platformPages(locale).find((page) => page.slug === slug)
 }
 
-/** Lien vers une page Solution, et vers l'une de ses sections si `anchor`. */
-export function platformHref(slug: string, anchor?: string) {
-  return `/plateforme/${slug}${anchor ? `#${anchor}` : ''}`
-}
+/* Défini dans platform-menu.ts (module léger, importable côté client). */
+export { platformHref }

@@ -47,5 +47,13 @@
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5",
     "vitest": "^3.2.7"
-  }
+  },
+  "browserslist": [
+    ">0.3%",
+    "not dead",
+    "not op_mini all",
+    "chrome >= 100",
+    "safari >= 15",
+    "firefox >= 100"
+  ]
 }

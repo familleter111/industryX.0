@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/navigation'
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m as motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight,
   X,

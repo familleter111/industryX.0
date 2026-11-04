@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import {
   ArrowRight,
   PlayCircle,

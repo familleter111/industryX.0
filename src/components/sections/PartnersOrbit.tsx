@@ -1,7 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 
 import { STATS } from '@/lib/data/orbit'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion'
+import { m as motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 
 interface Orb {
   color: string

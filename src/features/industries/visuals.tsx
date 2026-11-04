@@ -1,7 +1,7 @@
 'use client'
 
 import { useId, useState } from 'react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import { CheckCircle2, Eye, ShieldCheck, Workflow } from 'lucide-react'
 
 import { viewport } from '@/lib/motion'

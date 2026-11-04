@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m as motion, AnimatePresence } from 'framer-motion'
 import { CalendarCheck, ExternalLink, Mail, RotateCcw, Send, X } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'

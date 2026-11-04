@@ -7,7 +7,7 @@ import {
   TrendingUp,
   type LucideIcon,
 } from 'lucide-react'
-import { platformHref } from '@/lib/data/platform'
+import { platformHref } from '@/lib/data/platform-menu'
 import type { Locale } from '@/i18n/routing'
 
 /**

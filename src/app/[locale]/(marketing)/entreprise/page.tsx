@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { Link, homeAnchorHref } from '@/i18n/navigation'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import { ArrowRight, BarChart3, Database, Settings, Users } from 'lucide-react'
 
 import { fadeUp, staggerContainer, viewport } from '@/lib/motion'

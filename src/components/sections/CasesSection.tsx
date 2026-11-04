@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, type KeyboardEvent } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m as motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { CheckCircle2, ChevronRight } from 'lucide-react'

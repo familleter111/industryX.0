@@ -2,7 +2,7 @@
 
 import { useId, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'

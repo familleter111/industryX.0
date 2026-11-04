@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m as motion } from 'framer-motion'
 
 import {
   ArrowRight,
@@ -31,7 +31,7 @@ import Image from 'next/image'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import dynamic from 'next/dynamic'
 import { CHAT_OPEN_EVENT, type OpenChatDetail } from '@/lib/chat/open'
-import { platformHref, platformPages } from '@/lib/data/platform'
+import { PLATFORM_MENU, platformHref } from '@/lib/data/platform-menu'
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
 import { Link, homeAnchorHref, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
@@ -171,14 +171,16 @@ function buildNavGroups(locale: Locale): NavGroup[] {
         description: t.featured,
         href: ROUTES.cipa,
       },
-      // Une entree par page Solution, generee depuis lib/data/platform.ts : le menu
-      // et les sept pages ne peuvent pas diverger.
+      // Une entree par page Solution, generee depuis lib/data/platform-menu.ts,
+      // que les sept pages reprennent aussi : ils ne peuvent pas diverger. Pas
+      // d'import de platform.ts ici : tout le contenu des pages partirait
+      // dans le JavaScript de chaque page du site.
       items: [
-        ...platformPages(locale).map((page) => ({
-          title: page.menuTitle,
-          description: page.menuDescription,
-          href: platformHref(page.slug),
-          icon: page.icon,
+        ...PLATFORM_MENU.map((entry) => ({
+          title: entry.title[locale],
+          description: entry.description[locale],
+          href: platformHref(entry.slug),
+          icon: entry.icon,
         })),
         // Nouveau produit : page de présentation, badge « Nouveau » / « New ».
         { title: t.entiwin[0], description: t.entiwin[1], badge: t.entiwin[2], href: ENTIWIN_PATH, icon: ScanSearch },

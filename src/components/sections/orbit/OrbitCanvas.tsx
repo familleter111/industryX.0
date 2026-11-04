@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 
 import { logoFrameWidth, type LogoAsset } from '@/lib/data/logoSizing'
 import { C, CORE_SIZE, GUIDE_RADIUS, RINGS, VIEW, type Ring } from '@/lib/data/orbit'

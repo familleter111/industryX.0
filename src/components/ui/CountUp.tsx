@@ -1,6 +1,6 @@
 'use client'
 
-import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-motion'
+import { useInView, useReducedMotion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 
 import { viewport } from '@/lib/motion'
@@ -38,6 +38,10 @@ type CountUpProps = {
  * L'incrementation ecrit directement dans le DOM plutot que de passer par un
  * etat React : soixante rendus par seconde et par compteur pour afficher du
  * texte seraient du gaspillage.
+ *
+ * Une boucle requestAnimationFrame plutot que `animate()` de Framer Motion :
+ * cette fonction embarque tout le moteur d'animation dans le JavaScript
+ * initial, que LazyMotion (MotionProvider) charge sinon apres coup.
  */
 export default function CountUp({
   to,
@@ -50,7 +54,6 @@ export default function CountUp({
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, viewport)
   const reduce = useReducedMotion()
-  const value = useMotionValue(0)
 
   const format = (n: number) =>
     prefix +
@@ -69,20 +72,15 @@ export default function CountUp({
     if (reduce || !inView) return
 
     node.textContent = format(0)
-    const unsubscribe = value.on('change', (v) => {
-      node.textContent = format(v)
+    const start = performance.now()
+    let frame = requestAnimationFrame(function tick(now) {
+      const progress = Math.min(1, (now - start) / duration)
+      // Sortie amortie (cubique), comme l'`easeOut` de Framer Motion.
+      const eased = 1 - (1 - progress) ** 3
+      node.textContent = progress < 1 ? format(to * eased) : final
+      if (progress < 1) frame = requestAnimationFrame(tick)
     })
-    const controls = animate(value, to, {
-      duration: duration / 1000,
-      ease: 'easeOut',
-      onComplete: () => {
-        node.textContent = final
-      },
-    })
-    return () => {
-      controls.stop()
-      unsubscribe()
-    }
+    return () => cancelAnimationFrame(frame)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, reduce, to, duration])
 
