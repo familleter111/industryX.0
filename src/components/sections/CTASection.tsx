@@ -83,10 +83,10 @@ export default function CTASection() {
           <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
 
             {/* ================= LEFT ================= */}
-            <div className="relative p-8 sm:p-12 lg:p-16">
+            <div className="relative p-8 sm:p-10">
 
               {/* TITLE */}
-              <h2 className="max-w-3xl text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.02] text-white mb-7">
+              <h2 className="max-w-3xl text-4xl sm:text-5xl lg:text-[2.75rem] font-bold leading-[1.04] text-white mb-5">
 
                 {t.title}{' '}
                 <span className="block mt-2 text-gradient-gold">
@@ -103,12 +103,12 @@ export default function CTASection() {
               </p>
 
               {/* BOTTOM LINE */}
-              <div className="mt-10 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
 
                 {t.tags.map((item, i) => (
                   <div
                     key={i}
-                    className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/55"
+                    className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-white/60"
                   >
                     {item}
                   </div>
@@ -124,13 +124,13 @@ export default function CTASection() {
               {/* PANEL BG */}
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(218,162,80,0.06),transparent)]" />
 
-              <div className="relative flex h-full flex-col justify-center p-8 sm:p-12">
+              <div className="relative flex h-full flex-col justify-center p-8 sm:p-10">
 
                 {/* TITLE */}
-                <div className="mb-10">
+                <div className="mb-8">
 
 
-                  <h3 className="text-3xl font-bold leading-tight text-white mb-4">
+                  <h3 className="mb-3 text-2xl font-bold leading-tight text-white lg:text-[1.75rem]">
                     {t.panelTitle}
                   </h3>
 
@@ -201,7 +201,7 @@ export default function CTASection() {
                 </div>
 
                 {/* TRUST */}
-                <div className="mt-8 pt-8 border-t border-white/10">
+                <div className="mt-6 pt-6 border-t border-white/10">
 
                   <div className="flex items-center gap-6 text-sm text-white/50">
 

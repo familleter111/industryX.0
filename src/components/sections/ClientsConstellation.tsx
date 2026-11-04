@@ -555,7 +555,7 @@ export default function ClientsConstellation() {
           >
             <span className="block h-[4px] w-24 rounded-full bg-gold" />
 
-            <p className="mt-6 text-[11.5px] font-bold uppercase tracking-[0.22em] text-gold-ink sm:text-[14px]">
+            <p className="mt-6 text-[12px] font-bold uppercase tracking-[0.22em] text-gold-ink sm:text-[14px]">
               {t.eyebrow}
             </p>
 

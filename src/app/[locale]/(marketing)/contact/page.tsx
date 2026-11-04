@@ -290,7 +290,7 @@ function FieldLabel({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-1.5 block text-[12.5px] font-semibold tracking-[-0.01em] text-[#292524] sm:text-[13px]"
+      className="mb-1.5 block text-[14px] font-semibold tracking-[-0.01em] text-[#292524] sm:text-[14px]"
     >
       {children}
       {required && (
@@ -549,7 +549,7 @@ function ContactForm() {
             setSubmitError(null)
             setStatus('idle')
           }}
-          className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#E7E5E4] px-5 py-2.5 text-[13px] font-semibold text-[#44403C] transition-all duration-300 hover:border-gold/40 hover:text-[#111827]"
+          className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#E7E5E4] px-5 py-2.5 text-[14px] font-semibold text-[#44403C] transition-all duration-300 hover:border-gold/40 hover:text-[#111827]"
         >
           {t.another}
         </button>
@@ -561,7 +561,7 @@ function ContactForm() {
     <form onSubmit={onSubmit} onFocus={onFormFocus} noValidate className="relative mt-5 lg:mt-6">
       {/* Sans cette ligne, l'asterisque rouge est un signe que rien
           n'explique : il faut savoir d'avance ce qu'il veut dire. */}
-      <p className="mb-3 text-[11.5px] leading-snug text-subtle">
+      <p className="mb-3 text-[12px] leading-snug text-subtle">
         {t.legend}
       </p>
 
@@ -737,7 +737,7 @@ function ContactForm() {
             }`}
           />
 
-          <span className="pointer-events-none absolute bottom-2.5 right-4 text-[11px] font-medium text-subtle">
+          <span className="pointer-events-none absolute bottom-2.5 right-4 text-[12px] font-medium text-subtle">
             {form.message.length} / {MESSAGE_MAX}
           </span>
         </div>
@@ -781,7 +781,7 @@ function ContactForm() {
             {form.consent && <Check size={12} strokeWidth={3.2} />}
           </span>
 
-          <span className="text-[12.5px] leading-relaxed text-[#57534E] sm:text-[13px]">
+          <span className="text-[14px] leading-relaxed text-[#57534E] sm:text-[14px]">
             {t.consent}{' '}
             {/* Le lien vit a l'interieur du <label> : sans stopPropagation, le
                 clic remonterait jusqu'a lui et cocherait la case au passage. */}
@@ -828,7 +828,7 @@ function ContactForm() {
       {submitError && (
         <div
           role="alert"
-          className="mt-4 flex items-start gap-2.5 rounded-xl border border-red-300 bg-red-50 px-3.5 py-3 text-[12.5px] leading-relaxed text-red-700"
+          className="mt-4 flex items-start gap-2.5 rounded-xl border border-red-300 bg-red-50 px-3.5 py-3 text-[14px] leading-relaxed text-red-700"
         >
           <AlertCircle size={16} className="mt-px shrink-0" />
           <span>{submitError}</span>
@@ -857,7 +857,7 @@ function ContactForm() {
         )}
       </button>
 
-      <div className="mt-3.5 flex items-center justify-center gap-2 text-center text-[12px] text-subtle sm:text-[12.5px]">
+      <div className="mt-3.5 flex items-center justify-center gap-2 text-center text-[12px] text-subtle sm:text-[14px]">
         <ShieldCheck size={15} className="shrink-0 text-subtle" />
         {t.secure}
       </div>
@@ -1055,7 +1055,7 @@ function AfterContactSection() {
 
                 <div className="relative h-full overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.03] p-5 pb-7 text-center backdrop-blur-sm sm:p-6 sm:pb-7 short:p-4 short:pb-5 transition-all duration-300 hover:border-gold/25 hover:bg-white/[0.05]">
                   {/* numéro */}
-                  <span className="absolute left-5 top-5 flex h-8 w-8 items-center justify-center rounded-full border border-gold/35 text-[11px] font-bold text-gold">
+                  <span className="absolute left-5 top-5 flex h-8 w-8 items-center justify-center rounded-full border border-gold/35 text-[12px] font-bold text-gold">
                     {step.num}
                   </span>
 
@@ -1067,7 +1067,7 @@ function AfterContactSection() {
                     {step.title}
                   </h3>
 
-                  <p className="mt-2 text-[13px] leading-[1.6] text-white/50">
+                  <p className="mt-2 text-[14px] leading-[1.6] text-white/50">
                     {step.desc}
                   </p>
 
@@ -1103,7 +1103,7 @@ function AfterContactSection() {
                     <p className="font-display whitespace-nowrap text-[21px] font-black leading-none tracking-[-0.04em] text-gold sm:text-[28px] lg:text-[22px] xl:text-[28px] short:text-[22px] short:xl:text-[24px]">
                       {stat.value}
                     </p>
-                    <p className="mt-2 text-[11.5px] leading-[1.45] text-white/50 xs:text-[10.5px] sm:text-[11.5px] lg:text-[11px] xl:text-[11.5px]">
+                    <p className="mt-2 text-[12px] leading-[1.45] text-white/50 xs:text-[12px] sm:text-[12px] lg:text-[12px] xl:text-[12px]">
                       {stat.label}
                     </p>
                   </div>
@@ -1131,10 +1131,10 @@ function AfterContactSection() {
                     </div>
 
                     <div className="min-w-0">
-                      <p className="text-[13.5px] font-bold leading-snug text-white lg:text-[13px] xl:text-[13.5px]">
+                      <p className="text-[14px] font-bold leading-snug text-white lg:text-[14px] xl:text-[14px]">
                         {item.title}
                       </p>
-                      <p className="mt-0.5 text-[11.5px] text-white/50">
+                      <p className="mt-0.5 text-[12px] text-white/50">
                         {item.desc}
                       </p>
                     </div>
@@ -1319,7 +1319,7 @@ export default function ContactPage() {
               </p>
 
               {/* LOGOS CLIENTS */}
-              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[11px] lg:mt-4">
+              <p className="mt-5 text-[12px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[12px] lg:mt-4">
                 {t.trust}
               </p>
 
@@ -1343,10 +1343,10 @@ export default function ContactPage() {
                       </div>
 
                       <div className="min-w-0 pt-0.5">
-                        <p className="text-[12.5px] font-bold leading-[1.25] tracking-[-0.015em] text-[#111827] sm:text-[13px]">
+                        <p className="text-[14px] font-bold leading-[1.25] tracking-[-0.015em] text-[#111827] sm:text-[14px]">
                           {promise.title}
                         </p>
-                        <p className="mt-1 text-[11.5px] leading-[1.25] text-subtle">
+                        <p className="mt-1 text-[12px] leading-[1.25] text-subtle">
                           {promise.desc}
                         </p>
                       </div>
@@ -1418,7 +1418,7 @@ export default function ContactPage() {
                       <p className="font-display text-[26px] font-black leading-none tracking-[-0.04em] text-gold lg:text-[24px]">
                         15+
                       </p>
-                      <p className="mt-1 text-[11px] leading-[1.25] text-white/70">
+                      <p className="mt-1 text-[12px] leading-[1.25] text-white/70">
                         {t.clients}
                       </p>
                     </div>
@@ -1429,7 +1429,7 @@ export default function ContactPage() {
                       <p className="font-display text-[26px] font-black leading-none tracking-[-0.04em] text-gold lg:text-[24px]">
                         5
                       </p>
-                      <p className="mt-1 text-[11px] leading-[1.25] text-white/70">
+                      <p className="mt-1 text-[12px] leading-[1.25] text-white/70">
                         {t.countries}
                       </p>
                     </div>
@@ -1439,7 +1439,7 @@ export default function ContactPage() {
 
                   <div className="mt-3 flex items-center gap-2 lg:mt-2.5">
                     <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-gold" />
-                    <span className="text-[10.5px] font-semibold text-white/80">
+                    <span className="text-[12px] font-semibold text-white/80">
                       Ops + Quality
                     </span>
                   </div>
@@ -1470,7 +1470,7 @@ export default function ContactPage() {
                     <h2 className="font-display text-[20px] font-black tracking-[-0.03em] text-[#111827] sm:text-[22px]">
                       {t.formTitle}
                     </h2>
-                    <p className="mt-1 text-[13px] text-[#57534E] sm:text-[13.5px]">
+                    <p className="mt-1 text-[14px] text-[#57534E] sm:text-[14px]">
                       {t.formLead}
                     </p>
                     <div className="mt-2 h-[3px] w-12 rounded-full bg-gold" />

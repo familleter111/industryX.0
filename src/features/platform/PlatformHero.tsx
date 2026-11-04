@@ -51,10 +51,10 @@ export default function PlatformHero({ slug }: { slug: string }) {
       <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-[1.1fr_1.3fr] lg:gap-8 xl:grid-cols-[0.95fr_1.5fr] lg:px-10">
         {/* TEXTE */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 text-center lg:text-left"
+          className="animate-rise relative z-10 text-center lg:text-left"
         >
           <div
             className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border px-3.5 py-2 sm:px-5 sm:py-2.5"
@@ -68,7 +68,7 @@ export default function PlatformHero({ slug }: { slug: string }) {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
             </span>
-            <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-subtle sm:text-[11px] sm:tracking-[0.18em]">
+            <span className="text-[12px] font-bold uppercase leading-snug tracking-[0.06em] text-subtle [text-wrap:balance] sm:tracking-[0.18em]">
               {page.menuTitle}
             </span>
           </div>
@@ -149,7 +149,7 @@ export default function PlatformHero({ slug }: { slug: string }) {
             {page.highlights.map((item) => (
               <div key={item} className="flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-green-500" />
-                <span className="text-[13px] font-medium text-stone-600">{item}</span>
+                <span className="text-[14px] font-medium text-stone-600">{item}</span>
               </div>
             ))}
           </div>
@@ -158,7 +158,7 @@ export default function PlatformHero({ slug }: { slug: string }) {
         {/* VISUEL — le fond creme de l'image se fond dans le degrade de la
             section : `mix-blend-multiply` pour la teinte, et un masque qui
             efface les bords pour qu'aucun rectangle ne se dessine. */}
-        <motion.div variants={m.scaleIn} initial="hidden" animate="visible" className="relative z-10">
+        <motion.div variants={m.scaleIn} initial={false} animate="visible" className="animate-settle relative z-10">
           <div
             className="lg:origin-center lg:translate-x-6 lg:scale-[1.06]"
             style={{

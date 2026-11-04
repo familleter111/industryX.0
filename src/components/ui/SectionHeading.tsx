@@ -20,7 +20,7 @@ export function SectionBadge({
     >
       <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-gold" />
       <span
-        className={`text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px] ${
+        className={`text-[12px] font-bold uppercase tracking-[0.18em] sm:text-[12px] ${
           tone === 'dark' ? 'text-white/75' : 'text-stone-600'
         }`}
       >

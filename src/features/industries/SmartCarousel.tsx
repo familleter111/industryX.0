@@ -155,7 +155,8 @@ export default function SmartCarousel({
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-8 md:p-10">
               <div className="lg:col-span-6 flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl font-black font-display text-gold/30">{slide.num}</span>
+                  {/* Numero decoratif : en pseudo-element, hors du texte de la page. */}
+                  <span aria-hidden="true" data-num={slide.num} className="text-3xl font-black font-display text-gold/30 before:content-[attr(data-num)]" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gold-ink">{slide.tag}</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black font-display text-[#111827] tracking-tight mb-4 leading-snug">
@@ -248,14 +249,14 @@ export default function SmartCarousel({
         <button
           onClick={prev}
           aria-label={t.prev}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-5 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center text-dark hover:border-gold hover:text-gold transition-all z-20"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-5 w-11 h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center text-dark hover:border-gold hover:text-gold transition-all z-20"
         >
           <ChevronLeft size={18} />
         </button>
         <button
           onClick={next}
           aria-label={t.next}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-5 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center text-dark hover:border-gold hover:text-gold transition-all z-20"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-5 w-11 h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center text-dark hover:border-gold hover:text-gold transition-all z-20"
         >
           <ChevronRight size={18} />
         </button>
@@ -265,23 +266,29 @@ export default function SmartCarousel({
         <button
           onClick={() => setPlaying(!playing)}
           aria-label={playing ? t.pause : t.play}
-          className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-subtle hover:border-gold hover:text-gold transition-all"
+          className="w-11 h-11 rounded-full bg-white border border-slate-200 flex items-center justify-center text-subtle hover:border-gold hover:text-gold transition-all"
         >
           {playing ? <Pause size={12} /> : <Play size={12} />}
         </button>
-        <div className="flex items-center gap-2">
+        {/* Chaque pastille dans une cible de 44 px ; la pastille visible reste fine. */}
+        <div className="flex items-center">
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
               aria-label={`${t.goTo} ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${
-                i === index ? 'w-8 h-2 bg-gold' : 'w-2 h-2 bg-slate-300 hover:bg-gold/50'
-              }`}
-            />
+              aria-current={i === index ? 'true' : undefined}
+              className="group grid h-11 min-w-[2.75rem] place-items-center rounded-full"
+            >
+              <span
+                className={`block rounded-full transition-all duration-300 ${
+                  i === index ? 'w-8 h-2 bg-gold' : 'w-2 h-2 bg-slate-300 group-hover:bg-gold/50'
+                }`}
+              />
+            </button>
           ))}
         </div>
-        <span className="text-[10px] font-bold text-subtle tabular-nums">
+        <span className="text-xs font-bold text-subtle tabular-nums">
           {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
         </span>
         <span className="sr-only">{accentLabel}</span>

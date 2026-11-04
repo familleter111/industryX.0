@@ -103,6 +103,13 @@ const config: Config = {
         // Minuterie de defilement automatique (components/ui/AutoplayTimer) :
         // la duree est fixee par element, la fin de l'animation fait avancer.
         autoplay: 'autoplay linear forwards',
+        // Entrees au-dessus de la ligne de flottaison (hero). En CSS pour la
+        // meme raison que l'intro, et sans toucher a l'opacite : un element a
+        // opacite nulle n'est pas candidat au LCP, l'element serait alors
+        // compte au moment ou il apparait, c'est-a-dire apres l'hydratation.
+        // Ici il est visible des la premiere image et ne fait que se poser.
+        rise: 'rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both',
+        settle: 'settle 700ms cubic-bezier(0.22, 1, 0.36, 1) both',
       },
       keyframes: {
         shimmer: {
@@ -155,6 +162,14 @@ const config: Config = {
         welcomeOut: {
           '0%, 40%': { opacity: '1', transform: 'translateY(0)' },
           '100%': { opacity: '0', transform: 'translateY(-40px)', visibility: 'hidden' },
+        },
+        rise: {
+          from: { transform: 'translateY(14px)' },
+          to: { transform: 'none' },
+        },
+        settle: {
+          from: { transform: 'scale(0.97)' },
+          to: { transform: 'none' },
         },
       },
       backgroundImage: {

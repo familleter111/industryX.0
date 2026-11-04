@@ -79,12 +79,11 @@ const VIEWPORT_MARGIN = 16
 /**
  * Contribution aux Objectifs de Developpement Durable.
  *
- * L'infobulle s'ouvre SOUS la pastille, fleche vers le haut. Ouverte vers le
- * haut, elle recouvrait le titre et le sous-titre de la section : le seul
- * espace libre au-dessus d'une grille posee sous un en-tete, c'est l'en-tete
- * lui-meme. Sous la grille, l'espace est reserve par un padding
- * (`lg:pb-28`, 112 px pour une bulle qui en descend 104) plutot que dispute
- * a un voisin.
+ * Bande compacte : l'intitule a gauche, les six pastilles a droite (sur
+ * desktop). L'infobulle s'ouvre AU-DESSUS de la pastille, fleche vers le
+ * bas : l'en-tete est desormais a cote de la grille, l'espace du haut est
+ * libre, et plus rien n'est reserve sous la grille (l'ancien `lg:pb-28`
+ * ajoutait 112 px de vide a la page).
  *
  * L'infobulle n'existe qu'a partir de `lg`, la ou la grille tient sur une
  * seule ligne. En dessous (deux ou trois colonnes, donc deux ou trois
@@ -148,11 +147,11 @@ export default function SdgContribution({ className = '' }: { className?: string
       initial="hidden"
       whileInView="visible"
       viewport={m.viewport}
-      className={`relative z-10 mx-auto max-w-6xl ${className}`}
+      className={`relative z-10 mx-auto max-w-6xl rounded-3xl border border-black/[0.06] bg-white/70 px-6 py-6 sm:px-8 lg:flex lg:items-center lg:gap-10 lg:py-5 ${className}`}
     >
-      {/* EN-TETE — recentre, 640 px, 48 px de respiration avant la grille. */}
-      <motion.div variants={m.fadeUp} className="mx-auto mb-12 max-w-[640px] text-center">
-        <h3 className="mb-2 text-[15px] font-bold text-dark">
+      {/* EN-TETE — au-dessus des pastilles sur mobile, a gauche sur desktop. */}
+      <motion.div variants={m.fadeUp} className="mb-6 text-center lg:mb-0 lg:w-[300px] lg:shrink-0 lg:text-left">
+        <h3 className="mb-1 text-[15px] font-bold text-dark">
           {t.title}
         </h3>
         <p className="text-sm leading-relaxed text-stone-600">
@@ -160,7 +159,7 @@ export default function SdgContribution({ className = '' }: { className?: string
         </p>
       </motion.div>
 
-      <ul className="grid grid-cols-2 justify-items-center gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-8 lg:grid-cols-6 lg:gap-x-6 lg:pb-28">
+      <ul className="grid flex-1 grid-cols-2 justify-items-center gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-4">
         {goals.map((goal, index) => {
           const isActive = active === index
           const isDimmed = active !== null && !isActive
@@ -202,8 +201,8 @@ export default function SdgContribution({ className = '' }: { className?: string
                     alt={`${t.short} ${goal.num} — ${goal.title}`}
                     width={512}
                     height={512}
-                    sizes="96px"
-                    className="h-20 w-20 object-contain sm:h-[88px] sm:w-[88px] lg:h-24 lg:w-24"
+                    sizes="72px"
+                    className="h-16 w-16 object-contain sm:h-[72px] sm:w-[72px] lg:h-16 lg:w-16"
                   />
                 </button>
 
@@ -211,22 +210,22 @@ export default function SdgContribution({ className = '' }: { className?: string
                     pas. `aria-hidden` : le bouton annonce deja ce texte. */}
                 <span
                   aria-hidden
-                  className="mt-3 line-clamp-2 max-w-[15ch] text-center text-[12px] leading-snug text-stone-600 lg:hidden"
+                  className="mt-2 line-clamp-2 max-w-[16ch] text-center text-sm leading-snug text-stone-600 lg:hidden"
                 >
                   {goal.title}
                 </span>
 
-                {/* INFOBULLE — conteneur de hauteur nulle pose sous la
-                    pastille. Il ne porte que l'apparition ; la bulle et la
+                {/* INFOBULLE — conteneur de hauteur nulle pose au-dessus de
+                    la pastille. Il ne porte que l'apparition ; la bulle et la
                     fleche portent la geometrie. */}
                 <div
-                  className={`pointer-events-none absolute left-0 right-0 top-full z-30 hidden h-0 transition-[opacity,transform] duration-150 ease-out lg:block ${
+                  className={`pointer-events-none absolute bottom-full left-0 right-0 z-30 hidden h-0 transition-[opacity,transform] duration-150 ease-out lg:block ${
                     isActive ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0'
                   }`}
                 >
                   <span
                     aria-hidden
-                    className="absolute left-1/2 top-[6px] h-2.5 w-2.5 -translate-x-1/2 rotate-45 bg-dark-raised"
+                    className="absolute bottom-[6px] left-1/2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 bg-dark-raised"
                   />
                   <div
                     ref={(node) => {
@@ -234,10 +233,10 @@ export default function SdgContribution({ className = '' }: { className?: string
                     }}
                     id={tooltipId}
                     role="tooltip"
-                    className="absolute left-1/2 top-[11px] w-max max-w-[260px] rounded-md bg-dark-raised px-[18px] py-[14px] text-left shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
+                    className="absolute bottom-[11px] left-1/2 w-max max-w-[260px] rounded-md bg-dark-raised px-[18px] py-[14px] text-left shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
                     style={{ transform: `translateX(calc(-50% + ${isActive ? shift : 0}px))` }}
                   >
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-gold-300">
+                    <span className="block text-xs font-bold uppercase tracking-[0.16em] text-gold-300">
                       {t.short} {goal.num}
                     </span>
                     <span className="mt-1 block text-[15px] font-medium leading-[1.4] text-white">

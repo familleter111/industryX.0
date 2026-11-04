@@ -89,7 +89,7 @@ export default function LandingView({
         <div className="pointer-events-none absolute -right-24 top-10 h-80 w-80 rounded-full bg-gold/10 blur-[120px]" />
         <div className="relative mx-auto max-w-4xl px-5 text-center sm:px-7">
           {page.eyebrow && (
-            <p className="inline-flex items-center gap-2.5 rounded-full border border-gold/30 bg-gold/5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-deep">
+            <p className="inline-flex items-center gap-2.5 rounded-full border border-gold/30 bg-gold/5 px-4 py-1.5 text-[12px] font-bold uppercase tracking-[0.2em] text-gold-deep">
               {page.eyebrow}
             </p>
           )}

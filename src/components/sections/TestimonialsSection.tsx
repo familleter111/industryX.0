@@ -130,6 +130,17 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
     onBlur: () => setHolding(false),
   }
 
+  // Minuterie du defilement automatique, rendue dans l'indicateur visible.
+  const timer = (
+    <AutoplayTimer
+      key={page}
+      duration={AUTOPLAY_MS}
+      paused={holding || !inView}
+      onDone={advance}
+      className="h-full w-full bg-gold"
+    />
+  )
+
   return (
     <Section
       variant="default"
@@ -163,11 +174,11 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
         {/* HEADER */}
         <motion.div
           variants={m.fadeUp}
-          className="mb-16 text-center"
+          className="mb-10 text-center"
         >
           <h2 className="text-4xl font-bold text-dark sm:text-5xl">
             {copy.title}{' '}
-            <span className="block">{copy.titleEnd}</span>
+            <span className="block lg:inline">{copy.titleEnd}</span>
           </h2>
         </motion.div>
 
@@ -192,7 +203,7 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
               "
             >
               {/* ICON + STARS */}
-              <div className="mb-6 flex items-center justify-between">
+              <div className="mb-5 flex items-center justify-between">
                 <div
                   className="flex h-14 w-14 items-center justify-center rounded-2xl"
                   style={{ background: `${t.color}12` }}
@@ -208,7 +219,7 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
               </div>
 
               {/* TEXT */}
-              <p className="mb-8 text-[15px] leading-8 text-stone-600">
+              <p className="mb-6 text-[15px] leading-7 text-stone-600">
                 “{t.quote}”
               </p>
 
@@ -225,13 +236,13 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
               </div>
 
               {/* SECTOR */}
-              <div className="mt-6">
+              {/* La couleur de la carte teinte le fond ; le texte reste en
+                  gris fonce : or, vert et bleu de marque tombaient entre 2 et
+                  3:1 sur leur propre teinte. */}
+              <div className="mt-5">
                 <span
-                  className="rounded-full px-3 py-1.5 text-xs font-semibold"
-                  style={{
-                    background: `${t.color}12`,
-                    color: t.color,
-                  }}
+                  className="rounded-full px-3 py-1.5 text-sm font-semibold text-stone-700"
+                  style={{ background: `${t.color}1f` }}
                 >
                   {t.sector}
                 </span>
@@ -242,7 +253,7 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
         </motion.div>
 
         {/* NAVIGATION — une pastille par page de défilement */}
-        <div className="mt-12 flex items-center justify-center gap-4" {...hold}>
+        <div className="mt-8 flex items-center justify-center gap-4" {...hold}>
           <motion.button
             type="button"
             onClick={prev}
@@ -255,7 +266,12 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
             <ChevronLeft size={18} />
           </motion.button>
 
-          <div className="flex gap-2">
+          {/* Pastilles a partir de sm, chacune dans une cible de 44 px. Sur
+              telephone, neuf cibles de 44 px ne tiennent pas avec les fleches :
+              le rang les remplace. La minuterie vit dans l'indicateur affiche
+              (une animation CSS ne tourne pas sous `display: none`) : une
+              seule fait donc avancer le defilement. */}
+          <div className="hidden sm:flex">
             {Array.from({ length: pageCount }).map((_, i) => (
               <button
                 key={i}
@@ -263,22 +279,28 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
                 onClick={() => goTo(i)}
                 aria-label={`${copy.page} ${i + 1}`}
                 aria-current={page === i ? 'true' : undefined}
-                className={`overflow-hidden rounded-full transition-all ${page === i
-                  ? `h-2.5 w-8 ${m.reduce || pageCount < 2 ? 'bg-gold' : 'bg-gold/30'}`
-                  : 'h-2.5 w-2.5 bg-black/20'
-                  }`}
+                className="group grid h-11 min-w-[2.75rem] place-items-center rounded-full"
               >
-                {page === i && pageCount > 1 && (
-                  <AutoplayTimer
-                    key={page}
-                    duration={AUTOPLAY_MS}
-                    paused={holding || !inView}
-                    onDone={advance}
-                    className="h-full w-full bg-gold"
-                  />
-                )}
+                <span
+                  className={`block overflow-hidden rounded-full transition-all ${page === i
+                    ? `h-2.5 w-8 ${m.reduce || pageCount < 2 ? 'bg-gold' : 'bg-gold/30'}`
+                    : 'h-2.5 w-2.5 bg-black/20 group-hover:bg-black/40'
+                    }`}
+                >
+                  {page === i && pageCount > 1 && timer}
+                </span>
               </button>
             ))}
+          </div>
+          <div className="flex min-w-[4.5rem] flex-col items-center gap-1.5 sm:hidden">
+            <p className="text-sm font-semibold tabular-nums text-subtle" aria-live="polite">
+              {page + 1} / {pageCount}
+            </p>
+            {pageCount > 1 && (
+              <span className={`block h-1 w-12 overflow-hidden rounded-full ${m.reduce ? 'bg-gold' : 'bg-gold/30'}`}>
+                {timer}
+              </span>
+            )}
           </div>
 
           <motion.button

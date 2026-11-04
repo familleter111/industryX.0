@@ -62,7 +62,7 @@ export default function GuidesLibrary({
               type="button"
               aria-pressed={selected}
               onClick={() => setActive(filter)}
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[13px] font-semibold transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep ${
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[14px] font-semibold transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep ${
                 selected
                   ? 'border-dark bg-dark text-white'
                   : 'border-[#E7E5E4] bg-white text-stone-700 hover:border-gold/40 hover:text-dark'
@@ -70,7 +70,7 @@ export default function GuidesLibrary({
             >
               {filter === 'Tous' ? t.all : categoryLabel(filter, locale)}
               <span
-                className={`text-[11px] tabular-nums ${selected ? 'text-gold' : 'text-subtle'}`}
+                className={`text-[12px] tabular-nums ${selected ? 'text-gold' : 'text-subtle'}`}
               >
                 {count}
               </span>

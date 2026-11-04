@@ -320,7 +320,7 @@ function AboutScreen() {
             <motion.p
               {...rise}
               transition={{ duration: 0.5, ease }}
-              className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]"
+              className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]"
             >
               {t.aboutEyebrow}
               <span className="h-px w-14 bg-gold/70" />
@@ -359,7 +359,7 @@ function AboutScreen() {
                       {fact.value}
                     </span>
                     <span className="mt-3 block h-px w-full bg-cream-deep" />
-                    <span className="mt-3 block text-[13px] text-muted sm:text-[13.5px]">
+                    <span className="mt-3 block text-[14px] text-muted sm:text-[14px]">
                       {fact.label}
                     </span>
                   </dd>
@@ -414,7 +414,7 @@ function AboutScreen() {
 
         <div className="relative z-10 mx-auto grid max-w-[1500px] grid-cols-1 items-center gap-8 px-5 sm:px-7 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-12 lg:px-10">
           {/* PILIERS */}
-          <ul className="flex flex-wrap gap-x-6 gap-y-1 border-l-2 border-gold/70 pl-5 text-[10px] font-bold uppercase leading-[2] tracking-[0.18em] text-white/55 lg:block lg:text-[11px]">
+          <ul className="flex flex-wrap gap-x-6 gap-y-1 border-l-2 border-gold/70 pl-5 text-[12px] font-bold uppercase leading-[2] tracking-[0.18em] text-white/55 lg:block lg:text-[12px]">
             {t.pillars.map((pillar) => (
               <li key={pillar}>{pillar}</li>
             ))}
@@ -432,7 +432,7 @@ function AboutScreen() {
           </div>
 
           {/* SIGNATURE */}
-          <p className="border-l-2 border-gold/70 pl-5 text-[10px] font-bold uppercase leading-[2] tracking-[0.18em] text-white/55 lg:border-l-0 lg:border-r-2 lg:pl-0 lg:pr-5 lg:text-right lg:text-[11px]">
+          <p className="border-l-2 border-gold/70 pl-5 text-[12px] font-bold uppercase leading-[2] tracking-[0.18em] text-white/55 lg:border-l-0 lg:border-r-2 lg:pl-0 lg:pr-5 lg:text-right lg:text-[12px]">
             {t.inspires[0]}
             <br />
             {t.inspires[1]}
@@ -592,7 +592,7 @@ function JourneySection() {
             className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/75 via-transparent to-transparent"
           />
 
-          <p className="absolute bottom-8 left-8 flex items-start gap-4 text-[10px] font-bold uppercase leading-[1.9] tracking-[0.16em] text-[#111827] lg:bottom-10 lg:left-10">
+          <p className="absolute bottom-8 left-8 flex items-start gap-4 text-[12px] font-bold uppercase leading-[1.9] tracking-[0.16em] text-[#111827] lg:bottom-10 lg:left-10">
             <span>
               {t.inspires[0]}
               <br />
@@ -609,7 +609,7 @@ function JourneySection() {
           viewport={viewport}
           className="flex flex-col justify-center px-5 pb-10 pt-14 sm:px-7 lg:py-16 lg:pl-10 lg:pr-8"
         >
-          <p className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]">
+          <p className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]">
             {t.journeyEyebrow}
             <span className="h-px w-16 bg-gold/70" />
           </p>
@@ -642,7 +642,7 @@ function JourneySection() {
             className="mt-[clamp(1.25rem,3vh,2.25rem)] h-auto w-[clamp(200px,45vw,300px)]"
           />
 
-          <p className="mt-[clamp(1.5rem,4vh,3rem)] border-l-2 border-gold pl-5 text-[9.5px] font-bold uppercase leading-[2] tracking-[0.18em] text-subtle sm:text-[10.5px]">
+          <p className="mt-[clamp(1.5rem,4vh,3rem)] border-l-2 border-gold pl-5 text-[12px] font-bold uppercase leading-[2] tracking-[0.18em] text-subtle sm:text-[12px]">
             {t.pillars[0]}
             <br />
             {t.pillars[1]}
@@ -684,7 +684,7 @@ function JourneySection() {
                 {step.label}
               </p>
 
-              <p className="mt-3 max-w-[20em] text-[13px] leading-[1.6] text-muted lg:text-[clamp(13px,min(0.95vw,1.75vh),15px)]">
+              <p className="mt-3 max-w-[20em] text-[14px] leading-[1.6] text-muted lg:text-[clamp(13px,min(0.95vw,1.75vh),15px)]">
                 {step.desc}
               </p>
             </motion.li>
@@ -726,7 +726,7 @@ function TeamSection() {
 
         {/* ==================== DISCOURS ==================== */}
         <div className="flex min-h-0 flex-col justify-center">
-          <p className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]">
+          <p className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]">
             {t.teamEyebrow}
             <span className="h-px w-14 bg-gold/70" />
           </p>
@@ -738,7 +738,7 @@ function TeamSection() {
             <span className="text-gold">{t.teamAccent}</span>
           </h2>
 
-          <p className="mt-[clamp(0.75rem,2.2vh,1.5rem)] max-w-[24em] text-[13.5px] leading-[1.6] text-muted lg:text-[clamp(14px,min(1.2vw,2.2vh),19px)]">
+          <p className="mt-[clamp(0.75rem,2.2vh,1.5rem)] max-w-[24em] text-[14px] leading-[1.6] text-muted lg:text-[clamp(14px,min(1.2vw,2.2vh),19px)]">
             {t.teamLead}
           </p>
 
@@ -769,7 +769,7 @@ function TeamSection() {
           </ul>
 
           {/* Les trois piliers, en pied de colonne. */}
-          <ul className="mt-[clamp(1.25rem,4vh,3rem)] flex flex-wrap items-center gap-x-3 text-[9px] font-bold uppercase tracking-[0.16em] text-subtle sm:text-[10.5px]">
+          <ul className="mt-[clamp(1.25rem,4vh,3rem)] flex flex-wrap items-center gap-x-3 text-[12px] font-bold uppercase tracking-[0.16em] text-subtle sm:text-[12px]">
             {t.pillars.map((pillar, index) => (
               <li key={pillar} className="flex items-center gap-3">
                 {index > 0 && (
@@ -828,7 +828,7 @@ function TeamSection() {
                   className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/10 to-transparent"
                 />
 
-                <p className="absolute left-5 top-5 max-w-[7.5rem] text-[9.5px] font-bold uppercase leading-[1.8] tracking-[0.11em] text-white sm:text-[10px]">
+                <p className="absolute left-5 top-5 max-w-[7.5rem] text-[12px] font-bold uppercase leading-[1.8] tracking-[0.11em] text-white sm:text-[12px]">
                   {founder.claim}
                   <span
                     aria-hidden="true"
@@ -845,11 +845,11 @@ function TeamSection() {
                 <h3 className="font-display text-[17px] font-black tracking-[-0.03em] text-[#111827] lg:text-[clamp(17px,1.35vw,22px)]">
                   {founder.name}
                 </h3>
-                <p className="mt-1 text-[13px] text-muted lg:text-[clamp(13px,1vw,15.5px)]">
+                <p className="mt-1 text-[14px] text-muted lg:text-[clamp(13px,1vw,15.5px)]">
                   {founder.role}
                 </p>
 
-                <p className="mt-5 text-[12.5px] leading-[1.6] text-muted lg:text-[clamp(12.5px,min(0.95vw,1.7vh),15px)]">
+                <p className="mt-5 text-[14px] leading-[1.6] text-muted lg:text-[clamp(12.5px,min(0.95vw,1.7vh),15px)]">
                   {founder.desc}
                 </p>
               </div>
@@ -869,7 +869,7 @@ function TeamSection() {
         <div className="hidden w-[8rem] flex-col justify-end pb-[12vh] lg:flex">
           <span aria-hidden="true" className="mb-4 block h-px w-8 bg-gold" />
 
-          <p className="text-right text-[10px] font-bold uppercase leading-[1.9] tracking-[0.16em] text-subtle">
+          <p className="text-right text-[12px] font-bold uppercase leading-[1.9] tracking-[0.16em] text-subtle">
             {t.teamCorner}
           </p>
         </div>
@@ -933,7 +933,7 @@ function ValuesSection() {
               className="mt-[clamp(0.75rem,2vh,1.25rem)] block h-[3px] w-16 rounded-full bg-gold"
             />
 
-            <p className="mt-[clamp(0.9rem,2.4vh,1.5rem)] text-[10.5px] font-medium uppercase leading-[1.9] tracking-[0.2em] text-muted sm:text-[12px] lg:text-[clamp(11px,min(0.92vw,1.7vh),15px)]">
+            <p className="mt-[clamp(0.9rem,2.4vh,1.5rem)] text-[12px] font-medium uppercase leading-[1.9] tracking-[0.2em] text-muted sm:text-[12px] lg:text-[clamp(11px,min(0.92vw,1.7vh),15px)]">
               {t.valuesLead[0]}{' '}
               <br />
               {t.valuesLead[1]}
@@ -944,7 +944,7 @@ function ValuesSection() {
               commentaire ne valent pas la hauteur qu’elles prendraient sur
               un téléphone. */}
           <div className="hidden shrink-0 flex-col items-end gap-7 pt-2 lg:flex">
-            <p className="border-l-2 border-gold pl-4 text-[10px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-[#111827]">
+            <p className="border-l-2 border-gold pl-4 text-[12px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-[#111827]">
               {t.pillars[0]}
               <br />
               {t.pillars[1]}
@@ -952,7 +952,7 @@ function ValuesSection() {
               {t.pillars[2]}
             </p>
 
-            <p className="text-right text-[10px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-muted">
+            <p className="text-right text-[12px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-muted">
               {t.valuesCorner[0]}
               <br />
               {t.valuesCorner[1]}
@@ -1053,7 +1053,7 @@ function ValuesSection() {
         <div className="mt-[clamp(1rem,2.5vh,2rem)] flex items-center justify-between gap-6">
           <span aria-hidden="true" className="h-px w-16 shrink-0 bg-gold" />
 
-          <p className="flex items-center gap-4 text-right text-[9px] font-bold uppercase tracking-[0.2em] text-muted sm:text-[10.5px]">
+          <p className="flex items-center gap-4 text-right text-[12px] font-bold uppercase tracking-[0.2em] text-muted sm:text-[12px]">
             <span aria-hidden="true" className="hidden h-px w-10 shrink-0 bg-gold sm:block" />
             {t.valuesFooter}
             <span aria-hidden="true" className="hidden h-px w-10 shrink-0 bg-gold sm:block" />
@@ -1110,7 +1110,7 @@ function ExpertiseSection() {
           className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12"
         >
           <div className="min-w-0">
-            <p className="flex items-center gap-4 border-l-2 border-gold pl-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]">
+            <p className="flex items-center gap-4 border-l-2 border-gold pl-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]">
               {t.expertiseEyebrow}
               <span aria-hidden="true" className="h-px w-16 bg-gold/70" />
             </p>
@@ -1136,7 +1136,7 @@ function ExpertiseSection() {
           {/* Mention d’angle. Absente sous `lg` : quatre lignes de
               commentaire ne valent pas la hauteur qu’elles prendraient sur
               un téléphone. */}
-          <p className="hidden shrink-0 border-l-2 border-gold pl-4 text-[10px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-muted lg:block">
+          <p className="hidden shrink-0 border-l-2 border-gold pl-4 text-[12px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-muted lg:block">
             {t.expertiseCorner[0]}
             <br />
             {t.expertiseCorner[1]}
@@ -1182,7 +1182,7 @@ function ExpertiseSection() {
                     <h3 className="font-display text-[17px] font-black tracking-[-0.03em] text-[#111827] lg:text-[clamp(17px,1.35vw,22px)]">
                       {field.title}
                     </h3>
-                    <p className="mt-1.5 text-[12.5px] leading-[1.5] text-muted lg:text-[clamp(12.5px,min(0.95vw,1.7vh),15px)]">
+                    <p className="mt-1.5 text-[14px] leading-[1.5] text-muted lg:text-[clamp(12.5px,min(0.95vw,1.7vh),15px)]">
                       {field.claim}
                     </p>
                   </div>
@@ -1209,7 +1209,7 @@ function ExpertiseSection() {
 
         {/* ==================== PIED ==================== */}
         <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
-          <p className="shrink-0 border-l-2 border-gold pl-4 text-[9.5px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-muted sm:text-[10.5px]">
+          <p className="shrink-0 border-l-2 border-gold pl-4 text-[12px] font-bold uppercase leading-[1.9] tracking-[0.18em] text-muted sm:text-[12px]">
             {t.expertiseFooter[0]}
             <br />
             {t.expertiseFooter[1]}
@@ -1271,7 +1271,7 @@ function HorizonSection() {
         {/* SUR-TITRE. Le filet précède le mot, comme dans le dessin. */}
         <motion.p
           variants={fadeUp}
-          className="flex items-center gap-5 text-[10px] font-bold uppercase tracking-[0.24em] text-gold sm:text-[11px]"
+          className="flex items-center gap-5 text-[12px] font-bold uppercase tracking-[0.24em] text-gold sm:text-[12px]"
         >
           <span aria-hidden="true" className="h-px w-10 bg-gold" />
           {t.horizonEyebrow}
@@ -1328,7 +1328,7 @@ function HorizonSection() {
               court ainsi que sur la hauteur du texte, comme au dessin. */}
           <motion.p
             variants={fadeUp}
-            className="shrink-0 border-l border-gold pl-6 text-[11px] font-medium uppercase leading-[1.9] tracking-[0.16em] text-[#111827] sm:text-[12.5px] lg:pt-[0.6em] lg:text-[clamp(11px,min(0.95vw,1.75vh),14px)]"
+            className="shrink-0 border-l border-gold pl-6 text-[12px] font-medium uppercase leading-[1.9] tracking-[0.16em] text-[#111827] sm:text-[14px] lg:pt-[0.6em] lg:text-[clamp(11px,min(0.95vw,1.75vh),14px)]"
           >
             {t.horizonMotto[0]}
             <br />

@@ -91,6 +91,8 @@ const nextConfig = {
     ]
   },
   images: {
+    // AVIF d'abord (plus leger), WebP sinon ; l'original seulement en dernier recours.
+    formats: ['image/avif', 'image/webp'],
     // Images des guides envoyées dans le Studio Sanity (voir docs/cms.md).
     remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/images/**' }],
   },

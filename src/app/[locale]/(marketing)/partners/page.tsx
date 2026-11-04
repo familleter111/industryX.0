@@ -63,7 +63,7 @@ export default function PartnersPage() {
             />
 
             <div className="relative z-10">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]">
+              <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]">
                 {t.eyebrow}
               </p>
 
@@ -84,7 +84,7 @@ export default function PartnersPage() {
                         {benefit.title}
                       </h3>
 
-                      <p className="mt-2 text-[12.5px] leading-[1.7] text-white/55">
+                      <p className="mt-2 text-[14px] leading-[1.7] text-white/55">
                         {benefit.desc}
                       </p>
                     </div>

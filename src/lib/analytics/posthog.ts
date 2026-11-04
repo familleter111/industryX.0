@@ -1,4 +1,4 @@
-import posthog from 'posthog-js'
+import type { PostHog } from 'posthog-js'
 
 import type { AnalyticsEvents, EventName } from './events'
 import { readConsent, type Consent } from './consent'
@@ -8,6 +8,10 @@ import { readConsent, type Consent } from './consent'
  *
  * Sans NEXT_PUBLIC_POSTHOG_KEY (dev, tests, preview sans clé), rien n'est
  * chargé et `track()` ne fait rien : le site fonctionne à l'identique.
+ *
+ * La bibliothèque (plus de 100 Ko compressés) est chargée à la demande, au
+ * démarrage, et non avec la page : elle ne retarde ni l'affichage ni
+ * l'interactivité, et n'est jamais téléchargée sans clé ou après un refus.
  *
  * Les requêtes passent par /ingest sur notre propre domaine (rewrites de
  * next.config.mjs) : les bloqueurs de publicité laissent passer un appel
@@ -22,17 +26,28 @@ export const analyticsEnabled = POSTHOG_KEY !== ''
 
 /**
  * Événements émis avant le démarrage de PostHog (un composant de page peut
- * monter avant le fournisseur) : gardés ici, envoyés juste après init.
+ * monter avant le fournisseur, ou avant la fin du chargement) : gardés ici,
+ * envoyés juste après init.
  */
 const pending: Array<[string, Record<string, unknown>?]> = []
 
+/** L'instance, une fois la bibliothèque chargée. */
+let client: PostHog | null = null
+let loading: Promise<PostHog> | null = null
+
+function load(): Promise<PostHog> {
+  loading ??= import('posthog-js').then((module) => (client = module.default))
+  return loading
+}
+
 function loaded(): boolean {
-  return typeof window !== 'undefined' && Boolean(posthog.__loaded)
+  return typeof window !== 'undefined' && Boolean(client?.__loaded)
 }
 
 /** Démarre PostHog, une seule fois. Rien si pas de clé ou si le visiteur a refusé. */
-export function initPostHog(consent: Consent | null, locale: string) {
+export async function initPostHog(consent: Consent | null, locale: string): Promise<void> {
   if (!analyticsEnabled || typeof window === 'undefined' || consent === 'denied') return
+  const posthog = await load()
   if (!loaded()) {
     posthog.init(POSTHOG_KEY, {
       api_host: '/ingest',
@@ -62,19 +77,19 @@ export function initPostHog(consent: Consent | null, locale: string) {
 }
 
 /** Applique un nouveau choix de consentement à une instance déjà lancée. */
-export function applyConsent(consent: Consent, locale: string) {
+export async function applyConsent(consent: Consent, locale: string): Promise<void> {
   if (!analyticsEnabled) return
   if (consent === 'denied') {
-    if (loaded()) {
-      posthog.stopSessionRecording()
-      posthog.opt_out_capturing()
+    if (client && loaded()) {
+      client.stopSessionRecording()
+      client.opt_out_capturing()
     }
     return
   }
-  if (!loaded()) return initPostHog(consent, locale)
-  if (posthog.has_opted_out_capturing()) posthog.opt_in_capturing()
-  posthog.set_config({ persistence: 'localStorage+cookie' })
-  posthog.startSessionRecording()
+  if (!client || !loaded()) return initPostHog(consent, locale)
+  if (client.has_opted_out_capturing()) client.opt_in_capturing()
+  client.set_config({ persistence: 'localStorage+cookie' })
+  client.startSessionRecording()
 }
 
 function active(): boolean {
@@ -83,7 +98,7 @@ function active(): boolean {
 
 function capture(event: string, properties?: Record<string, unknown>) {
   if (!analyticsEnabled || typeof window === 'undefined' || readConsent() === 'denied') return
-  if (loaded()) posthog.capture(event, properties)
+  if (client && loaded()) client.capture(event, properties)
   else if (pending.length < 50) pending.push([event, properties])
 }
 
@@ -98,10 +113,10 @@ export function capturePageview() {
 
 /** Enregistre une propriété envoyée avec tous les événements suivants. */
 export function registerProperties(properties: Record<string, string>) {
-  if (active()) posthog.register(properties)
+  if (client && active()) client.register(properties)
 }
 
 /** Identifiant PostHog du visiteur, pour relier une demande de démo à son parcours. */
 export function distinctId(): string | undefined {
-  return active() ? posthog.get_distinct_id() : undefined
+  return client && active() ? client.get_distinct_id() : undefined
 }

@@ -321,7 +321,7 @@ export default function PhoneField({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={onSearchKeyDown}
-              className="h-10 w-full bg-transparent pl-9 pr-3 text-[13px] text-stone-900 outline-none placeholder:text-placeholder"
+              className="h-10 w-full bg-transparent pl-9 pr-3 text-[14px] text-stone-900 outline-none placeholder:text-placeholder"
             />
           </div>
 
@@ -332,7 +332,7 @@ export default function PhoneField({
             className="py-1"
           >
             {groups.length === 0 && (
-              <p className="px-3 py-6 text-center text-[13px] text-subtle">
+              <p className="px-3 py-6 text-center text-[14px] text-subtle">
                 {t.none(query)}
               </p>
             )}
@@ -341,7 +341,7 @@ export default function PhoneField({
               <div key={group.label} role="group" aria-label={group.label}>
                 <div
                   aria-hidden="true"
-                  className="px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.09em] text-subtle"
+                  className="px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.09em] text-subtle"
                 >
                   {group.label}
                 </div>
@@ -361,7 +361,7 @@ export default function PhoneField({
                       onMouseDown={(event) => event.preventDefault()}
                       onClick={() => select(item)}
                       onMouseEnter={() => setActiveIso(item.iso)}
-                      className={`flex cursor-pointer items-center gap-2.5 px-3 py-2 text-[13.5px] transition-colors duration-150 ${
+                      className={`flex cursor-pointer items-center gap-2.5 px-3 py-2 text-[14px] transition-colors duration-150 ${
                         isActive ? 'bg-stone-100' : 'bg-transparent'
                       }`}
                     >
@@ -375,7 +375,7 @@ export default function PhoneField({
                       >
                         {item.name}
                       </span>
-                      <span className="shrink-0 tabular-nums text-[12.5px] text-subtle">
+                      <span className="shrink-0 tabular-nums text-[14px] text-subtle">
                         +{item.dial}
                       </span>
                       {isSelected && (
@@ -388,7 +388,7 @@ export default function PhoneField({
             ))}
 
             {(!query || truncated) && (
-              <p className="border-t border-stone-100 px-3 pb-1.5 pt-2 text-[11.5px] text-subtle">
+              <p className="border-t border-stone-100 px-3 pb-1.5 pt-2 text-[12px] text-subtle">
                 {query ? t.refine : t.more}
               </p>
             )}

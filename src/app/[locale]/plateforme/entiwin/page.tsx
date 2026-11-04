@@ -290,7 +290,7 @@ function AnalysisVisual({ t }: { t: (typeof COPY)['fr']['visual'] }) {
         <div className="mt-5 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[auto_auto_minmax(0,1fr)] sm:gap-5">
           <div className="flex w-24 flex-col items-center rounded-xl border border-stone-200 bg-white px-2 py-4 text-center shadow-sm sm:w-28">
             <FileText size={32} className="text-red-500" aria-hidden="true" />
-            <span className="mt-2 text-[11px] font-medium leading-tight text-stone-700">{t.file}</span>
+            <span className="mt-2 text-[12px] font-medium leading-tight text-stone-700">{t.file}</span>
           </div>
 
           <div className="hidden h-14 w-14 items-center justify-center rounded-full bg-dark text-gold ring-8 ring-gold/25 sm:flex">
@@ -310,7 +310,7 @@ function AnalysisVisual({ t }: { t: (typeof COPY)['fr']['visual'] }) {
                       <span className={`mr-1.5 text-lg ${tone.text}`}>{tone.value}</span>
                       {label}
                     </p>
-                    <p className="hidden truncate text-[11px] text-stone-500 sm:block">{sub}</p>
+                    <p className="hidden truncate text-[12px] text-stone-500 sm:block">{sub}</p>
                   </div>
                 </li>
               )
@@ -328,7 +328,7 @@ function AnalysisVisual({ t }: { t: (typeof COPY)['fr']['visual'] }) {
           </div>
         </div>
       </div>
-      <p className="px-2 pt-2 text-center text-[11px] text-white/50">{t.caption}</p>
+      <p className="px-2 pt-2 text-center text-[12px] text-white/50">{t.caption}</p>
     </div>
   )
 }
@@ -347,7 +347,7 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-16 pt-[calc(82px+3rem)] sm:px-6 lg:grid-cols-2 lg:px-8 lg:pb-24 lg:pt-[calc(82px+4.5rem)]">
           <div>
             <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-medium text-gold">
-              <span className="rounded-full bg-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-dark">
+              <span className="rounded-full bg-gold px-2 py-0.5 text-[12px] font-bold uppercase tracking-wide text-dark">
                 {t.badge}
               </span>
               {t.product}

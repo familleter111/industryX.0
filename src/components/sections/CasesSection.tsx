@@ -315,11 +315,12 @@ function UsagePanel({
           {/* Badge, optionnel : porté par la donnée de l'onglet */}
           {tab.badge && (
           <div
-            className="mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-semibold"
+            className="mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold"
             style={{
               background: 'rgba(34,197,94,0.08)',
               border: '1px solid rgba(34,197,94,0.18)',
-              color: 'rgb(22 163 74)', // green-600
+              // green-700, 4,7:1 sur ce fond (le green-600 tombait a 3,1:1).
+              color: 'rgb(21 128 61)',
             }}
           >
             <CheckCircle2 size={16} aria-hidden="true" />
@@ -356,8 +357,9 @@ function UsagePanel({
           {/* CTA link */}
           <Link
             href={tab.href}
-            className="mt-4 flex items-center gap-2 text-sm font-semibold transition-all duration-300 hover:gap-3"
-            style={{ color: colors.gold }}
+            className="mt-4 flex min-h-11 items-center gap-2 text-sm font-semibold transition-all duration-300 hover:gap-3"
+            // Or d'encre, 5,1:1 sur blanc (l'or de marque y tombait a 2,3:1).
+            style={{ color: tokens.color.gold.ink }}
           >
             {more}
             <ChevronRight size={18} aria-hidden="true" />
@@ -403,7 +405,7 @@ function UsagePanel({
             </div>
           </div>
           {/* Règle 3 : maquette aux valeurs inventées, signalée comme telle. */}
-          <figcaption className="mt-3 text-center text-[11px] text-stone-500">{illustration}</figcaption>
+          <figcaption className="mt-3 text-center text-sm text-subtle">{illustration}</figcaption>
         </figure>
       </div>
     </motion.div>

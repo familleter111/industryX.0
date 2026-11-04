@@ -63,13 +63,13 @@ const COPY = {
 
 function Stats({ labels }: { labels: string[] }) {
   return (
-    <div className="mt-10 grid grid-cols-3 items-start gap-x-4 sm:mt-12 sm:flex sm:flex-wrap sm:gap-x-14 sm:gap-y-6">
+    <div className="mt-8 grid grid-cols-3 items-start gap-x-4 sm:mt-10 sm:flex sm:flex-wrap sm:gap-x-14 sm:gap-y-6">
       {STATS.map((stat, i) => (
         <div key={stat.label}>
           <p className="font-display text-[26px] font-black leading-none tracking-[-0.03em] text-gray-900 sm:text-[30px]">
             {stat.value}
           </p>
-          <p className="mt-2 text-[12px] font-medium text-stone-600 sm:text-[12.5px]">
+          <p className="mt-2 text-sm font-medium text-stone-600">
             {labels[i]}
           </p>
         </div>
@@ -115,7 +115,7 @@ export default function PartnersOrbit({
             {/* DISCOURS */}
             <motion.div {...reveal}>
 
-              <h2 className="mt-6 font-display text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-gray-900 sm:text-[40px] lg:text-[46px]">
+              <h2 className="font-display text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-gray-900 sm:text-[40px] lg:text-[46px]">
                 {t.title[0]}{' '}
                 <br />
                 {t.title[1]}{' '}
@@ -127,7 +127,7 @@ export default function PartnersOrbit({
                 {t.lead}
               </p>
 
-              <div className="mt-9 flex flex-wrap items-center gap-3.5">
+              <div className="mt-8 flex flex-wrap items-center gap-3.5">
                 <Link
                   href={ROUTES.partners}
                   className="group inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[14px] font-bold text-dark shadow-[0_14px_34px_rgba(218,162,80,0.28)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
@@ -154,8 +154,9 @@ export default function PartnersOrbit({
               <Stats labels={t.stats} />
             </motion.div>
 
-            {/* ORBITE */}
-            <OrbitCanvas />
+            {/* ORBITE — bornee a 540 px : a 680 px, elle fixait seule la
+                hauteur de la section, bien au-dela du texte en regard. */}
+            <OrbitCanvas sizeClassName="max-w-[440px] sm:max-w-[540px]" />
           </div>
         ) : (
           <>
@@ -168,7 +169,7 @@ export default function PartnersOrbit({
               >
                 <div className="flex items-center gap-4">
                   <span className="h-px w-10 bg-gold/55 sm:w-16 lg:hidden" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[11.5px]">
+                  <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[12px]">
                     {t.eyebrow}
                   </span>
                   <span className="h-px w-10 bg-gold/55 sm:w-16" />
@@ -208,7 +209,7 @@ export default function PartnersOrbit({
             page. Pas de padding horizontal, le conteneur de Section en pose
             deja un.
             ================================================================= */}
-        {isHome && <SdgContribution className="mt-20 sm:mt-24" />}
+        {isHome && <SdgContribution className="mt-10" />}
     </Section>
   )
 }

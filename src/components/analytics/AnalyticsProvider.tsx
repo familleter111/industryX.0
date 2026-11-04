@@ -37,10 +37,12 @@ function boot(locale: string) {
   booted = true
   const consent = readConsent()
   captureAttribution(consent === 'granted')
-  initPostHog(consent, locale)
   applyGaConsent(consent)
   const ref = getAttribution().last?.ref
-  if (ref) registerProperties({ ref })
+  // PostHog se charge à la demande : la propriété attend qu'il ait démarré.
+  void initPostHog(consent, locale).then(() => {
+    if (ref) registerProperties({ ref })
+  })
 }
 
 /** Une page vue à chaque changement d'URL (l'App Router ne recharge pas). */
@@ -66,7 +68,7 @@ export default function AnalyticsProvider({ locale }: { locale: string }) {
   useEffect(() => {
     const onConsent = (event: Event) => {
       const consent = (event as CustomEvent<Consent>).detail
-      applyConsent(consent, locale)
+      void applyConsent(consent, locale)
       applyGaConsent(consent)
       if (consent === 'granted') persistAttribution()
       else clearStoredAttribution()

@@ -178,7 +178,7 @@ export default async function GuidePage({ params }: Params) {
       <article>
         {/* ==================== EN-TÊTE ==================== */}
         <header className="mx-auto max-w-[1080px] px-5 pt-[calc(82px+2.5rem)] sm:px-7 lg:px-8 lg:pt-[calc(82px+3.5rem)]">
-          <nav aria-label={t.breadcrumb} className="text-[13px] text-subtle">
+          <nav aria-label={t.breadcrumb} className="text-[14px] text-subtle">
             <Link
               href="/resources"
               className="group inline-flex items-center gap-1.5 font-semibold text-gold-ink hover:underline"
@@ -202,7 +202,7 @@ export default async function GuidePage({ params }: Params) {
             {guide.excerpt}
           </p>
 
-          <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-subtle">
+          <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-subtle">
             <span className="font-semibold text-stone-800">{guide.author}</span>
             <span>
               {t.published} <time dateTime={guide.date}>{formatGuideDate(guide.date, locale)}</time>
@@ -250,13 +250,13 @@ export default async function GuidePage({ params }: Params) {
                 {t.asideTitle}
               </p>
 
-              <p className="mt-2.5 text-[13px] leading-[1.65] text-white/55">
+              <p className="mt-2.5 text-[14px] leading-[1.65] text-white/55">
                 {t.asideText}
               </p>
 
               <Link
                 href={ROUTES.demo}
-                className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-[13.5px] font-bold text-[#0C0D12] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
+                className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-[14px] font-bold text-[#0C0D12] transition-all duration-300 hover:-translate-y-[1px] hover:bg-gold-400"
               >
                 {t.demo}
                 <ArrowRight
@@ -269,7 +269,7 @@ export default async function GuidePage({ params }: Params) {
               {guide.related.href !== '/contact' && (
                 <Link
                   href={guide.related.href}
-                  className="group mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-[13px] font-semibold text-white/85 transition hover:border-gold/40 hover:text-white"
+                  className="group mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-[14px] font-semibold text-white/85 transition hover:border-gold/40 hover:text-white"
                 >
                   {guide.related.label}
                 </Link>

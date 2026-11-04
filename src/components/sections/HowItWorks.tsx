@@ -120,16 +120,16 @@ function NetworkCard({
   const Icon = item.icon
   return (
     <li
-      className={`flex items-start gap-3 rounded-xl border border-white/60 bg-white/[0.92] px-3.5 py-3 shadow-[0_12px_28px_rgba(12,13,18,0.22)] backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(218,162,80,0.28)] ${className}`}
+      className={`flex items-start gap-3 rounded-xl border border-white/60 bg-white/[0.92] px-3.5 py-3 xl:px-3 xl:py-2.5 shadow-[0_12px_28px_rgba(12,13,18,0.22)] backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(218,162,80,0.28)] ${className}`}
     >
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold/15 text-gold-ink ring-1 ring-gold/25">
         <Icon size={16} strokeWidth={2} />
       </div>
       <div className="min-w-0">
-        <p className="text-[12px] font-extrabold uppercase leading-snug tracking-wide text-gray-900 xl:text-[11.5px]">
+        <p className="text-sm font-extrabold uppercase leading-snug tracking-wide text-gray-900">
           {item.title}
         </p>
-        <p className="mt-0.5 text-[11.5px] leading-snug text-stone-600 xl:text-[10.5px]">
+        <p className="mt-0.5 text-sm leading-snug text-stone-600">
           {item.desc}
         </p>
       </div>
@@ -290,8 +290,10 @@ export default function ProblemsSection() {
             {/* Voile sombre qui monte du bas : la photo redevient un decor,
                 pas un concurrent des cartes posees dessus. */}
             <div className="absolute inset-0 bg-gradient-to-t from-dark/85 via-dark/55 to-dark/35" />
-            <div className="pointer-events-none absolute -left-16 -top-16 h-64 w-64 rounded-full bg-gold/20 blur-[100px]" />
-            <div className="pointer-events-none absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-gold/12 blur-[110px]" />
+            {/* Halos en degrade radial plutot que disques floutes : meme lueur,
+                peinture bien moins chere. */}
+            <div className="pointer-events-none absolute -left-40 -top-40 h-[30rem] w-[30rem]" style={{ background: 'radial-gradient(closest-side, rgba(218,162,80,0.16), transparent)' }} />
+            <div className="pointer-events-none absolute -bottom-40 -right-40 h-[30rem] w-[30rem]" style={{ background: 'radial-gradient(closest-side, rgba(218,162,80,0.10), transparent)' }} />
 
             <ConnectorLines />
 
@@ -319,11 +321,11 @@ export default function ProblemsSection() {
 
       {/* ================= BLOC CENTRAL : CARTES STATISTIQUES ================= */}
       {/* Un declencheur pour les trois cartes, pas trois. Ce bloc reste
-          distinct de celui du haut : 56 px les separent sur mobile, 80 au
+          distinct de celui du haut : 40 px les separent sur mobile, 48 au
           dela. Les fusionner ferait apparaitre ces cartes en meme temps
           qu'un contenu situe bien plus haut. */}
       <motion.div
-        className="mt-14 grid grid-cols-1 gap-5 sm:mt-20 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+        className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
         variants={m.stagger(0.1)}
         initial="hidden"
         whileInView="visible"
@@ -362,10 +364,10 @@ export default function ProblemsSection() {
                 className="mt-2.5 block h-[3px] w-10 origin-left rounded-full bg-gold"
               />
 
-              <span className="mt-2.5 block text-[13px] font-extrabold uppercase tracking-[0.08em] text-subtle">
+              <span className="mt-2.5 block text-sm font-extrabold uppercase tracking-[0.08em] text-subtle">
                 {stat.label}
               </span>
-              <p className="mt-3 text-[12.5px] leading-relaxed text-stone-600">{stat.desc}</p>
+              <p className="mt-3 text-sm leading-relaxed text-stone-600">{stat.desc}</p>
             </div>
           </motion.div>
         ))}
@@ -382,7 +384,7 @@ export default function ProblemsSection() {
       {/* Note de bas de page, pas conclusion : alignee a gauche sous les
           cartes et dans le gris des libelles. Centree et en gris de texte
           courant, elle avait le poids d'une chute. */}
-      <p className="mt-6 max-w-3xl text-left text-[11px] leading-relaxed text-subtle">
+      <p className="mt-6 max-w-3xl text-left text-sm leading-relaxed text-subtle">
         <span className="font-semibold">{t.sources}</span> — {t.sourcesText}
       </p>
     </Section>

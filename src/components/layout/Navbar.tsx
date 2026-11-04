@@ -29,7 +29,7 @@ import {
 
 import Image from 'next/image'
 import { LINKEDIN_URL } from '@/lib/data/socials'
-import ChatWidget from '@/components/layout/ChatWidget'
+import dynamic from 'next/dynamic'
 import { CHAT_OPEN_EVENT, type OpenChatDetail } from '@/lib/chat/open'
 import { platformHref, platformPages } from '@/lib/data/platform'
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
@@ -37,6 +37,10 @@ import { Link, homeAnchorHref, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
 import { track } from '@/lib/analytics/posthog'
 import { ROUTES } from '@/lib/routes'
+
+// L'assistant (widget, réponses locales, données) ne pèse sur aucune page
+// tant que personne ne l'ouvre.
+const ChatWidget = dynamic(() => import('@/components/layout/ChatWidget'), { ssr: false })
 
 type NavItem = {
   title: string
@@ -199,6 +203,14 @@ export default function Navbar() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   // Origine de la dernière ouverture du chat (bouton flottant, FAQ…).
   const [chatSource, setChatSource] = useState('bouton')
+  // Le widget n'est chargé qu'à la première ouverture, puis reste monté (la
+  // conversation et l'animation de fermeture en ont besoin).
+  const [chatMounted, setChatMounted] = useState(false)
+  const [bubbleHidden, setBubbleHidden] = useState(false)
+
+  useEffect(() => {
+    if (isChatOpen) setChatMounted(true)
+  }, [isChatOpen])
 
   // Ouverture demandée par une autre partie du site (lib/chat/open.ts).
   useEffect(() => {
@@ -382,8 +394,17 @@ export default function Navbar() {
   }
 
   useEffect(() => {
+    let lastY = window.scrollY
     const onScroll = () => {
-      setScrolled(window.scrollY > 12)
+      const y = window.scrollY
+      setScrolled(y > 12)
+      // Bulle du chat : masquée pendant la lecture (défilement vers le bas),
+      // de retour dès que le visiteur remonte. Seuil de 8 px contre les
+      // petites secousses du doigt.
+      if (Math.abs(y - lastY) > 8) {
+        setBubbleHidden(y > lastY && y > 240)
+        lastY = y
+      }
     }
 
     window.addEventListener('scroll', onScroll, {
@@ -535,7 +556,7 @@ export default function Navbar() {
               {/* CTA */}
               <Link
                 href={ROUTES.demo}
-                className="group inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gray-900 px-4 py-2.5 text-[13px] xl:px-5 font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.12)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
+                className="group inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gray-900 px-4 py-2.5 text-sm xl:px-5 font-semibold text-white shadow-[0_10px_30px_rgba(17,24,39,0.12)] transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
               >
                 {t.cta}
                 <ArrowRight
@@ -560,7 +581,7 @@ export default function Navbar() {
                     <div className="relative h-4 w-4 overflow-hidden rounded-full">
                       <Image src={language.flag} alt={language.name} fill sizes="16px" className="object-cover" />
                     </div>
-                    <span className="text-[13px] font-semibold tracking-[-0.01em] text-stone-700">
+                    <span className="text-sm font-semibold tracking-[-0.01em] text-stone-700">
                       {language.short}
                     </span>
                     <ChevronDown
@@ -680,12 +701,12 @@ export default function Navbar() {
                                   {item.title}
                                 </p>
                                 {item.badge && (
-                                  <span className="rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-800">
+                                  <span className="rounded-full bg-gold-tint px-2 py-0.5 text-xs font-bold uppercase tracking-[0.08em] text-gold-800">
                                     {item.badge}
                                   </span>
                                 )}
                               </div>
-                              <p className="mt-1 text-[12.5px] leading-relaxed text-stone-600">
+                              <p className="mt-1 text-sm leading-relaxed text-stone-600">
                                 {item.description}
                               </p>
                             </div>
@@ -706,20 +727,20 @@ export default function Navbar() {
                           }}
                         />
                         <div className="relative z-10">
-                          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gold-300">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-gold-300">
                             <Bot size={12} />
                             CIPA Intelligence
                           </div>
                           <h3 className="mt-5 text-[1.45rem] font-black leading-tight tracking-[-0.04em]">
                             {activeGroup.featured.title}
                           </h3>
-                          <p className="mt-4 text-[13px] leading-relaxed text-white/65">
+                          <p className="mt-4 text-sm leading-relaxed text-white/65">
                             {activeGroup.featured.description}
                           </p>
                           <Link
                             href={homeAnchorHref(activeGroup.featured.href)}
                             onClick={() => setActiveMenu(null)}
-                            className="mt-8 inline-flex items-center gap-2 text-[13px] font-semibold text-gold-300"
+                            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-gold-300"
                           >
                             {t.explore}
                             <ChevronRight size={15} />
@@ -765,7 +786,7 @@ export default function Navbar() {
 
                 {navGroups.map((group) => (
                   <div key={group.id} className="flex flex-col gap-3">
-                    <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-subtle">
+                    <h4 className="text-xs font-bold uppercase tracking-[0.14em] text-subtle">
                       {group.label}
                     </h4>
                     <div className="flex flex-col gap-1">
@@ -785,7 +806,7 @@ export default function Navbar() {
                               {item.title}
                             </span>
                             {item.badge && (
-                              <span className="ml-auto rounded-full bg-gold-tint px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-gold-800">
+                              <span className="ml-auto rounded-full bg-gold-tint px-2 py-0.5 text-xs font-bold uppercase tracking-[0.08em] text-gold-800">
                                 {item.badge}
                               </span>
                             )}
@@ -857,19 +878,25 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* CHAT BUTTON & WIDGET */}
+      {/* CHAT BUTTON & WIDGET
+          Sur téléphone : bulle plus petite (48 px, cible tactile suffisante),
+          plus près du bord, et masquée pendant le défilement vers le bas pour
+          ne pas recouvrir le texte. Jamais masquée chat ouvert ou focalisée. */}
       <button
         onClick={() => {
           setChatSource('bouton')
           setIsChatOpen(!isChatOpen)
         }}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-dark border border-gold/20 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition-all duration-300 hover:scale-105 hover:border-gold/50"
+        onFocus={() => setBubbleHidden(false)}
+        className={`fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-gold/20 bg-dark text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition-[transform,opacity,border-color] duration-300 hover:scale-105 hover:border-gold/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep sm:bottom-6 sm:right-6 sm:h-14 sm:w-14 ${
+          bubbleHidden && !isChatOpen ? 'max-sm:pointer-events-none max-sm:translate-y-20 max-sm:opacity-0' : ''
+        }`}
         aria-label={isChatOpen ? t.closeChat : t.openChat}
       >
         {isChatOpen ? <X size={20} className="text-gold" /> : <MessageCircle size={20} />}
       </button>
 
-      <ChatWidget isOpen={isChatOpen} source={chatSource} onClose={() => setIsChatOpen(false)} />
+      {chatMounted && <ChatWidget isOpen={isChatOpen} source={chatSource} onClose={() => setIsChatOpen(false)} />}
     </div>
   )
 }

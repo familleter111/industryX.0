@@ -96,7 +96,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="font-inter relative overflow-hidden bg-black text-white"
+      className="font-inter relative overflow-hidden bg-black text-white [contain-intrinsic-size:auto_800px] [content-visibility:auto]"
     >
       {/* top glow line */}
 
@@ -112,7 +112,7 @@ export default function Footer() {
         ]}
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-24 pt-10 sm:pb-10 lg:px-8">
         {/* MAIN GRID */}
 
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.6fr]">
@@ -133,7 +133,7 @@ export default function Footer() {
 
             {/* description */}
 
-            <p className="mt-5 max-w-xl text-[13px] leading-7 text-white/60">
+            <p className="mt-5 max-w-xl text-sm leading-7 text-white/70">
               {t.about}
             </p>
 
@@ -152,14 +152,14 @@ export default function Footer() {
                   <div className="mt-2 h-[2px] w-8 rounded-full bg-yellow-500" />
                 </div>
 
-                <ul className="space-y-4">
+                <ul className="sm:space-y-4 lg:space-y-3">
                   {section.items.map((item) => (
                     <li key={item.label}>
                       <Link
                         href={homeAnchorHref(item.href)}
                         className="
-                        group flex items-center gap-2
-                        text-sm
+                        group flex min-h-11 items-center gap-2 py-1
+                        text-sm sm:min-h-0 sm:py-0
                         text-white/65
                         transition-all duration-300
                         hover:text-yellow-400
@@ -178,7 +178,7 @@ export default function Footer() {
                         <span>{item.label}</span>
                       </Link>
 
-                      <div className="mt-3 h-px w-full bg-white/10" />
+                      <div className="h-px w-full bg-white/10 sm:mt-3 lg:mt-2.5" />
                     </li>
                   ))}
                 </ul>
@@ -219,7 +219,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-yellow-400">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-yellow-400">
                 {t.address}
               </p>
 
@@ -254,7 +254,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-yellow-400">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-yellow-400">
                 {t.phone}
               </p>
 
@@ -282,7 +282,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-yellow-400">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-yellow-400">
                 {t.email}
               </p>
 
@@ -296,7 +296,7 @@ export default function Footer() {
 
           <div className="flex items-center gap-3 lg:border-l lg:border-white/10 lg:pl-5">
             <div>
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-yellow-400">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-yellow-400">
                 {t.follow}
               </p>
 
@@ -337,11 +337,11 @@ export default function Footer() {
           md:flex-row
           "
         >
-          <p className="text-xs text-white/50">
+          <p className="text-sm text-white/60">
             © 2026 Industry X.0 — {t.rights}
           </p>
 
-          <div className="flex items-center gap-3 text-xs text-white/50">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/60">
             <span>{t.startupAct}</span>
 
             <div className="h-1 w-1 rounded-full bg-white/20" aria-hidden="true" />
@@ -351,7 +351,7 @@ export default function Footer() {
             {/* Rien n'apparaît tant que la mesure d'audience n'est pas configurée. */}
             <CookieSettingsButton
               label={t.cookies}
-              className="border-l border-white/20 pl-3 underline-offset-2 transition-colors hover:text-white hover:underline"
+              className="min-h-11 border-l border-white/20 pl-3 underline-offset-2 sm:min-h-0 transition-colors hover:text-white hover:underline"
             />
           </div>
         </div>

@@ -78,15 +78,9 @@ export default function Hero() {
       <div className="mx-auto grid max-w-7xl items-center gap-8 lg:gap-6 lg:grid-cols-[0.9fr_1.7fr] px-4 sm:px-6 lg:px-10">
         {/* LEFT */}
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.5,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="relative z-10 text-center lg:text-left"
-        >
+        {/* Entrée en CSS (`animate-rise`, tailwind.config.ts) : le titre est
+            visible dès la première image, sans attendre l'hydratation. */}
+        <div className="relative z-10 animate-rise text-center lg:text-left">
           {/* BADGE */}
 
           <div
@@ -107,7 +101,7 @@ export default function Hero() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
             </span>
 
-            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-subtle">
+            <span className="text-[12px] font-bold uppercase leading-snug tracking-[0.06em] text-subtle [text-wrap:balance] sm:tracking-[0.18em]">
               {t.badge}
             </span>
           </div>
@@ -287,22 +281,17 @@ export default function Hero() {
                   className="text-green-500"
                 />
 
-                <span className="text-[13px] font-medium text-stone-600">
+                <span className="text-sm font-medium text-stone-600">
                   {item}
                 </span>
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* RIGHT SIDE */}
 
-        <motion.div
-          variants={m.scaleIn}
-          initial="hidden"
-          animate="visible"
-          className="relative z-10"
-        >
+        <div className="relative z-10 animate-settle">
           {/* Conteneur isolé à la couleur de la section : le fond blanc de
               l'image se fond dans la section via mix-blend-multiply.
               Agrandi et décalé un peu vers la droite sur grand écran. */}
@@ -320,7 +309,7 @@ export default function Hero() {
               className="h-auto w-full mix-blend-multiply"
             />
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* PARTNER LOGOS MARQUEE — déplacée depuis CIPA (#2) */}

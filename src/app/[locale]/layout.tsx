@@ -6,6 +6,7 @@ import { setRequestLocale } from 'next-intl/server'
 import '@/styles/globals.css'
 
 import AnalyticsProvider from '@/components/analytics/AnalyticsProvider'
+import MotionProvider from '@/components/layout/MotionProvider'
 import Navbar from '@/components/layout/Navbar'
 import PreviewBadge from '@/components/layout/PreviewBadge'
 import JsonLd from '@/components/seo/JsonLd'
@@ -103,8 +104,10 @@ export default function RootLayout({
             (useLocale, Link localisé). Aucun message : les textes sont dans
             les composants. */}
         <NextIntlClientProvider locale={locale} messages={{}}>
-          <Navbar />
-          {children}
+          <MotionProvider>
+            <Navbar />
+            {children}
+          </MotionProvider>
           <AnalyticsProvider locale={locale} />
           <PreviewBadge locale={locale} />
         </NextIntlClientProvider>

@@ -120,7 +120,7 @@ function SectorLogoCard({ logo, label, href }: { logo: string; label: string; hr
       </div>
       {/* Le nom du secteur est ecrit, pas cache derriere un survol : une
           rangee d'icones muettes se lit comme une barre d'outils. */}
-      <figcaption className="w-full hyphens-auto text-center text-[9.5px] font-semibold leading-tight tracking-[-0.01em] text-stone-600 [overflow-wrap:anywhere] sm:text-[10.5px] sm:tracking-normal">
+      <figcaption className="w-full hyphens-auto text-center text-sm font-semibold leading-tight text-stone-600">
         {label}
       </figcaption>
     </figure>
@@ -187,7 +187,7 @@ export default function CipaSection() {
                 alt="CIPA"
                 width={320}
                 height={120}
-                className="h-auto w-[220px] lg:w-[280px]"
+                className="h-auto w-[160px] lg:w-[190px]"
               />
             </div>
 
@@ -222,7 +222,7 @@ export default function CipaSection() {
           className="relative mt-6 lg:mt-8"
         >
           <p
-            className="mx-auto max-w-2xl text-center text-[13px] font-medium leading-6"
+            className="mx-auto max-w-2xl text-center text-sm font-medium leading-6"
             style={{ color: colors.muted }}
           >
             {t.bridge}{' '}
@@ -245,7 +245,7 @@ export default function CipaSection() {
         </motion.div>
 
         {/* ================= PILLARS / CARDS — les 3 pouvoirs ================= */}
-        <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-8 grid gap-6 lg:grid-cols-3 lg:gap-6">
           {pillars.map((pillar, i) => (
             <motion.div
               key={i}
@@ -265,7 +265,7 @@ export default function CipaSection() {
             >
               {/* Numéro flottant */}
               <div
-                className="absolute -top-5 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full text-[13px] font-black text-white shadow-lg transition-transform duration-300 group-hover:scale-110"
+                className="absolute -top-5 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full text-[14px] font-black text-white shadow-lg transition-transform duration-300 group-hover:scale-110"
                 style={{ background: pillar.iconColor }}
               >
                 0{i + 1}
@@ -295,7 +295,7 @@ export default function CipaSection() {
           initial="hidden"
           whileInView="visible"
           viewport={m.viewport}
-          className="mx-auto mt-10 max-w-6xl lg:mt-12"
+          className="mx-auto mt-8 max-w-6xl"
         >
           <div className="mb-3 text-center">
             <h4
@@ -304,12 +304,14 @@ export default function CipaSection() {
             >
               {t.sectorsTitle}
             </h4>
-            <p className="mx-auto max-w-md text-[13px]" style={{ color: colors.muted }}>
+            <p className="mx-auto max-w-md text-sm" style={{ color: colors.muted }}>
               {t.sectorsLead}
             </p>
           </div>
 
-          <div className="grid grid-cols-4 items-start justify-items-center gap-x-1.5 gap-y-4 py-1 sm:gap-4 lg:grid-cols-8">
+          {/* Deux colonnes sur mobile : les legendes restent a 14 px sans se
+              casser au milieu des mots. */}
+          <div className="grid grid-cols-2 items-start justify-items-center gap-x-3 gap-y-5 py-1 sm:grid-cols-4 sm:gap-4 lg:grid-cols-8">
             {SECTOR_LOGOS.map((sector, i) => (
               <SectorLogoCard key={sector.logo} {...sector} label={t.sectors[i]} />
             ))}
@@ -317,7 +319,7 @@ export default function CipaSection() {
         </motion.div>
 
         {/* ================= CTA — rayonnement gold (#8) ================= */}
-        <div className="mt-6 flex justify-center lg:mt-7">
+        <div className="mt-6 flex justify-center">
           <div className="relative">
             <Link
               href={ROUTES.demo}

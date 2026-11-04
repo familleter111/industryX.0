@@ -46,7 +46,7 @@ export default function LegalDocument({ title, updated, intro, tocTitle, section
 
           {tocTitle && (
             <nav aria-labelledby="toc-title" className="mt-10 rounded-2xl border border-cream-border bg-white p-5 sm:p-6">
-              <h2 id="toc-title" className="text-[13px] font-bold uppercase tracking-[0.12em] text-dark">
+              <h2 id="toc-title" className="text-[14px] font-bold uppercase tracking-[0.12em] text-dark">
                 {tocTitle}
               </h2>
               <ol className="mt-4 grid gap-x-8 gap-y-2 text-[14px] sm:grid-cols-2">

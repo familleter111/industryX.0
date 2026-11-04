@@ -268,7 +268,8 @@ export default function PlatformCarousel({ slug }: { slug: string }) {
             <div className="grid grid-cols-1 gap-8 p-6 sm:p-8 md:p-10 lg:grid-cols-12">
               <div className="flex flex-col lg:col-span-6">
                 <div className="mb-4 flex items-center gap-3">
-                  <span className="font-display text-3xl font-black text-gold/30">{num(index)}</span>
+                  {/* Numero decoratif : en pseudo-element, hors du texte de la page. */}
+                  <span aria-hidden="true" data-num={num(index)} className="font-display text-3xl font-black text-gold/30 before:content-[attr(data-num)]" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gold-ink">
                     {page.name}
                   </span>
@@ -351,7 +352,7 @@ export default function PlatformCarousel({ slug }: { slug: string }) {
           type="button"
           onClick={prev}
           aria-label={t.prev}
-          className="absolute left-0 top-1/2 z-20 flex h-10 w-10 -translate-x-3 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-dark shadow-lg transition-all hover:border-gold hover:text-gold sm:h-11 sm:w-11 sm:-translate-x-5"
+          className="absolute left-0 top-1/2 z-20 flex h-11 w-11 -translate-x-3 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-dark shadow-lg transition-all hover:border-gold hover:text-gold sm:-translate-x-5"
         >
           <ChevronLeft size={18} />
         </button>
@@ -359,7 +360,7 @@ export default function PlatformCarousel({ slug }: { slug: string }) {
           type="button"
           onClick={next}
           aria-label={t.next}
-          className="absolute right-0 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 translate-x-3 items-center justify-center rounded-full border border-slate-200 bg-white text-dark shadow-lg transition-all hover:border-gold hover:text-gold sm:h-11 sm:w-11 sm:translate-x-5"
+          className="absolute right-0 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 translate-x-3 items-center justify-center rounded-full border border-slate-200 bg-white text-dark shadow-lg transition-all hover:border-gold hover:text-gold sm:translate-x-5"
         >
           <ChevronRight size={18} />
         </button>
@@ -370,24 +371,30 @@ export default function PlatformCarousel({ slug }: { slug: string }) {
           type="button"
           onClick={() => setPlaying(!playing)}
           aria-label={playing ? t.pause : t.play}
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-subtle transition-all hover:border-gold hover:text-gold"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-subtle transition-all hover:border-gold hover:text-gold"
         >
           {playing ? <Pause size={12} /> : <Play size={12} />}
         </button>
-        <div className="flex items-center gap-2">
+        {/* Chaque pastille dans une cible de 44 px ; la pastille visible reste fine. */}
+        <div className="flex items-center">
           {slides.map((s, i) => (
             <button
               key={s.id}
               type="button"
               onClick={() => goTo(i)}
               aria-label={`${t.goTo} ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${
-                i === index ? 'h-2 w-8 bg-gold' : 'h-2 w-2 bg-slate-300 hover:bg-gold/50'
-              }`}
-            />
+              aria-current={i === index ? 'true' : undefined}
+              className="group grid h-11 min-w-[2.75rem] place-items-center rounded-full"
+            >
+              <span
+                className={`block rounded-full transition-all duration-300 ${
+                  i === index ? 'h-2 w-8 bg-gold' : 'h-2 w-2 bg-slate-300 group-hover:bg-gold/50'
+                }`}
+              />
+            </button>
           ))}
         </div>
-        <span className="text-[10px] font-bold tabular-nums text-subtle">
+        <span className="text-xs font-bold tabular-nums text-subtle">
           {num(index)} / {total}
         </span>
       </div>

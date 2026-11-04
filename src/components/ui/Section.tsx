@@ -19,7 +19,7 @@ import type { ReactNode } from 'react'
  */
 
 type SectionProps = {
-  /** `default` 128/80/64 px, `dense` 96/64/48 px (desktop/tablette/mobile). */
+  /** `default` 96/80/64 px, `dense` 80/64/48 px (desktop/tablette/mobile). */
   variant?: 'default' | 'dense'
   background?: 'cream' | 'white' | 'dark'
   id?: string
@@ -41,9 +41,11 @@ type SectionProps = {
 }
 
 const PADDING = {
-  // spacing.section = 6rem, spacing.section-lg = 8rem, definis dans les tokens.
-  default: 'py-16 md:py-20 lg:py-section-lg',
-  dense: 'py-12 md:py-16 lg:py-section',
+  // Une seule echelle : 64 px sur mobile, 96 px sur desktop (spacing.section,
+  // 6rem, dans les tokens). 128 px de part et d'autre d'une frontiere, soit
+  // 256 px de vide entre deux contenus, allongeaient la page sans rien dire.
+  default: 'py-16 md:py-20 lg:py-section',
+  dense: 'py-12 md:py-16 lg:py-20',
 } as const
 
 const BACKGROUND = {

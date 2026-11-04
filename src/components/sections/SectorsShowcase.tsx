@@ -124,11 +124,11 @@ export default function SectorsShowcase({
                     {sector.title}
                   </h3>
 
-                  <p className="mt-2 text-[13px] leading-[1.65] text-stone-600">
+                  <p className="mt-2 text-[14px] leading-[1.65] text-stone-600">
                     {sector.desc}
                   </p>
 
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-gold-ink">
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-gold-ink">
                     {ctaLabel}
                     <ArrowRight
                       size={14}

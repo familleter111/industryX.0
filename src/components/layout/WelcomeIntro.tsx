@@ -50,16 +50,18 @@ export default function WelcomeIntro() {
     >
       {/* ================= PREMIUM GRADIENT MESH BACKGROUND ================= */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Glowing Golden Orb */}
+        {/* Halos en dégradé radial plutôt que disques floutés (`blur-[140px]`) :
+            même lueur, mais l'intro couvre tout l'écran au premier affichage,
+            et un flou de cette taille retardait ce premier affichage (donc le
+            LCP, dont le logo ci-dessous est l'élément) sur mobile. */}
         <div
-          className="animate-orb-drift absolute -top-10 -left-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-gold/12 blur-[100px] sm:blur-[140px]"
-          style={{ animationDuration: '6s' }}
+          className="animate-orb-drift absolute -top-48 -left-48 h-[650px] w-[650px] sm:h-[800px] sm:w-[800px]"
+          style={{ animationDuration: '6s', background: 'radial-gradient(closest-side, rgba(218,162,80,0.12), transparent)' }}
         />
 
-        {/* Glowing Graphite Orb */}
         <div
-          className="animate-orb-drift absolute -bottom-10 -right-10 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] rounded-full bg-stone-600/10 blur-[100px] sm:blur-[140px]"
-          style={{ animationDuration: '7s' }}
+          className="animate-orb-drift absolute -bottom-48 -right-48 h-[650px] w-[650px] sm:h-[800px] sm:w-[800px]"
+          style={{ animationDuration: '7s', background: 'radial-gradient(closest-side, rgba(87,83,78,0.10), transparent)' }}
         />
 
         {/* Elegant grid overlay */}
@@ -79,7 +81,7 @@ export default function WelcomeIntro() {
       <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center font-[family-name:var(--font-inter)]">
         <div className="flex items-center gap-4 mb-6">
           <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold/70" />
-          <p className="font-[family-name:var(--font-inter)] text-[11px] sm:text-sm font-semibold uppercase tracking-[0.4em] bg-gradient-to-r from-stone-600 via-gold to-stone-600 bg-clip-text text-transparent">
+          <p className="font-[family-name:var(--font-inter)] text-xs sm:text-sm font-semibold uppercase tracking-[0.4em] bg-gradient-to-r from-stone-600 via-gold to-stone-600 bg-clip-text text-transparent">
             {welcome}
           </p>
           <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold/70" />
@@ -89,7 +91,14 @@ export default function WelcomeIntro() {
             Pas de `priority` : la Navbar precharge deja ce meme fichier, et
             un second preload sur la meme URL ne ferait que disputer sa bande
             passante a l'image LCP du hero. */}
-        <div className="drop-shadow-[0_10px_45px_rgba(245,166,35,0.25)]">
+        {/* Lueur dorée en dégradé derrière le logo, plutôt qu'un
+            `drop-shadow` (un filtre recalculé sur l'image). */}
+        <div className="relative">
+          <span
+            aria-hidden
+            className="absolute -inset-x-10 -inset-y-12"
+            style={{ background: 'radial-gradient(closest-side, rgba(245,166,35,0.18), transparent)' }}
+          />
           <Image
             src="/logo.png"
             alt=""
@@ -98,7 +107,7 @@ export default function WelcomeIntro() {
             sizes="(min-width: 1024px) 520px, (min-width: 640px) 420px, 280px"
             // Premier élément affiché, souvent le LCP : jamais en différé.
             loading="eager"
-            className="w-[280px] sm:w-[420px] lg:w-[520px] h-auto"
+            className="relative w-[280px] sm:w-[420px] lg:w-[520px] h-auto"
           />
         </div>
 

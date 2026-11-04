@@ -91,25 +91,25 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
               <div className={heroStyles.intro}>
                 {statement ? (
                   <motion.div
-                    initial={{ opacity: 0, y: 14 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center gap-3 rounded-full border border-[#EDE3D2] bg-white/80 py-1.5 pl-1.5 pr-5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] backdrop-blur"
+                    className="animate-rise inline-flex items-center gap-3 rounded-full border border-[#EDE3D2] bg-white/80 py-1.5 pl-1.5 pr-5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] backdrop-blur"
                   >
                     <span className="h-5 w-1.5 rounded-full bg-[#DAA250]" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#57534E] sm:text-[11px]">
+                    <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#57534E] sm:text-[12px]">
                       {statement.eyebrow}
                     </span>
                   </motion.div>
                 ) : (
                   <motion.div
-                    initial={{ opacity: 0, y: 14 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center gap-2.5 rounded-full border border-[#EFDFC4] bg-[#FDF7EC] py-2 pl-3.5 pr-5"
+                    className="animate-rise inline-flex items-center gap-2.5 rounded-full border border-[#EFDFC4] bg-[#FDF7EC] py-2 pl-3.5 pr-5"
                   >
                     <BadgeIcon size={14} aria-hidden="true" className="text-[#DAA250]" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B6842B] sm:text-[11px]">
+                    <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#B6842B] sm:text-[12px]">
                       {t.badge}
                     </span>
                   </motion.div>
@@ -117,44 +117,44 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
 
                 {statement ? (
                   <motion.h1
-                    initial={{ opacity: 0, y: 22 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className={`${heroStyles.title} ${heroStyles.statementTitle} mt-6 font-display text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-dark sm:text-[44px] lg:text-[clamp(34px,3.85vw_-_4px,50px)]`}
+                    className={`animate-rise ${heroStyles.title} ${heroStyles.statementTitle} mt-6 font-display text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-dark sm:text-[44px] lg:text-[clamp(34px,3.85vw_-_4px,50px)]`}
                   >
                     {statement.title[0]}{' '}
                     <br />
-                    {statement.title[1]} <span className="text-[#DAA250]">{statement.title[2]}</span>{' '}
+                    {statement.title[1]} <span className="text-gold-deep">{statement.title[2]}</span>{' '}
                     <br />
                     {statement.title[3]}
                   </motion.h1>
                 ) : (
                   <motion.h1
-                    initial={{ opacity: 0, y: 22 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className={`${heroStyles.title} mt-6 font-display text-[32px] font-black leading-[1.08] tracking-[-0.02em] text-dark sm:text-[40px] lg:text-[clamp(32px,3.5vw_-_4px,46px)]`}
+                    className={`animate-rise ${heroStyles.title} mt-6 font-display text-[32px] font-black leading-[1.08] tracking-[-0.02em] text-dark sm:text-[40px] lg:text-[clamp(32px,3.5vw_-_4px,46px)]`}
                   >
                     {t.title}
                     {data.headlinePrefix}
-                    <span className="text-[#DAA250]">{data.headline}</span>
+                    <span className="text-gold-deep">{data.headline}</span>
                   </motion.h1>
                 )}
 
                 <motion.p
-                  initial={{ opacity: 0, y: 22 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="mt-6 max-w-[34rem] text-[14px] leading-[1.75] text-[#57534E] sm:text-[15.5px]"
+                  className="animate-rise mt-6 max-w-[34rem] text-[14px] leading-[1.75] text-[#57534E] sm:text-[15.5px]"
                 >
                   {data.intro}
                 </motion.p>
 
                 <motion.div
-                  initial={{ opacity: 0, y: 22 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="mt-8 flex flex-wrap items-center gap-3.5"
+                  className="animate-rise mt-8 flex flex-wrap items-center gap-3.5"
                 >
                   <Link
                     href={ROUTES.demo}
@@ -177,7 +177,7 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
                 {data.indicators.slice(0, 3).map((label) => (
                   <li key={label} className="flex items-start gap-2 sm:items-center">
                     <CheckCircle2 size={15} aria-hidden="true" className="shrink-0 text-[#22C55E]" />
-                    <span className="text-[13px] font-medium text-[#57534E]">{label}</span>
+                    <span className="text-[14px] font-medium text-[#57534E]">{label}</span>
                   </li>
                 ))}
               </ul>
@@ -185,10 +185,10 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
 
             {/* ---------- Colonne visuel ---------- */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
+              initial={false}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className={`${heroStyles.visual} ${statement ? heroStyles.statementVisual : ''} relative -mx-5 sm:-mx-7 lg:absolute lg:right-0 lg:top-0 lg:m-0 lg:w-[54%] lg:max-w-[min(760px,calc((100svh_-_150px)*4/3))]`}
+              className={`animate-settle ${heroStyles.visual} ${statement ? heroStyles.statementVisual : ''} relative -mx-5 sm:-mx-7 lg:absolute lg:right-0 lg:top-0 lg:m-0 lg:w-[54%] lg:max-w-[min(760px,calc((100svh_-_150px)*4/3))]`}
             >
               <div className={`${heroStyles.imageFrame} relative w-full`}>
                 <Image
@@ -216,12 +216,12 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
                 <span className="h-1.5 w-5 rounded-full bg-[#EBD3AC]" />
                 <span className="h-1.5 w-5 rounded-full bg-[#E7E2D8]" />
               </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-subtle">
                 {t.tagline}
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8A837A]">
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-subtle">
               {t.domains.map((item, i) => (
                 <span key={item} className="flex items-center gap-2.5">
                   {i > 0 && <span className="text-[#DAA250]">•</span>}
@@ -244,7 +244,7 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
             <div className="w-11 h-11 rounded-full border border-gold/40 bg-gold/10 text-gold-deep flex items-center justify-center shrink-0 relative z-10">
               <HeroIcon size={19} />
             </div>
-            <p className="text-[13px] sm:text-sm text-white/85 leading-relaxed relative z-10 text-center md:text-left">
+            <p className="text-[14px] sm:text-sm text-white/85 leading-relaxed relative z-10 text-center md:text-left">
               {data.overview}
             </p>
           </motion.div>
@@ -252,7 +252,7 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
       </section>
 
       {/* 3. CAROUSEL — 4 FAÇONS */}
-      <section id="core-ops" className="py-20 md:py-28 relative">
+      <section id="core-ops" className="py-16 lg:py-24 relative">
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
@@ -271,7 +271,7 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
       </section>
 
       {/* 4. CAROUSEL — 3 FAÇONS */}
-      <section className="py-20 md:py-28 relative bg-[#F1EFE9]/40 border-y border-[#ECE7DD]">
+      <section className="py-16 lg:py-24 relative bg-[#F1EFE9]/40 border-y border-[#ECE7DD]">
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <div className="text-center max-w-5xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-[40px] font-black font-display text-dark tracking-tight leading-[1.15] mb-4">
@@ -290,14 +290,14 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
       </section>
 
       {/* 5. UNE PLATEFORME UNIQUE */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <motion.div
             {...fadeInUp}
             className="bg-dark rounded-[2rem] p-8 md:p-12 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-mesh-dark opacity-30" />
-            <div className="absolute top-[-80px] right-[-80px] w-72 h-72 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-[-180px] right-[-180px] w-[29rem] h-[29rem] rounded-full bg-[radial-gradient(closest-side,rgba(218,162,80,0.10),transparent)] pointer-events-none" />
 
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               <div className="lg:col-span-6">
@@ -332,7 +332,7 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
       </section>
 
       {/* 6. COMMENT CIPA FONCTIONNE */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-5 sm:px-7 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="text-3xl sm:text-4xl font-black font-display text-dark tracking-tight mb-3">
@@ -361,7 +361,7 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
                     <Icon size={22} />
                   </div>
                   <h3 className="text-sm font-black text-dark mb-1.5">{step.title}</h3>
-                  <p className="text-[11px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
+                  <p className="text-[12px] text-subtle leading-relaxed max-w-[190px]">{step.desc}</p>
                 </motion.div>
               )
             })}
@@ -370,10 +370,10 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
       </section>
 
       {/* 7. CALL TO ACTION FINAL */}
-      <section className="py-20 bg-dark text-white relative overflow-hidden">
+      <section className="py-16 lg:py-24 bg-dark text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-mesh-dark opacity-30" />
-        <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-100px] right-[-100px] w-96 h-96 bg-green-500/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-[-220px] left-[-220px] w-[39rem] h-[39rem] rounded-full bg-[radial-gradient(closest-side,rgba(218,162,80,0.10),transparent)] pointer-events-none" />
+        <div className="absolute bottom-[-220px] right-[-220px] w-[39rem] h-[39rem] rounded-full bg-[radial-gradient(closest-side,rgba(34,197,94,0.05),transparent)] pointer-events-none" />
 
         <div className="max-w-5xl mx-auto px-5 text-center relative z-10">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-display tracking-tight text-white mb-6">

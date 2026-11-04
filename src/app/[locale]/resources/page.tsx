@@ -122,7 +122,7 @@ function ResourcesHero({ guides: GUIDES }: { guides: Guide[] }) {
       >
         {/* DISCOURS */}
         <div>
-          <RevealItem className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/[0.07] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gold sm:text-[11px]">
+          <RevealItem className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/[0.07] px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.18em] text-gold sm:text-[12px]">
             <span className="h-[6px] w-[6px] rounded-full bg-gold" />
             {t.badge}
           </RevealItem>
@@ -183,7 +183,7 @@ function ResourcesHero({ guides: GUIDES }: { guides: Guide[] }) {
                 sizes="(min-width: 1024px) 640px, 100vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
-              <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.12em] text-dark">
+              <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[12px] font-bold uppercase tracking-[0.12em] text-dark">
                 {t.featured}
               </span>
             </div>
@@ -204,11 +204,11 @@ function ResourcesHero({ guides: GUIDES }: { guides: Guide[] }) {
                 {featured.title}
               </h2>
 
-              <p className="mt-3 line-clamp-2 text-[13.5px] leading-[1.7] text-white/55">
+              <p className="mt-3 line-clamp-2 text-[14px] leading-[1.7] text-white/55">
                 {featured.excerpt}
               </p>
 
-              <span className="mt-5 inline-flex items-center gap-2 text-[13.5px] font-bold text-gold">
+              <span className="mt-5 inline-flex items-center gap-2 text-[14px] font-bold text-gold">
                 {t.readGuide}
                 <ArrowRight
                   size={15}

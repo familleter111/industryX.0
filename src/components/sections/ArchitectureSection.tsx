@@ -160,7 +160,7 @@ export default function ArchitectureSection({
               <p className="mt-1 text-[14px] font-semibold text-dark">
                 {node.label}
               </p>
-              <p className="mt-1 text-[13px] leading-relaxed text-stone-600">
+              <p className="mt-1 text-[14px] leading-relaxed text-stone-600">
                 {node.detail}
               </p>
             </motion.li>
@@ -174,10 +174,10 @@ export default function ArchitectureSection({
             <dl className="mt-4 divide-y divide-cream-border border-y border-cream-border">
               {stack.map((layer) => (
                 <div key={layer.layer} className="grid gap-1 py-3 sm:grid-cols-[140px_1fr] sm:gap-4">
-                  <dt className="text-[13px] font-semibold text-dark">
+                  <dt className="text-[14px] font-semibold text-dark">
                     {layer.layer}
                   </dt>
-                  <dd className="text-[13px] leading-relaxed text-stone-600">
+                  <dd className="text-[14px] leading-relaxed text-stone-600">
                     {layer.role}
                     {layer.tech && (
                       <span className="mt-1 block text-subtle">{layer.tech}</span>
@@ -202,10 +202,10 @@ export default function ArchitectureSection({
                       <Icon size={15} className="text-subtle" />
                     </span>
                     <div>
-                      <p className="text-[13px] font-semibold text-dark">
+                      <p className="text-[14px] font-semibold text-dark">
                         {point.title}
                       </p>
-                      <p className="mt-1 text-[13px] leading-relaxed text-stone-600">
+                      <p className="mt-1 text-[14px] leading-relaxed text-stone-600">
                         {point.detail}
                       </p>
                     </div>

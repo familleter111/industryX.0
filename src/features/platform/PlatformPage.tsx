@@ -97,7 +97,7 @@ function PillarLinks({ current }: { current: string }) {
                     <Icon size={19} />
                   </span>
                   <span
-                    className={`text-[11px] font-bold uppercase tracking-[0.14em] ${
+                    className={`text-[12px] font-bold uppercase tracking-[0.14em] ${
                       isCurrent ? 'text-gold' : 'text-subtle'
                     }`}
                   >
@@ -109,7 +109,7 @@ function PillarLinks({ current }: { current: string }) {
                   {page.title}
                 </p>
                 <p
-                  className={`mt-1.5 flex-1 text-[13.5px] leading-[1.6] ${
+                  className={`mt-1.5 flex-1 text-[14px] leading-[1.6] ${
                     isCurrent ? 'text-white/60' : 'text-stone-600'
                   }`}
                 >
@@ -117,7 +117,7 @@ function PillarLinks({ current }: { current: string }) {
                 </p>
 
                 <span
-                  className={`mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold ${
+                  className={`mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold ${
                     isCurrent ? 'text-white/50' : 'text-gold-ink'
                   }`}
                 >

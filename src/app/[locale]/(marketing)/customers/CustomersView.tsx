@@ -166,7 +166,7 @@ function TestimonialLogo({ testimonial }: { testimonial: Testimonial }) {
 
   if (!logo) {
     return (
-      <span className="font-display text-[13px] font-black text-gold-ink">
+      <span className="font-display text-[14px] font-black text-gold-ink">
         {testimonial.company
           .split(' ')
           .map((word) => word[0])
@@ -211,7 +211,7 @@ function TestimonialCard({
     >
       <Quote size={26} className="text-gold/50" />
 
-      <blockquote className="mt-4 flex-1 text-[13.5px] leading-[1.75] text-[#44403C]">
+      <blockquote className="mt-4 flex-1 text-[14px] leading-[1.75] text-[#44403C]">
         {testimonial.quote}
       </blockquote>
 
@@ -227,7 +227,7 @@ function TestimonialCard({
         </div>
 
         <div className="min-w-0">
-          <p className="text-[13.5px] font-bold text-[#111827]">
+          <p className="text-[14px] font-bold text-[#111827]">
             {testimonial.company}
           </p>
           <p className="mt-0.5 text-[12px] text-subtle">
@@ -267,7 +267,7 @@ function TestimonialsGrid({ testimonials }: { testimonials: Testimonial[] }) {
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className="group inline-flex items-center gap-2 rounded-full border border-[#E7E5E4] bg-white px-6 py-3 text-[13.5px] font-semibold text-[#44403C] transition-all duration-300 hover:-translate-y-[1px] hover:border-gold/40 hover:text-[#111827]"
+            className="group inline-flex items-center gap-2 rounded-full border border-[#E7E5E4] bg-white px-6 py-3 text-[14px] font-semibold text-[#44403C] transition-all duration-300 hover:-translate-y-[1px] hover:border-gold/40 hover:text-[#111827]"
           >
             {t.more(testimonials.length - TESTIMONIALS_PAGE_SIZE)}
             <ChevronDown
@@ -327,7 +327,7 @@ function UseCasesScreen() {
             <motion.span
               {...rise}
               transition={{ duration: 0.5, ease }}
-              className="inline-flex w-fit items-center gap-2.5 rounded-full border border-gold/30 bg-gold/[0.05] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-gold-ink sm:text-[11px]"
+              className="inline-flex w-fit items-center gap-2.5 rounded-full border border-gold/30 bg-gold/[0.05] px-4 py-2 text-[12px] font-bold uppercase tracking-[0.16em] text-gold-ink sm:text-[12px]"
             >
               <span className="h-[7px] w-[7px] rounded-full bg-gold" />
               {t.badge}
@@ -389,7 +389,7 @@ function UseCasesScreen() {
               transition={{ duration: 0.55, delay: 0.24, ease }}
               className="mt-[clamp(1.25rem,2.7vh,2.25rem)] border-t border-cream-border pt-[clamp(1rem,2.2vh,1.6rem)]"
             >
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[11px]">
+              <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-subtle sm:text-[12px]">
                 {t.expertise}
               </p>
 
@@ -414,7 +414,7 @@ function UseCasesScreen() {
                           {figure.value}
                         </span>
                       </p>
-                      <p className="mt-2 text-[13px] leading-[1.4] text-muted sm:text-[13.5px]">
+                      <p className="mt-2 text-[14px] leading-[1.4] text-muted sm:text-[14px]">
                         {t.reach[index]}
                       </p>
                     </li>
@@ -465,7 +465,7 @@ function UseCasesScreen() {
               <span className="text-gold-deep">{t.platformAccent}</span>
             </h2>
 
-            <p className="mt-3.5 max-w-[26rem] text-[13px] leading-[1.65] text-muted sm:text-[13.5px]">
+            <p className="mt-3.5 max-w-[26rem] text-[14px] leading-[1.65] text-muted sm:text-[14px]">
               {t.platformLead}
             </p>
           </div>
@@ -498,7 +498,7 @@ function UseCasesScreen() {
                       className="shrink-0 text-subtle"
                     />
                   </p>
-                  <p className="mt-1.5 text-[12.5px] leading-[1.5] text-subtle">
+                  <p className="mt-1.5 text-[14px] leading-[1.5] text-subtle">
                     {use.desc}
                   </p>
                 </li>
@@ -508,7 +508,7 @@ function UseCasesScreen() {
 
           {/* Étiquette de clôture. Absente sous `lg` : c’est un commentaire,
               pas une information, et elle prendrait la place d’un contenu. */}
-          <p className="hidden text-[11px] font-bold uppercase leading-[1.9] tracking-[0.16em] text-subtle lg:block">
+          <p className="hidden text-[12px] font-bold uppercase leading-[1.9] tracking-[0.16em] text-subtle lg:block">
             {t.closing[0]}
             <br />
             {t.closing[1]}

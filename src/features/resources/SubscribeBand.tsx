@@ -155,7 +155,7 @@ export default function SubscribeBand({ source }: { source: string }) {
             <CheckCircle2 size={24} className="mt-0.5 shrink-0 text-gold" aria-hidden="true" />
             <div>
               <p className="text-[15px] font-bold text-white">{t.doneTitle}</p>
-              <p className="mt-1.5 text-[13.5px] leading-[1.65] text-white/55">
+              <p className="mt-1.5 text-[14px] leading-[1.65] text-white/55">
                 {t.doneText}
               </p>
             </div>
@@ -235,7 +235,7 @@ export default function SubscribeBand({ source }: { source: string }) {
                 >
                   {consent && <Check size={12} strokeWidth={3.2} />}
                 </span>
-                <span className="text-[12.5px] leading-relaxed text-white/55">
+                <span className="text-[14px] leading-relaxed text-white/55">
                   {t.consent}{' '}
                   <Link
                     href="/privacy"
@@ -273,7 +273,7 @@ export default function SubscribeBand({ source }: { source: string }) {
             {submitError && (
               <div
                 role="alert"
-                className="mt-4 flex items-start gap-2.5 rounded-xl border border-red-400/40 bg-red-500/10 px-3.5 py-3 text-[12.5px] leading-relaxed text-red-200"
+                className="mt-4 flex items-start gap-2.5 rounded-xl border border-red-400/40 bg-red-500/10 px-3.5 py-3 text-[14px] leading-relaxed text-red-200"
               >
                 <AlertCircle size={16} className="mt-px shrink-0" aria-hidden="true" />
                 <span>{submitError}</span>

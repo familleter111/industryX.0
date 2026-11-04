@@ -108,7 +108,7 @@ function HighlightsPanel() {
         />
 
         <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[11px]">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
             {t.panelEyebrow}
           </p>
 
@@ -132,7 +132,7 @@ function HighlightsPanel() {
                 <h3 className="text-[14.5px] font-bold tracking-[-0.01em] text-white">
                   {item.title}
                 </h3>
-                <p className="mt-1.5 text-[12.5px] leading-[1.65] text-white/50">
+                <p className="mt-1.5 text-sm leading-[1.65] text-white/60">
                   {item.desc}
                 </p>
               </div>
@@ -144,7 +144,7 @@ function HighlightsPanel() {
       {/* CONFIDENTIALITÉ — l'ancien bandeau isolé, rapatrié là où il a du sens */}
       <div className="flex items-center gap-3 border-t border-white/[0.07] px-6 py-4 sm:px-7">
         <ShieldCheck size={16} className="shrink-0 text-gold" />
-        <p className="text-[11.5px] leading-[1.6] text-white/50">
+        <p className="text-sm leading-[1.6] text-white/60">
           {t.confidential}
         </p>
       </div>
@@ -207,7 +207,7 @@ function FaqAccordion({ faqs: FAQS }: { faqs: FaqEntry[] }) {
                 >
                   <span
                     aria-hidden="true"
-                    className={`shrink-0 font-display text-[13px] font-black tabular-nums tracking-[0.02em] transition-colors duration-300 ${
+                    className={`shrink-0 font-display text-[14px] font-black tabular-nums tracking-[0.02em] transition-colors duration-300 ${
                       isOpen ? 'text-gold' : 'text-[#C7C2B8]'
                     }`}
                   >
@@ -245,7 +245,7 @@ function FaqAccordion({ faqs: FAQS }: { faqs: FaqEntry[] }) {
                 }`}
               >
                 <div className="overflow-hidden">
-                  <p className="px-5 pb-6 pl-[46px] text-[13.5px] leading-[1.75] text-[#57534E] sm:px-7 sm:pb-7 sm:pl-[64px] sm:text-[14.5px] lg:pb-5">
+                  <p className="px-5 pb-6 pl-[46px] text-sm leading-[1.75] text-[#57534E] sm:px-7 sm:pb-7 sm:pl-[64px] sm:text-[15px] lg:pb-5">
                     {faq.answer}
                   </p>
                 </div>
@@ -257,7 +257,7 @@ function FaqAccordion({ faqs: FAQS }: { faqs: FaqEntry[] }) {
 
       {/* PIED — absorbe l'écart de hauteur avec le panneau de gauche */}
       <div className="mt-auto flex flex-col gap-4 border-t border-[#F0EDE6] bg-[#FDFCF9] px-5 py-5 lg:py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
-        <p className="text-[13.5px] leading-[1.6] text-[#57534E]">
+        <p className="text-sm leading-[1.6] text-[#57534E]">
           {t.notListed}
         </p>
 
@@ -267,7 +267,7 @@ function FaqAccordion({ faqs: FAQS }: { faqs: FaqEntry[] }) {
           type="button"
           onClick={() => openChat({ source: 'faq' })}
           aria-haspopup="dialog"
-          className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#0C0D12] px-5 py-3 text-[13.5px] font-bold text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
+          className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#0C0D12] px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
         >
           {t.ask}
           <MessageCircle
@@ -289,10 +289,11 @@ export default function FaqSection({ faqs }: { faqs: FaqEntry[] }) {
   return (
     <section
       id="faq"
-      className="relative scroll-mt-[82px] overflow-hidden bg-[#FDFBF6] py-20 font-body text-dark sm:py-24"
+      className="relative scroll-mt-[82px] overflow-hidden bg-[#FDFBF6] py-16 font-body text-dark lg:py-24"
     >
-      <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-gold/[0.06] blur-[120px]" />
-      <div className="pointer-events-none absolute -left-32 top-1/3 h-72 w-72 rounded-full bg-gold/[0.04] blur-[120px]" />
+      {/* Halos en degrade radial, sans `filter: blur` (cout de peinture). */}
+      <div className="pointer-events-none absolute -right-56 -top-32 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(closest-side,rgba(218,162,80,0.06),transparent)]" />
+      <div className="pointer-events-none absolute -left-64 top-1/3 -mt-32 h-[33rem] w-[33rem] rounded-full bg-[radial-gradient(closest-side,rgba(218,162,80,0.04),transparent)]" />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-5 sm:px-7 lg:px-8">
         <SectionHeading
@@ -305,7 +306,7 @@ export default function FaqSection({ faqs }: { faqs: FaqEntry[] }) {
             colonnes font exactement la même hauteur, la photo à gauche et le
             pied de carte à droite absorbant chacun leur écart. Sur mobile
             l'accordéon passe en premier — c'est l'objet de la section. */}
-        <div className="mt-12 grid gap-5 lg:mt-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-6">
+        <div className="mt-10 grid gap-5 lg:mt-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-6">
           <HighlightsPanel />
           <FaqAccordion faqs={faqs} />
         </div>

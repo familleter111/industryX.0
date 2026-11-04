@@ -25,7 +25,7 @@ function OrbitChip({ logo, ring }: { logo: LogoAsset; ring: Ring }) {
     >
       <span
         role="tooltip"
-        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-dark px-2.5 py-1 text-[11px] font-semibold text-white opacity-0 shadow-lg transition-opacity duration-fast group-hover/chip:opacity-100 group-focus-visible/chip:opacity-100"
+        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-dark px-2.5 py-1 text-[12px] font-semibold text-white opacity-0 shadow-lg transition-opacity duration-fast group-hover/chip:opacity-100 group-focus-visible/chip:opacity-100"
       >
         {logo.alt}
       </span>

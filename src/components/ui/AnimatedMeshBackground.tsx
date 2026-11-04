@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 
 interface Orb {
   color: string
@@ -30,7 +30,10 @@ function ParallaxOrb({
   scrollYProgress: MotionValue<number>
   delay: number
 }) {
-  const amplitude = orb.parallax ?? 40
+  // Parallax lie au scroll : du JavaScript, que la regle CSS de
+  // prefers-reduced-motion n'atteint pas. Immobile si le visiteur le demande.
+  const reduce = useReducedMotion()
+  const amplitude = reduce ? 0 : (orb.parallax ?? 40)
   const y = useTransform(scrollYProgress, [0, 1], [-amplitude, amplitude])
 
   return (
@@ -48,11 +51,17 @@ function ParallaxOrb({
           CSS, ou le compositeur l'execute sans occuper le fil principal.
           Elle herite ainsi du respect de prefers-reduced-motion defini dans
           globals.css, que Framer Motion ignore. */}
+      {/* Halo en dégradé radial, et non disque plein + `filter: blur(140px)` :
+          même lueur diffuse (le flou étalait le disque sur environ une
+          demi-taille de chaque côté, d'où le débord), pour une fraction du
+          coût de peinture — le flou se recalculait sur toute sa surface et
+          retardait le premier affichage des téléphones modestes. */}
       <div
-        className="h-full w-full animate-orb-drift rounded-full"
+        className="absolute animate-orb-drift"
         style={{
-          background: orb.color,
-          filter: 'blur(140px)',
+          inset: -orb.size / 2,
+          background: `radial-gradient(closest-side, ${orb.color}, transparent)`,
+          opacity: 0.75,
           animationDuration: `${orb.duration ?? 10}s`,
           animationDelay: `${delay}s`,
         }}

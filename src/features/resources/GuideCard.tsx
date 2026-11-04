@@ -29,7 +29,7 @@ export default function GuideCard({ guide }: { guide: Guide }) {
           sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
-        <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.1em] text-gold-ink shadow-sm">
+        <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[12px] font-bold uppercase tracking-[0.1em] text-gold-ink shadow-sm">
           {categoryLabel(guide.category, locale)}
         </span>
       </div>
@@ -39,7 +39,7 @@ export default function GuideCard({ guide }: { guide: Guide }) {
           {guide.title}
         </h3>
 
-        <p className="mt-2.5 line-clamp-3 flex-1 text-[13px] leading-[1.65] text-stone-600">
+        <p className="mt-2.5 line-clamp-3 flex-1 text-[14px] leading-[1.65] text-stone-600">
           {guide.excerpt}
         </p>
 
