@@ -51,6 +51,7 @@ export default function CTASection() {
 
   return (
     <Section
+      deferRender
       variant="default"
       background="cream"
       id="contact"
@@ -177,7 +178,7 @@ export default function CTASection() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     href={ROUTES.demo}
-                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-7 py-5 backdrop-blur-md transition-all duration-300 hover:bg-white/[0.06]"
+                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-7 py-5 sm:backdrop-blur-md transition-all duration-300 hover:bg-white/[0.06]"
                   >
 
                     <div>

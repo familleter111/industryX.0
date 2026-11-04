@@ -9,6 +9,7 @@ import AnalyticsProvider from '@/components/analytics/AnalyticsProvider'
 import MotionProvider from '@/components/layout/MotionProvider'
 import Navbar from '@/components/layout/Navbar'
 import PreviewBadge from '@/components/layout/PreviewBadge'
+import RenderGuards from '@/components/layout/RenderGuards'
 import JsonLd from '@/components/seo/JsonLd'
 import { isLocale, routing } from '@/i18n/routing'
 import { organizationSchema } from '@/lib/seo/schema'
@@ -63,8 +64,26 @@ export default function RootLayout({
   setRequestLocale(locale)
 
   return (
-    <html lang={locale} className={`${syne.variable} ${outfit.variable} ${inter.variable}`}>
+    // suppressHydrationWarning : le script ci-dessous peut ajouter `cv-off`
+    // aux classes de <html> avant l'hydratation.
+    <html
+      lang={locale}
+      className={`${syne.variable} ${outfit.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
       <head>
+        {/*
+          Arrivée sur une ancre (`/#faq`) : le navigateur y défile pendant le
+          chargement, avant tout JavaScript de page. Les sections en rendu
+          différé (`cv-auto`) n'auraient alors que leur hauteur estimée et la
+          cible serait mal placée : on les rend toutes d'emblée. Le reste de la
+          garde (clics, changements de hash) est dans RenderGuards.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "if(location.hash)document.documentElement.classList.add('cv-off')",
+          }}
+        />
         {/*
           Les entrees au scroll sont rendues cote serveur dans leur etat de
           depart, soit `style="opacity:0"` — une cinquantaine d'elements sur la
@@ -110,6 +129,8 @@ export default function RootLayout({
           </MotionProvider>
           <AnalyticsProvider locale={locale} />
           <PreviewBadge locale={locale} />
+          {/* Rendu différé et ancres, animations en pause hors écran. */}
+          <RenderGuards />
         </NextIntlClientProvider>
       </body>
     </html>

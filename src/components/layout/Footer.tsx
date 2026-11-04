@@ -197,7 +197,7 @@ export default function Footer() {
           border border-white/10
           bg-white/[0.02]
           p-5
-          backdrop-blur-xl
+          sm:backdrop-blur-xl
           lg:grid-cols-4
           "
         >

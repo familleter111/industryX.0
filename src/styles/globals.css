@@ -106,26 +106,16 @@
 }
 
 @layer utilities {
+  /* Dégradé fixe (première image de l'ancienne animation). Le faire défiler
+     animait `background-position`, donc repeignait le texte à chaque image,
+     pour un écart à peine visible entre deux ors voisins. */
   .text-gradient-gold {
     background: linear-gradient(135deg, #DAA250 0%, #e0a83a 50%, #DAA250 100%);
     background-size: 200% 200%;
+    background-position: 0% 50%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: gradientShift 4s ease infinite;
-  }
-
-  /* Défini ici et pas dans tailwind.config : Tailwind n'émet les keyframes
-     d'une animation que si l'utilitaire correspondant est employé dans le
-     JSX, ce qui n'est pas le cas de `animate-gradient-shift`. */
-  @keyframes gradientShift {
-    0%,
-    100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
   }
 }
 
@@ -141,4 +131,33 @@
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* Rendu différé des grandes sections sous la ligne de flottaison
+   (Section deferRender, FaqSection). `auto` : une fois la section rendue,
+   le navigateur retient sa vraie hauteur au lieu de l'estimation.
+   Estimations proches des hauteurs réelles, plus grandes sur mobile. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1400px;
+}
+
+@media (min-width: 1024px) {
+  .cv-auto {
+    contain-intrinsic-size: auto 850px;
+  }
+}
+
+/* Garde des ancres (RenderGuards) : dès qu'une ancre est visée, tout est
+   rendu avant le défilement doux, sinon la cible se déplacerait pendant la
+   course à mesure que les sections traversées prennent leur vraie hauteur. */
+.cv-off .cv-auto {
+  content-visibility: visible;
+}
+
+/* Animations CSS en pause dans les sections hors de l'écran (RenderGuards). */
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
 }

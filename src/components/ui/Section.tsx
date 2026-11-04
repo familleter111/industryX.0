@@ -37,6 +37,15 @@ type SectionProps = {
    * bandeaux defilants, frises, separateurs. Rendu apres les enfants.
    */
   bleed?: ReactNode
+  /**
+   * Rendu différé (`content-visibility: auto`, classe `cv-auto` de
+   * globals.css) : le navigateur ne calcule ni le style ni la mise en page
+   * de la section tant qu'elle est loin de l'écran. Réservé aux sections
+   * sous la ligne de flottaison, et jamais à une section qui contient un
+   * élément `fixed` (modale) : le confinement le positionnerait par rapport
+   * à la section au lieu de la fenêtre.
+   */
+  deferRender?: boolean
   children: ReactNode
 }
 
@@ -62,6 +71,7 @@ export default function Section({
   innerClassName,
   backdrop,
   bleed,
+  deferRender = false,
   children,
 }: SectionProps) {
   return (
@@ -69,6 +79,7 @@ export default function Section({
       id={id}
       className={clsx(
         'relative overflow-hidden',
+        deferRender && 'cv-auto',
         PADDING[variant],
         BACKGROUND[background],
         className,

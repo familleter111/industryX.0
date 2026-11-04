@@ -120,7 +120,7 @@ function NetworkCard({
   const Icon = item.icon
   return (
     <li
-      className={`flex items-start gap-3 rounded-xl border border-white/60 bg-white/[0.92] px-3.5 py-3 xl:px-3 xl:py-2.5 shadow-[0_12px_28px_rgba(12,13,18,0.22)] backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(218,162,80,0.28)] ${className}`}
+      className={`flex items-start gap-3 rounded-xl border border-white/60 bg-white/[0.92] px-3.5 py-3 xl:px-3 xl:py-2.5 shadow-[0_12px_28px_rgba(12,13,18,0.22)] sm:backdrop-blur-[12px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(218,162,80,0.28)] ${className}`}
     >
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold/15 text-gold-ink ring-1 ring-gold/25">
         <Icon size={16} strokeWidth={2} />
@@ -218,6 +218,7 @@ export default function ProblemsSection() {
 
   return (
     <Section
+      deferRender
       variant="default"
       background="white"
       innerClassName="lg:px-10"

@@ -119,6 +119,7 @@ export default function CasesSection({
 
   return (
     <Section
+      deferRender
       className="font-inter"
       variant="default"
       background="white"

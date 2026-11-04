@@ -103,6 +103,7 @@ export default function PartnersOrbit({
 
   return (
     <Section
+      deferRender
       // Sur /partners la section ouvre la page : le padding `default` (128 px)
       // s'ajoutait a la navbar et poussait l'orbite sous la ligne de flottaison.
       variant={isHome ? 'default' : 'dense'}

@@ -289,7 +289,7 @@ export default function FaqSection({ faqs }: { faqs: FaqEntry[] }) {
   return (
     <section
       id="faq"
-      className="relative scroll-mt-[82px] overflow-hidden bg-[#FDFBF6] py-16 font-body text-dark lg:py-24"
+      className="cv-auto relative scroll-mt-[82px] overflow-hidden bg-[#FDFBF6] py-16 font-body text-dark lg:py-24"
     >
       {/* Halos en degrade radial, sans `filter: blur` (cout de peinture). */}
       <div className="pointer-events-none absolute -right-56 -top-32 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(closest-side,rgba(218,162,80,0.06),transparent)]" />

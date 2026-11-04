@@ -12,7 +12,7 @@ export function SectionBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-2.5 rounded-full border px-4 py-2 backdrop-blur-sm ${
+      className={`inline-flex items-center gap-2.5 rounded-full border px-4 py-2 sm:backdrop-blur-sm ${
         tone === 'dark'
           ? 'border-white/12 bg-white/[0.04]'
           : 'border-stone-200 bg-white/70'

@@ -143,6 +143,7 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
 
   return (
     <Section
+      deferRender
       variant="default"
       background="white"
       backdrop={
@@ -197,7 +198,7 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
               variants={m.fadeUp}
               className="
                 w-[85%] shrink-0 snap-start rounded-[32px] border border-black/10 bg-white/90 p-7
-                backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-gold/30
+                sm:backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-gold/30
                 hover:shadow-[0_20px_60px_rgba(218,162,80,0.15)]
                 sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]
               "
