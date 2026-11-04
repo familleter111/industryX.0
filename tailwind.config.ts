@@ -110,6 +110,8 @@ const config: Config = {
         // Ici il est visible des la premiere image et ne fait que se poser.
         rise: 'rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both',
         settle: 'settle 700ms cubic-bezier(0.22, 1, 0.36, 1) both',
+        // Barre de navigation : même principe, elle descend en place.
+        drop: 'drop 450ms cubic-bezier(0.22, 1, 0.36, 1) both',
       },
       keyframes: {
         shimmer: {
@@ -169,6 +171,10 @@ const config: Config = {
         },
         settle: {
           from: { transform: 'scale(0.97)' },
+          to: { transform: 'none' },
+        },
+        drop: {
+          from: { transform: 'translateY(-14px)' },
           to: { transform: 'none' },
         },
       },

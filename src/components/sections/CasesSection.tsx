@@ -235,7 +235,6 @@ export default function CasesSection({
               key={tab.id}
               tab={tab}
               active={index === activeTab}
-              priority={index === 0}
               reduce={m.reduce}
               more={t.more}
               illustration={t.illustration}
@@ -251,7 +250,6 @@ export default function CasesSection({
 function UsagePanel({
   tab,
   active,
-  priority,
   reduce,
   more,
   illustration,
@@ -260,8 +258,6 @@ function UsagePanel({
 }: {
   tab: FeatureTab
   active: boolean
-  /** Premier onglet : capture préchargée (visible au premier affichage). */
-  priority: boolean
   reduce: boolean
   more: string
   illustration: string
@@ -397,7 +393,9 @@ function UsagePanel({
                   width={image.width}
                   height={image.height}
                   sizes="(min-width: 640px) 420px, 90vw"
-                  priority={priority}
+                  // Chargement différé (défaut de next/image) : la section est
+                  // loin sous la ligne de flottaison. Préchargée, cette capture
+                  // disputait la bande passante à l'image du hero.
                   className="h-full w-full object-cover object-top"
                   onError={onImageError}
                 />

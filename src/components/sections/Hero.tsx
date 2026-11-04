@@ -56,7 +56,13 @@ export default function Hero() {
   const m = useMotion()
   const t = useCopy(COPY)
   return (
-    <section data-cta-location="hero" className="relative overflow-hidden bg-cream pt-[106px] sm:pt-[114px] lg:pt-28 pb-6 lg:pb-8">
+    // Sous 1024 px, la section est une colonne flexible et la grille passe en
+    // `contents` : texte, bande de logos, puis image (ordre `order-*`). Le
+    // titre est ainsi le plus grand élément du premier écran mobile, donc
+    // l'élément LCP : un texte s'affiche avec le HTML et le CSS, sans
+    // attendre ni l'image ni le JavaScript. Au-dessus de 1024 px, rien ne
+    // change : grille texte | image, logos dessous.
+    <section data-cta-location="hero" className="relative flex flex-col overflow-hidden bg-cream pt-[106px] sm:pt-[114px] lg:block lg:pt-28 pb-6 lg:pb-8">
       {/* Le Hero n'utilise pas <Section> : son padding haut degage la navbar
           fixe et son padding bas est volontairement asymetrique, deux
           contraintes que l'echelle de rythme ne doit pas connaitre. Le fond,
@@ -75,12 +81,12 @@ export default function Hero() {
         ]}
       />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-8 lg:gap-6 lg:grid-cols-[0.9fr_1.7fr] px-4 sm:px-6 lg:px-10">
+      <div className="contents lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-[0.9fr_1.7fr] lg:items-center lg:gap-6 lg:px-10">
         {/* LEFT */}
 
         {/* Entrée en CSS (`animate-rise`, tailwind.config.ts) : le titre est
             visible dès la première image, sans attendre l'hydratation. */}
-        <div className="relative z-10 animate-rise text-center lg:text-left">
+        <div className="relative z-10 order-1 animate-rise px-4 text-center sm:px-6 lg:order-none lg:px-0 lg:text-left">
           {/* BADGE */}
 
           <div
@@ -291,7 +297,7 @@ export default function Hero() {
 
         {/* RIGHT SIDE */}
 
-        <div className="relative z-10 animate-settle">
+        <div className="relative z-10 order-3 mt-8 animate-settle px-4 sm:px-6 lg:order-none lg:mt-0 lg:px-0">
           {/* Conteneur isolé à la couleur de la section : le fond blanc de
               l'image se fond dans la section via mix-blend-multiply.
               Agrandi et décalé un peu vers la droite sur grand écran. */}
@@ -318,7 +324,7 @@ export default function Hero() {
         initial="hidden"
         whileInView="visible"
         viewport={m.viewport}
-        className="relative z-10 mt-8 w-full sm:mt-12"
+        className="relative z-10 order-2 mt-8 w-full sm:mt-12 lg:order-none"
       >
         {/* Titre de la bande. Les deux filets s'effacent vers l'exterieur :
             ils encadrent le mot sans fermer la ligne. Decoratifs, donc hors

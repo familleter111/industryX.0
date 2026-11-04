@@ -115,8 +115,20 @@ function SectorLogoCard({ logo, label, href }: { logo: string; label: string; hr
   const card = (
     <figure className="flex w-full flex-col items-center gap-2">
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-black/[0.06] bg-white p-3 shadow-[0_4px_16px_rgba(0,0,0,0.03)] transition-shadow duration-base ease-smooth hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]">
+        {/* `loading="lazy"` : sans lui, React précharge d'office chaque <img>
+            du HTML serveur (<link rel="preload"> dans le <head>), et ces huit
+            icônes, loin sous la ligne de flottaison, partaient avec l'image
+            du hero. 40 x 40 px affichés : pas de next/image pour 3 Ko. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logo} alt="" className="h-full w-full object-contain" />
+        <img
+          src={logo}
+          alt=""
+          width={40}
+          height={40}
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-contain"
+        />
       </div>
       {/* Le nom du secteur est ecrit, pas cache derriere un survol : une
           rangee d'icones muettes se lit comme une barre d'outils. */}

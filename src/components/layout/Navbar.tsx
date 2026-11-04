@@ -426,13 +426,11 @@ export default function Navbar() {
   return (
     <div className="font-inter">
       {/* HEADER */}
-      <motion.header
-        initial={{ opacity: 0, y: -14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.45,
-          ease: [0.22, 1, 0.36, 1],
-        }}
+      {/* Entrée en CSS (`animate-drop`, tailwind.config.ts), transform seul :
+          la barre est visible dès la première image. En Framer Motion, elle
+          était rendue côté serveur à `opacity:0` et n'apparaissait qu'après
+          l'hydratation. */}
+      <header
         onMouseLeave={() => setActiveMenu(null)}
         /* Pendant du onMouseLeave, pour le clavier : on referme des que le
            focus sort de l'en-tete, sans quoi un panneau reste deroule
@@ -443,7 +441,7 @@ export default function Navbar() {
             setLanguageOpen(false)
           }
         }}
-        className="fixed inset-x-0 top-0 z-50"
+        className="fixed inset-x-0 top-0 z-50 animate-drop"
       >
         {/* FULL WIDTH NAVBAR */}
         <div
@@ -472,6 +470,10 @@ export default function Navbar() {
                 width={250}
                 height={60}
                 loading="eager"
+                // Le fichier (8625 x 3202) est contenu dans la boîte : à 48 px
+                // de haut il s'affiche sur 130 px de large, 151 px à 56 px.
+                // Sans `sizes`, le navigateur prenait la version 640 px.
+                sizes="(min-width: 1280px) 151px, 130px"
                 className="h-[48px] w-auto object-contain xl:h-[56px]"
               />
             </Link>
@@ -754,7 +756,7 @@ export default function Navbar() {
             )}
           </AnimatePresence>
         </div>
-      </motion.header>
+      </header>
 
       {/* MOBILE MENU CORRIGÉ */}
       <AnimatePresence>
