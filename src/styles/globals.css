@@ -127,97 +127,11 @@
       background-position: 100% 50%;
     }
   }
-
-  .glass-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-  }
-
-  .glass-card-dark {
-    background: rgba(20, 21, 32, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(218, 162, 80, 0.15);
-  }
-
-  .grain-overlay::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.35;
-    z-index: 1;
-  }
-
-  .section-padding {
-    @apply px-6 md:px-12 lg:px-20 xl:px-28;
-  }
-
-  .hover-lift {
-    /* La courbe et la duree viennent du theme, donc de lib/tokens.ts :
-       theme() est resolu au build, aucune valeur n'est recopiee ici. */
-    transition:
-      transform theme('transitionDuration.fast') theme('transitionTimingFunction.smooth'),
-      box-shadow theme('transitionDuration.fast') theme('transitionTimingFunction.smooth');
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-  }
 }
 
-/* Gold button glow */
-.btn-gold {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-gold::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-  transition: left theme('transitionDuration.slow') theme('transitionTimingFunction.smooth');
-}
-
-.btn-gold:hover::before {
-  left: 100%;
-}
-
-/* Animated progress bar */
-.progress-bar {
-  height: 6px;
-  border-radius: 9999px;
-  overflow: hidden;
-  background: rgba(0,0,0,0.08);
-}
-
-.progress-bar-fill {
-  height: 100%;
-  border-radius: 9999px;
-  transform-origin: left;
-}
-
-/* Noise texture */
-.noise-bg {
-  position: relative;
-}
-
-.noise-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-  pointer-events: none;
-  border-radius: inherit;
-}
+/* Classes retirées faute d'usage (glass-card, grain-overlay, section-padding,
+   hover-lift, btn-gold, progress-bar, noise-bg, section-divider) : celles
+   hors @layer partaient dans le CSS bloquant de chaque page. */
 
 /* Dashboard animation */
 .animate-blink {
@@ -227,10 +141,4 @@
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
-}
-
-/* Section divider */
-.section-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(218,162,80,0.3), transparent);
 }
