@@ -29,6 +29,17 @@ const AVAILABLE_SCREENSHOTS = FEATURE_TABS.filter((tab) =>
   existsSync(path.join(process.cwd(), 'public', tab.screenshot.src)),
 ).map((tab) => tab.id)
 
+/**
+ * Seules les langues construites (generateStaticParams du layout : fr, en)
+ * sont servies ici. Sans cela, une adresse à un segment que le middleware
+ * ignore (tout chemin avec un point : /favicon.ico, /wp-login.php…) arrivait
+ * ici avec ce chemin pour « langue » : la page, statique, basculait en rendu
+ * dynamique pour lire la langue dans les en-têtes, et Next répondait 500.
+ * Désormais, 404 directe (app/not-found.tsx). Réglage limité à cette page :
+ * posé sur le layout, il pourrait refuser les nouvelles pages du CMS.
+ */
+export const dynamicParams = false
+
 export function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   return seoMetadata('/', locale)
 }
