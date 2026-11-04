@@ -12,6 +12,7 @@
 import type { Locale } from '@/i18n/routing'
 import { cmsConfig, cmsQuery, localized, type CmsEnv, type Localized } from '@/lib/cms/client'
 import { FAQ_ENTRIES, type FaqEntry } from '@/lib/data/faq'
+import { fillSectors } from '@/lib/data/sectors'
 
 /** Une question telle que la renvoie FAQ_QUERY. */
 export type CmsFaq = { key?: string | null; question?: Localized | null; answer?: Localized | null }
@@ -25,7 +26,8 @@ export function faqFromCms(docs: CmsFaq[], locale: Locale): FaqEntry[] {
     .map((doc) => ({
       ...(doc.key?.trim() ? { id: doc.key.trim() } : {}),
       question: localized(doc.question, locale),
-      answer: localized(doc.answer, locale),
+      // `{secteurs}` : liste de lib/data/sectors.ts, comme dans le fichier local.
+      answer: fillSectors(localized(doc.answer, locale), locale),
     }))
 }
 

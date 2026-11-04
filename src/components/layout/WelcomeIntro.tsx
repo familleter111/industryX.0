@@ -1,11 +1,8 @@
 import Image from 'next/image'
 
-import { useCopy } from '@/lib/i18n'
-
-const COPY = { fr: 'Bienvenue sur le site', en: 'Welcome' }
-
 /**
- * Ecran d'introduction.
+ * Ecran d'introduction : le logo seul. Le libellé « Bienvenue sur le site »
+ * qui le surmontait a été retiré.
  *
  * ─────────────────────────────────────────────────────────────────────────
  *  POURQUOI CE COMPOSANT N'EST PAS CLIENT
@@ -39,7 +36,6 @@ const COPY = { fr: 'Bienvenue sur le site', en: 'Welcome' }
 const SHOW_INTRO = true
 
 export default function WelcomeIntro() {
-  const welcome = useCopy(COPY)
   if (!SHOW_INTRO) return null
 
   return (
@@ -79,14 +75,6 @@ export default function WelcomeIntro() {
 
       {/* ================= CONTENT CONTAINER ================= */}
       <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center font-[family-name:var(--font-inter)]">
-        <div className="flex items-center gap-4 mb-6">
-          <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold/70" />
-          <p className="font-[family-name:var(--font-inter)] text-xs sm:text-sm font-semibold uppercase tracking-[0.4em] bg-gradient-to-r from-stone-600 via-gold to-stone-600 bg-clip-text text-transparent">
-            {welcome}
-          </p>
-          <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold/70" />
-        </div>
-
         {/* Logo with premium gold glow.
             Pas de `priority` : la Navbar precharge deja ce meme fichier, et
             un second preload sur la meme URL ne ferait que disputer sa bande

@@ -11,7 +11,7 @@ import { CONTACT, MAILTO, TEL } from '@/lib/data/contact'
 import { LINKEDIN_URL } from '@/lib/data/socials'
 import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import CookieSettingsButton from '@/components/analytics/CookieSettingsButton'
-import { INDUSTRY_NAMES, industryHref } from '@/lib/data/industries/labels'
+import { SECTORS, sectorHref } from '@/lib/data/sectors'
 import { useCopy, useCurrentLocale } from '@/lib/i18n'
 
 // Chaque lien mene a une page existante (L1-04). Les anciens libelles sans
@@ -91,7 +91,8 @@ export default function Footer() {
   // Les six pages sectorielles, après la colonne Solution.
   footerLinks.splice(1, 0, {
     title: t.industries,
-    items: INDUSTRY_NAMES.map(({ slug, name }) => ({ label: name[locale], href: industryHref(slug) })),
+    // Source unique des secteurs (lib/data/sectors.ts), comme la grille et la FAQ.
+    items: SECTORS.map(({ slug, name }) => ({ label: name[locale], href: sectorHref(slug) })),
   })
 
   return (

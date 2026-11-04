@@ -7,11 +7,8 @@ import {
   ArrowRight,
   Bot,
   Building2,
-  Car,
   ChevronDown,
   ChevronRight,
-  ClipboardCheck,
-  Factory,
   FileText,
   Handshake,
   HelpCircle,
@@ -20,11 +17,8 @@ import {
   Menu,
   MessageCircle,
   ScanSearch,
-  ShieldCheck,
   Users,
-  Utensils,
   X,
-  Zap,
 } from 'lucide-react'
 
 import Image from 'next/image'
@@ -32,6 +26,7 @@ import { LINKEDIN_URL } from '@/lib/data/socials'
 import dynamic from 'next/dynamic'
 import { CHAT_OPEN_EVENT, type OpenChatDetail } from '@/lib/chat/open'
 import { PLATFORM_MENU, platformHref } from '@/lib/data/platform-menu'
+import { SECTORS, sectorHref } from '@/lib/data/sectors'
 import { ENTIWIN_PATH } from '@/lib/data/entiwin'
 import { Link, homeAnchorHref, usePathname, useRouter } from '@/i18n/navigation'
 import { useCurrentLocale, type Locale } from '@/lib/i18n'
@@ -138,14 +133,9 @@ const COPY = {
   },
 }
 
-const INDUSTRY_LINKS = [
-  { href: '/industries/pharma', icon: ShieldCheck },
-  { href: '/industries/food', icon: Utensils },
-  { href: '/industries/cosmetics', icon: ClipboardCheck },
-  { href: '/industries/automotive', icon: Car },
-  { href: '/industries/electronics', icon: Zap },
-  { href: '/industries/packaging', icon: Factory },
-]
+// Liens et pictogrammes depuis lib/data/sectors.ts (source unique), dans
+// l'ordre des textes `industryItems`.
+const INDUSTRY_LINKS = SECTORS.map((sector) => ({ href: sectorHref(sector.slug), icon: sector.icon }))
 const RESOURCE_LINKS = [
   { href: '/customers', icon: Users },
   { href: '/resources', icon: FileText },

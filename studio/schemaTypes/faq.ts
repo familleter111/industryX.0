@@ -15,7 +15,14 @@ export const faq = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'question', title: 'Question', type: 'localeString', validation: (rule) => rule.required() }),
-    defineField({ name: 'answer', title: 'Réponse', type: 'localeText', validation: (rule) => rule.required() }),
+    defineField({
+      name: 'answer',
+      title: 'Réponse',
+      description:
+        'Écrire {secteurs} pour insérer la liste des secteurs couverts, tenue à jour dans le code (lib/data/sectors.ts).',
+      type: 'localeText',
+      validation: (rule) => rule.required(),
+    }),
     defineField({
       name: 'key',
       title: 'Identifiant pour l’assistant',

@@ -15,8 +15,8 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
-import { industryHref } from '@/lib/data/industries/labels'
-import { useCopy } from '@/lib/i18n'
+import { SECTORS, sectorHref, type Sector } from '@/lib/data/sectors'
+import { useCopy, useCurrentLocale } from '@/lib/i18n'
 import { ROUTES } from '@/lib/routes'
 
 const colors = {
@@ -35,26 +35,10 @@ const PILLAR_STYLES = [
 ]
 
 /*
- * Cartes secteurs — déplacées depuis le Hero (#2). Une carte dont le secteur
- * a sa page y mène ; les autres restent de simples étiquettes.
- *
- * TODO(seo): la liste ne correspond pas aux pages sectorielles. Sans page :
- * Nutraceutique & santé, Chimie & matières premières, Industrie
- * manufacturière, Distribution & logistique, Autres secteurs. Sans carte :
- * automobile, électronique, packaging (la cosmétique n'apparaît que via
- * « Dispositifs médicaux »). Au propriétaire de choisir : créer les pages
- * manquantes, ou aligner les cartes sur les six pages existantes.
+ * Cartes secteurs — déplacées depuis le Hero (#2). Liste, noms, liens et
+ * pictogrammes viennent de lib/data/sectors.ts, comme la FAQ et le pied de
+ * page : chaque carte mène à la page de son secteur.
  */
-const SECTOR_LOGOS: { logo: string; href?: string }[] = [
-  { logo: '/Secteur/Pharmaceutique.png', href: industryHref('pharma') },
-  { logo: '/Secteur/Nutraceutical.png' },
-  { logo: '/Secteur/Agroalimentaire.png', href: industryHref('food') },
-  { logo: '/Secteur/Chimie.png' },
-  { logo: '/Secteur/Dispositifs.png', href: industryHref('cosmetics') },
-  { logo: '/Secteur/Manufacture.png' },
-  { logo: '/Secteur/Distribution.png' },
-  { logo: '/Secteur/Autres.png' },
-]
 
 const COPY = {
   fr: {
@@ -62,16 +46,6 @@ const COPY = {
       ['Structurer', 'Centralisez audits, inspections et données terrain dans un référentiel unique afin de créer une visibilité claire et exploitable.'],
       ['Orchestrer', 'Coordonnez qualité, production et workflows critiques à travers une plateforme fluide pensée pour les opérations modernes.'],
       ['Piloter', 'Transformez les données terrain en décisions rapides grâce à une intelligence opérationnelle en temps réel.'],
-    ],
-    sectors: [
-      'Pharmaceutiques & biotech',
-      'Nutraceutique & Santé',
-      'Agroalimentaire & boissons',
-      'Chimie & Matières premières',
-      'Dispositifs Médicaux',
-      'Industrie Manufacturière',
-      'Distribution & logistique',
-      'Autres Secteurs',
     ],
     title: 'La plateforme qui transforme',
     titleEnd: 'vos opérations industrielles.',
@@ -89,16 +63,6 @@ const COPY = {
       ['Orchestrate', 'Coordinate quality, production and critical workflows on a seamless platform built for modern operations.'],
       ['Drive', 'Turn shop-floor data into fast decisions with real-time operational intelligence.'],
     ],
-    sectors: [
-      'Pharma & biotech',
-      'Nutraceuticals & health',
-      'Food & beverage',
-      'Chemicals & raw materials',
-      'Medical devices',
-      'Manufacturing',
-      'Distribution & logistics',
-      'Other industries',
-    ],
     title: 'The platform that transforms',
     titleEnd: 'your industrial operations.',
     subtitle: 'The answer to disconnected operations.',
@@ -111,24 +75,34 @@ const COPY = {
   },
 }
 
-function SectorLogoCard({ logo, label, href }: { logo: string; label: string; href?: string }) {
+function SectorLogoCard({ sector, label }: { sector: Sector; label: string }) {
+  const Icon = sector.icon
   const card = (
     <figure className="flex w-full flex-col items-center gap-2">
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-black/[0.06] bg-white p-3 shadow-[0_4px_16px_rgba(0,0,0,0.03)] transition-shadow duration-base ease-smooth hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]">
-        {/* `loading="lazy"` : sans lui, React précharge d'office chaque <img>
-            du HTML serveur (<link rel="preload"> dans le <head>), et ces huit
-            icônes, loin sous la ligne de flottaison, partaient avec l'image
-            du hero. 40 x 40 px affichés : pas de next/image pour 3 Ko. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={logo}
-          alt=""
-          width={40}
-          height={40}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-contain"
-        />
+        {sector.gridImage ? (
+          <>
+            {/* `loading="lazy"` : sans lui, React précharge d'office chaque
+                <img> du HTML serveur (<link rel="preload"> dans le <head>), et
+                ces icônes, loin sous la ligne de flottaison, partaient avec
+                l'image du hero. 40 x 40 px affichés : pas de next/image pour
+                3 Ko. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={sector.gridImage}
+              alt=""
+              width={40}
+              height={40}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-contain"
+            />
+          </>
+        ) : (
+          // Pas encore d'illustration (TODO dans lib/data/sectors.ts) : le
+          // pictogramme du menu Industries.
+          <Icon aria-hidden="true" className="h-8 w-8 text-gold-ink" strokeWidth={1.6} />
+        )}
       </div>
       {/* Le nom du secteur est ecrit, pas cache derriere un survol : une
           rangee d'icones muettes se lit comme une barre d'outils. */}
@@ -139,21 +113,20 @@ function SectorLogoCard({ logo, label, href }: { logo: string; label: string; hr
   )
   // Le pictogramme reste `alt=""` : la légende nomme déjà le secteur, et
   // c'est elle qui donne son nom au lien.
-  return href ? (
+  return (
     <Link
-      href={href}
+      href={sectorHref(sector.slug)}
       className="block w-full rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2"
     >
       {card}
     </Link>
-  ) : (
-    card
   )
 }
 
 export default function CipaSection() {
   const m = useMotion()
   const t = useCopy(COPY)
+  const locale = useCurrentLocale()
   const [open, setOpen] = useState(false)
   const pillars = PILLAR_STYLES.map((style, i) => ({
     ...style,
@@ -323,9 +296,9 @@ export default function CipaSection() {
 
           {/* Deux colonnes sur mobile : les legendes restent a 14 px sans se
               casser au milieu des mots. */}
-          <div className="grid grid-cols-2 items-start justify-items-center gap-x-3 gap-y-5 py-1 sm:grid-cols-4 sm:gap-4 lg:grid-cols-8">
-            {SECTOR_LOGOS.map((sector, i) => (
-              <SectorLogoCard key={sector.logo} {...sector} label={t.sectors[i]} />
+          <div className="grid grid-cols-2 items-start justify-items-center gap-x-3 gap-y-5 py-1 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
+            {SECTORS.map((sector) => (
+              <SectorLogoCard key={sector.slug} sector={sector} label={sector.name[locale]} />
             ))}
           </div>
         </motion.div>

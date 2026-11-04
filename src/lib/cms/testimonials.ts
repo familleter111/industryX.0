@@ -17,6 +17,9 @@ export type CmsTestimonial = {
   company?: string | null
   quote?: Localized | null
   author?: Localized | null
+  name?: string | null
+  /** URL de la photo sur le CDN Sanity (`photo.asset->url`). */
+  photo?: string | null
   sector?: Localized | null
   logoAlt?: string | null
   rating?: number | null
@@ -24,7 +27,7 @@ export type CmsTestimonial = {
 }
 
 export const TESTIMONIALS_QUERY =
-  '*[_type == "testimonial"] | order(order asc, _createdAt asc) {company, quote, author, sector, logoAlt, rating, clientApproved}'
+  '*[_type == "testimonial"] | order(order asc, _createdAt asc) {company, quote, author, name, "photo": photo.asset->url, sector, logoAlt, rating, clientApproved}'
 
 function stars(rating: number | null | undefined): number {
   if (typeof rating !== 'number' || !Number.isFinite(rating)) return 5
@@ -46,6 +49,8 @@ export function testimonialsFromCms(docs: CmsTestimonial[], locale: Locale): Tes
       ({ doc, company }, index): Testimonial => ({
         quote: localized(doc.quote, locale),
         author: localized(doc.author, locale),
+        name: doc.name?.trim() || null,
+        photo: doc.photo ? { src: doc.photo, alt: '' } : null,
         company,
         sector: localized(doc.sector, locale),
         logoAlt: doc.logoAlt?.trim() || null,

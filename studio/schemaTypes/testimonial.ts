@@ -23,6 +23,21 @@ export const testimonial = defineType({
       type: 'localeString',
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'name',
+      title: 'Nom de la personne citée',
+      description:
+        'Facultatif, et seulement avec son accord écrit. Vide : la carte n’affiche que sa fonction.',
+      type: 'string',
+    }),
+    defineField({
+      name: 'photo',
+      title: 'Photo de la personne citée',
+      description:
+        'Facultatif, avec son accord écrit. Vide : logo de la société, sinon initiales.',
+      type: 'image',
+      options: { hotspot: true },
+    }),
     defineField({ name: 'sector', title: 'Secteur', type: 'localeString', validation: (rule) => rule.required() }),
     defineField({
       name: 'clientApproved',

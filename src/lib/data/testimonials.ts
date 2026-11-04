@@ -28,6 +28,17 @@ export type Testimonial = {
   quote: string
   /** Fonction de la personne citée. */
   author: string
+  /**
+   * Nom de la personne citée, seulement avec son accord écrit. Absent : la
+   * carte n'affiche que sa fonction (`author`).
+   */
+  name?: string | null
+  /**
+   * Photo de la personne citée, avec son accord écrit. Absente : logo de la
+   * société, puis initiales (lib/data/testimonial-initials.ts). `alt` vide :
+   * le nom est déjà écrit à côté.
+   */
+  photo?: { src: string; alt: string } | null
   company: string
   sector: string
   /** `alt` d'une entrée CLIENT_LOGOS, ou null si aucun logo n'est disponible. */
@@ -58,6 +69,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'L’intégration de CIPA a considérablement simplifié nos audits et nos opérations quotidiennes. La plateforme a amélioré notre conformité réglementaire tout en nous aidant à résoudre efficacement des problématiques récurrentes de qualité et de suivi.',
     author: 'Quality Manager',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Warda Company',
     sector: 'Industrie agroalimentaire',
     logoAlt: 'Warda',
@@ -69,6 +82,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Grâce à CIPA, nous avons simplifié la gestion de nos lots de production et renforcé la fiabilité de nos processus industriels. Les plans d’action automatisés ainsi que le suivi qualité garantissent désormais une production conforme, fluide et performante.',
     author: 'General Manager',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Polyroto Group',
     sector: 'Industrie navale',
     logoAlt: 'Polyroto Group',
@@ -84,6 +99,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Les contrôles en cours de fabrication sont désormais saisis directement au poste, avec photo et validation. Nous avons supprimé la ressaisie et divisé par deux le délai de clôture de nos dossiers de lot.',
     author: 'Responsable Assurance Qualité',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Médis',
     sector: 'Industrie pharmaceutique',
     logoAlt: 'Médis',
@@ -95,6 +112,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'La traçabilité de nos non-conformités est complète de bout en bout : déclaration terrain, analyse de cause, plan d’action, vérification d’efficacité. Nos audits se préparent maintenant en quelques heures.',
     author: 'Directrice Qualité',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Saiph',
     sector: 'Industrie pharmaceutique',
     logoAlt: 'Saiph',
@@ -106,6 +125,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Nos tournées d’inspection sur les lignes de conditionnement sont standardisées et horodatées. Les écarts remontent en temps réel aux superviseurs, ce qui a nettement réduit nos rebuts.',
     author: 'Responsable Production',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Rose Blanche Group',
     sector: 'Industrie agroalimentaire',
     logoAlt: 'Rose Blanche Group',
@@ -117,6 +138,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'CIPA nous donne une lecture unique de la performance de nos sites : conformité, arrêts, actions ouvertes. Les revues mensuelles se font sur des données partagées plutôt que sur des tableurs divergents.',
     author: 'Directeur des Opérations',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Opella',
     sector: 'Santé grand public',
     logoAlt: 'Opella',
@@ -128,6 +151,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Le déploiement s’est fait par étapes, en commençant par un périmètre pilote. Les équipes terrain ont adopté l’outil rapidement parce qu’il correspond à leur façon de travailler.',
     author: 'Responsable Amélioration Continue',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Neapolis Pharma',
     sector: 'Industrie pharmaceutique',
     logoAlt: 'Neapolis Pharma',
@@ -139,6 +164,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Le suivi des interventions sur nos lignes d’extrusion est centralisé : demande, affectation, pièces consommées, retour d’expérience. Nous anticipons les arrêts au lieu de les subir.',
     author: 'Responsable Maintenance',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'Medpack',
     sector: 'Packaging & plasturgie',
     logoAlt: 'Medpack',
@@ -150,6 +177,8 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Les indicateurs de production remontent automatiquement, sans consolidation manuelle. Nos chefs d’équipe passent leur temps sur les écarts, plus sur la collecte des chiffres.',
     author: 'Directeur Industriel',
+    name: null, // TODO(temoignages) : nom de la personne citée, avec son accord écrit
+    photo: null, // TODO(temoignages) : photo de la personne citée, avec son accord écrit
     company: 'TCH Industries',
     sector: 'Industrie mécanique',
     logoAlt: 'TCH Industries',

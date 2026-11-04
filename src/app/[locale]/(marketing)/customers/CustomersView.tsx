@@ -29,6 +29,7 @@ import {
   logoFrameWidth,
 } from '@/lib/data/clientLogos'
 import type { Testimonial } from '@/lib/data/testimonials'
+import { testimonialInitials } from '@/lib/data/testimonial-initials'
 import { viewport } from '@/lib/motion'
 import Footer from '@/components/layout/Footer'
 import { useCopy } from '@/lib/i18n'
@@ -158,8 +159,21 @@ const COPY = {
    ============================================================ */
 
 function TestimonialLogo({ testimonial }: { testimonial: Testimonial }) {
-  /* /public/logos d'abord, `fallbackLogo` ensuite pour les clients qui n'y
-     figurent pas — les initiales ne restent qu'en dernier recours. */
+  /* Photo de la personne citée (avec son accord) d'abord, puis /public/logos,
+     `fallbackLogo` pour les clients qui n'y figurent pas — les initiales ne
+     restent qu'en dernier recours. */
+  if (testimonial.photo) {
+    return (
+      <Image
+        src={testimonial.photo.src}
+        alt={testimonial.photo.alt}
+        fill
+        sizes="44px"
+        className="object-cover"
+      />
+    )
+  }
+
   const logo =
     (testimonial.logoAlt ? findClientLogo(testimonial.logoAlt) : undefined) ??
     testimonial.fallbackLogo
@@ -167,11 +181,7 @@ function TestimonialLogo({ testimonial }: { testimonial: Testimonial }) {
   if (!logo) {
     return (
       <span className="font-display text-[14px] font-black text-gold-ink">
-        {testimonial.company
-          .split(' ')
-          .map((word) => word[0])
-          .slice(0, 2)
-          .join('')}
+        {testimonialInitials(testimonial)}
       </span>
     )
   }
@@ -222,7 +232,7 @@ function TestimonialCard({
       </div>
 
       <figcaption className="mt-5 flex items-center gap-3 border-t border-[#EFEDE8] pt-5">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#EFEDE8] bg-white p-1.5">
+        <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#EFEDE8] bg-white p-1.5">
           <TestimonialLogo testimonial={testimonial} />
         </div>
 
@@ -230,8 +240,10 @@ function TestimonialCard({
           <p className="text-[14px] font-bold text-[#111827]">
             {testimonial.company}
           </p>
+          {/* Nom de la personne s'il est connu (avec son accord). */}
           <p className="mt-0.5 text-[12px] text-subtle">
-            {testimonial.author} — {testimonial.sector}
+            {testimonial.name ? `${testimonial.name}, ${testimonial.author}` : testimonial.author} —{' '}
+            {testimonial.sector}
           </p>
         </div>
       </figcaption>

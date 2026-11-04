@@ -8,6 +8,7 @@ import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import AutoplayTimer from '@/components/ui/AutoplayTimer'
 import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
 import type { Testimonial } from '@/lib/data/testimonials'
+import { testimonialInitials } from '@/lib/data/testimonial-initials'
 import { tokens } from '@/lib/tokens'
 import { useMotion } from '@/hooks/useMotion'
 import Section from '@/components/ui/Section'
@@ -40,14 +41,23 @@ const COPY = {
    témoignage, initiales en dernier recours.
    `logoFrameWidth` inscrit le contenu réel dans une boîte commune pour que
    tous les logos paraissent de la même taille. */
+/** Photo de la personne citée, sinon logo de la société, sinon initiales. */
 function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
   const logo =
     (testimonial.logoAlt ? findClientLogo(testimonial.logoAlt) : undefined) ??
     testimonial.fallbackLogo
 
   return (
-    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-2 ring-white shadow-md">
-      {logo ? (
+    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-2 ring-white shadow-md">
+      {testimonial.photo ? (
+        <Image
+          src={testimonial.photo.src}
+          alt={testimonial.photo.alt}
+          fill
+          sizes="64px"
+          className="object-cover"
+        />
+      ) : logo ? (
         <Image
           src={logo.src}
           alt={logo.alt}
@@ -60,11 +70,7 @@ function ClientAvatar({ testimonial }: { testimonial: Testimonial }) {
         />
       ) : (
         <span className="font-display text-[17px] font-black text-gold-deep">
-          {testimonial.company
-            .split(' ')
-            .map((word) => word[0])
-            .slice(0, 2)
-            .join('')}
+          {testimonialInitials(testimonial)}
         </span>
       )}
     </div>
@@ -228,11 +234,15 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
               <div className="flex items-center gap-4">
                 <ClientAvatar testimonial={t} />
 
+                {/* Nom de la personne s'il est connu (avec son accord),
+                    sinon sa fonction, comme avant. */}
                 <div>
                   <h3 className="text-base font-bold text-dark">
-                    {t.author}
+                    {t.name || t.author}
                   </h3>
-                  <p className="text-sm text-subtle">{t.company}</p>
+                  <p className="text-sm text-subtle">
+                    {t.name ? `${t.author} · ${t.company}` : t.company}
+                  </p>
                 </div>
               </div>
 

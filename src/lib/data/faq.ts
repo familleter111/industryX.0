@@ -6,6 +6,8 @@
  * utilise (lib/cms/faq.ts) : ce fichier sert de repli et d'import initial.
  */
 
+import { fillSectors } from '@/lib/data/sectors'
+
 /**
  * `id` : identifiant stable de la question, partagé par le code, le CMS
  * (champ « Identifiant pour l'assistant ») et la reconnaissance des
@@ -14,7 +16,12 @@
  */
 export type FaqEntry = { id?: string; question: string; answer: string }
 
-export const FAQ_ENTRIES: Record<'fr' | 'en', FaqEntry[]> = {
+/**
+ * Texte source, tel qu'importé dans le CMS (`npm run cms:seed`) : la réponse
+ * sur les secteurs garde le marqueur `{secteurs}`, remplacé à l'affichage par
+ * la liste de lib/data/sectors.ts. Les consommateurs lisent FAQ_ENTRIES.
+ */
+export const FAQ_SOURCE: Record<'fr' | 'en', FaqEntry[]> = {
   fr: [
     {
       id: 'demo-duration',
@@ -38,7 +45,7 @@ export const FAQ_ENTRIES: Record<'fr' | 'en', FaqEntry[]> = {
       id: 'industries',
       question: 'Quels secteurs industriels sont couverts ?',
       answer:
-        'CIPA est déployée dans la pharmaceutique, l’agroalimentaire et les boissons, la cosmétique et les dispositifs médicaux, l’automobile et les composants, l’électronique et le câblage, ainsi que le packaging et la plasturgie. La plateforme s’adapte aux référentiels et exigences propres à chaque secteur.',
+        'CIPA est déployée dans {secteurs}. La plateforme s’adapte aux référentiels et exigences propres à chaque secteur.',
     },
     {
       id: 'pilot-delay',
@@ -70,7 +77,7 @@ export const FAQ_ENTRIES: Record<'fr' | 'en', FaqEntry[]> = {
       id: 'industries',
       question: 'Which industries are covered?',
       answer:
-        'CIPA is deployed in pharmaceuticals, food and beverage, cosmetics and medical devices, automotive and components, electronics and wiring, and packaging and plastics. The platform adapts to the standards and requirements specific to each industry.',
+        'CIPA is deployed in {secteurs}. The platform adapts to the standards and requirements specific to each industry.',
     },
     {
       id: 'pilot-delay',
@@ -79,4 +86,10 @@ export const FAQ_ENTRIES: Record<'fr' | 'en', FaqEntry[]> = {
         'A first pilot scope is usually up and running within a few weeks. We start with a high-value process — audits, inspections, non-conformities or production checks — to show the impact quickly before gradually extending to the whole site.',
     },
   ],
+}
+
+/** Questions prêtes à afficher : marqueur `{secteurs}` remplacé. */
+export const FAQ_ENTRIES: Record<'fr' | 'en', FaqEntry[]> = {
+  fr: FAQ_SOURCE.fr.map((entry) => ({ ...entry, answer: fillSectors(entry.answer, 'fr') })),
+  en: FAQ_SOURCE.en.map((entry) => ({ ...entry, answer: fillSectors(entry.answer, 'en') })),
 }

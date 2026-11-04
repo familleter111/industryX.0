@@ -59,7 +59,8 @@ async function testimonials() {
 }
 
 async function faqs() {
-  const { FAQ_ENTRIES } = await import('@/lib/data/faq')
+  // Texte source : la réponse sur les secteurs garde le marqueur {secteurs}.
+  const { FAQ_SOURCE: FAQ_ENTRIES } = await import('@/lib/data/faq')
   return FAQ_ENTRIES.fr.map((entry, i) => ({
     _id: `faq-${slug(entry.question).slice(0, 60).replace(/-$/, '')}`,
     _type: 'faq',
