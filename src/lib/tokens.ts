@@ -205,6 +205,56 @@ export const tokens = {
       green: '#3FAE5A',
     },
 
+    /**
+     * Palette d'Enti Win, produit d'Industry X.0 (entiwin.cipa-web.com),
+     * relevée dans sa feuille de style. Réservée à la page /plateforme/entiwin,
+     * qui reprend l'identité du produit ; classes Tailwind `ew-…`.
+     *
+     * Texte sur blanc : navy.900 (14:1), ink.700 (13:1), ink.500 (7,4:1),
+     * green.700 (6,4:1 ; 5,8:1 sur green.50), amber.700 (5,0:1), ko (4,8:1).
+     * green.600 (4,4:1) et green.500, blue.500, amber.500 : pictogrammes et
+     * pastilles seulement, jamais de petit texte.
+     */
+    entiwin: {
+      navy: {
+        50: '#EEF3FB',
+        100: '#DBE5F5',
+        200: '#B9C8E4',
+        500: '#1E3A73',
+        800: '#122C5E',
+        900: '#0D2A5C',
+        950: '#061530',
+      },
+      ink: {
+        300: '#98A3BA',
+        500: '#46557A',
+        700: '#1F2D4A',
+      },
+      green: {
+        50: '#E9F7EF',
+        100: '#CFEEDD',
+        400: '#34B36A',
+        500: '#12A150',
+        600: '#0E8A45',
+        700: '#0B6E37',
+      },
+      blue: {
+        50: '#E8F0FE',
+        100: '#D3E2FD',
+        500: '#1A63E8',
+      },
+      amber: {
+        500: '#F99C00',
+        700: '#B75000',
+      },
+      /** Rouge des exigences non couvertes. */
+      ko: '#DC2626',
+      /** Filet des cartes et séparateurs. */
+      line: '#E6EAF2',
+      /** Fond de section gris-bleu. */
+      surface: '#F7F9FC',
+    },
+
     /** Couleurs imposées par des marques tierces. */
     brand: {
       linkedin: '#0A66C2',

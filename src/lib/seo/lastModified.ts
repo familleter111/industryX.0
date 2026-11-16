@@ -38,6 +38,8 @@ function sources(path: string): string[] | undefined {
     return [`${APP}/resources/page.tsx`, 'src/features/resources', 'src/lib/data/guides.ts', 'src/lib/data/guides.en.ts']
   if (path === '/privacy' || path === '/conditions-utilisation')
     return [`${APP}/(marketing)${path}`, 'src/features/legal']
+  if (path === '/faq')
+    return [`${APP}/(marketing)/faq`, 'src/features/faq', 'src/lib/data/faq-center.ts', 'src/lib/data/faq.ts']
   if (['/entreprise', '/customers', '/partners', '/contact'].includes(path))
     return [`${APP}/(marketing)${path}`]
   return undefined

@@ -109,7 +109,8 @@ export default function IndustryPage({ slug, text }: { slug: string; text?: Indu
                     className="animate-rise inline-flex items-center gap-2.5 rounded-full border border-[#EFDFC4] bg-[#FDF7EC] py-2 pl-3.5 pr-5"
                   >
                     <BadgeIcon size={14} aria-hidden="true" className="text-[#DAA250]" />
-                    <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#B6842B] sm:text-[12px]">
+                    {/* `gold.ink` : petit libellé, 4,5:1 exigé ; l'ancien #B6842B plafonnait à 3,1:1. */}
+                    <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[12px]">
                       {t.badge}
                     </span>
                   </motion.div>

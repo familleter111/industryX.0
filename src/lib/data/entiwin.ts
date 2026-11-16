@@ -21,3 +21,32 @@ export function entiwinHref(content: string): string {
   url.searchParams.set('utm_content', content)
   return url.toString()
 }
+
+/**
+ * Documents qualité pris en charge et formats acceptés : affichés par la page
+ * /plateforme/entiwin et repris par la FAQ (lib/data/faq-center.ts).
+ */
+export const ENTIWIN_DOCUMENTS: Record<'fr' | 'en', string[]> = {
+  fr: [
+    'Procédure de gestion des déviations',
+    'Procédure CAPA',
+    'Formulaire ou modèle de déviation',
+    'Procédure de Change Control',
+    'SOP approuvée',
+    'Rapport d’audit',
+    'Réclamation qualité',
+    'Rapport APR / PQR',
+  ],
+  en: [
+    'Deviation management procedure',
+    'CAPA procedure',
+    'Deviation form or template',
+    'Change control procedure',
+    'Approved SOP',
+    'Audit report',
+    'Quality complaint',
+    'APR / PQR report',
+  ],
+}
+
+export const ENTIWIN_FORMATS = ['PDF', 'DOCX', 'XLSX'] as const

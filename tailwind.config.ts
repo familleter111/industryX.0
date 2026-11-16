@@ -36,6 +36,8 @@ const config: Config = {
         dark: color.dark,
         cream: color.cream,
         brand: color.brand,
+        // Identité d'Enti Win, page /plateforme/entiwin seulement.
+        ew: color.entiwin,
 
         // Gris de TEXTE sur fond clair. Exposes a plat, et non sous un
         // prefixe `text`, pour que la classe se lise `text-muted` et non

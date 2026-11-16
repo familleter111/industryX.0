@@ -43,7 +43,7 @@ const COPY = {
 
 /* Les deux appels menent a /contact. `Link` plutot que `a` pour garder
    la navigation cote client ; anime, donc passe par la fabrique. */
-const MotionLink = motion(Link)
+const MotionLink = motion.create(Link)
 
 export default function CTASection() {
   const m = useMotion()

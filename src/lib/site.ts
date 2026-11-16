@@ -67,6 +67,7 @@ export function publicPaths(guideSlugs: string[] = GUIDES.map(({ slug }) => slug
     '/privacy',
     '/conditions-utilisation',
     '/resources',
+    '/faq',
     ...guideSlugs.map((slug) => `/resources/${slug}`),
     ...PLATFORM_PAGES.map(({ slug }) => `/plateforme/${slug}`),
     ENTIWIN_PATH,

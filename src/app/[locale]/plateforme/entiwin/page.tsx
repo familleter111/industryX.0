@@ -1,30 +1,41 @@
 import { setRequestLocale } from 'next-intl/server'
+import Image from 'next/image'
 import {
-  ArrowRight,
-  BarChart3,
+  BrainCircuit,
   Check,
-  Clock,
-  ExternalLink,
+  CloudUpload,
   FileText,
   History,
-  ScanLine,
+  Minus,
+  PlayCircle,
   ShieldCheck,
-  Upload,
+  Sparkles,
+  Timer,
+  UserCheck,
   UserRound,
+  X,
   type LucideIcon,
 } from 'lucide-react'
 
 import Footer from '@/components/layout/Footer'
 import { Link } from '@/i18n/navigation'
-import { entiwinHref } from '@/lib/data/entiwin'
+import { ENTIWIN_DOCUMENTS, ENTIWIN_FORMATS, entiwinHref } from '@/lib/data/entiwin'
 import { useCopy, type Locale } from '@/lib/i18n'
 import { ROUTES } from '@/lib/routes'
 
 /**
- * Enti Win — page de présentation du nouveau produit (badge « New » dans le
- * menu Plateforme). L'outil lui-même est hébergé ailleurs : les boutons
- * « Lancer mon analyse » y mènent (voir lib/data/entiwin.ts), le bouton démo
- * reste sur /contact.
+ * Enti Win — page de présentation du produit (badge « Nouveau » dans le menu
+ * Plateforme). L'outil lui-même est hébergé ailleurs : les boutons « Lancer
+ * mon analyse » y mènent (voir lib/data/entiwin.ts), le bouton démo reste sur
+ * /contact.
+ *
+ * La page reprend l'identité du site Enti Win (entiwin.cipa-web.com) : palette
+ * `ew-…` (lib/tokens.ts, relevée dans sa feuille de style), police Inter,
+ * boutons et cartes à l'identique, logo et signature « Une solution
+ * Industry X.0 ». Barre de navigation et pied de page restent ceux du site.
+ * Seuls écarts voulus : les petits textes verts passent en green.700 (le
+ * green.600 d'Enti Win n'atteint que 4,0:1 sur fond vert pâle) et le chiffre
+ * orange en amber.700.
  *
  * Les valeurs du visuel du hero (15 / 6 / 3, 68 %) sont des exemples, et le
  * visuel le dit.
@@ -34,8 +45,8 @@ type Item = { title: string; text: string }
 
 const COPY = {
   fr: {
-    badge: 'Nouveau',
-    product: 'Enti Win — Évaluation qualité pharmaceutique assistée par IA',
+    product: 'Évaluation qualité pharmaceutique assistée par IA',
+    tagline: 'Évaluation qualité assistée par IA',
     title: 'Détectez vos écarts',
     accent: 'avant l’inspection',
     lead: 'L’IA confronte vos procédures, déviations et CAPA aux exigences BPF : chaque écart est justifié et traçable.',
@@ -60,21 +71,12 @@ const COPY = {
       strong: 'Enti Win automatise cette lecture croisée.',
       end: 'L’objectif n’est pas de remplacer l’expert qualité, mais de lui faire gagner du temps pour qu’il se concentre sur les écarts qui comptent.',
     },
-    steps: {
-      eyebrow: 'Comment ça marche',
-      title: 'Trois étapes, de vos documents au plan d’action',
-      items: [
-        { title: 'Déposez vos documents', text: 'Procédures, déviations, CAPA… au format PDF, Word ou Excel. Vos fichiers restent confidentiels.' },
-        { title: 'L’IA confronte les exigences', text: 'Chaque exigence du référentiel est vérifiée dans vos documents, passage par passage.' },
-        { title: 'Décidez, preuves à l’appui', text: 'Écarts, preuves et plan d’action priorisé : un rapport que vos experts n’ont plus qu’à valider.' },
-      ] as Item[],
-    },
     journey: {
       eyebrow: 'Le parcours sur la plateforme',
       title: 'Un parcours guidé en 4 étapes',
       lead: 'De l’organisation au rapport, l’utilisateur garde la main à chaque étape et valide les thèmes détectés avant l’analyse.',
       items: [
-        { title: 'Documents', text: 'Renseignez votre organisation puis chargez vos fichiers (PDF, DOCX, XLSX).' },
+        { title: 'Documents', text: `Renseignez votre organisation puis chargez vos fichiers (${ENTIWIN_FORMATS.join(', ')}).` },
         { title: 'Thèmes détectés', text: 'L’IA identifie les thèmes BPF couverts par vos documents. Vous les vérifiez avant de lancer l’analyse.' },
         { title: 'Analyse IA', text: 'Chaque exigence du référentiel est confrontée au contenu de vos documents.' },
         { title: 'Rapport', text: 'Exigences couvertes, partielles ou non identifiées, avec l’extrait source de chaque conclusion.' },
@@ -87,16 +89,6 @@ const COPY = {
     documents: {
       eyebrow: 'Documents pris en charge',
       title: 'Vos documents qualité, tels qu’ils sont',
-      items: [
-        'Procédure de gestion des déviations',
-        'Procédure CAPA',
-        'Formulaire ou modèle de déviation',
-        'Procédure de Change Control',
-        'SOP approuvée',
-        'Rapport d’audit',
-        'Réclamation qualité',
-        'Rapport APR / PQR',
-      ],
     },
     report: {
       eyebrow: 'Le rapport',
@@ -125,7 +117,7 @@ const COPY = {
       roles: ['Assurance qualité (QA)', 'Contrôle qualité (QC)', 'Affaires réglementaires', 'Responsables conformité & audit'],
     },
     cta: {
-      eyebrow: 'Une solution Industry X.0',
+      solution: 'Une solution',
       title: 'Envie de tester sur un de vos documents ?',
       text: 'Lancez votre première analyse en quelques minutes. Un aperçu du résultat s’affiche immédiatement, et le rapport complet est accessible en ligne.',
       demo: 'Demander une démo',
@@ -133,8 +125,8 @@ const COPY = {
     newTab: '(nouvel onglet)',
   },
   en: {
-    badge: 'New',
-    product: 'Enti Win — AI-assisted pharmaceutical quality assessment',
+    product: 'AI-assisted pharmaceutical quality assessment',
+    tagline: 'AI-assisted quality assessment',
     title: 'Find your gaps',
     accent: 'before the inspection',
     lead: 'AI checks your procedures, deviations and CAPAs against GMP requirements: every gap is justified and traceable.',
@@ -159,21 +151,12 @@ const COPY = {
       strong: 'Enti Win automates this cross-check.',
       end: 'The goal is not to replace the quality expert, but to save them time so they can focus on the gaps that matter.',
     },
-    steps: {
-      eyebrow: 'How it works',
-      title: 'Three steps, from your documents to an action plan',
-      items: [
-        { title: 'Upload your documents', text: 'Procedures, deviations, CAPAs… as PDF, Word or Excel files. Your files stay confidential.' },
-        { title: 'AI checks the requirements', text: 'Every requirement of the standard is checked against your documents, passage by passage.' },
-        { title: 'Decide, with evidence', text: 'Gaps, evidence and a prioritised action plan: a report your experts only need to validate.' },
-      ] as Item[],
-    },
     journey: {
       eyebrow: 'The journey on the platform',
       title: 'A guided journey in 4 steps',
       lead: 'From your organisation to the report, users stay in control at every step and validate the detected topics before the analysis.',
       items: [
-        { title: 'Documents', text: 'Enter your organisation, then upload your files (PDF, DOCX, XLSX).' },
+        { title: 'Documents', text: `Enter your organisation, then upload your files (${ENTIWIN_FORMATS.join(', ')}).` },
         { title: 'Detected topics', text: 'AI identifies the GMP topics covered by your documents. You review them before running the analysis.' },
         { title: 'AI analysis', text: 'Every requirement of the standard is compared with the content of your documents.' },
         { title: 'Report', text: 'Covered, partial or missing requirements, with the source excerpt behind each conclusion.' },
@@ -186,16 +169,6 @@ const COPY = {
     documents: {
       eyebrow: 'Supported documents',
       title: 'Your quality documents, as they are',
-      items: [
-        'Deviation management procedure',
-        'CAPA procedure',
-        'Deviation form or template',
-        'Change control procedure',
-        'Approved SOP',
-        'Audit report',
-        'Quality complaint',
-        'APR / PQR report',
-      ],
     },
     report: {
       eyebrow: 'The report',
@@ -224,7 +197,7 @@ const COPY = {
       roles: ['Quality assurance (QA)', 'Quality control (QC)', 'Regulatory affairs', 'Compliance & audit managers'],
     },
     cta: {
-      eyebrow: 'An Industry X.0 solution',
+      solution: 'A solution by',
       title: 'Want to try it on one of your documents?',
       text: 'Run your first analysis in minutes. A preview of the result appears right away, and the full report is available online.',
       demo: 'Book a demo',
@@ -233,47 +206,95 @@ const COPY = {
   },
 }
 
-const STEP_ICONS: LucideIcon[] = [Upload, ScanLine, BarChart3]
 const PRINCIPLE_ICONS: LucideIcon[] = [UserRound, FileText, ShieldCheck, History]
-const HIGHLIGHT_ICONS: LucideIcon[] = [Clock, FileText, UserRound]
+const HIGHLIGHT_ICONS: LucideIcon[] = [Timer, ShieldCheck, UserCheck]
+/* Statuts : pastille (couleur vive, pictogramme blanc) et chiffre (nuance
+   foncée, lisible en petit texte). */
 const RESULT_TONES = [
-  { dot: 'bg-emerald-600', text: 'text-emerald-600', sign: '✓', value: 15 },
-  { dot: 'bg-amber-500', text: 'text-amber-500', sign: '−', value: 6 },
-  { dot: 'bg-red-600', text: 'text-red-600', sign: '✕', value: 3 },
+  { badge: 'bg-ew-green-500', text: 'text-ew-green-700', icon: Check, value: 15 },
+  { badge: 'bg-ew-amber-500', text: 'text-ew-amber-700', icon: Minus, value: 6 },
+  { badge: 'bg-ew-ko', text: 'text-ew-ko', icon: X, value: 3 },
 ]
 
-/** Bouton vers l'outil Enti Win. `data-cta` déclenche `entiwin_clicked` (analytics). */
-function LaunchButton({ content, label, newTab }: { content: string; label: string; newTab: string }) {
+
+/** Logo Enti Win : bulle et point vert, tracés repris du site du produit. */
+function EntiWinMark({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" className={`shrink-0 ${className}`}>
+      <path
+        d="M20 3.5c9.1 0 16.5 6.9 16.5 15.4S29.1 34.3 20 34.3c-1.9 0-3.7-.3-5.4-.8l-8 3 2.3-6.4C5.4 27.3 3.5 23.3 3.5 18.9 3.5 10.4 10.9 3.5 20 3.5Z"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <circle cx="20" cy="18.9" r="6" className="fill-ew-green-500" />
+    </svg>
+  )
+}
+
+/** Flèche pointillée des schémas d'Enti Win. */
+function DottedArrow({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 12" fill="none" aria-hidden="true" className={className}>
+      <path d="M2 6h46" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="1 7" />
+      <path d="m50 2 5 4-5 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+/**
+ * Bouton vers l'outil Enti Win. `data-cta` déclenche `entiwin_clicked`
+ * (analytics). Marine sur fond clair, blanc sur le bandeau sombre.
+ */
+function LaunchButton({
+  content,
+  label,
+  newTab,
+  onDark = false,
+}: {
+  content: string
+  label: string
+  newTab: string
+  onDark?: boolean
+}) {
   return (
     <a
       href={entiwinHref(content)}
       target="_blank"
       rel="noopener noreferrer"
       data-cta={`entiwin_${content}`}
-      className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold text-dark shadow-gold transition hover:bg-gold-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
+      className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-[15px] font-semibold transition-colors ${
+        onDark
+          ? 'bg-white text-ew-navy-900 hover:bg-ew-navy-50'
+          : 'bg-ew-navy-800 text-white hover:bg-ew-navy-900'
+      }`}
     >
+      <CloudUpload size={20} aria-hidden="true" />
       {label}
-      <ExternalLink size={16} aria-hidden="true" />
       <span className="sr-only">{newTab}</span>
     </a>
   )
 }
 
-/** Surtitre : or foncé sur fond clair, or vif sur fond sombre (contraste). */
-function Eyebrow({ children, onDark = false }: { children: React.ReactNode; onDark?: boolean }) {
+/** Petite coche verte en pastille, la marque des listes d'Enti Win. */
+function CheckPill() {
   return (
-    <p className={`text-xs font-semibold uppercase tracking-[0.14em] ${onDark ? 'text-gold' : 'text-gold-ink'}`}>
-      {children}
-    </p>
+    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ew-green-50 text-ew-green-600 ring-1 ring-ew-green-100">
+      <Check size={14} strokeWidth={2.5} aria-hidden="true" />
+    </span>
   )
+}
+
+/** Surtitre vert foncé (green.700 : 5,8:1 même sur fond vert pâle). */
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return <p className="text-xs font-bold uppercase tracking-[0.14em] text-ew-green-700">{children}</p>
 }
 
 function SectionTitle({ eyebrow, title, lead }: { eyebrow: string; title: string; lead?: string }) {
   return (
     <div className="mx-auto max-w-2xl text-center">
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] text-dark sm:text-4xl">{title}</h2>
-      {lead && <p className="mt-4 text-base leading-relaxed text-stone-600">{lead}</p>}
+      <h2 className="mt-2 text-3xl font-extrabold tracking-[-0.02em] text-ew-navy-900 sm:text-4xl">{title}</h2>
+      {lead && <p className="mt-4 text-base leading-relaxed text-ew-ink-500">{lead}</p>}
     </div>
   )
 }
@@ -281,36 +302,42 @@ function SectionTitle({ eyebrow, title, lead }: { eyebrow: string; title: string
 /** Document → IA → répartition des exigences. Valeurs d'exemple, signalées comme telles. */
 function AnalysisVisual({ t }: { t: (typeof COPY)['fr']['visual'] }) {
   return (
-    <div className="min-w-0 rounded-3xl border border-white/10 bg-white/5 p-3 shadow-2xl shadow-black/30">
-      <div className="rounded-2xl bg-stone-50 p-5">
-        <div className="flex items-center gap-2 text-xs font-medium text-stone-600">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-gold" /> {t.running}
-        </div>
+    <div className="min-w-0 rounded-2xl border border-ew-line bg-ew-surface p-2.5 sm:p-3.5">
+      <div className="rounded-xl border border-ew-line bg-white p-5 shadow-sm shadow-ew-navy-900/5 sm:p-6">
+        <p className="flex items-center gap-2 text-[13px] font-medium text-ew-ink-700">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-ew-blue-500" /> {t.running}
+        </p>
 
-        <div className="mt-5 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[auto_auto_minmax(0,1fr)] sm:gap-5">
-          <div className="flex w-24 flex-col items-center rounded-xl border border-stone-200 bg-white px-2 py-4 text-center shadow-sm sm:w-28">
-            <FileText size={32} className="text-red-500" aria-hidden="true" />
-            <span className="mt-2 text-[12px] font-medium leading-tight text-stone-700">{t.file}</span>
+        <div className="mt-5 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[auto_auto_auto_auto_minmax(0,1fr)] sm:gap-0">
+          <div className="flex w-24 flex-col items-center rounded-xl border border-ew-line bg-white px-2 py-4 text-center shadow-sm sm:w-28">
+            <FileText size={32} className="text-ew-ko" aria-hidden="true" />
+            <span className="mt-2 text-[12px] font-medium leading-tight text-ew-ink-700">{t.file}</span>
           </div>
 
-          <div className="hidden h-14 w-14 items-center justify-center rounded-full bg-dark text-gold ring-8 ring-gold/25 sm:flex">
-            <ScanLine size={24} aria-hidden="true" />
-          </div>
+          <DottedArrow className="mx-2 hidden h-3 w-10 text-ew-blue-500 sm:block" />
+
+          {/* Le cerveau dans son halo, comme sur Enti Win. */}
+          <span className="hidden h-16 w-16 items-center justify-center rounded-full bg-ew-blue-500 text-white ring-8 ring-ew-blue-100 sm:flex">
+            <BrainCircuit size={28} aria-hidden="true" />
+          </span>
+
+          <DottedArrow className="mx-2 hidden h-3 w-10 text-ew-blue-500 sm:block" />
 
           <ul className="min-w-0 space-y-2">
             {t.results.map(([label, sub], i) => {
               const tone = RESULT_TONES[i]
+              const Icon = tone.icon
               return (
-                <li key={label} className="flex items-center gap-3 rounded-xl border border-stone-200 bg-white px-3 py-2 shadow-sm">
-                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${tone.dot}`}>
-                    {tone.sign}
+                <li key={label} className="flex items-center gap-3 rounded-xl border border-ew-line bg-white px-3 py-2 shadow-sm">
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white ${tone.badge}`}>
+                    <Icon size={16} strokeWidth={3} aria-hidden="true" />
                   </span>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-stone-800">
-                      <span className={`mr-1.5 text-lg ${tone.text}`}>{tone.value}</span>
+                    <p className="text-sm font-semibold text-ew-ink-700">
+                      <span className={`mr-1.5 text-xl font-extrabold ${tone.text}`}>{tone.value}</span>
                       {label}
                     </p>
-                    <p className="hidden truncate text-[12px] text-stone-500 sm:block">{sub}</p>
+                    <p className="hidden text-[12px] leading-snug text-ew-ink-500 sm:block">{sub}</p>
                   </div>
                 </li>
               )
@@ -318,17 +345,17 @@ function AnalysisVisual({ t }: { t: (typeof COPY)['fr']['visual'] }) {
           </ul>
         </div>
 
-        <div className="mt-5 rounded-xl border border-stone-200 bg-white px-4 py-3">
-          <div className="flex justify-between text-xs text-stone-600">
+        <div className="mt-5 rounded-xl border border-ew-line bg-white px-4 py-3">
+          <div className="flex justify-between text-[13px] text-ew-ink-700">
             <span>{t.progress}</span>
             <span className="font-semibold">68 %</span>
           </div>
-          <div className="mt-2 h-1.5 rounded-full bg-stone-100">
-            <div className="h-1.5 w-[68%] rounded-full bg-gold" />
+          <div className="mt-2 h-1.5 rounded-full bg-ew-line">
+            <div className="h-1.5 w-[68%] rounded-full bg-ew-green-500" />
           </div>
         </div>
       </div>
-      <p className="px-2 pt-2 text-center text-[12px] text-white/50">{t.caption}</p>
+      <p className="px-2 pt-2 text-center text-[12px] text-ew-ink-500">{t.caption}</p>
     </div>
   )
 }
@@ -338,45 +365,56 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
   const t = useCopy(COPY)
 
   return (
-    <main className="overflow-x-hidden bg-white font-body text-stone-800">
+    <main className="overflow-x-hidden bg-white font-inter text-ew-ink-700">
       {/* HERO */}
-      <section
-        data-cta-location="hero"
-        className="relative overflow-hidden bg-dark bg-[radial-gradient(ellipse_at_top_right,rgba(218,162,80,0.16),transparent_55%)]"
-      >
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-16 pt-[calc(82px+3rem)] sm:px-6 lg:grid-cols-2 lg:px-8 lg:pb-24 lg:pt-[calc(82px+4.5rem)]">
+      <section data-cta-location="hero" className="relative overflow-hidden bg-white">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-16 pt-[calc(82px+2.5rem)] sm:px-6 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,1fr)] lg:px-8 lg:pb-20 lg:pt-[calc(82px+4rem)]">
           <div>
-            <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-medium text-gold">
-              <span className="rounded-full bg-gold px-2 py-0.5 text-[12px] font-bold uppercase tracking-wide text-dark">
-                {t.badge}
+            {/* Signature du produit, comme l'en-tête d'Enti Win. */}
+            <p className="flex items-center gap-2.5 text-ew-navy-900">
+              <EntiWinMark className="h-8 w-8" />
+              <span className="text-[21px] font-bold tracking-tight">ENTI WiN</span>
+            </p>
+
+            {/* Un seul texte : sur mobile, il passe à la ligne d'un bloc. */}
+            <p className="mt-5 inline-flex items-start gap-2 rounded-2xl bg-ew-green-50 px-4 py-1.5 text-[13px] font-semibold leading-snug text-ew-green-700 ring-1 ring-ew-green-100 sm:items-center sm:rounded-full">
+              <Sparkles size={16} className="mt-px shrink-0 text-ew-green-500 sm:mt-0" aria-hidden="true" />
+              <span>
+                <span className="font-bold text-ew-navy-900">ENTI WIN</span> — {t.product}
               </span>
-              {t.product}
-            </div>
+            </p>
 
-            <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.1] tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
-              {t.title} <span className="text-gold">{t.accent}</span>
+            <h1 className="mt-4 text-[clamp(2.25rem,4.6vw,3.5rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-ew-navy-900">
+              {t.title}
+              <br className="hidden lg:block" /> {t.accent}
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">{t.lead}</p>
+            <p className="mt-5 max-w-[48ch] text-[clamp(1rem,1.1vw,1.1rem)] leading-[1.6] text-ew-ink-500">{t.lead}</p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-col gap-3.5 sm:flex-row">
               <LaunchButton content="hero" label={t.launch} newTab={t.newTab} />
               <a
                 href="#fonctionnement"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-ew-line bg-white px-6 py-3.5 text-[15px] font-semibold text-ew-navy-900 transition-colors hover:border-ew-navy-200 hover:bg-ew-navy-50"
               >
+                <PlayCircle size={20} className="text-ew-navy-800" aria-hidden="true" />
                 {t.how}
               </a>
             </div>
 
-            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/70">
+            <ul className="mt-7 flex flex-wrap items-center gap-x-2.5 gap-y-3 text-sm font-medium text-ew-ink-700">
               {t.highlights.map((label, i) => {
                 const Icon = HIGHLIGHT_ICONS[i]
                 return (
-                  <li key={label} className="flex items-center gap-2">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold/15 text-gold">
-                      <Icon size={16} aria-hidden="true" />
+                  <li key={label} className="flex items-center gap-2.5">
+                    <span className="flex items-center gap-2 whitespace-nowrap">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ew-green-50 text-ew-green-500 ring-1 ring-ew-green-100">
+                        <Icon size={17} aria-hidden="true" />
+                      </span>
+                      {label}
                     </span>
-                    {label}
+                    {i < t.highlights.length - 1 && (
+                      <span aria-hidden="true" className="hidden h-1.5 w-1.5 rounded-full bg-ew-green-400 sm:block" />
+                    )}
                   </li>
                 )
               })}
@@ -388,107 +426,79 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
       </section>
 
       {/* CONSTAT */}
-      <section className="border-b border-stone-100 bg-white">
+      <section className="border-t border-ew-line bg-ew-surface">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.2fr] lg:px-8 lg:py-20">
           <div>
             <Eyebrow>{t.problem.eyebrow}</Eyebrow>
-            <h2 className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] text-dark">{t.problem.title}</h2>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-[-0.02em] text-ew-navy-900">{t.problem.title}</h2>
           </div>
-          <div className="space-y-4 text-base leading-relaxed text-stone-600">
+          <div className="space-y-4 text-base leading-8 text-ew-ink-500 lg:text-lg">
             <p>{t.problem.text}</p>
             <p>
-              <strong className="font-semibold text-dark">{t.problem.strong}</strong> {t.problem.end}
+              <strong className="font-semibold text-ew-navy-900">{t.problem.strong}</strong> {t.problem.end}
             </p>
           </div>
         </div>
       </section>
 
-      {/* COMMENT ÇA MARCHE */}
-      <section id="fonctionnement" className="scroll-mt-24 bg-cream">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <SectionTitle eyebrow={t.steps.eyebrow} title={t.steps.title} />
-          <ol className="mt-12 grid gap-6 md:grid-cols-3">
-            {t.steps.items.map(({ title, text }, i) => {
-              const Icon = STEP_ICONS[i]
-              return (
-                <li key={title} className="relative rounded-2xl border border-cream-border bg-white p-6 shadow-sm">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-50 text-gold-ink">
-                    <Icon size={20} aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-4 text-lg font-semibold text-dark">
-                    {i + 1}. {title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-stone-600">{text}</p>
-                  {i < t.steps.items.length - 1 && (
-                    <ArrowRight
-                      size={20}
-                      aria-hidden="true"
-                      className="absolute -right-5 top-1/2 hidden -translate-y-1/2 text-stone-300 md:block"
-                    />
-                  )}
-                </li>
-              )
-            })}
-          </ol>
-        </div>
-      </section>
-
-      {/* PARCOURS */}
-      <section className="bg-white">
+      {/* PARCOURS — cible du bouton « Voir comment ça marche » du hero.
+          La section « Trois étapes » qui la précédait a été retirée : elle
+          redisait ce parcours en plus court et prêtait à confusion. */}
+      {/* Pas de scroll-mt : le scroll-padding-top global (globals.css)
+          dégage déjà la barre de navigation fixe. */}
+      <section id="fonctionnement" className="border-t border-ew-line bg-white">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <SectionTitle eyebrow={t.journey.eyebrow} title={t.journey.title} lead={t.journey.lead} />
 
           <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[1.3fr_1fr]">
-            <ol className="relative ml-4 space-y-6 border-l-2 border-gold/40 pl-8">
+            <ol className="relative ml-4 space-y-6 border-l-2 border-ew-navy-100 pl-8">
               {t.journey.items.map((step, i) => (
                 <li key={step.title} className="relative">
-                  <span className="absolute -left-[49px] flex h-8 w-8 items-center justify-center rounded-full bg-dark text-sm font-bold text-white ring-4 ring-white">
+                  <span className="absolute -left-[49px] flex h-8 w-8 items-center justify-center rounded-full bg-ew-navy-800 text-sm font-bold text-white ring-4 ring-white">
                     {i + 1}
                   </span>
-                  <h3 className="text-lg font-semibold text-dark">{step.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-stone-600">{step.text}</p>
+                  <h3 className="text-lg font-bold text-ew-navy-900">{step.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-ew-ink-500">{step.text}</p>
                 </li>
               ))}
             </ol>
 
-            <div className="rounded-2xl border border-stone-200 bg-stone-50 p-6">
-              <h3 className="text-base font-semibold text-dark">{t.journey.pipelineTitle}</h3>
-              <p className="mt-1 text-sm text-stone-600">{t.journey.pipelineLead}</p>
+            <div className="rounded-2xl border border-ew-line bg-ew-surface p-6">
+              <h3 className="text-base font-bold text-ew-navy-900">{t.journey.pipelineTitle}</h3>
+              <p className="mt-1 text-sm text-ew-ink-500">{t.journey.pipelineLead}</p>
               <ul className="mt-5 space-y-3">
                 {t.journey.pipeline.map((step) => (
-                  <li key={step} className="flex items-center gap-3 text-sm text-stone-700">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gold text-dark">
-                      <Check size={12} strokeWidth={3} aria-hidden="true" />
-                    </span>
+                  <li key={step} className="flex items-center gap-3 text-sm text-ew-ink-700">
+                    <CheckPill />
                     {step}
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 border-t border-stone-200 pt-4 text-xs text-stone-500">{t.journey.pipelineNote}</p>
+              <p className="mt-5 border-t border-ew-line pt-4 text-[13px] text-ew-ink-500">{t.journey.pipelineNote}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* DOCUMENTS & RAPPORT */}
-      <section className="bg-cream">
+      <section className="border-t border-ew-line bg-ew-surface">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
-          <div className="rounded-2xl border border-cream-border bg-white p-8">
+          <div className="rounded-2xl border border-ew-line bg-white p-6 shadow-sm shadow-ew-navy-900/5 sm:p-8">
             <Eyebrow>{t.documents.eyebrow}</Eyebrow>
-            <h2 className="mt-2 font-display text-2xl font-bold tracking-[-0.03em] text-dark">{t.documents.title}</h2>
-            <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-              {t.documents.items.map((doc) => (
-                <li key={doc} className="flex items-start gap-2 text-sm text-stone-700">
-                  <Check size={16} className="mt-0.5 shrink-0 text-gold-deep" aria-hidden="true" />
+            <h2 className="mt-2 text-2xl font-extrabold tracking-[-0.02em] text-ew-navy-900">{t.documents.title}</h2>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {ENTIWIN_DOCUMENTS[locale].map((doc) => (
+                <li key={doc} className="flex items-start gap-2.5 text-sm text-ew-ink-700">
+                  <CheckPill />
                   {doc}
                 </li>
               ))}
             </ul>
             <div className="mt-6 flex flex-wrap gap-2">
-              {['PDF', 'DOCX', 'XLSX'].map((format) => (
+              {ENTIWIN_FORMATS.map((format) => (
                 <span
                   key={format}
-                  className="rounded-md border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-600"
+                  className="rounded-md bg-ew-navy-50 px-2.5 py-1 text-xs font-semibold text-ew-navy-800 ring-1 ring-ew-navy-100"
                 >
                   {format}
                 </span>
@@ -496,25 +506,31 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
             </div>
           </div>
 
-          <div className="rounded-2xl border border-cream-border bg-white p-8">
+          <div className="rounded-2xl border border-ew-line bg-white p-6 shadow-sm shadow-ew-navy-900/5 sm:p-8">
             <Eyebrow>{t.report.eyebrow}</Eyebrow>
-            <h2 className="mt-2 font-display text-2xl font-bold tracking-[-0.03em] text-dark">{t.report.title}</h2>
+            <h2 className="mt-2 text-2xl font-extrabold tracking-[-0.02em] text-ew-navy-900">{t.report.title}</h2>
             <ul className="mt-6 space-y-4">
-              {t.report.items.map((result, i) => (
-                <li key={result.title} className="flex gap-3">
-                  <span className={`mt-1.5 h-3 w-3 shrink-0 rounded-full ${RESULT_TONES[i].dot}`} />
-                  <div>
-                    <p className="font-semibold text-stone-800">{result.title}</p>
-                    <p className="text-sm text-stone-600">{result.text}</p>
-                  </div>
-                </li>
-              ))}
+              {t.report.items.map((result, i) => {
+                const tone = RESULT_TONES[i]
+                const Icon = tone.icon
+                return (
+                  <li key={result.title} className="flex gap-3">
+                    <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white ${tone.badge}`}>
+                      <Icon size={14} strokeWidth={3} aria-hidden="true" />
+                    </span>
+                    <div>
+                      <p className="font-semibold text-ew-navy-900">{result.title}</p>
+                      <p className="text-sm text-ew-ink-500">{result.text}</p>
+                    </div>
+                  </li>
+                )
+              })}
             </ul>
-            <p className="mt-6 rounded-xl bg-stone-50 p-4 text-sm text-stone-600">
+            <p className="mt-6 rounded-xl bg-ew-surface p-4 text-sm text-ew-ink-500 ring-1 ring-ew-line">
               {t.report.note[0]}
-              <strong className="text-stone-800">{t.report.note[1]}</strong>
+              <strong className="text-ew-navy-900">{t.report.note[1]}</strong>
               {t.report.note[2]}
-              <strong className="text-stone-800">{t.report.note[3]}</strong>
+              <strong className="text-ew-navy-900">{t.report.note[3]}</strong>
               {t.report.note[4]}
             </p>
           </div>
@@ -522,19 +538,19 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
       </section>
 
       {/* PRINCIPES */}
-      <section className="bg-white">
+      <section className="border-t border-ew-line bg-white">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <SectionTitle eyebrow={t.principles.eyebrow} title={t.principles.title} />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {t.principles.items.map(({ title, text }, i) => {
               const Icon = PRINCIPLE_ICONS[i]
               return (
-                <div key={title} className="rounded-2xl border border-stone-200 p-6">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-50 text-gold-ink">
+                <div key={title} className="rounded-2xl border border-ew-line bg-white p-6 shadow-sm shadow-ew-navy-900/5">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-ew-green-50 text-ew-green-600 ring-1 ring-ew-green-100">
                     <Icon size={20} aria-hidden="true" />
                   </span>
-                  <h3 className="mt-4 font-semibold text-dark">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-stone-600">{text}</p>
+                  <h3 className="mt-4 font-bold text-ew-navy-900">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ew-ink-500">{text}</p>
                 </div>
               )
             })}
@@ -543,20 +559,20 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
       </section>
 
       {/* POUR QUI */}
-      <section className="bg-cream">
+      <section className="border-t border-ew-line bg-gradient-to-b from-ew-green-50/70 to-white">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20">
           <div>
             <Eyebrow>{t.audience.eyebrow}</Eyebrow>
-            <h2 className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] text-dark">{t.audience.title}</h2>
-            <p className="mt-4 text-base leading-relaxed text-stone-600">{t.audience.text}</p>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-[-0.02em] text-ew-navy-900">{t.audience.title}</h2>
+            <p className="mt-4 text-base leading-relaxed text-ew-ink-500">{t.audience.text}</p>
           </div>
           <ul className="grid gap-3 sm:grid-cols-2">
             {t.audience.roles.map((role) => (
               <li
                 key={role}
-                className="flex items-center gap-3 rounded-xl border border-cream-border bg-white px-4 py-3 text-sm font-medium text-stone-700"
+                className="flex items-center gap-3 rounded-xl border border-ew-line bg-white px-4 py-3 text-sm font-medium text-ew-ink-700"
               >
-                <Check size={16} className="text-gold-deep" aria-hidden="true" />
+                <CheckPill />
                 {role}
               </li>
             ))}
@@ -564,17 +580,43 @@ export default function EntiWinPage({ params: { locale } }: { params: { locale: 
         </div>
       </section>
 
-      {/* APPEL FINAL */}
-      <section data-cta-location="cta_band" className="bg-dark">
-        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20">
-          <Eyebrow onDark>{t.cta.eyebrow}</Eyebrow>
-          <h2 className="mt-3 font-display text-3xl font-bold tracking-[-0.03em] text-white sm:text-4xl">{t.cta.title}</h2>
+      {/* APPEL FINAL — bandeau marine d'Enti Win : filet vert, halos, signature */}
+      <section data-cta-location="cta_band" className="relative overflow-hidden bg-ew-navy-950">
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ew-green-400 to-transparent" />
+        {/* Halos en dégradé radial plutôt qu'en flou (coût de peinture). */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(closest-side,rgba(18,161,80,0.16),transparent)]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-[radial-gradient(closest-side,rgba(30,58,115,0.45),transparent)]"
+        />
+
+        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20">
+          {/* Signature : « ENTI WiN · Une solution Industry X.0 ». */}
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="flex items-center gap-2.5 text-left text-white">
+              <EntiWinMark className="h-9 w-9" />
+              <div>
+                <p className="text-xl font-extrabold tracking-tight">ENTI WiN</p>
+                <p className="text-[13px] text-white/60">{t.tagline}</p>
+              </div>
+            </div>
+            <span aria-hidden="true" className="hidden h-8 w-px bg-white/15 sm:block" />
+            <span className="flex items-center gap-2.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-white/60">{t.cta.solution}</span>
+              <Image src="/logo.png" alt="Industry X.0" width={8625} height={3202} sizes="140px" className="h-auto w-[140px]" />
+            </span>
+          </div>
+
+          <h2 className="mt-10 text-3xl font-extrabold tracking-[-0.02em] text-white sm:text-4xl">{t.cta.title}</h2>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/70">{t.cta.text}</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <LaunchButton content="footer" label={t.launch} newTab={t.newTab} />
+          <div className="mt-8 flex flex-col justify-center gap-3.5 sm:flex-row">
+            <LaunchButton content="footer" label={t.launch} newTab={t.newTab} onDark />
             <Link
               href={ROUTES.demo}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 px-6 py-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-white/10"
             >
               {t.cta.demo}
             </Link>

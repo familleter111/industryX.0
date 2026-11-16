@@ -155,6 +155,12 @@
   content-visibility: visible;
 }
 
+/* Bandeau de consentement rendu côté serveur : masqué avant le premier
+   affichage si le visiteur a déjà répondu (script du <head>, ConsentBanner). */
+[data-consent] [data-consent-banner] {
+  display: none;
+}
+
 /* Animations CSS en pause dans les sections hors de l'écran (RenderGuards). */
 [data-offscreen] *,
 [data-offscreen] *::before,

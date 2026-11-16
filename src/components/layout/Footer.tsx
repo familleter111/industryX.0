@@ -31,7 +31,7 @@ const FOOTER_HREFS = [
     '/plateforme/entiwin',
   ],
   ['/entreprise', '/partners', '/customers', '/resources', '/contact'],
-  ['/privacy', '/conditions-utilisation', '/#faq'],
+  ['/privacy', '/conditions-utilisation', '/faq'],
 ]
 
 const COPY = {

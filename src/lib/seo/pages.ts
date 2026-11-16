@@ -112,6 +112,18 @@ const STATIC_PAGES: Record<string, Bilingual<PageSeo>> = {
         'The rules for using the Industry X.0 website: access, contact forms, intellectual property, liability and governing law. Read them before using our forms.',
     },
   },
+  '/faq': {
+    fr: {
+      title: 'Questions fréquentes : CIPA, Enti Win, Industry X.0',
+      description:
+        'Démo, intégrations, mode hors ligne, audit trail, Enti Win, données : les réponses aux questions fréquentes sur CIPA et Industry X.0. Cherchez la vôtre.',
+    },
+    en: {
+      title: 'FAQ: the CIPA platform, Enti Win and Industry X.0',
+      description:
+        'Demos, integrations, offline mode, audit trail, Enti Win, data: answers to frequently asked questions about CIPA and Industry X.0. Search for yours now.',
+    },
+  },
   '/resources': {
     fr: {
       title: 'Guides qualité, audits et digitalisation industrielle',

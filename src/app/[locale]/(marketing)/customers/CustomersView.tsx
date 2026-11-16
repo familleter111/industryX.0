@@ -586,7 +586,7 @@ export default function CustomersView({ testimonials }: { testimonials: Testimon
       <section className="bg-[#F7F7F6] py-20 sm:py-24">
         <div className="mx-auto max-w-[900px] px-5 text-center sm:px-7 lg:px-8">
           <h2 className="font-display text-[24px] font-black leading-tight tracking-[-0.035em] text-[#111827] sm:text-[32px]">
-            {t.ctaTitle} <span className="text-gold">{t.ctaAccent}</span>
+            {t.ctaTitle} <span className="text-gold-deep">{t.ctaAccent}</span>
             {t.ctaEnd}
           </h2>
 

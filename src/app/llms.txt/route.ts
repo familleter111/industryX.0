@@ -48,7 +48,7 @@ function body() {
     '## Entreprise et ressources',
     '',
     ...['/entreprise', '/customers', '/partners', '/resources'].map((path) => entry(path)),
-    `- [Questions fréquentes](${SITE_URL}/#faq)`,
+    entry('/faq', 'Questions fréquentes'),
     '',
     '## Contact',
     '',

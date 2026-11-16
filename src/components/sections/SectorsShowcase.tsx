@@ -153,7 +153,8 @@ export default function SectorsShowcase({
 
           <p className="text-[14px] leading-[1.6] text-stone-600 sm:text-[16px]">
             {footnote.text}{' '}
-            <span className="font-semibold text-green-600 underline decoration-green-500/40 decoration-2 underline-offset-4">
+            {/* green-800 : green-600 ne fait que 2,9:1 sur ce fond, green-700 4,4:1. */}
+            <span className="font-semibold text-green-800 underline decoration-green-500/40 decoration-2 underline-offset-4">
               {footnote.accent}
             </span>
             .

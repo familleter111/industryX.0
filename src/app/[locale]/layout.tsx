@@ -6,6 +6,7 @@ import { setRequestLocale } from 'next-intl/server'
 import '@/styles/globals.css'
 
 import AnalyticsProvider from '@/components/analytics/AnalyticsProvider'
+import { CONSENT_COOKIE } from '@/lib/analytics/consent'
 import MotionProvider from '@/components/layout/MotionProvider'
 import Navbar from '@/components/layout/Navbar'
 import PreviewBadge from '@/components/layout/PreviewBadge'
@@ -78,10 +79,15 @@ export default function RootLayout({
           différé (`cv-auto`) n'auraient alors que leur hauteur estimée et la
           cible serait mal placée : on les rend toutes d'emblée. Le reste de la
           garde (clics, changements de hash) est dans RenderGuards.
+
+          Consentement déjà donné ou refusé : `data-consent` masque le bandeau
+          (rendu côté serveur, voir ConsentBanner) avant le premier affichage.
         */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "if(location.hash)document.documentElement.classList.add('cv-off')",
+            __html:
+              "var d=document.documentElement;if(location.hash)d.classList.add('cv-off');" +
+              `if(/(?:^|; )${CONSENT_COOKIE}=(?:granted|denied)/.test(document.cookie))d.dataset.consent='1'`,
           }}
         />
         {/*
@@ -106,8 +112,9 @@ export default function RootLayout({
           */}
           <style
             dangerouslySetInnerHTML={{
+              // Sans JavaScript, ni mesure ni boutons actifs : pas de bandeau.
               __html:
-                '[style*="opacity:0"]{opacity:1!important;transform:none!important}',
+                '[style*="opacity:0"]{opacity:1!important;transform:none!important}[data-consent-banner]{display:none!important}',
             }}
           />
         </noscript>

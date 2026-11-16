@@ -33,6 +33,7 @@ const PAGES = [
   '/en/customers',
   '/en/partners',
   '/en/resources',
+  '/en/faq',
   '/en/resources/digitaliser-audits-terrain',
   '/en/resources/non-conformites-capa',
   '/en/resources/indicateurs-qualite-temps-reel',
@@ -48,6 +49,10 @@ const FUNCTION_WORDS =
 // Noms propres et adresses : français par nature, pas des oublis de traduction.
 const ALLOWED =
   /^(Médis|Ministère de la Santé Publique.*|Municipalité|Neapolis Pharma|Rose Blanche Group|Kilani Groupe|Cité Les Pins,?( 1053 Tunis, Tunisia)?|1053 Tunis|Français|Startup Act.*|© 2026.*|Industry X\.0, Cité Les Pins.*)$/
+
+// Les mêmes noms propres, retirés à l'intérieur d'une phrase (« Our offices
+// are at Cité Les Pins… », FAQ) avant de chercher du français.
+const PROPER_NOUNS = /Cité Les Pins|Médis|Ministère de la Santé Publique|Neapolis Pharma|Rose Blanche Group|Kilani Groupe/g
 
 const decode = (s) =>
   s
@@ -81,12 +86,14 @@ for (const path of PAGES) {
     failed++
     continue
   }
-  const hits = [...new Set(fragments(html))].filter(
-    (t) =>
+  const hits = [...new Set(fragments(html))].filter((t) => {
+    const plain = t.replace(PROPER_NOUNS, '')
+    return (
       t.length >= 3 &&
       !ALLOWED.test(t) &&
-      (ACCENTS.test(t) || (t.match(FUNCTION_WORDS) ?? []).length >= 2),
-  )
+      (ACCENTS.test(plain) || (plain.match(FUNCTION_WORDS) ?? []).length >= 2)
+    )
+  })
   if (hits.length) {
     failed++
     console.log(`✗ ${path} : ${hits.length} texte(s) en français`)

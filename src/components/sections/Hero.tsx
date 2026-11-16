@@ -340,11 +340,13 @@ export default function Hero() {
             style={{ fontSize: 'clamp(1rem,1.7vw,1.55rem)' }}
           >
             {t.trust}{' '}
-            {/* `gold.deep`, pas `gold.DEFAULT` : meme raison qu'au titre
-                ci-dessus — l'or de marque tombe a 2,04:1 sur le creme, sous
-                le seuil de 3:1 du texte large. Les filets, eux, gardent l'or
-                de marque : ce sont des traits, pas du texte. */}
-            <span style={{ color: tokens.color.gold.deep }}>{t.trustAccent}</span>
+            {/* Pas l'or de marque : il tombe a 2,04:1 sur le creme. Cette
+                ligne ne devient du texte large (18,66 px en gras) que vers
+                1100 px de large : en dessous, `gold.ink` (4,6:1, seuil 4,5) ;
+                a partir de xl, `gold.deep` (3,1:1, seuil 3) garde plus
+                d'eclat. Les filets, eux, gardent l'or de marque : ce sont
+                des traits, pas du texte. */}
+            <span className="text-gold-ink xl:text-gold-deep">{t.trustAccent}</span>
           </p>
 
           <span

@@ -4,7 +4,6 @@ import { useRef, useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import { m as motion, useInView } from 'framer-motion'
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react'
-import AnimatedMeshBackground from '@/components/ui/AnimatedMeshBackground'
 import AutoplayTimer from '@/components/ui/AutoplayTimer'
 import { findClientLogo, logoFrameWidth } from '@/lib/data/clientLogos'
 import type { Testimonial } from '@/lib/data/testimonials'
@@ -151,20 +150,10 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
     <Section
       deferRender
       variant="default"
+      // Fond blanc uni : les halos jaunes animés (AnimatedMeshBackground)
+      // ont été retirés, jugés fatigants pour les yeux.
       background="white"
-      backdrop={
-        <AnimatedMeshBackground
-          grid={false}
-          orbs={[
-            { color: 'rgba(254,240,138,0.4)', size: 300, position: { left: '0', top: '0' }, duration: 9, parallax: 25 },
-            { color: 'rgba(254,249,195,0.5)', size: 300, position: { right: '0', bottom: '0' }, duration: 11, parallax: 30 },
-          ]}
-        />
-      }
     >
-
-      {/* glow background — mesh animé avec parallax léger */}
-
 
         {/* Un seul declencheur pour le titre ET les cartes : le conteneur
             orchestre, les enfants ne declarent que leurs variants. Deux

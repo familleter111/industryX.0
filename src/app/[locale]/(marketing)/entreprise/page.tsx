@@ -320,7 +320,7 @@ function AboutScreen() {
             <motion.p
               {...rise}
               transition={{ duration: 0.5, ease }}
-              className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]"
+              className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[12px]"
             >
               {t.aboutEyebrow}
               <span className="h-px w-14 bg-gold/70" />
@@ -333,7 +333,7 @@ function AboutScreen() {
               className="mt-[clamp(1rem,2.2vh,1.75rem)] font-display font-black leading-[1.06] tracking-[-0.04em] text-[#111827] text-[clamp(30px,7.4vw,42px)] lg:text-[clamp(30px,min(3.05vw,5.6vh),52px)]"
             >
               {t.aboutTitle}{' '}
-              <span className="text-gold">{t.aboutAccent}</span>
+              <span className="text-gold-deep">{t.aboutAccent}</span>
             </motion.h1>
 
             {/* CHAPEAU */}
@@ -476,14 +476,14 @@ function MissionSection() {
 
       <div className={styles.content}>
         <div className={styles.heading}>
-          <p className={`${styles.eyebrow} text-gold`}>
+          <p className={`${styles.eyebrow} text-gold-ink`}>
             {t.missionEyebrow}
             <span aria-hidden="true" className="bg-gold" />
           </p>
           <h2 id="mission-title" className={styles.title}>
             <span>{t.missionTitle[0]}</span>{' '}
             <span>{t.missionTitle[1]}</span>{' '}
-            <span className="text-gold">{t.missionTitle[2]}</span>
+            <span className="text-gold-deep">{t.missionTitle[2]}</span>
           </h2>
         </div>
 
@@ -494,7 +494,7 @@ function MissionSection() {
               <li key={step.num} className={styles.card}>
                 <div className={styles.cardTop}>
                   <Icon className={`${styles.icon} text-gold`} aria-hidden="true" strokeWidth={1.5} />
-                  <span className={`${styles.number} text-gold`}>{step.num}</span>
+                  <span className={`${styles.number} text-gold-ink`}>{step.num}</span>
                 </div>
                 <h3 className={styles.cardTitle}>
                   <span>{step.titleLines[0]}</span>{' '}
@@ -609,7 +609,7 @@ function JourneySection() {
           viewport={viewport}
           className="flex flex-col justify-center px-5 pb-10 pt-14 sm:px-7 lg:py-16 lg:pl-10 lg:pr-8"
         >
-          <p className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]">
+          <p className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[12px]">
             {t.journeyEyebrow}
             <span className="h-px w-16 bg-gold/70" />
           </p>
@@ -618,7 +618,7 @@ function JourneySection() {
               coupure en quatre lignes tient à toutes les largeurs. */}
           <h2 className="mt-[clamp(1rem,2.6vh,1.75rem)] max-w-[11em] font-display font-black leading-[1.08] tracking-[-0.04em] text-[#111827] text-[clamp(28px,6.6vw,36px)] lg:text-[clamp(28px,min(2.9vw,5.4vh),48px)]">
             {t.journeyTitle}{' '}
-            <span className="text-gold">{t.journeyAccent}</span>
+            <span className="text-gold-deep">{t.journeyAccent}</span>
           </h2>
 
           <p className="mt-[clamp(1rem,2.6vh,1.75rem)] max-w-[26em] text-[14px] leading-[1.7] text-muted lg:text-[clamp(14px,min(1.1vw,2vh),17px)]">
@@ -680,7 +680,7 @@ function JourneySection() {
                 {step.year}
               </h3>
 
-              <p className="mt-2 font-display font-bold leading-[1.3] tracking-[-0.02em] text-gold text-[clamp(14px,3.6vw,17px)] lg:text-[clamp(14px,min(1.25vw,2.3vh),19px)]">
+              <p className="mt-2 font-display font-bold leading-[1.3] tracking-[-0.02em] text-gold-ink text-[clamp(14px,3.6vw,17px)] lg:text-[clamp(14px,min(1.25vw,2.3vh),19px)]">
                 {step.label}
               </p>
 
@@ -726,7 +726,7 @@ function TeamSection() {
 
         {/* ==================== DISCOURS ==================== */}
         <div className="flex min-h-0 flex-col justify-center">
-          <p className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]">
+          <p className="flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[12px]">
             {t.teamEyebrow}
             <span className="h-px w-14 bg-gold/70" />
           </p>
@@ -735,7 +735,7 @@ function TeamSection() {
               coupure en trois lignes tient à toutes les largeurs. */}
           <h2 className="mt-[clamp(0.9rem,2.4vh,1.75rem)] max-w-[10em] font-display font-black leading-[1.07] tracking-[-0.04em] text-[#111827] text-[clamp(26px,6.6vw,34px)] lg:text-[clamp(28px,min(3.25vw,6vh),56px)]">
             {t.teamTitle}{' '}
-            <span className="text-gold">{t.teamAccent}</span>
+            <span className="text-gold-deep">{t.teamAccent}</span>
           </h2>
 
           <p className="mt-[clamp(0.75rem,2.2vh,1.5rem)] max-w-[24em] text-[14px] leading-[1.6] text-muted lg:text-[clamp(14px,min(1.2vw,2.2vh),19px)]">
@@ -925,7 +925,7 @@ function ValuesSection() {
         >
           <div>
             <h2 className="font-display font-black leading-[0.98] tracking-[-0.045em] text-[#111827] text-[clamp(40px,10vw,60px)] lg:text-[clamp(44px,min(4.6vw,9vh),88px)]">
-              {t.valuesTitle} <span className="text-gold">{t.valuesAccent}</span>
+              {t.valuesTitle} <span className="text-gold-deep">{t.valuesAccent}</span>
             </h2>
 
             <span
@@ -1004,7 +1004,7 @@ function ValuesSection() {
               style={{ backgroundColor: card.bg }}
             >
               <div className="px-[9cqw] pt-[6cqw]">
-                <p className="font-display font-black leading-[0.78] tracking-[-0.04em] text-gold text-[25cqw]">
+                <p className="font-display font-black leading-[0.78] tracking-[-0.04em] text-gold-deep text-[25cqw]">
                   {card.num}
                 </p>
                 <span
@@ -1110,7 +1110,7 @@ function ExpertiseSection() {
           className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12"
         >
           <div className="min-w-0">
-            <p className="flex items-center gap-4 border-l-2 border-gold pl-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold sm:text-[12px]">
+            <p className="flex items-center gap-4 border-l-2 border-gold pl-4 text-[12px] font-bold uppercase tracking-[0.2em] text-gold-ink sm:text-[12px]">
               {t.expertiseEyebrow}
               <span aria-hidden="true" className="h-px w-16 bg-gold/70" />
             </p>
@@ -1119,7 +1119,7 @@ function ExpertiseSection() {
               <h2 className="font-display font-black leading-[1.08] tracking-[-0.04em] text-[#111827] text-[clamp(28px,6.6vw,38px)] lg:text-[clamp(30px,min(3.1vw,5.8vh),52px)]">
                 {t.expertiseTitle}{' '}
                 <br />
-                <span className="text-gold">{t.expertiseAccent}</span>
+                <span className="text-gold-deep">{t.expertiseAccent}</span>
               </h2>
 
               <span
@@ -1271,7 +1271,7 @@ function HorizonSection() {
         {/* SUR-TITRE. Le filet précède le mot, comme dans le dessin. */}
         <motion.p
           variants={fadeUp}
-          className="flex items-center gap-5 text-[12px] font-bold uppercase tracking-[0.24em] text-gold sm:text-[12px]"
+          className="flex items-center gap-5 text-[12px] font-bold uppercase tracking-[0.24em] text-gold-ink sm:text-[12px]"
         >
           <span aria-hidden="true" className="h-px w-10 bg-gold" />
           {t.horizonEyebrow}
@@ -1288,7 +1288,7 @@ function HorizonSection() {
               className="max-w-[13.8em] font-display font-black leading-[1.06] tracking-[-0.04em] text-[#111827] text-[clamp(30px,7.6vw,42px)] lg:text-[clamp(34px,min(3.6vw,6.6vh),58px)]"
             >
               {t.horizonTitle}{' '}
-              <span className="text-gold">{t.horizonAccent}</span>
+              <span className="text-gold-deep">{t.horizonAccent}</span>
             </motion.h2>
 
             {/* LES DEUX APPELS */}
@@ -1298,7 +1298,7 @@ function HorizonSection() {
             >
               <Link
                 href={homeAnchorHref(ROUTES.cipa)}
-                className="group inline-flex items-center justify-center gap-3 rounded-[6px] bg-gold px-7 py-4 text-[14px] font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 sm:text-[15px]"
+                className="group inline-flex items-center justify-center gap-3 rounded-[6px] bg-gold px-7 py-4 text-[14px] font-semibold text-dark transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 sm:text-[15px]"
               >
                 {t.discover}
                 <ArrowRight

@@ -121,9 +121,12 @@ export function HowItWorks({ steps }: { steps: PlatformItem[] }) {
                 key={step.title}
                 className="relative rounded-2xl border border-cream-border p-6"
               >
-                <span className="absolute right-5 top-5 text-sm font-bold text-stone-300">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+                {/* Numéro décoratif, en pseudo-élément : hors du texte de la page. */}
+                <span
+                  aria-hidden="true"
+                  data-num={String(i + 1).padStart(2, '0')}
+                  className="absolute right-5 top-5 text-sm font-bold text-stone-300 before:content-[attr(data-num)]"
+                />
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-gold/15 text-gold-ink">
                   <Icon size={20} />
                 </span>

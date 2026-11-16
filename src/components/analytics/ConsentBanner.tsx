@@ -25,21 +25,36 @@ const COPY = {
   },
 } satisfies Bilingual<Record<string, string>>
 
+/** Mesure configurée au build : sans elle, jamais de bandeau. */
+const MEASURED = analyticsEnabled || gaEnabled
+
 /**
  * Bandeau de consentement. N'apparaît que si la mesure est configurée
  * (clé PostHog ou identifiant Google Analytics) et que le visiteur n'a pas
  * encore répondu — ou
  * qu'il a cliqué sur « Gérer les cookies » dans le pied de page.
  * Accepter et Refuser ont le même poids visuel, comme l'exige la CNIL.
+ *
+ * Rendu dès le HTML serveur, et non après hydratation : affiché seulement
+ * une fois le JavaScript exécuté, ce bloc de texte devenait l'élément LCP
+ * des pages au titre court (FAQ, Enti Win, contact) et le retardait de toute
+ * l'exécution des scripts. Pour un visiteur qui a déjà répondu, le script du
+ * <head> pose `data-consent` sur <html> avant le premier affichage, et la
+ * règle de globals.css masque le bandeau : aucun clignotement. Une fois
+ * hydraté, le composant prend le relais et le retire du DOM.
  */
 export default function ConsentBanner() {
   const t = useCopy(COPY)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(MEASURED)
 
   useEffect(() => {
-    if (!analyticsEnabled && !gaEnabled) return
-    if (readConsent() === null) setOpen(true)
-    const reopen = () => setOpen(true)
+    if (!MEASURED) return
+    if (readConsent() !== null) setOpen(false)
+    const reopen = () => {
+      // « Gérer les cookies » : la règle de masquage ne doit plus s'appliquer.
+      delete document.documentElement.dataset.consent
+      setOpen(true)
+    }
     window.addEventListener(OPEN_CONSENT_EVENT, reopen)
     return () => window.removeEventListener(OPEN_CONSENT_EVENT, reopen)
   }, [])
@@ -53,6 +68,7 @@ export default function ConsentBanner() {
 
   return (
     <div
+      data-consent-banner=""
       role="dialog"
       aria-live="polite"
       aria-label={t.label}

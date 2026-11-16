@@ -127,12 +127,15 @@ export function softwareApplicationSchema({
   }
 }
 
-/** Questions-réponses telles qu'affichées par la section FAQ. */
-export function faqSchema(entries: FaqEntry[], locale: Locale): Schema {
+/**
+ * Questions-réponses telles qu'affichées : section FAQ de l'accueil (`/`) ou
+ * page /faq (`path`).
+ */
+export function faqSchema(entries: FaqEntry[], locale: Locale, path = '/'): Schema {
   return {
     '@context': CONTEXT,
     '@type': 'FAQPage',
-    '@id': `${pageUrl('/', locale)}#faq`,
+    '@id': `${pageUrl(path, locale)}#faq`,
     inLanguage: locale,
     mainEntity: entries.map(({ question, answer }) => ({
       '@type': 'Question',

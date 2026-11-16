@@ -58,9 +58,8 @@ const nextConfig = {
     return [
       { source: '/about', destination: '/entreprise', permanent: true },
       { source: '/en/about', destination: '/en/entreprise', permanent: true },
-      // La FAQ est devenue une section de l'accueil.
-      { source: '/faq', destination: '/#faq', permanent: true },
-      { source: '/en/faq', destination: '/en#faq', permanent: true },
+      // /faq redirigeait vers la section de l'accueil : c'est de nouveau une
+      // page (centre d'aide), la section #faq de l'accueil y renvoie.
       // Les trois anciennes pages Plateforme, eclatees en sept pages Solution
       // (lib/data/platform.ts) : chacune renvoie vers la page qui reprend
       // l'essentiel de son contenu.
@@ -93,6 +92,10 @@ const nextConfig = {
   images: {
     // AVIF d'abord (plus leger), WebP sinon ; l'original seulement en dernier recours.
     formats: ['image/avif', 'image/webp'],
+    // 30 jours au lieu de 60 s : le serveur ne réencode plus chaque image
+    // toutes les minutes, et les visites suivantes la lisent du cache.
+    // Une image de public/ remplacée doit donc changer de nom.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     // Images des guides envoyées dans le Studio Sanity (voir docs/cms.md).
     remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/images/**' }],
   },

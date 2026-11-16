@@ -1,8 +1,9 @@
 'use client'
 
 /**
- * Questions fréquentes, en section de l'accueil (ancre #faq, visée par le
- * menu et le pied de page) : l'ancienne page /faq redirige ici.
+ * Questions fréquentes, en section de l'accueil (ancre #faq) : les cinq
+ * principales. La page /faq (centre d'aide) les reprend avec une quinzaine
+ * d'autres, et le pied de la carte y renvoie.
  *
  * Les questions viennent de la page (lib/cms/faq.ts : Sanity, sinon
  * lib/data/faq.ts), qui les reprend dans ses données structurées FAQPage.
@@ -12,6 +13,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { m as motion } from 'framer-motion'
 import {
+  ArrowRight,
   ChevronDown,
   MessageCircle,
   MonitorPlay,
@@ -23,6 +25,7 @@ import {
 import SectionHeading from '@/components/ui/SectionHeading'
 import { viewport } from '@/lib/motion'
 import { useCopy } from '@/lib/i18n'
+import { Link } from '@/i18n/navigation'
 import { openChat } from '@/lib/chat/open'
 import type { FaqEntry } from '@/lib/data/faq'
 
@@ -45,6 +48,7 @@ const COPY = {
     confidential: 'Échanges confidentiels — aucune information n’est partagée sans votre accord.',
     notListed: 'Votre question n’est pas dans la liste ?',
     ask: 'Poser votre question',
+    all: 'Voir toutes les questions',
     title: 'Questions',
     accent: 'fréquentes',
     subtitle: 'Des réponses claires pour avancer en toute confiance vers vos opérations industrielles performantes.',
@@ -61,6 +65,7 @@ const COPY = {
     confidential: 'Confidential conversations — no information is shared without your consent.',
     notListed: 'Is your question not on the list?',
     ask: 'Ask your question',
+    all: 'See all questions',
     title: 'Frequently asked',
     accent: 'questions',
     subtitle: 'Clear answers to move forward with confidence toward high-performing industrial operations.',
@@ -205,14 +210,15 @@ function FaqAccordion({ faqs: FAQS }: { faqs: FaqEntry[] }) {
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="flex w-full items-center gap-4 px-5 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/50 sm:gap-5 sm:px-7 sm:py-[22px] lg:py-4"
                 >
+                  {/* Numéro décoratif : en pseudo-élément, hors du texte de la
+                      page (comme sur /faq), donc sans exigence de contraste. */}
                   <span
                     aria-hidden="true"
-                    className={`shrink-0 font-display text-[14px] font-black tabular-nums tracking-[0.02em] transition-colors duration-300 ${
-                      isOpen ? 'text-gold' : 'text-[#C7C2B8]'
+                    data-num={String(index + 1).padStart(2, '0')}
+                    className={`shrink-0 font-display text-[14px] font-black tabular-nums tracking-[0.02em] transition-colors duration-300 before:content-[attr(data-num)] ${
+                      isOpen ? 'text-gold' : 'text-stone-300'
                     }`}
-                  >
-                    {String(index + 1).padStart(2, '0')}
-                  </span>{' '}
+                  />
 
                   <span className="min-w-0 flex-1 text-pretty text-[14.5px] font-bold leading-snug tracking-[-0.015em] text-[#111827] sm:text-[15.5px]">
                     {faq.question}
@@ -261,20 +267,31 @@ function FaqAccordion({ faqs: FAQS }: { faqs: FaqEntry[] }) {
           {t.notListed}
         </p>
 
-        {/* Ouvre l'assistant de chat plutôt que d'envoyer vers le
-            formulaire : une question rapide n'a pas besoin d'un rendez-vous. */}
-        <button
-          type="button"
-          onClick={() => openChat({ source: 'faq' })}
-          aria-haspopup="dialog"
-          className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#0C0D12] px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
-        >
-          {t.ask}
-          <MessageCircle
-            size={15}
-            className="transition-transform duration-300 group-hover:scale-110"
-          />
-        </button>
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+          {/* La page complète : une vingtaine de questions, avec recherche. */}
+          <Link
+            href="/faq"
+            className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-cream-border bg-white px-5 py-3 text-sm font-bold text-gray-900 transition-all duration-300 hover:-translate-y-[1px] hover:border-gold/40"
+          >
+            {t.all}
+            <ArrowRight size={15} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
+
+          {/* Ouvre l'assistant de chat plutôt que d'envoyer vers le
+              formulaire : une question rapide n'a pas besoin d'un rendez-vous. */}
+          <button
+            type="button"
+            onClick={() => openChat({ source: 'faq' })}
+            aria-haspopup="dialog"
+            className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#0C0D12] px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-[1px] hover:bg-black"
+          >
+            {t.ask}
+            <MessageCircle
+              size={15}
+              className="transition-transform duration-300 group-hover:scale-110"
+            />
+          </button>
+        </div>
       </div>
     </motion.div>
   )

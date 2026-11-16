@@ -139,7 +139,7 @@ const INDUSTRY_LINKS = SECTORS.map((sector) => ({ href: sectorHref(sector.slug),
 const RESOURCE_LINKS = [
   { href: '/customers', icon: Users },
   { href: '/resources', icon: FileText },
-  { href: '/#faq', icon: HelpCircle },
+  { href: '/faq', icon: HelpCircle },
 ]
 const COMPANY_LINKS = [
   { href: '/entreprise', icon: Building2 },
