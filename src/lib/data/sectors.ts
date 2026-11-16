@@ -20,10 +20,8 @@ export type Sector = {
   name: Record<Locale, string>
   /** Le secteur au fil d'une phrase (FAQ) : « la pharmaceutique ». */
   inSentence: Record<Locale, string>
-  /** Pictogramme du menu Industries ; dans la grille, à défaut d'illustration. */
+  /** Pictogramme du secteur : menu Industries et grille de l'accueil. */
   icon: LucideIcon
-  /** Illustration de la grille de l'accueil (public/Secteur). */
-  gridImage?: string
 }
 
 export const SECTORS: Sector[] = [
@@ -32,14 +30,12 @@ export const SECTORS: Sector[] = [
     name: { fr: 'Pharmaceutique', en: 'Pharmaceuticals' },
     inSentence: { fr: 'la pharmaceutique', en: 'pharmaceuticals' },
     icon: ShieldCheck,
-    gridImage: '/Secteur/Pharmaceutique.png',
   },
   {
     slug: 'food',
     name: { fr: 'Agroalimentaire & boissons', en: 'Food & beverage' },
     inSentence: { fr: 'l’agroalimentaire et les boissons', en: 'food and beverage' },
     icon: Utensils,
-    gridImage: '/Secteur/Agroalimentaire.png',
   },
   {
     slug: 'cosmetics',
@@ -49,29 +45,24 @@ export const SECTORS: Sector[] = [
       en: 'cosmetics and medical devices',
     },
     icon: ClipboardCheck,
-    gridImage: '/Secteur/Dispositifs.png',
   },
   {
     slug: 'automotive',
     name: { fr: 'Automobile & composants', en: 'Automotive & components' },
     inSentence: { fr: 'l’automobile et les composants', en: 'automotive and components' },
     icon: Car,
-    // TODO(secteurs) : illustration de grille (public/Secteur), dans le style
-    // des trois premières. En attendant, la grille affiche le pictogramme.
   },
   {
     slug: 'electronics',
     name: { fr: 'Électronique & câblage', en: 'Electronics & wiring' },
     inSentence: { fr: 'l’électronique et le câblage', en: 'electronics and wiring' },
     icon: Zap,
-    // TODO(secteurs) : illustration de grille, comme ci-dessus.
   },
   {
     slug: 'packaging',
     name: { fr: 'Packaging & plasturgie', en: 'Packaging & plastics' },
     inSentence: { fr: 'le packaging et la plasturgie', en: 'packaging and plastics' },
     icon: Factory,
-    // TODO(secteurs) : illustration de grille, comme ci-dessus.
   },
 ]
 

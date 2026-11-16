@@ -390,8 +390,8 @@ export default function ChatWidget({ isOpen, source, onClose }: ChatWidgetProps)
             <p className="px-2 text-xs text-center text-stone-500 leading-snug select-none">
               {AI
                 ? language === 'FR'
-                  ? "Réponses générées par IA, à vérifier. Messages transmis à notre fournisseur d'IA, non conservés par Industry X.0. "
-                  : 'AI-generated answers, to be checked. Messages are sent to our AI provider and not stored by Industry X.0. '
+                  ? 'Réponses générées par IA. L’IA peut se tromper. '
+                  : 'AI-generated answers. AI can make mistakes. '
                 : language === 'FR'
                   ? 'Vos messages restent dans votre navigateur : ils ne sont pas enregistrés. '
                   : 'Your messages stay in your browser: they are not recorded. '}

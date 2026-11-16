@@ -29,9 +29,12 @@ const colors = {
 }
 
 const PILLAR_STYLES = [
-  { icon: Database, iconColor: colors.gold },
-  { icon: Workflow, iconColor: colors.green },
-  { icon: Activity, iconColor: colors.bronze },
+  // `numberColor` : le chiffre de la pastille. Blanc, il ne fait que 2,3:1 sur
+  // l'or et 2,8:1 sur le vert ; sombre, 8,5:1 et 6,7:1. Le bronze garde le
+  // blanc (5,1:1).
+  { icon: Database, iconColor: colors.gold, numberColor: colors.text },
+  { icon: Workflow, iconColor: colors.green, numberColor: colors.text },
+  { icon: Activity, iconColor: colors.bronze, numberColor: 'rgb(255 255 255)' },
 ]
 
 /*
@@ -80,29 +83,9 @@ function SectorLogoCard({ sector, label }: { sector: Sector; label: string }) {
   const card = (
     <figure className="flex w-full flex-col items-center gap-2">
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-black/[0.06] bg-white p-3 shadow-[0_4px_16px_rgba(0,0,0,0.03)] transition-shadow duration-base ease-smooth hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]">
-        {sector.gridImage ? (
-          <>
-            {/* `loading="lazy"` : sans lui, React précharge d'office chaque
-                <img> du HTML serveur (<link rel="preload"> dans le <head>), et
-                ces icônes, loin sous la ligne de flottaison, partaient avec
-                l'image du hero. 40 x 40 px affichés : pas de next/image pour
-                3 Ko. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={sector.gridImage}
-              alt=""
-              width={40}
-              height={40}
-              loading="lazy"
-              decoding="async"
-              className="h-full w-full object-contain"
-            />
-          </>
-        ) : (
-          // Pas encore d'illustration (TODO dans lib/data/sectors.ts) : le
-          // pictogramme du menu Industries.
-          <Icon aria-hidden="true" className="h-8 w-8 text-gold-ink" strokeWidth={1.6} />
-        )}
+        {/* Les six secteurs au même style : pictogramme Lucide du menu
+            Industries, même couleur, même trait. */}
+        <Icon aria-hidden="true" className="h-8 w-8 text-gold-ink" strokeWidth={1.6} />
       </div>
       {/* Le nom du secteur est ecrit, pas cache derriere un survol : une
           rangee d'icones muettes se lit comme une barre d'outils. */}
@@ -111,8 +94,8 @@ function SectorLogoCard({ sector, label }: { sector: Sector; label: string }) {
       </figcaption>
     </figure>
   )
-  // Le pictogramme reste `alt=""` : la légende nomme déjà le secteur, et
-  // c'est elle qui donne son nom au lien.
+  // Le pictogramme est masqué aux lecteurs d'écran : la légende nomme déjà
+  // le secteur, et c'est elle qui donne son nom au lien.
   return (
     <Link
       href={sectorHref(sector.slug)}
@@ -250,8 +233,8 @@ export default function CipaSection() {
             >
               {/* Numéro flottant */}
               <div
-                className="absolute -top-5 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full text-[14px] font-black text-white shadow-lg transition-transform duration-300 group-hover:scale-110"
-                style={{ background: pillar.iconColor }}
+                className="absolute -top-5 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full text-[14px] font-black shadow-lg transition-transform duration-300 group-hover:scale-110"
+                style={{ background: pillar.iconColor, color: pillar.numberColor }}
               >
                 0{i + 1}
               </div>
@@ -283,9 +266,10 @@ export default function CipaSection() {
           className="mx-auto mt-8 max-w-6xl"
         >
           <div className="mb-3 text-center">
+            {/* Petit libellé sur crème : `gold.ink` (4,6:1), l'or de marque n'y fait que 2:1. */}
             <h4
               className="mb-1 text-xs font-bold uppercase tracking-[0.2em]"
-              style={{ color: colors.gold }}
+              style={{ color: tokens.color.gold.ink }}
             >
               {t.sectorsTitle}
             </h4>
