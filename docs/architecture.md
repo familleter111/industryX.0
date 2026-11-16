@@ -40,7 +40,7 @@ Site marketing d'Industry X.0 (produit CIPA, outil Enti Win) : un site Next.js b
 | IA | Azure OpenAI ou Anthropic Claude (`CHAT_PROVIDER`) | réponses en flux, cache de prompt, plafond quotidien |
 | Leads | exceljs, API HubSpot / Brevo / Pipedrive, webhook HMAC, Resend | aucune perte : destinations en parallèle et secours |
 | Mesure | PostHog (UE) relayé par `/ingest`, GA4 | consentement d'abord ; attribution UTM jointe au lead |
-| Qualité | Vitest (333 tests), ESLint, `tsc`, scripts `check:*`, `audit:seo` | rejoués en CI |
+| Qualité | Vitest (347 tests), ESLint, `tsc`, scripts `check:*`, `audit:seo` | rejoués en CI |
 | Hébergement | Azure App Service, GitHub Actions | `main` → production, pull request → préversion |
 
 ## Arborescence

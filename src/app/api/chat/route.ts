@@ -22,9 +22,12 @@ import { loadFaq } from '@/lib/cms/faq'
 import { azureConfig, AzureError, streamAzure } from '@/lib/chat/azure'
 import type { ChatLocale } from '@/lib/chat/config'
 import { spamReason } from '@/lib/chat/guard'
-import { chatSystemPrompt } from '@/lib/chat/prompt'
+import { chatPassages, type Passage } from '@/lib/chat/passages'
+import { chatSystemBlocks, type SystemBlocks } from '@/lib/chat/prompt'
+import { retrievePassages } from '@/lib/chat/retrieve'
 import {
   chatProvider,
+  chatRetrieval,
   createDailyQuota,
   createRepeatGuard,
   dailyLimit,
@@ -77,14 +80,32 @@ const FALLBACK_TEXT: Record<ChatLocale, string> = {
  * question.
  */
 const FAQ_TTL_MS = 5 * 60 * 1000
-const faqCache = new Map<ChatLocale, { at: number; faq: Promise<FaqEntry[]> }>()
+const faqCache = new Map<ChatLocale, { at: number; faq: Promise<FaqEntry[]>; passages: Promise<Passage[]> }>()
 
-function publishedFaq(locale: ChatLocale): Promise<FaqEntry[]> {
+/**
+ * FAQ publiée et, avec elle, les passages de la recherche documentaire : la
+ * même liste est réutilisée d'une question à l'autre, donc son index
+ * (lib/chat/retrieve.ts) n'est construit qu'une fois par cycle.
+ */
+function published(locale: ChatLocale) {
   const cached = faqCache.get(locale)
-  if (cached && Date.now() - cached.at < FAQ_TTL_MS) return cached.faq
+  if (cached && Date.now() - cached.at < FAQ_TTL_MS) return cached
   const faq = loadFaq(locale)
-  faqCache.set(locale, { at: Date.now(), faq })
-  return faq
+  const entry = { at: Date.now(), faq, passages: faq.then((entries) => chatPassages(locale, entries)) }
+  faqCache.set(locale, entry)
+  return entry
+}
+
+/** Passages envoyés avec chaque question (CHAT_RETRIEVAL=keyword). */
+const PASSAGES_PER_QUESTION = 8
+
+/** Les passages proches de la question, ou `undefined` quand la recherche est coupée. */
+async function retrieved(locale: ChatLocale, messages: Turn[]): Promise<Passage[] | undefined> {
+  if (chatRetrieval() !== 'keyword') return undefined
+  const questions = messages.filter((m) => m.role === 'user').map((m) => m.content)
+  const question = questions[questions.length - 1]
+  const previous = questions[questions.length - 2]
+  return retrievePassages(question, await published(locale).passages, PASSAGES_PER_QUESTION, previous)
 }
 
 const refuse = (error: string, status: number) => NextResponse.json({ ok: false, error }, { status })
@@ -122,7 +143,9 @@ export async function POST(request: Request) {
   // Compté après tous les contrôles : une requête refusée ne consomme rien.
   if (!quota.take()) return refuse('daily-quota', 429)
 
-  const system = chatSystemPrompt(locale, await publishedFaq(locale))
+  // Recherche documentaire après tous les contrôles et le quota : un refus
+  // n'a rien coûté, pas même un classement.
+  const system = chatSystemBlocks(locale, await published(locale).faq, await retrieved(locale, messages))
   const reply = provider === 'azure' ? azureReply(messages, system) : anthropicReply(messages, system)
 
   const encoder = new TextEncoder()
@@ -178,7 +201,7 @@ type Reply = { text: AsyncIterable<string>; refused: () => Promise<boolean>; abo
 /** Réponses courtes demandées par les consignes ; la marge couvre la réflexion du modèle. */
 const MAX_OUTPUT_TOKENS = 1500
 
-function anthropicReply(messages: Turn[], system: string): Reply {
+function anthropicReply(messages: Turn[], system: SystemBlocks): Reply {
   const model = process.env.CHAT_MODEL?.trim() || DEFAULT_MODEL
   const stream = new Anthropic().beta.messages.stream({
     model,
@@ -191,8 +214,12 @@ function anthropicReply(messages: Turn[], system: string): Reply {
       ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const }
       : {}),
     // Consignes + base de connaissances : identiques à chaque question,
-    // donc mises en cache par l'API.
-    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+    // donc mises en cache par l'API. Les passages retrouvés, propres à la
+    // question, suivent dans un bloc sans cache.
+    system: [
+      { type: 'text', text: system.stable, cache_control: { type: 'ephemeral' } },
+      ...(system.retrieved ? [{ type: 'text' as const, text: system.retrieved }] : []),
+    ],
     messages,
   })
   return {
@@ -206,13 +233,15 @@ function anthropicReply(messages: Turn[], system: string): Reply {
   }
 }
 
-function azureReply(messages: Turn[], system: string): Reply {
+function azureReply(messages: Turn[], system: SystemBlocks): Reply {
   const controller = new AbortController()
   const outcome = { refused: false }
-  // Consignes identiques à chaque question : Azure met le préfixe en cache seul.
+  // Consignes identiques à chaque question : Azure met le préfixe en cache
+  // seul. Les passages retrouvés viennent après, hors du préfixe.
+  const instructions = system.retrieved ? `${system.stable}\n\n${system.retrieved}` : system.stable
   const text = streamAzure(
     azureConfig()!,
-    { system, messages, maxTokens: MAX_OUTPUT_TOKENS, signal: controller.signal },
+    { system: instructions, messages, maxTokens: MAX_OUTPUT_TOKENS, signal: controller.signal },
     outcome,
   )
   return { text, refused: async () => outcome.refused, abort: () => controller.abort() }

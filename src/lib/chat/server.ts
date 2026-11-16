@@ -20,6 +20,17 @@ export function chatProvider(env: Env = process.env): ChatProvider | null {
   return null
 }
 
+export type ChatRetrieval = 'off' | 'keyword'
+
+/**
+ * Recherche documentaire (CHAT_RETRIEVAL) : `keyword` n'envoie au modèle que
+ * les passages proches de la question (lib/chat/retrieve.ts) ; `off`, le
+ * défaut, et toute valeur inconnue envoient la base entière.
+ */
+export function chatRetrieval(env: Env = process.env): ChatRetrieval {
+  return env.CHAT_RETRIEVAL?.trim().toLowerCase() === 'keyword' ? 'keyword' : 'off'
+}
+
 /** La route répond seulement si le fournisseur et sa clé sont configurés. */
 export function chatEnabled(env: Env = process.env): boolean {
   return chatProvider(env) !== null

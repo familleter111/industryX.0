@@ -8,9 +8,9 @@
  * Le texte est déterministe (même ordre, aucune date) : il sert de préfixe
  * mis en cache par l'API, qu'un octet changé invaliderait.
  *
- * Étape suivante possible (docs/chatbot.md) : y ajouter les guides
- * (lib/data/guides.ts), ou passer à une recherche documentaire si la base
- * devient trop grande pour un seul prompt.
+ * Avec CHAT_RETRIEVAL=keyword, seuls FACTS restent dans le prompt : les
+ * passages utiles sont choisis par lib/chat/retrieve.ts parmi ceux de
+ * lib/chat/passages.ts, découpés depuis les mêmes sources.
  */
 
 import { CHATBOT_BASE } from '@/lib/data/chatbotBase'
@@ -21,7 +21,11 @@ import type { ChatLocale } from '@/lib/chat/config'
 
 export const SITE = 'https://www.industryx0.pro'
 
-const FACTS: Record<ChatLocale, string> = {
+/**
+ * Faits de base : toujours dans le prompt, même en recherche documentaire
+ * (lib/chat/passages.ts ne les découpe pas).
+ */
+export const FACTS: Record<ChatLocale, string> = {
   fr: `## Industry X.0
 Industry X.0 est une startup tunisienne fondée en 2019, spécialisée dans la digitalisation et l'optimisation des opérations industrielles. Elle conçoit et déploie CIPA, une plateforme industrielle pour l'industrie africaine et méditerranéenne : remontée des données terrain, gestion des écarts et de la qualité, pilotage de la performance.
 Enti Win : nouveau produit, évaluation qualité pharmaceutique assistée par IA (${SITE}/plateforme/entiwin).

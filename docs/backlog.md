@@ -17,7 +17,7 @@ Ce qui reste à faire, par priorité, au 3 novembre 2026. Chaque ligne renvoie �
 
 | Tâche | Où |
 |---|---|
-| Chatbot : vraie recherche documentaire (RAG) : ne transmettre au modèle que les passages utiles (recherche par mots-clés sans clé ; par embeddings avec Azure OpenAI) | docs/chatbot.md ; `src/lib/chat/knowledge.ts` |
+| Chatbot : recherche documentaire, étape 1 faite (mots-clés, `CHAT_RETRIEVAL=keyword`, à activer en production après recette) ; étape 2 : embeddings (Azure OpenAI), même variable, même route | docs/chatbot.md, « Activer la recherche » ; `src/lib/chat/retrieve.ts` |
 | PostHog : entonnoirs et tableaux de bord (visite → démo, visite → Enti Win, par canal et par page d'atterrissage) ; vérifier la clé de production dans GitHub | README, « Analytics » |
 | Activer la préversion : emplacement `staging`, secret et variables GitHub | docs/preview.md |
 | Délai de réponse commercial à annoncer, puis le rétablir (contact, chat) | C2, L2-15 ; `contact/page.tsx` |

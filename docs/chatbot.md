@@ -35,7 +35,9 @@ src/lib/chat/
   local.ts       mode local : messages de bienvenue et réponses par mots-clés
   client.ts      appel de /api/chat et lecture de la réponse en flux (navigateur)
   knowledge.ts   base de connaissances, construite depuis les données du site
-  prompt.ts      consignes du modèle + base de connaissances
+  passages.ts    la même base découpée en passages (recherche documentaire)
+  retrieve.ts    recherche par mots-clés (BM25) dans les passages
+  prompt.ts      consignes du modèle + base de connaissances, en un ou deux blocs
   server.ts      contrôles de la route (activation, origine, historique, signature, répétitions)
 src/app/api/chat/route.ts   route serveur : appel de Claude, réponse en flux texte
 src/app/api/chat/faq/[locale]/route.ts   FAQ publiée, pour les réponses locales (statique, en cache)
@@ -46,6 +48,7 @@ src/lib/chat/azure.ts                  fournisseur Azure OpenAI (API Responses e
 src/lib/data/faq.ts         FAQ partagée par la section #faq de l'accueil et l'assistant
 src/lib/data/chatbotBase.ts réponses de prospection validées, générées depuis
                             Industry_X0_Base_Chatbot_Prospection.xlsx (npm run gen:chatbot-base)
+scripts/eval-rag.mjs        mesure de la recherche documentaire (npm run eval:rag)
 ```
 
 **Flux d'une question en mode IA** :
@@ -54,7 +57,7 @@ src/lib/data/chatbotBase.ts réponses de prospection validées, générées depu
 2. La route fait ses contrôles (voir « Antispam » et « Contexte borné » ci-dessous), puis vérifie le plafond quotidien.
 3. Elle appelle Claude en streaming avec :
    - `claude-haiku-5-5`, le modèle le moins cher (réglable via `CHAT_MODEL`), effort `low` et réponses courtes (2 000 tokens au plus, réflexion comprise) ;
-   - les consignes et la base de connaissances en prompt système, mis en cache par l'API ;
+   - les consignes et la base de connaissances en prompt système, mis en cache par l'API ; avec `CHAT_RETRIEVAL=keyword`, la base est remplacée par les faits de base (en cache) et les huit passages les plus proches de la question (voir « Activer la recherche ») ;
    - le repli serveur `fallbacks: "default"` seulement si `CHAT_MODEL` désigne un modèle qui l'accepte (Opus 5.5, Sonnet 5.5…) : Claude Haiku 5.5 ne l'a pas, une question déclinée reçoit alors un message renvoyant vers le formulaire.
 4. Le texte revient morceau par morceau et s'écrit dans la bulle. Le flux se termine par un caractère NUL suivi de la signature de la réponse, que le widget garde avec elle. Si le visiteur ferme le chat, la génération s'arrête.
 
@@ -103,11 +106,23 @@ C'est une défense en profondeur, pas une garantie : un modèle peut toujours ê
 
 Pour couper l'IA : vider `NEXT_PUBLIC_CHAT_AI`, puis reconstruire.
 
+## Activer la recherche
+
+Par défaut (`CHAT_RETRIEVAL` vide ou `off`), la base entière part dans le prompt à chaque question. Avec `CHAT_RETRIEVAL=keyword`, le modèle ne reçoit que ce qui sert :
+
+- **Les faits de base** (`FACTS` dans `knowledge.ts` : l'entreprise, Enti Win, les secteurs, le parcours, les coordonnées) restent toujours dans le prompt, dans le premier bloc système, mis en cache par l'API.
+- **Les passages les plus proches de la question** suivent dans un second bloc, propre à la question, sans cache. La base est découpée en passages (`passages.ts`) : un par section de page Solution, par question de la FAQ publiée, par réponse de prospection. Le classement est un BM25 écrit à la main (`retrieve.ts`) : minuscules, accents et ponctuation retirés, mots vides français et anglais ignorés. La requête est la dernière question du visiteur, complétée par sa question précédente pour les suivis (« et pour la pharma ? »). Sous un score minimal, aucun passage n'est envoyé : le modèle répond avec les faits de base et oriente vers le formulaire.
+- **Rien d'autre ne change** : contrôles antispam, signature, plafond quotidien et repli local sont les mêmes. La recherche a lieu après tous les contrôles et après le comptage du quota. Elle vaut pour les deux fournisseurs : avec Azure, les passages sont ajoutés à la fin des `instructions`, hors du préfixe mis en cache.
+
+Variable serveur, lue à chaque question : pas de reconstruction du site. L'index est construit une fois en mémoire et refait quand la FAQ publiée est relue (toutes les 5 minutes au plus).
+
+**Mesurer** : `npm run eval:rag` rejoue chaque question du classeur de prospection et vérifie que sa réponse est dans les 3, 5 et 8 premiers passages ; il affiche le rappel et les questions manquées. À relancer après tout réglage des mots vides, du seuil (`MIN_SCORE`) ou du découpage. Les tests (`tests/chat-retrieve.test.ts`) vérifient en plus qu'une question hors sujet ne renvoie rien et que, sans la variable, le prompt reste identique au caractère près.
+
 ## Coût
 
 **Il n'existe pas de quota gratuit permanent sur l'API Claude** : chaque question envoyée à l'IA est facturée. Le dispositif garde la facture très basse et plafonnée.
 
-- **Estimation, non mesurée** : une question à Claude Haiku 5.5 envoie environ 13 000 tokens (consignes, base de connaissances dont les réponses validées, historique) et en reçoit quelques centaines. Tarif : 0,10 $ par million de tokens en entrée, 0,50 $ en sortie. Cela fait environ 0,15 centime de dollar par question, et environ 2 $ par mois si le plafond de 50 questions est atteint chaque jour (moins grâce au cache du prompt).
+- **Estimation, non mesurée** : une question à Claude Haiku 5.5 envoie environ 13 000 tokens (consignes, base de connaissances dont les réponses validées, historique) et en reçoit quelques centaines. Avec `CHAT_RETRIEVAL=keyword`, environ 2 500 : consignes et faits de base en cache, huit passages, historique. Tarif : 0,10 $ par million de tokens en entrée, 0,50 $ en sortie. Cela fait environ 0,15 centime de dollar par question, et environ 2 $ par mois si le plafond de 50 questions est atteint chaque jour (moins grâce au cache du prompt).
 - **Les questions de la FAQ ne coûtent rien** : elles ne quittent pas le navigateur.
 - **Plafond applicatif** `CHAT_DAILY_LIMIT` : il est compté en mémoire et repart de zéro au redémarrage du serveur. C'est un garde-fou, pas une garantie.
 - **La garantie, c'est la limite de dépense** de la console Anthropic (Settings > Limits). Fixez-la à quelques dollars par mois : au-delà, l'API refuse et le chat repasse automatiquement en réponses locales.
@@ -120,8 +135,8 @@ Pour des réponses plus fines, et plus chères, il suffit de changer `CHAT_MODEL
 2. **Jeu de questions de référence** : les questions du classeur de prospection (`chatbotBase.ts`) donnent déjà les réponses attendues ; reste à les rejouer contre le modèle pour mesurer la qualité avant chaque changement de prompt ou de modèle.
 3. **Prise de rendez-vous dans le chat** : un outil (tool use) qui collecte nom, email et société avec consentement, puis passe par la même livraison que le formulaire (`src/lib/leads/deliver.ts` : tableur, CRM, webhook).
 4. **Relais humain** : transmettre la conversation à l'équipe (Slack ou email) quand le visiteur le demande.
-5. **Base trop grande pour un prompt** : passer à une recherche documentaire, qui ne sélectionne que les passages utiles à chaque question.
+5. **Recherche documentaire, étape 2** : l'étape 1 (recherche par mots-clés, `CHAT_RETRIEVAL=keyword`) est en place. Étape 2 : embeddings (Azure OpenAI ou Voyage) pour retrouver un passage sans mot en commun avec la question (« ça marche sans internet ? » → « mode hors ligne »), derrière la même variable (`CHAT_RETRIEVAL=embeddings`) et la même route. Prérequis : élargir la base (point 1), et comparer avec `npm run eval:rag`.
 
 ## Tests
 
-`npm test` couvre : la validation de l'historique, l'activation, la base de connaissances, les réponses locales et la route, avec un SDK simulé (aucun appel réel ni coût).
+`npm test` couvre : la validation de l'historique, l'activation, la base de connaissances, les réponses locales, la route et la recherche documentaire (découpage, normalisation, rappel, seuil, prompt inchangé sans la variable), avec un SDK simulé (aucun appel réel ni coût).
